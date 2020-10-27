@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<head>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no maximum-scale=1.0,user-scalable=0, minimal-ui" />
+	<title th:text="${'Uh oh..'}"></title>
+	<link rel="shortcut icon" th:href="@{/public/favicon.png}" type="image/x-icon">
+	<link rel="stylesheet" th:href="@{/css/bootstrap.css}" />
+	<link rel="stylesheet" th:href="@{/css/colors.css}" />
+	<link rel="stylesheet" th:href="@{/css/site.css}" />
+	<script th:src="@{/js/lib/jquery-3.3.1.min.js}"></script>
+	<script th:src="@{/js/lib/jquery-ui.min.js}"></script>
+	<script th:src="@{/js/lib/bootstrap.bundle.js}"></script>
+</head>
+<body>
+	<div class="row setlist-section error text-center no-gutters">
+		<div class="col h-100 my-auto">
+			<div class="set-list-container">
+				<div class="row w-100">
+					<div class="col w-100 text-left">
+						<a th:href="@{/}">
+						<img border="0"
+							th:src="@{/images/logo_transparent.png}" width="150px"  class="logo" alt="Logo">
+							</a>
+					</div>
+				</div>
+				<div class="row w-100 mt-3">
+					<div class="col w-100 text-center">
+						<h4 class="pb-2 error">Uh oh... something went wrong</h4>
+						<hr>
+						<h5 class="mb-4 mt-4 error">Click on this box to email the site administrator</h5>
+						<a th:href="@{/}" class="mb-4 mt-4"><h6>Back to Home page</h6></a>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+<script>
+	$('.setlist-section').click(function(e){
+		if (!$(e.target).is('a,img,h6')){
+			window.location = 'mailto:worship@cfchurches.com';	
+		}
+	});
+</script>

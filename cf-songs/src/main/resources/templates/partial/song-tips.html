@@ -1,0 +1,51 @@
+<div class="song-tips" style="z-index:57983416">
+	<ul class="w-100">
+		<li>
+			<div class="row no-gutters">
+				<div class="col-12 text-left no-gutters">
+					<p>Type chords on the line above the lyrics over the word where the chord changes. Make sure to set the "Chorded In" value to the key you are chording the song in.</p>
+				</div>
+			</div>
+			<div class="row no-gutters mb-4">
+				<div class="col-12 no-gutters">
+					<img th:src="@{/images/instructions/chord-sample.PNG}">
+				</div>
+			</div>
+		</li>
+		<li>
+			<div class="row no-gutters">
+				<div class="col-12 text-left no-gutters">
+					<p>Use a single blank line to separate sections of a song in the PowerPoint. You can always edit the song later to add more breaks in a section.</p>
+				</div>
+			</div>
+			<div class="row no-gutters mb-4">
+				<div class="col-12 no-gutters">
+					<img th:src="@{/images/instructions/split-section.PNG}">
+				</div>
+			</div>
+		</li>
+		<li>
+			<div class="row no-gutters">
+				<div class="col-12 text-left no-gutters">
+					<p>Long sentences on a single line may be truncated in some views and the PowerPoint may break the sentence in an awkward place. Use shorter sentences to avoid unwanted formatting</p>
+				</div>
+			</div>
+			<div class="row no-gutters">
+				<div class="col-12 no-gutters">
+					<img th:src="@{/images/instructions/long-sentence-sample.PNG}">
+				</div>
+			</div>
+		</li>
+	</ul>
+</div>
+<script>
+	$(document).ready(function(){
+		$('.song-tips-btn').off();
+		$('.song-tips-btn').tooltip({
+			title: $('.song-tips-container').html(),
+			html: true,
+			trigger: 'click',
+			offset: 225
+		});
+	});
+</script>

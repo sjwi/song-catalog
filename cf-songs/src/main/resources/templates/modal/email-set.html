@@ -1,0 +1,56 @@
+<div class="modal fade" id="emailSetModal">
+	<div class="modal-dialog modal-lg" role="document">
+		<div class="modal-content">
+			<div class = "modal-header">
+				<h5 class="modal-title"></h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+				  <span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<form id="emailSetForm">
+			</form>
+		</div>
+	</div>
+</div>
+
+<script>
+	function emailSet(setId){
+		$.ajax({
+			url: contextpath + 'setlist/email/' + setId,
+			method: "GET",
+			success: function(data) {
+				$('#emailSetForm').html(data);
+				$('#emailSetModal').modal('show');
+			},
+			error: function(data){
+				alertWithFade('danger','Something went wrong! Unable to retreive set list to email')
+			}
+		});
+	}
+
+	$(document).ready(function(){
+		$('#emailSetForm').on('submit',function(e){
+			e.preventDefault();
+			$('[name="finalMessageBody"]').val($("#messageBody").contents().find("body").html());
+			if (isFormFilled(this)){
+				$('#submitEmailSetBtn').attr('disabled',true);
+				$.ajax({
+					url: contextpath + 'setlist/email/' + $('#emailSetForm').find('.set-id').val(),
+					method: "POST",
+					data: $('#emailSetForm').serialize(),
+					success: function() {
+						$('#emailSetModal').modal('hide');
+						alertWithFade('success','Email sent successfully.');
+					},
+					error: function(data){
+						alertWithFade('danger','Something went wrong! Unable to email set')
+					},
+					complete: function(data){
+						$('#submitEmailSetBtn').attr('disabled',false);
+					}
+				});
+			}
+		});
+	});
+
+</script>

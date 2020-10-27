@@ -1,0 +1,276 @@
+<div class="modal fade" id="createItemModal">
+	<div class="modal-dialog modal-lg" role="document">
+		<div class="modal-content">
+			<div class = "modal-header">
+				<h5 class="modal-title"> <span class="modal-title-text">Create New Song</span>
+				<small class="song-tips-btn" data-toggle="tooltip" data-placement="bottom">
+					<b>tips</b>
+				</small>
+				</h5>
+				<div class="collapse song-tips-container w-100">
+					<th:block th:replace="partial/song-tips"></th:block>
+				</div>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+				  <span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="create-tab row mb-2 no-gutters">
+				<div class="col-6 text-center tab selected pt-2 pb-2 song" data-target="song">Create Song</div>
+				<div class="col-6 text-center tab pt-2 pb-2 setlist" data-target="setlist">Create Set List</div>
+			</div>
+			<div class="modal-body">
+				<div class="create-song-form">
+					<form method="POST" action="" id="createSongForm">
+						<div class="form-group row flex-nowrap no-gutters">
+							<div class="col-12 no-gutters">
+								<input placeholder="Song title" class="form-control title required autofocus" title="Enter a title for this song." type="text" name="songTitle"/>
+							</div>
+						</div>
+						<div class="form-group row">
+							<div class="col-7 d-flex flex-nowrap">
+								<label for="categories" class="col-form-label pr-1">Category</label>
+								<select id="categorySelect" name="category" class="form-control categories">
+								</select>
+							</div>
+							<div class="col-5 no-gutters text-right">
+								<label for="defaultKey" class="col-form-label">Chorded In</label>
+								<th:block th:replace="partial/key-dropdown-select :: keySet('N','chordedIn')"></th:block>
+							</div>
+						</div>
+						<div class="form-group row">
+							<div class="col-12">
+								<textarea rows="15" name="songBody" type="textArea" class="form-control body required" title="Song body"></textarea>
+							</div>
+						</div>
+						<div class="form-group row">
+							<div class="col-12 recording-setting">
+								<th:block th:replace="partial/audio-input :: audioInput(${nullValue})"></th:block>
+							</div>
+						</div>
+					</form>
+				</div>
+			
+				<div class="create-setlist-form collapse">
+					<form id="createSetListForm">
+						<div class="form-group row no-gutters d-flex w-100 justify-content-center">
+							<div class="form-max-width">
+								<div class="row no-gutters">
+									<div class="col-4 no-gutters">
+										<label for="unit" class="col-form-label">Organization</label>
+									</div>
+									<div class="col-8 no-gutters">
+										<select name="unit" class="form-control pl-1"
+											id="organizationSelect"></select>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div
+							class="form-group mb-0 row no-gutters d-flex w-100 justify-content-center">
+							<div class="form-max-width">
+								<div class="row no-gutters">
+									<div class="offset-4 col-8">
+										<input type="text" name="otherUnit"
+											class="form-control mb-3 other-unit collapse required pl-2"
+											title="Enter an associated organization for this set list."
+											placeholder="Church name">
+									</div>
+								</div>
+							</div>
+						</div>
+						<div
+							class="form-group row no-gutters d-flex w-100 justify-content-center">
+							<div class="form-max-width">
+								<div class="row no-gutters">
+									<div class="col-4">
+										<label for="subUnit" class="col-form-label">Service</label>
+									</div>
+									<div class="col-8">
+										<select name="subUnit" class="form-control pl-1" id="serviceSelect"></select>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div
+							class="form-group row no-gutters mb-0 d-flex w-100 justify-content-center">
+							<div class="form-max-width">
+								<div class="row no-gutters">
+									<div class="col-8 offset-4">
+										<input type="text" name="otherSubUnit"
+											class="form-control mb-3 other-sub-unit collapse required pl-2"
+											title="Enter a service associated with this set list."
+											placeholder="Service name">
+									</div>
+								</div>
+							</div>
+						</div>
+						<div
+							class="form-group mb-0 row no-gutters d-flex w-100 justify-content-center">
+							<div class="form-max-width">
+								<div class="row no-gutters">
+									<div class="col-8 offset-4">
+										<input type="text" name="homegroupName"
+											class="form-control mb-3 homegroup-name collapse required pl-2"
+											title="Enter the last name of the Home Fellowship leader"
+											placeholder="Home Fellowship name">
+									</div>
+								</div>
+							</div>
+						</div>
+						<div
+							class="form-group row no-gutters d-flex w-100 justify-content-center">
+							<div class="form-max-width">
+								<div class="row no-gutters">
+									<div class="col-4">
+										<label for="date" class="col-form-label">Date</label>
+									</div>
+									<div class="col-8">
+										<input type="date" name="date" class="form-control date-picker pl-2">
+									</div>
+								</div>
+							</div>
+						</div>
+					</form>
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+				<button type="submit" class="btn btn-info" id="submitCreateItemBtn">Create Song</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+<script>
+	function createSong(){
+		focusItem('song');
+		$('#createItemModal').modal('show');
+	}
+	function createSetList() {
+		focusItem('setlist');
+		$('#createItemModal').modal('show');
+	}
+	
+	function focusItem(itemType){
+		$('.tab.selected').removeClass('selected');
+		if (itemType === 'song'){
+			$('.tab.song').addClass('selected');
+			$('.create-song-form').show();
+			$('.create-setlist-form').hide();
+			$('.modal-title-text').html('Create New Song');
+			$('.song-tips-btn').show();
+			$('#submitCreateItemBtn').html('Create Song');
+			$('#submitCreateItemBtn').addClass('create-song');
+			$('#submitCreateItemBtn').removeClass('create-setlist');
+		} else {
+			$('.tab.setlist').addClass('selected');
+			$('.create-song-form').hide();
+			$('.create-setlist-form').show();
+			$('.modal-title-text').html('Create New Set List');
+			$('.song-tips-btn').hide();
+			$('#submitCreateItemBtn').html('Create Set List');
+			$('#submitCreateItemBtn').addClass('create-setlist');
+			$('#submitCreateItemBtn').removeClass('create-song');
+		}
+	}
+	$(document).ready(function(){
+		$('.create-tab>.tab').on('click',function(){
+			focusItem($(this).data('target'));
+		});
+		$('#submitCreateItemBtn').on('click',function(e){
+			e.preventDefault();
+			if($(this).hasClass('create-song')){
+				$('#createSongForm').submit()
+			} else {
+				$('#createSetListForm').submit()
+			}
+		});
+		$('#createSongForm').on('submit',function(e){
+			e.preventDefault();
+			if (isFormFilled(this)){
+				$('.btn.create-song').attr('disabled',true);
+				$.ajax({
+					url: contextpath + 'song/create',
+					method: "POST",
+					data: new FormData(this),
+					processData: false,
+					contentType: false,
+					dataType: 'JSON',
+					success: function(data) {
+						alertWithFade('success','New song <b>' +$('#createSongForm').find('.title').val() + '</b> created.');
+						setTimeout(function(){
+							location.href = contextpath + 'song/' + data.action; 
+						},1000);
+					},
+					error: function(data){
+						alertWithFade('danger','Something went wrong! Unable to create song.')
+					},
+					complete: function(data){
+						$('.btn.create-song').attr('disabled',false);
+					}
+				});
+			}
+		});
+		
+		
+		$('#organizationSelect')
+				.load(contextpath + 'organizations?view=partial/select-options/organizations',
+						function() {
+							$('#organizationSelect').append('<option value="0">Other</option>');
+						});
+		$('#serviceSelect')
+				.load(contextpath+ 'services?view=partial/select-options/services',
+						function() {
+							$('#serviceSelect').append('<option value="0">Other</option>');
+						});
+		$('.date-picker').val(new Date().toDateInputValue());
+
+		$('#categorySelect').load(contextpath + 'categories?view=partial/select-options/categories');
+
+		$(document).on('change','select[name="unit"]', function() {
+			if ($(this).val() == "0") {
+				$('.other-unit').show();
+				$('.other-unit').focus();
+			} else {
+				$('.other-unit').hide();
+			}
+		});
+
+		$(document).on('change','select[name="subUnit"]', function() {
+			if ($(this).val() == "0") {
+				$('.other-sub-unit').show();
+				$('.other-sub-unit').focus();
+				$('.homegroup-name').hide();
+			} else if ($(this).val() == "2"){
+				$('.homegroup-name').show();
+				$('.homegroup-name').focus();
+				$('.other-sub-unit').hide();
+			} else {
+				$('.other-sub-unit').hide();
+				$('.homegroup-name').hide();
+			}
+		});
+
+		$('#createSetListForm').on('submit',function(e) {
+			e.preventDefault();
+			if (isFormFilled(this)) {
+				$('.btn.create-setlist').attr('disabled', true);
+				$.ajax({
+					url : contextpath+ 'setlist/create',
+					method : "POST",
+					data : $('#createSetListForm').serialize(),
+					success : function() {
+						location.reload();
+					},
+					error : function(data) {
+						alertWithFade('danger','Something went wrong! Unable to add song to set')
+					},
+					complete : function() {
+						$('.btn.create-setlist').attr('disabled', false);
+					}
+				});
+			}
+		});
+	});
+</script>

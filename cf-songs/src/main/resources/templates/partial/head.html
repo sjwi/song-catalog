@@ -1,0 +1,51 @@
+<th:block th:fragment="head(title)">
+	<!DOCTYPE html>
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no maximum-scale=1.0,user-scalable=0, minimal-ui" />
+		<meta name="apple-mobile-web-app-title" content="Song Catalog">
+		<meta property="og:title" content="CF Worship Songs" />
+		<meta property="og:image" th:attr="content=@{/images/logo_preview.png}" />
+		<title th:text="${title}"></title>
+		<link rel="shortcut icon" th:href="@{/public/favicon.png}" type="image/x-icon">
+		<link th:if="${#session.getAttribute(T(com.sjwi.cfsongs.config.PreferencesConfiguration).NIGHT_MODE_PREFERENCE_KEY) == null || !#session.getAttribute(T(com.sjwi.cfsongs.config.PreferencesConfiguration).NIGHT_MODE_PREFERENCE_KEY)}" rel="stylesheet" th:href="@{/css/bootstrap.css}" />
+		<link th:if="${#session.getAttribute(T(com.sjwi.cfsongs.config.PreferencesConfiguration).NIGHT_MODE_PREFERENCE_KEY) == null || !#session.getAttribute(T(com.sjwi.cfsongs.config.PreferencesConfiguration).NIGHT_MODE_PREFERENCE_KEY)}" rel="stylesheet" th:href="@{/css/colors.css}" />
+		<link th:if="${#session.getAttribute(T(com.sjwi.cfsongs.config.PreferencesConfiguration).NIGHT_MODE_PREFERENCE_KEY)}" rel="stylesheet" th:href="@{/css/bootstrap-dark.css}" />
+		<link th:if="${#session.getAttribute(T(com.sjwi.cfsongs.config.PreferencesConfiguration).NIGHT_MODE_PREFERENCE_KEY)}" rel="stylesheet" th:href="@{/css/colors-dark.css}" />
+		<link rel="stylesheet" type="text/css" th:href="@{/css/slick.css}"/>
+		<link rel="stylesheet" type="text/css" th:href="@{/css/select2.min.css}"/>
+		<link rel="apple-touch-icon" th:href="@{/images/icon_dark.png}">
+		<link rel="stylesheet" th:href="@{/css/site.css}" />
+		<link rel="stylesheet" th:href="@{/css/font-awesome.all.min.css}" />
+		<script th:src="@{/js/lib/jquery-3.3.1.min.js}"></script>
+		<script th:src="@{/js/lib/jquery-ui.min.js}"></script>
+		<script th:src="@{/js/lib/bootstrap.bundle.js}"></script>
+		<script th:src="@{/js/lib/jquery.ui.touch-punch.min.js}"></script>
+		<script th:src="@{/js/lib/popper.min.js}"></script>
+		<script th:src="@{/js/lib/slick.min.js}"></script>
+		<script th:src="@{/js/site/site.js}"></script>
+		<script th:src="@{/js/lib/select2.full.min.js}"></script>
+		<script th:src="@{/js/lib/qrcode.min.js}"></script>
+		<script th:src="@{/js/site/form-validation.js}"></script>
+		<script th:src="@{/js/site/scroll.js}"></script>
+		<script th:inline="javascript">
+			if (location.protocol !== 'https:' && !location.href.includes('localhost') && !location.href.includes('elasticbeanstalk')) {
+				location.replace('https:' + location.href.substring(location.protocol.length));
+			}
+			var contextpath = /*[[@{/}]]*/;
+			var loggedInUser = /*[[${#authentication?.getPrincipal()}]]*/;
+			var alertOnLoad = /*[[${ALERT_ON_LOAD}]]*/ false;
+		</script>
+
+		<th:block th:replace="modal/login"></th:block>
+		<th:block sec:authorize="hasAuthority('USER')">
+			<th:block th:replace="modal/change-password"></th:block>
+			<th:block th:replace="modal/invite"></th:block>
+		</th:block>
+		<th:block sec:authorize="!hasAuthority('USER')">
+			<th:block th:replace="modal/reset-password"></th:block>
+			<th:block th:replace="modal/prompt-for-reset"></th:block>
+			<th:block th:replace="modal/enroll"></th:block>
+		</th:block>
+	</head>
+</th:block>

@@ -1,0 +1,52 @@
+<div class="modal fade" id="addMembersToGroupModal">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<form id="addMembersToGroupForm">
+			</form>
+		</div>
+	</div>
+</div>
+
+
+<script>
+function addEntriesFromSelect(groupId,groupName){
+	$.ajax({
+		url: contextpath + 'addressbook?view=modal/dynamic/add-members-to-group',
+		method: "GET",
+		success: function(data) {
+			$('#addMembersToGroupForm').html(data);
+			$('#addMembersToGroupForm').find('.group-id').val(groupId);
+			$('#addMembersToGroupForm').find('.modal-title').html('Add contacts to ' + groupName);
+			$('#addMembersToGroupForm').find('.modal-message').html('Add members to the group ' + groupName);
+			$('#addMembersToGroupModal').modal('show');
+		},
+		error: function(data){
+			alertWithFade('danger','Something went wrong! Unable to retreive address book contacts')
+		},
+	});
+}
+
+$(document).ready(function(){
+	$('#addMembersToGroupForm').on('submit',function(e){
+		e.preventDefault();
+		if (isFormFilled(this)){
+			$(this).find('button[type="submit"]').attr('disabled',true);
+			$.ajax({
+				url: contextpath + 'addressbook/add-multiple-members',
+				method: "POST",
+				data: $(this).serialize(),
+				success: function() {
+					location.reload();
+				},
+				error: function(data){
+					alertWithFade('danger','Something went wrong! Unable to add members to group')
+				},
+				complete: function(data){
+					$(this).find('button[type="submit"]').attr('disabled',false);
+				}
+			});
+		}
+	});
+});
+
+</script>

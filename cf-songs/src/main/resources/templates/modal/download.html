@@ -1,0 +1,30 @@
+<div class="modal fade" id="downloadModal">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+		</div>
+	</div>
+</div>
+<script>
+var pptDownloadBaseUri;
+var pdfDownloadBaseUri;
+var downloadBaseUri;
+function downloadFile(endpoint,id,key){
+	pptDownloadBaseUri = contextpath + endpoint + '/ppt/' + id;
+	pdfDownloadBaseUri = contextpath + endpoint + '/pdf/' + id;
+	var downloadRequestUrl = contextpath + endpoint + '/download/' + id;
+	if (key){
+		downloadRequestUrl = downloadRequestUrl + '?key=' + key;
+	}
+	$.ajax({
+		url: downloadRequestUrl,
+		method: "GET",
+		success: function(data) {
+			$('#downloadModal').find('.modal-content').html(data);
+			$('#downloadModal').modal('show');
+		},
+		error: function(data){
+			alertWithFade('danger','Something went wrong! Unable to retrieve download details');
+		},
+	});		
+}
+</script>

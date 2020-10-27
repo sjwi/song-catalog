@@ -1,0 +1,87 @@
+<div class="modal fade" id="createAddressBookEntryModal">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<form method="POST" action="" id="createAddressBookEntryForm">
+			<div class = "modal-header">
+				<h5 class="modal-title" th:text="${'Create new Address Book Contact'}"></h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+				  <span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body">
+				<div class="form-group row">
+					<div class="col-4">
+						<label class="form-group" for="firstName">First Name</label>
+					</div>
+					<div class="col-8">
+						<input class="form-control autofocus first-name required" title="First name cannot be blank" name="firstName" type="text">
+					</div>
+				</div>
+				<div class="form-group row">
+					<div class="col-4">
+						<label class="form-group" for="lastName">Last Name</label>
+					</div>
+					<div class="col-8">
+						<input class="form-control last-name required" title="Last name cannot be blank" name="lastName" type="text" >
+					</div>
+				</div>
+				<div class="form-group row">
+					<div class="col-4">
+						<label class="form-group" for="email">Email</label>
+					</div>
+					<div class="col-8">
+						<input class="form-control email required" title="Email cannot be blank" name="email" type="text">
+					</div>
+				</div>
+				<div class="form-group row">
+					<div class="col-4">
+						<label class="form-group" for="phone">Phone Number</label>
+					</div>
+					<div class="col-8">
+						<input class="form-control phone required" name="phone" title="Phone cannot be blank" type="text">
+					</div>
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+				<button type="submit" class="btn btn-info">Create Contact</button>
+			</div>
+			</form>	
+		</div>
+	</div>
+</div>
+
+<script>
+	$(document).ready(function(){
+		$('#createAddressBookEntryForm').on('submit',function(e){
+			e.preventDefault();
+			if (isFormFilled(this)){
+				$.ajax({
+					url: contextpath + 'addressbook/create/entry',
+					method: "POST",
+					data: $(this).serialize(),
+					beforeSend: function(){
+						$(this).find('input[type="submit"]').attr('disabled',true);
+					},
+					success: function() {
+						alertWithFade('success','Contact created')
+						setTimeout(function(){
+							location.reload()
+						},1000);
+					},
+					error: function(data){
+						$(this).find('input[type="submit"]').attr('disabled',false);
+						alertWithFade('danger','Something went wrong! Unable to create contact.')
+					}
+				});
+			}
+		});
+	});
+	function createAddressBookEntry(){
+		if ($('#addressBookEntriesContainer').is(':hidden')){
+			$('#createAddressBookGroupModal').modal('show');	
+		} else {
+			$('#createAddressBookEntryModal').modal('show');
+		}
+	}
+</script>

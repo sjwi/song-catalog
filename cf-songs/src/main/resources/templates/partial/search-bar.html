@@ -1,0 +1,72 @@
+<th:block th:fragment="searchBar(endpoint,view,type,id,append)">
+	<div id="home-song-search">
+		<form th:id="${id + '_form'}">
+			<div class="input-group">
+				<input class="form-control search-input" th:value="${searchTerm != null}? ${searchTerm}:''" type="text" name="searchTerm" th:placeholder="${'Search ' + type + '...'}" /> 
+			</div>
+		</form>
+	</div>
+	<script th:inline="javascript">
+		var searchType;
+		var searchRequest = null;
+		$(document).ready(function(){
+			var id = [[${id}]];
+			var endpoint = [[${endpoint}]];
+			var view = [[${view}]];
+			var append = [[${append}]];
+			if (id == "abGroupSearch"){
+				searchType = "group";
+			} else {
+				searchType = "item";
+			}
+			var form = '#' + id + '_form';
+			$(form).find('input').on('keyup',function(){
+				clearTimeout(typingTimer);
+				typingTimer = setTimeout(function() {
+					searchItem(form,endpoint,view,append,id)
+				}, doneTypingInterval);
+			});
+			$(form).find('input').on('keydown',function(e){
+				if (e.key === "Enter"){
+					location.href = contextpath + 'songs?searchTerm=' + $('.search-input').val();
+				}
+				clearTimeout(typingTimer);
+			});
+
+			$(form).submit(function(e){
+				e.preventDefault();
+			});
+		});
+		function searchItem(form,endpoint,view,append,id){
+			if (id == "abGroupSearch"){
+				searchType = "group";
+			} else {
+				searchType = "item";
+			}
+			if (searchRequest != null){
+				searchRequest.abort();
+			}
+			searchRequest = $.ajax({
+				url: contextpath + endpoint,
+				method: "GET",
+				data: {
+					searchValue:$(form).find('input').val(),
+					view: view,
+					searchType: searchType
+				},
+				success: function(data) {
+					$(append).html(data);
+					if (id == 'setlistSearch' && loggedInUser != 'anonymousUser'){
+						$('table.set-table').each(function(){
+							if ($(this).hasClass('ui-sortable')){
+								$(this).sortable('destroy');
+							}
+							initializeSortableSetListTable(this);
+						});
+					}
+					refreshCategories();
+				}
+			});
+		}
+	</script>
+</th:block>

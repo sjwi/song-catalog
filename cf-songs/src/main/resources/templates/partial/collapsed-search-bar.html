@@ -1,0 +1,80 @@
+<th:block th:fragment="searchBar(endpoint,view,type,id,append)" xmlns:th="http://www.thymeleaf.org">
+	<div id="home-song-search" class="d-flex align-items-center w-100">
+		<form th:id="${id + '_form'}" class="w-100">
+			<img th:src="@{/images/mag-glass-inverse.png}" class="search-glass">
+			<div class="collapsed-search input-group collapse w-100">
+				<input class="form-control search-input" type="text" name="searchTerm" th:value="${searchTerm != null}? ${searchTerm}:''" th:placeholder="${'Search ' + type + '...'}" /> 
+			</div>
+		</form>
+	</div>
+	<script th:inline="javascript">
+		var searchType;
+		var searchRequest = null;
+		$(document).on('click','.search-glass', function(e){
+			$('.search-glass').hide();
+			$('.search-input').addClass('sliding');
+			$('.collapsed-search').show();
+			$('.search-input').focusTextToEnd();
+			$('.user-btn,.static-song-page-title').css({'opacity':'0'});
+			$('.top-nav').addClass('min-z');
+		});
+		$(document).on('focusout','.search-input',function(e){
+			$('.search-glass').show();
+			$('.search-input').removeClass('sliding');
+			$('.collapsed-search').hide();
+			$('.user-btn,.static-song-page-title').css('opacity','1');
+			$('.top-nav').removeClass('min-z');
+		});
+		$(document).ready(function(){
+			var id = [[${id}]];
+			var endpoint = [[${endpoint}]];
+			var view = [[${view}]];
+			var append = [[${append}]];
+			if (id == "abGroupSearch"){
+				searchType = "group";
+			} else {
+				searchType = "item";
+			}
+			var form = '#' + id + '_form';
+			$(form).find('input').on('keyup',function(){
+				clearTimeout(typingTimer);
+				typingTimer = setTimeout(function() {
+					searchItem(form,endpoint,view,append,id)
+				}, doneTypingInterval);
+			});
+			$(form).find('input').on('keydown',function(e){
+				if (e.key === "Enter"){
+					location.href = contextpath + 'songs?searchTerm=' + $('.search-input').val();
+				}
+				clearTimeout(typingTimer);
+			});
+
+			$(form).submit(function(e){
+				e.preventDefault();
+			});
+		});
+		function searchItem(form,endpoint,view,append,id){
+			console.log('hi');
+			if (id == "abGroupSearch"){
+				searchType = "group";
+			} else {
+				searchType = "item";
+			}
+			if (searchRequest != null){
+				searchRequest.abort();
+			}
+			searchRequest = $.ajax({
+				url: contextpath + endpoint,
+				method: "GET",
+				data: {
+					searchValue:$(form).find('input').val(),
+					view: view,
+					searchType: searchType
+				},
+				success: function(data) {
+					$(append).html(data);
+				}
+			});
+		}
+	</script>
+</th:block>

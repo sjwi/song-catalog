@@ -1,0 +1,3 @@
+mvn install:install-file -Dfile=javax_servlet_jsp_jstl_1_2_1_jar -DgroupId=javax_servlet_jsp -DartifactId=jstl_notapi -Dversion=121 -Dpackaging=jar
+mvn install:install-file -Dfile=javax_servlet_jsp_jstl_api_1_2_1_jar -DgroupId=javax_servlet_jsp -DartifactId=jstl -Dversion=121 -Dpackaging=jar
+mvn install:install-file -Dfile=sqljdbc42 -DgroupId=com_microsoft_sqlserver -DartifactId=sqljdbc42 -Dversion=42 -Dpackaging=jar

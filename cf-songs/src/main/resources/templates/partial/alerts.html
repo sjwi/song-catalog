@@ -1,0 +1,45 @@
+<div class="alert-container">
+	<div class="collapse">
+		<div id="custom-alert" class="alert fade fade-alert show" role="alert" data-mousein="false">
+			<button type="button" class="close alert-close" data-dismiss="alert" aria-label="Close">
+				<span aria-hidden="true">&times;</span>
+			</button>
+		  <span class="alert-message"></span>
+		</div>
+	</div>
+</div>
+
+<script>
+	function alertWithoutFade(alertType,msg){
+		if (alertType == 'success'){
+			alertType = 'info';
+		}
+		var dynamicElement = $('#custom-alert').clone();
+		$(dynamicElement).find('.alert-message').html(msg);
+		$(dynamicElement).addClass('alert-' + alertType);
+		$(dynamicElement).appendTo($('.alert-container'));
+	}
+	function alertWithFade(alertType, msg){
+		if (alertType == 'success'){
+			alertType = 'info';
+		}
+		var dynamicElement = $('#custom-alert').clone();
+		$(dynamicElement).find('.alert-message').html(msg);
+		$(dynamicElement).addClass('alert-' + alertType);
+		$(dynamicElement).hover(function(){
+			$(this).data('mousein',true);
+		}, function(){
+			$(this).data('mousein',false);
+			setAlertToFadeOut(this);
+		});
+		$(dynamicElement).appendTo($('.alert-container'));
+		setAlertToFadeOut(dynamicElement);
+	}
+	function setAlertToFadeOut(alertToFade){
+		setTimeout(function(){
+			if ($(alertToFade).data('mousein') == false){
+				$(alertToFade).alert('close');
+			}
+		}, 3000);
+	}
+</script>

@@ -1,0 +1,17 @@
+<div id="sideNav" class="side-nav">
+  <a href="javascript:void(0)" class="close-nav nav-link text-white">&times;</a>
+	<ul class="navbar-nav ml-2">
+		<li class="nav nav-item active">
+			<a class="nav-link text-white" th:href="@{/}">Home <span class="sr-only">Home</span></a>
+		</li>
+		<li class="nav-item song-catalog-nav">
+			<a class="nav-link text-white" th:href="@{/songs}">Song Catalog</a>
+		</li>
+		<li class="nav-item">
+			<a class="nav-link text-white" th:href="@{/setlists}" >Set Lists</a>
+		</li>
+		<li class="nav-item" sec:authorize="hasAuthority('USER')">
+			<a class="nav-link text-white" th:href="@{/addressbook}" >Address Book</a>
+		</li>
+	</ul>
+</div>

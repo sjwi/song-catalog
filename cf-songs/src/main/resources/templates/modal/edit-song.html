@@ -1,0 +1,65 @@
+<div class="modal fade" id="editSongModal">
+	<div class="modal-dialog modal-lg" role="document">
+		<div class="modal-content">
+			<div class = "modal-header">
+				<h5 class="modal-title"></h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+				  <span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<form method="POST" action="" id="editSongForm">
+			</form>	
+			<div class="modal-footer">
+				<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+				<button type="submit" class="btn btn-info" onclick="$('#editSongForm').submit();">Edit Song</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script>
+	$(document).ready(function(){
+		$('#editSongForm').on('submit',function(e){
+			e.preventDefault();
+			if (isFormFilled(this)){
+				$.ajax({
+					url: contextpath + 'song/edit/'+ $('#editSongModal').find('.song-id').val(),
+					method: "POST",
+					data: new FormData(this),
+					processData: false,
+					contentType: false,
+					beforeSend: function(){
+						$('#submitEditSongBtn').attr('disabled',true);
+					},
+					success: function() {
+						alertWithFade('success','Song updated')
+						setTimeout(function(){
+							location.reload()
+						},1000);
+					},
+					error: function(data){
+						$('#submitEditSongBtn').attr('disabled',false);
+						alertWithFade('danger','Something went wrong! Unable to edit song')
+					}
+				});
+			}
+		});
+	});
+	function showEditSongModal(id, setSongId){
+		$.ajax({
+			url: contextpath + 'song/edit/' + id,
+			method: "GET",
+			success: function(data) {
+				$('#editSongForm').html(data);
+				if (setSongId != undefined){
+					$("#editSongModal").find('.set-song-id').val(setSongId);
+				}
+				$('#editSongModal').find('select[name="defaultKey"]').attr('disabled',true);
+				$('#editSongModal').modal('show');
+			},
+			error: function(data){
+				alertWithFade('danger','Something went wrong! Unable to retrieve song details');
+			},
+		});		
+	}
+</script>

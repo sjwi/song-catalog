@@ -1,0 +1,40 @@
+:root {
+	--main-bg-color: #303030;
+	--secondary-bg-color: #004f70;
+
+	--icon-bar-color: #B6B6B6;
+	--navbar-menu-item-color: #00c1ff;
+	
+	--main-text-color: #FFF;
+	--strong-text-color: #FFF;
+	
+	--primary-grey: rgba(130, 130, 130,1);
+	--secondary-grey: #4a4a4a;
+	
+	--primary-grey-opacity: rgba(130, 130, 130,0);
+	
+	--deep-grey: #a6a6a6;
+	--dark-grey: #626262;
+	
+	--action-container-bg: #2B2B2B;
+	--action-container-hover: #6D6D6D;
+	
+	--black-0: #000000;
+	
+	--version-selected: #00A8DF;
+
+	--set-row-hover: inset 0 4px 0 0 rgba(48, 48, 48,.5);
+	--set-table-hover: inset 0 -3px 0 0 rgba(48, 48, 48,.5);
+	
+	--offnav-bg-color: #004f70;
+	--offnav-primary-color: #00b3ff;
+	--offnav-secondary-color: #fff;
+	
+	--form-ctrl-bg: #dbdbdb;
+	--form-ctrl-text: #212529;
+	--form-ctrl-ph: #4a4a4a;
+
+	--version-bg-color: #292929;
+	--version-bg-color-hover: #3b3b3b;
+	--secondary-border-color: #006791;
+}

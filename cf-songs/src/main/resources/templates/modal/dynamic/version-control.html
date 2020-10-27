@@ -1,0 +1,208 @@
+<div class="modal-dialog modal-xl" role="document">
+	<div class="modal-content">
+		<div class = "modal-header">
+			<h5 class="modal-title">Version control for <a th:href="@{/song/__${song.id}__}"><b th:text="${song.name}"></b></a></h5>
+			<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+			  <span aria-hidden="true">&times;</span>
+			</button>
+		</div>
+		<div class="modal-body">
+			<div class="row no-gutters justify-content-center">
+				<div class="col-auto no-gutters w-100">
+					<table class="table table-default table-striped version-control-table">
+						<tbody>
+							<tr class="version-control-row selected master-version" th:attr="data-target=${song.id}">
+								<td class="col-3 pl-2" th:text="${'Master** [' + song.createdBy + ']'}"></td>
+								<td class="col-3">
+								</td>
+								<td class="col-3">
+								</td>
+								<td class="col-3">
+								</td>
+							</tr>
+							<tr th:each="version: ${song.versions}" class="version-control-row" th:attr="data-target=${version.id}">
+								<td class="col-3 pl-2" th:text="${version.versionName + ' [' + version.createdBy + ']'}"></td>
+								<td class="col-3">
+									<div class="btn btn-outline-info btn-xs edit-version">Edit</div>
+								</td>
+								<td class="col-3" data-toggle="tooltip" data-placement="bottom" title="Click to set this version as the Master version">
+									<div class="btn btn-outline-primary btn-xs swap-master">Master</div>
+								</td>
+								<td class="col-3">
+									<div class="btn btn-outline-danger btn-xs delete-version">Delete</div>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+			<form method="POST" action="" class="collapse" id="createVersionForm">
+				<input type="hidden" class="song-id" name="songId" th:value="${song.id}">
+			</form>	
+			<div class="row no-gutters mt-1">
+				<div class="col-12 text-center">
+					<button type="submit" class="btn btn-info btn-sm" id="submitCreateVersionBtn">Create Version</button>
+				</div>
+			</div>
+			<div class="edit-song-form mt-5 pt-4 pl-4 pr-4 pb-4 collapse">
+				<div class="container">
+				<form method="POST" action="" id="editSongForm">
+				</form>	
+				<div class="text-right w-100">
+					<button type="button" class="btn btn-primary edit-version-btn" onclick="$('#versionControlModal').find('#editSongForm').submit();">Edit</button>
+				</div>
+				</div>
+			</div>
+			<div class="song-page-container modal-page-container text-center mt-3">
+				<th:block th:replace="dynamic/single-song-page :: songPage(${song})"></th:block>
+			</div>
+		</div>
+		<div class="modal-footer">
+			<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+		</div>
+	</div>
+</div>
+
+
+<script>
+$(document).ready(function(){
+	$('#submitCreateVersionBtn').click(function(e){
+		if ($('#versionControlModal').find('#createVersionForm').is(':visible')){
+			if (isFormFilled($('#versionControlModal').find('#createVersionForm'))){
+				$('#versionControlModal').find('#submitCreateVersionBtn').find('.btn').attr('disabled',true);
+				var formData = new FormData($('#versionControlModal').find('#createVersionForm')[0]);
+				formData.append('setSongId','0');
+				$.ajax({
+					url: contextpath + 'song/version/' + $('#createVersionForm').find('.song-id').val(),
+					method: "POST",
+					data: formData,
+					processData: false,
+					contentType: false,
+					success: function() {
+						alertWithFade('success','New version created for <b>' + $('#createVersionForm').find('.song-name').val() + '</b>');
+						refreshVersionControl($('#versionControlModal').find('.song-id').val());
+						versionChange = true;
+					},
+					error: function(data){
+						alertWithFade('danger','Something went wrong! Unable to create version')
+					},
+					complete: function(){
+						$('#versionControlModal').find('#submitCreateVersionBtn').find('.btn').attr('disabled',false);
+					}
+				});
+			} else return;
+		} else {
+			$.ajax({
+				url: contextpath + 'song/version/' + $('#versionControlModal').find('.song-id').val() + '?view=modal/dynamic/new-version', 
+				method: "GET",
+				beforeSend: function(data){
+					$('#versionControlModal').find('.song-page-container').html($('.loading'));
+				},
+				success: function(data) {
+					$('#createVersionForm').show();
+					$('#versionControlModal').find('.song-page-container').hide();
+					$('#versionControlModal').find('.edit-song-form').hide();
+					$('#versionControlModal').find('#createVersionForm').html(data);
+				},
+				error: function(data){
+					alertWithFade('danger','Something went wrong! Unable to get master data for song versions')
+				}
+			});
+		}
+
+	});
+	$('.version-control-row').click(function(e){
+		if (!$(e.target).is('.btn')){
+			$.ajax({
+				url: contextpath + 'song/version/' + $(e.target).closest('.version-control-row').data('target') + '?view=dynamic/single-song-page', 
+				method: "GET",
+				beforeSend: function(data){
+					$('#versionControlModal').find('.song-page-container').html($('.loading'));
+				},
+				success: function(data) {
+					$('#createVersionForm').hide();
+					$('#versionControlModal').find('.edit-song-form').hide();
+					$('#versionControlModal').find('.selected').removeClass('selected');
+					$(e.target).closest('.version-control-row').addClass('selected');
+					$('#versionControlModal').find('.song-page-container').show();
+					$('#versionControlModal').find('.song-page-container').html(data);
+				},
+				error: function(data){
+					alertWithFade('danger','Something went wrong! Unable to get master data for song versions')
+				}
+			});
+		}
+	});
+	$('.delete-version').click(function(e){
+		$.ajax({
+			url: contextpath + 'song/delete', 
+			method: "DELETE",
+			data: {songId:$(e.target).closest('.version-control-row').data('target')},
+			success: function(data) {
+				refreshVersionControl($('#versionControlModal').find('.song-id').val());
+				alertWithFade('success','Version deleted.');
+				versionChange = true;
+			},
+			error: function(data){
+				alertWithFade('danger','Something went wrong! Unable to delete version')
+			}
+		});
+	});
+	$('.swap-master').click(function(e){
+		$.ajax({
+			url: contextpath + 'song/version/swap-master/'+  $('.master-version').data('target'), 
+			method: "POST",
+			data: {newId:$(e.target).closest('.version-control-row').data('target')},
+			success: function(data) {
+				refreshVersionControl($(e.target).closest('.version-control-row').data('target'));
+				alertWithFade('success','Master has been updated.');
+				versionChange = true;
+			},
+			error: function(data){
+				alertWithFade('danger','Something went wrong! Unable to change master version')
+			}
+		});
+	});
+	$('.edit-version').click(function(e){
+		$.ajax({
+			url: contextpath + 'song/edit/' + $(e.target).closest('.version-control-row').data('target'),
+			method: "GET",
+			success: function(data) {
+				$('#versionControlModal').find('#editSongForm').html(data);
+				$('#versionControlModal').find('select[name="defaultKey"]').attr('disabled',true);
+				$('#versionControlModal').find('.song-page-container').hide();
+				$('#versionControlModal').find('#createVersionForm').hide();
+				$('#versionControlModal').find('.edit-song-form').show();
+			},
+			error: function(data){
+				alertWithFade('danger','Something went wrong! Unable to retrieve song details');
+			},
+		});			
+	});
+	$('#versionControlModal').find('#editSongForm').on('submit',function(e){
+		e.preventDefault();
+		if (isFormFilled(this)){
+			$.ajax({
+				url: contextpath + 'song/edit/'+ $(this).find('.song-id').val(),
+				method: "POST",
+				data: $('#versionControlModal').find('#editSongForm').serialize(),
+				beforeSend: function(){
+					$('.edit-version-btn').attr('disabled',true);
+				},
+				success: function() {
+					alertWithFade('success','Song updated')
+					refreshVersionControl($('#versionControlModal').find('.song-id').val());
+					versionChange = true;
+				},
+				error: function(data){
+					$('#submitEditSongBtn').attr('disabled',false);
+					alertWithFade('danger','Something went wrong! Unable to edit song')
+				}
+			});
+		}
+	});
+	if (createToggle){
+		$('#submitCreateVersionBtn').click();
+	}
+});
+</script>

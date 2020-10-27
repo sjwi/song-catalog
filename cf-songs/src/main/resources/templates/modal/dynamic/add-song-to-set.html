@@ -1,0 +1,89 @@
+<div class="modal-body">
+	<div class="modal-message mb-4 collapse">
+		<div class="form-group row">
+			<div class="col-12 text-center">
+				<span class="notification-message drag-notification">NOTE: You can add songs quickly from the home page by dragging the grip &nbsp;&nbsp;<img width="8px" class="grip-container" th:src="@{/images/grip-inverse-lg.png}">&nbsp;&nbsp; icon into a set list</span>
+			</div>
+		</div>
+	</div>
+	<input type="hidden" name="song" class="song-id" th:value="${song.id}"/> 
+	<div class="form-group row no-gutters">
+		<div class="col-2 no-gutters">
+			<label class="col-form-label" for="setList">Set List</label>
+		</div>
+		<div class="col-6 no-gutters">
+			<select title="Select a set list"
+				name="setList" class="custom-select set-list required">
+				<option value="0">Add to New Set</option>
+				<option th:each="list, iter: ${sets}"
+					th:value = "${list.id}" th:text="${list.setListName}" th:selected="${iter.index==0}"></option>
+			</select>
+		</div>
+		<div class="col-2 text-right no-gutters pr-2">
+			<label class="col-form-label" for="setListKey">Key</label>
+		</div>
+		<div class="col-2 text-right no-gutters">
+			<th:block th:replace="partial/key-dropdown-select :: keySet(${song.defaultKey},'setListKey')"></th:block>
+		</div>
+	</div>
+	<div class="form-group row add-new-set no-gutters">
+		<div id="addNewSet" data-loaded="false" class="col-12"></div>
+	</div>
+	<div class="form-group row no-gutters">
+		<div class="col-2 no-gutters">
+			<label class="col-form-label" for="version">Version</label>
+		</div>
+		<div class="col-10 no-gutters">
+			<select class="custom-select version-list required" title="Select a version" name="version">
+				<option value="master" th:text="${'** [' + song.createdBy + ']'}"></option>
+				<option th:each="version: ${song.versions}" th:value="${version.id}" th:text="${version.versionName + ' [' + version.createdBy + ']'}"></option>
+				<option value="newVersion">Create new version</option>
+			</select>
+		</div>
+	</div>
+	<div id="newVersionContainer" class="template-container collapse">
+	</div>
+</div>
+<div class="modal-footer">
+	<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+	<button type="submit" class="btn btn-info" id="submitAddSongToSetFormBtn">Add to set</button>
+</div>
+
+<script th:inline="javascript">
+	$(document).ready(function(){
+		$('#addSongToSetListModal').find('.modal-title').html('Add <a href="' + [[@{/song/__${song.id}__}]] + '"><b>' + [[${song.name}]] + '</b></a> to a Set List');
+		$('.version-list').change(function(){
+			if ($(this).val() == 'newVersion'){
+				$.ajax({
+					url: contextpath + 'song/version/' + $('#addSongToSetListModal').find('.song-id').val() + '?view=modal/dynamic/new-version', 
+					method: "GET",
+					success: function(data) {
+						$('#newVersionContainer').html(data);
+						$('#newVersionContainer').show();
+					},
+					error: function(data){
+						alertWithFade('danger','Something went wrong! Unable to add song to set')
+					}
+				});
+			}
+			else{
+				$('#newVersionContainer').hide();
+			}
+		});
+		
+		$('.set-list').change(function(){
+			if ($(this).val() == "0") {
+				var setListElement = $('#addSongToSetListModal').find('#addNewSet');
+				if($(setListElement).data('loaded')){
+					$(".add-new-set").show();
+				} else {
+					$(setListElement).html($('#createSetListForm').html());
+					$(setListElement).find('.date-picker').val(new Date().toDateInputValue());
+					$(setListElement).data('loaded','true')
+				}
+			}else{
+				$(".add-new-set").hide();
+			}
+		});
+	});
+</script>

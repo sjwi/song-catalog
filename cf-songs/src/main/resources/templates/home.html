@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:sec="http://www.thymeleaf.org" xmlns:th="http://www.thymeleaf.org">
+	<th:block th:replace="partial/head :: head('CF Worship Songs')"></th:block>
+	<th:block th:replace="partial/header"></th:block>
+	<body id="homePageBody">
+		<div class="scroll-lock">
+			<div class="row no-gutters flex-nowrap home-page">
+				<div class="col no-gutters">
+					<div class="song-section">
+						<nav class="sticky-top song custom-border-bottom" id="songNav">
+							<div class="row song-header no-gutters">
+								<div class="col-2">
+									<a th:href="@{/}"><img border="0"
+							th:src="${#session.getAttribute(T(com.sjwi.cfsongs.config.PreferencesConfiguration).NIGHT_MODE_PREFERENCE_KEY) == null || !#session.getAttribute(T(com.sjwi.cfsongs.config.PreferencesConfiguration).NIGHT_MODE_PREFERENCE_KEY)}? @{/images/logo_transparent.png}: @{/images/logo_transparent_dark.png}"  class="logo dark-swap" alt="Logo"></a>
+								</div>
+								<div class="col-8 text-center my-auto">
+									<div> <a th:href="@{/songs}" class="title-link">Song Catalog</a></div>
+								</div>
+								<div class="col-2"></div>
+							</div>
+							<div class="row mr-2 pb-2 no-gutters">
+								<div class="col-4">
+									<th:block th:replace="partial/navbar"></th:block>
+								</div>
+								<div class="col-4 my-auto text-center" >
+									<div sec:authorize="hasAuthority('USER')" class="btn add-item-btn" onclick="createSong();" data-toggle="tooltip" data-placement="bottom" title="Add new song"><img width="30px" th:src="@{/images/plus-blue.png}"></div>
+								</div>
+								<div class="col-4 text-center">
+									<th:block th:replace="partial/search-bar :: searchBar('search/song','','song catalog','songSearch','#songTableContainer')"></th:block>
+								</div>
+							</div>
+							<div class="container">
+								<th:block th:replace="partial/categories"></th:block>
+							</div>
+						</nav>
+						<div class="container">
+							<div class="template-container" id="songTableContainer">
+								<th:block th:replace="dynamic/song-table"></th:block>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-12 col-md-6 no-gutters setlist-home-col" style="background: var(--secondary-bg-color)">
+					<div class="setlist-section">
+						<nav class="sticky-top setlist" id="setListNav">
+							<div class="row setlist-header no-gutters">
+									<div class="col-12 my-auto text-center">
+										<a th:href="@{/setlists}" class="title-link" style="color:white;">
+											Set Lists
+										</a>
+									</div>
+							</div>
+							<div class="row mr-2 pb-2 no-gutters">
+								<div class="col-5 my-auto pr-2"></div>
+								<div class="col-2 text-center">
+									<div sec:authorize="hasAuthority('USER')" class="btn add-item-btn" onclick="createSetList();" data-toggle="tooltip" data-placement="bottom" title="Add new set"><img width="30px" th:src="@{/images/plus-inverse.png}"></div>
+								</div>
+								<div class="col-1"></div>
+								<div class="col-4 text-right">
+									<th:block th:replace="partial/search-bar :: searchBar('search/setlist','','set lists','setlistSearch','#setListTableContainer')"></th:block>
+								</div>
+							</div>
+						</nav>
+						<div class="container">
+							<div class="template-container" id="setListTableContainer">
+								<th:block th:replace="dynamic/set-list-table :: setListResults(${sets})"></th:block>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		<!-- 	<th:block th:replace="partial/footer"></th:block> -->
+			<div class="modal-container">
+				<th:block th:replace="modal/download"></th:block>
+				<th:block th:replace="modal/qrcode"></th:block>
+				<th:block sec:authorize="hasAuthority('USER')">
+					<th:block th:replace="modal/create-item"></th:block>
+					<th:block th:replace="modal/add-song-to-set"></th:block>
+					<th:block th:replace="modal/delete-song"></th:block>
+					<th:block th:replace="modal/edit-song"></th:block>
+					<th:block th:replace="modal/edit-set"></th:block>
+					<th:block th:replace="modal/version-control"></th:block>
+					<th:block th:replace="modal/delete-setlist"></th:block>
+					<th:block th:replace="modal/add-song-from-select"></th:block>
+					<th:block th:replace="modal/email-set"></th:block>
+					<th:block th:replace="modal/change-version"></th:block>
+				</th:block>
+			</div>
+		</div>
+	</body>
+	<th:block sec:authorize="hasAuthority('USER')">
+		<script th:inline="javascript" th:src="@{/js/page/set-list/user.js}"></script>
+		<script th:inline="javascript" th:src="@{/js/page/set-list/static-user.js}"></script>
+		<script th:inline="javascript" th:src="@{/js/page/song/user.js}"></script>
+		<script th:inline="javascript" th:src="@{/js/page/set-list/key-change/user.js}"></script>
+	</th:block>
+	<script th:inline="javascript" th:src="@{/js/page/set-list/page.js}"></script>
+	<script th:inline="javascript" th:src="@{/js/page/set-list/static.js}"></script>
+
+	<script th:inline="javascript" th:src="@{/js/page/song/page.js}"></script>
+	<script th:inline="javascript" th:src="@{/js/page/song/static.js}"></script>
+	<script>
+		var ignoreSongClickedSelector = ".action-btn,.song-dropdown-btn,.dropdown-menu, li, .dropdown-item,.grip-container,img";
+		var resized = false;
+		$(document).ready(function(){
+			$(document).on('click','.song-row',function(e){
+				if (!$(e.target).is(ignoreSongClickedSelector)){
+					location.href= contextpath + "song/" + $(e.target).closest('.song-metadata').data('target');
+				}
+			});
+			$(document).on('click','.set-list-container',function(e){
+				if(!$(e.target).is(setContainerIgnoreSelector)){
+					location.href = contextpath +'setlist/' +  $(this).data('target');
+				}
+			});
+			$(window).resize(function() {
+				var width = $(window).width();
+				if (width > 900 && !resized) {
+					$('#setListTableContainer').load(encodeURI(contextpath + 'search/setlist?searchValue='));
+					resized = true;
+				}
+			});
+			$('#versionControlModal').on('hidden.bs.modal', function () {
+				if (versionChange){
+					location.reload();
+				}
+			});	
+			if (window.innerWidth < 900){
+				addScrollListener('#songNav');
+			} else {
+				hideCategoriesOnScrollListener('#categoriesControl', '.song-section');
+			}
+		});
+	</script>
+	<script type="text/javascript" sec:authorize="!hasAuthority('USER')">
+		var setContainerIgnoreSelector = '.col,img';
+	</script>
+	<script type="text/javascript" sec:authorize="hasAuthority('USER')">
+		var setContainerIgnoreSelector = '.delete-set,.delete-set span,.ignore-nav,a,table,tbody,td,tr,img,.col,.btn,.dropdown-item,button,.close-dark,.grip-container,.set-grip';
+		function allowDrop(e){
+			e.preventDefault();
+		}
+		function dragSong(e){
+			var row = $(e.target).closest('.song-metadata');
+			e.dataTransfer.setData("songId",$(row).data('target'));
+			e.dataTransfer.setData("key",$(row).data('defaultkey'));
+			e.dataTransfer.setDragImage($(row)[0],200,30);
+		}
+		function dropSongToSet(e, setId){
+			dragCtr = 0;
+			$('.set-list-container').removeClass('hover-background');
+			var sort = 0;
+			if ($(e.target).closest('.set-table').length){
+				sort = $(e.target).closest('.song-metadata').data('sort');
+			}
+			quickAddSongToSet(e.dataTransfer.getData("songId"),setId,e.dataTransfer.getData("key"),sort);
+		}
+	</script>
+</html>

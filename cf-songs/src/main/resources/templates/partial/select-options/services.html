@@ -1,0 +1,3 @@
+<th:block th:fragment="services(services)">
+	<option th:each="service, iter:${services}" th:selected="${iter==0}" th:value="${service.key}" th:text="${service.value}"></option>
+</th:block>

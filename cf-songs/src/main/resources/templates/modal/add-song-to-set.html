@@ -1,0 +1,64 @@
+<div class="modal fade" id="addSongToSetListModal">
+	<div class="modal-dialog modal-lg" role="document">
+		<div class="modal-content">
+			<div class = "modal-header">
+				<h5 class="modal-title"></h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+				  <span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<form method="POST" th:action="@{/setlist/add-song}" id="addSongToSetForm">
+			</form>	
+		</div>
+	</div>
+</div>
+
+
+<script>
+function addSongToSet(id){
+	$.ajax({
+		url: contextpath + 'song/details/' + id + '?view=modal/dynamic/add-song-to-set', 
+		method: "GET",
+		success: function(data) {
+			$('#addSongToSetForm').html(data);
+			$('#addSongToSetListModal').modal('show');
+		},
+		error: function(data){
+			alertWithFade('danger','Something went wrong! Unable to retreive song metadata.')
+		}
+	});
+}
+$(document).ready(function(){
+	$('#addSongToSetListModal').on('shown.bs.modal',function(){
+		if (!isMobile){
+			$('#addSongToSetListModal').find('.modal-message').show();
+		}
+	});
+	$('#addSongToSetForm').on('submit',function(e){
+		e.preventDefault();
+		if (isFormFilled(this)){
+			$('#addSongToSetForm button[type="submit"]').prop("disabled",true);
+			$.ajax({
+				url: contextpath + 'setlist/add-song',
+				method: "POST",
+				data: $('#addSongToSetForm').serialize(),
+				success: function() {
+					if ($('#addSongToSetListModal').find('.set-list').val() == '0'){
+						location.reload();
+					} else {
+						alertWithFade('success','<b>' + $('#addSongToSetListModal').find('.modal-title').html() + '</b> added to set list <a href="'+ contextpath + 'setlist/' +  $('#addSongToSetListModal').find('.set-list').val()  + '" class="alert-link">'+$('#addSongToSetListModal').find('.set-list option:selected').text() + '</a>');
+						reloadSetContainerIfPresent($('#addSongToSetListModal').find('.set-list').val());
+						$('#addSongToSetListModal').modal('hide');
+					}
+				},
+				error: function(data){
+					alertWithFade('danger','Something went wrong! Unable to add song to set')
+				},
+				complete: function(){
+					$('#addSongToSetForm button[type="submit"]').prop("disabled",false);
+				}
+			});
+		}
+	});
+});
+</script>

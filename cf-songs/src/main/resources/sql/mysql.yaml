@@ -1,0 +1,375 @@
+getUserForLogin: >
+  select * from AppUsers where username= ? and password = ?
+  
+getMySongsByUserName: > 
+  Select * from Song WHERE RELATED IS NULL AND CREATED_BY = ? order by NAME
+
+getSongVersionsByRelatedIdExcludePrivate: >
+  select v.ID as VERSION_ID,vc.VERSION,s.ID,s.NAME,s.BODY,s.FREQUENCY,s.DEFAULT_KEY,s.ARTIST,s.NOTES,s.CREATED_BY,s.MODIFIED_BY,s.CHANGED_ON,s.RELATED,s.PRIVATE,s.CATEGORY
+    from Song s inner join Version v on s.ID = v.SONG_ID INNER JOIN VersionControl vc on vc.ID = v.VERSION_NAME
+    WHERE s.RELATED = ? and s.PRIVATE IS NULL
+  
+getSongVersionsByRelatedIdIncludePrivate: >
+  select v.ID as VERSION_ID,vc.VERSION,s.ID,s.NAME,s.BODY,s.FREQUENCY,s.DEFAULT_KEY,s.ARTIST,s.NOTES,s.CREATED_BY,s.MODIFIED_BY,s.CHANGED_ON,s.RELATED,s.PRIVATE,s.CATEGORY
+    from Song s inner join Version v on s.ID = v.SONG_ID INNER JOIN VersionControl vc on vc.ID = v.VERSION_NAME
+    WHERE s.RELATED = ?
+  
+getSongVersionById: >
+  select v.ID as VERSION_ID,vc.VERSION,s.ID,s.NAME,s.BODY,s.FREQUENCY,s.DEFAULT_KEY,s.ARTIST,s.NOTES,s.CREATED_BY,s.MODIFIED_BY,s.CHANGED_ON,s.RELATED,s.PRIVATE,s.CATEGORY
+    from Song s inner join Version v on s.ID = v.SONG_ID INNER JOIN VersionControl vc on vc.ID = v.VERSION_NAME
+    WHERE s.ID = ?
+
+getSetListVersionById: >
+  select sl.ID as SET_SONG_ID, sl.SETLIST_ID, sl.SORT_ORDER, v.ID as VERSION_ID,vc.VERSION,s.ID,s.NAME,s.BODY,s.FREQUENCY,sl.DEFAULT_KEY,s.ARTIST,s.NOTES,s.CREATED_BY,s.MODIFIED_BY,s.CHANGED_ON,s.RELATED,s.PRIVATE,s.CATEGORY
+    from Song s inner join Version v on s.ID = v.SONG_ID inner join SetList sl on sl.SONG_ID = s.ID INNER JOIN VersionControl vc on vc.ID = v.VERSION_NAME
+    WHERE sl.ID = ?
+
+getRecordingBySongId: >
+  SELECT ID,SONG_ID,PATH,EXT,FILE FROM Recording WHERE SONG_ID = ?
+  
+getAllSongsOrderByNameAsc: >
+  Select * from Song WHERE RELATED IS NULL and PRIVATE IS NULL order by REPLACE(NAME,'''','')
+
+getXNumberOfSongsOrderByNameAsc: >
+  Select * from Song WHERE RELATED IS NULL and PRIVATE IS NULL order by NAME LIMIT ?
+
+insertNewSong: >
+  insert into Song (NAME, BODY, DEFAULT_KEY,FREQUENCY,CREATED_BY,MODIFIED_BY,CHANGED_ON,PRIVATE,CATEGORY) values (?,?,?,?,?,?,CURRENT_TIMESTAMP(),?,?)
+  
+getSongById: >
+  Select * from Song where ID = ?
+  
+getKeysetByKeyId: >
+  Select * from KeyMaster where keyId = ?
+  
+getAllKeysets: >
+  Select * from KeyMaster
+  
+getSongCategories: >
+  Select * from SongCategories;
+
+updateSongById: >
+  update Song set NAME = ?, BODY = ?, FREQUENCY = ?, DEFAULT_KEY = ?, ARTIST = ?,MODIFIED_BY = ?,CATEGORY = ?, CHANGED_ON = CURRENT_TIMESTAMP() where ID = ?
+  
+insertSongIntoArchive: >
+  Insert into SongArchive select * from Song where ID = ?
+  
+deleteSongBySongId: >
+  Delete from Song where ID = ?
+
+updateSongTitleAndBody: >
+  update Song set NAME = ?, BODY = ?, MODIFIED_BY = ?, CHANGED_ON = CURRENT_TIMESTAMP() where ID = ?
+
+deleteVersionsByRelatedId: >
+  Delete from Version where SONG_ID in (select ID from Song where related = ?)
+  
+deleteSongByRelatedId: >
+  Delete from Song where RELATED = ?
+
+deleteFromAllSetlistsBySongId: >
+  Delete from SetList where SONG_ID = ?
+  
+getAllSetlistsOrderByCreatedOnDesc: >
+  Select * from SetListMaster order by CREATED_ON DESC
+  
+getXNumberOfSetlistsOrderByCreatedOnDesc: >
+  Select * from SetListMaster order by CREATED_ON DESC LIMIT ?
+  
+getXNumberOfSetlistsOrderByCreatedOnDescWithPagination: >
+  Select * from SetListMaster order by CREATED_ON DESC LIMIT ?,?
+  
+getSetListsAfterX: >
+  Select * from SetListMaster order by CREATED_ON DESC LIMIT ?,100000
+  
+getMaxSortValInSetlist: >
+  SELECT SORT_ORDER FROM SetList WHERE SETLIST_ID = ? ORDER BY SORT_ORDER DESC LIMIT 1
+  
+insertSongIntoSetOverrideKey: >
+  INSERT INTO SetList (SETLIST_ID,SONG_ID,DEFAULT_KEY,SORT_ORDER,ARTIST,NOTES) SELECT ?,ID,?,?,?,? FROM Song WHERE ID = ?
+  
+updateSetListVersion: >
+  UPDATE SetList set SONG_ID = ? where SETLIST_ID = ? and SONG_ID = ?
+  
+updateSetListVersionBySetSongId: >
+   UPDATE SetList set SONG_ID = ?, DEFAULT_KEY = (select DEFAULT_KEY from Song where ID = ?)  where ID = ?
+
+updateSongFrequencyById: >
+  UPDATE Song SET FREQUENCY = FREQUENCY + 1 WHERE ID = ?
+  
+updateSetlistLastUpdated: >
+  UPDATE SetListMaster SET LAST_UPDATED = CURRENT_TIMESTAMP() WHERE ID = ?
+  
+insertSongIntoSetDefaultKey: >
+  INSERT INTO SetList (SETLIST_ID,SONG_ID,DEFAULT_KEY,SORT_ORDER,ARTIST,NOTES) SELECT ?,ID,DEFAULT_KEY,?,?,NOTES FROM Song WHERE ID = ?
+  
+insertSongsIntoSetDefaultKey: >
+  INSERT INTO SetList (SETLIST_ID,SONG_ID,DEFAULT_KEY,SORT_ORDER) 
+  SELECT ?,ID,DEFAULT_KEY,(SELECT SORT_ORDER + 1 FROM SetList WHERE SETLIST_ID = ? ORDER BY SORT_ORDER DESC LIMIT 1)
+  FROM Song WHERE ID = ?
+  
+getSongsInSetBySetId: >
+  Select a.ID, a.SETLIST_ID,a.SONG_ID,b.NAME,b.BODY,b.FREQUENCY,a.DEFAULT_KEY,a.SORT_ORDER,a.ARTIST,a.NOTES,b.CREATED_BY,b.MODIFIED_BY,b.CHANGED_ON,b.RELATED,b.PRIVATE,b.CATEGORY
+  from SetList a INNER JOIN Song b on a.SONG_ID = b.ID where a.SETLIST_ID = ? order by SORT_ORDER ASC
+  
+createNewSet: >
+  INSERT INTO SetListMaster (SETLIST_NAME,CREATED_ON,LAST_UPDATED,CREATED_BY,ORGANIZATION) VALUES (?,CURRENT_TIMESTAMP,CURRENT_TIMESTAMP,?,?)
+  
+getLatestSet: >
+  SELECT ID FROM SetListMaster order by ID desc LIMIT 1
+  
+deleteFromSetlistMaster: >
+  Delete from SetListMaster where ID = ?
+  
+insertIntoSetlistArchive: >
+  INSERT INTO SetListArchive select * from SetList where SETLIST_ID = ?
+  
+deleteFromSetlist: >
+  Delete from SetList where SETLIST_ID = ?
+  
+getSetlistById: >
+  Select * from SetListMaster where ID = ?
+  
+searchSongsByTerm: >
+  Select * from Song a where (RELATED IS NULL AND PRIVATE IS NULL) AND (LOWER(REPLACE(NAME,',','')) like :term or LOWER(REPLACE(BODY,',','')) like :term or ID like :term or DEFAULT_KEY like :term or LOWER(NOTES) like :term or (SELECT COUNT(*) FROM Song WHERE RELATED = a.ID and LOWER(REPLACE(BODY,',','')) like :term) > 0) order by REPLACE(NAME,'''','')
+
+getSortOrderForSongInSet: >
+  select SORT_ORDER from SetList where ID = ?
+  
+decreaseSortOrder: >
+  Update SetList set SORT_ORDER = SORT_ORDER - 1 where SETLIST_ID = ? AND SORT_ORDER > ? 
+  
+getSongFromSetlistBySongId: >
+  SELECT SONG_ID FROM SetList where ID = ?
+  
+decreaseFrequencyBySongId: >
+  UPDATE Song SET FREQUENCY = FREQUENCY - 1 WHERE ID = ?
+  
+deleteFromSetlistBySongId: >
+  Delete from SetList where SETLIST_ID = ? and ID = ?
+  
+updateDefaultKeyForSet: >
+  UPDATE SetList set DEFAULT_KEY = ? where ID = ?
+ 
+updateSortOrderForSong: >
+  UPDATE SetList SET SORT_ORDER = ?
+  where ID = ?
+  
+updateSetListSortForInsert: >
+  UPDATE SetList SET SORT_ORDER = SORT_ORDER + 1 where SETLIST_ID = ? and SORT_ORDER >= ?
+  
+updateSetListMasterLastModified: >
+  UPDATE SetListMaster SET LAST_UPDATED = CURRENT_TIMESTAMP() WHERE ID = ?
+  
+searchSetlistsByTerm: >
+  select DISTINCT m.ID,m.SETLIST_NAME,m.CREATED_ON,m.LAST_UPDATED,m.CREATED_BY 
+  from SetListMaster m INNER JOIN SetList s on m.ID = s.SETLIST_ID INNER JOIN Song a on s.SONG_ID = a.ID 
+  WHERE LOWER(a.name) like ? or LOWER(a.body) like ? or LOWER(m.SETLIST_NAME) like ? order by LAST_UPDATED Desc
+  
+setDefaultKeyForSong: >
+  UPDATE Song set DEFAULT_KEY = ?,CHANGED_ON = CURRENT_TIMESTAMP(), MODIFIED_BY = ? where ID = ?
+  
+createNewVersionForSong: >
+  INSERT INTO Song (NAME,BODY,FREQUENCY,DEFAULT_KEY,ARTIST,CREATED_BY,MODIFIED_BY,CHANGED_ON,RELATED)
+  SELECT NAME,?,0,?,ARTIST,?,?,CURRENT_TIMESTAMP(),? FROM Song WHERE ID = ?
+
+getLatestSongId: >
+  SELECT * FROM Song ORDER BY ID DESC LIMIT 1
+  
+createNewVersion: >
+  INSERT INTO Version (SONG_ID,VERSION_NAME) VALUES (?,
+  (SELECT NEXT_ID FROM VersionControl 
+  where ID = (SELECT IFNULL(MAX(VERSION_NAME),0) FROM Version v inner join Song s on v.SONG_ID = s.ID WHERE s.RELATED = ?)))
+  
+swapMasterOfVersionByRelated: >
+  UPDATE Song SET RELATED = ? WHERE RELATED = ?
+  
+nullifyRelatedBySongId: >
+  UPDATE Song SET RELATED = NULL WHERE ID = ?
+  
+swapMasterOfVersionById: >
+  UPDATE Song SET RELATED = ? WHERE ID = ?
+  
+swapVersionById: >
+  UPDATE Version SET SONG_ID = ? WHERE SONG_ID = ?
+  
+getVersionById: >
+  select v.ID as VERSION_ID,vc.VERSION,s.ID,s.NAME,s.BODY,s.FREQUENCY,s.DEFAULT_KEY,s.ARTIST,s.NOTES,s.CREATED_BY,s.MODIFIED_BY,s.CHANGED_ON,s.RELATED,s.PRIVATE,s.CATEGORY
+    from Song s inner join Version v on s.ID = v.SONG_ID INNER JOIN VersionControl vc on vc.ID = v.VERSION_NAME
+    WHERE s.ID = ?
+
+updateVersionName: >
+  update Version set VERSION_NAME = ? where SONG_ID = ?
+  
+addRecording: >
+  INSERT INTO Recording (SONG_ID,PATH,EXT,FILE) VALUES (?,?,?,?)
+  
+updateSetlistTitle: >
+  update SetListMaster set SETLIST_NAME = ? where ID = ?
+  
+deleteRecordingById: >
+  Delete from Recording where SONG_ID = ?
+
+getAllRecordings: >
+  Select * from Recording;
+  
+makeSongPublic: >
+  UPDATE Song SET PRIVATE = NULL WHERE ID = ?
+  
+makeSongPrivate: >
+  UPDATE Song SET PRIVATE = 'Y' WHERE ID = ?
+  
+getUserByUsername: >
+  select u.username, u.password, a.firstname, a.lastname, a.email
+  from users u left join AddressBook a on u.username = a.username where u.username = :username
+  union
+  select u.username, u.password, a.firstname, a.lastname, a.email
+  from users u right join AddressBook a on u.username = a.username where u.username = :username
+
+getUserByEmail: >
+  select u.username, u.password, a.firstname, a.lastname, a.email
+  from users u left join AddressBook a on u.username = a.username where a.email = :email
+  union
+  select u.username, u.password, a.firstname, a.lastname, a.email
+  from users u right join AddressBook a on u.username = a.username where a.email = :email
+
+getAuthoritiesByUsername: >
+    select * from authorities where username = ?
+ 
+saveUser: >
+  insert into users (username,password,enabled) values (?,?,1)
+
+disableUser: >
+  update users set enabled = 0 where username = ?
+
+purgeTokensForUser: >
+  delete from StoredLogins where username = ?
+
+changePassword: >
+  update users set password = ? where username = ?
+
+getAllActiveUsers: >
+  select distinct u.username, u.password, a.firstname, a.lastname, a.email
+  from users u inner join AddressBook a on u.username = a.username 
+  inner join authorities r on u.username = r.username where r.authority <> 'SUPERADMIN'
+  
+getUserPassword: >
+  select * from users where username = ?
+
+getActiveUsersByUsername: >
+  select * from users where username = ?
+  
+deleteUserPreference: >
+  delete from preferences where username = ? and PreferenceKey = ?
+  
+createUserPreference: >
+   insert into preferences (username, PreferenceKey, PreferenceValue) values (?,?,?)
+  
+getPreferencesForUser: >
+  select * from preferences where username = ?
+
+storeToken: >
+  insert into EnrollmentToken (TOKEN, EMAIL, PRIVILEGE) values (?,?,?)
+
+getTokenByUser: >
+  select * from EnrollmentToken where EMAIL = ?
+
+deleteTokenById: >
+  delete from EnrollmentToken where ID = ?
+  
+getCookieToken: >
+  select * from StoredLogins where LOGIN_COOKIE = ?
+
+getAllEnrollmentTokens: >
+  select * from EnrollmentToken
+
+storeCookieToken: >
+  insert into StoredLogins (username, LOGIN_COOKIE, CREATED_ON) values (?,?,CURRENT_TIMESTAMP)
+
+deleteCookieToken: >
+  delete from StoredLogins where LOGIN_COOKIE = ?
+
+deletePasswordResetToken: >
+  delete from PasswordReset where username = ?
+
+storePasswordResetToken: >
+  insert into PasswordReset (username, RESET_TOKEN, CREATED_ON) values (?,?,CURRENT_TIMESTAMP)
+
+getPasswordResetToken: >
+  select * from PasswordReset where username = ?
+
+getAddressBookEntryByEmail: >
+  select * from AddressBook where LOWER(Email) like ?
+  
+createAddressBookEntry: >
+  insert into AddressBook (username, LastName, FirstName, Email, Phone)
+  values (?,?,?,?,?)
+
+updateAddressBookEntryByEmail: >
+  update AddressBook set username = ?, Lastname = ?, Firstname = ? 
+  where Email = ?
+
+saveUserAuthorities: >
+  insert into authorities (username,authority) values (?,?)
+  
+getAddressBookGroupEntriesByName: >
+  select * from AddressBookGroup where LOWER(name) like ? order by NAME asc
+  
+getAddressBookGroupEntries: >
+  select * from AddressBookGroup order by NAME asc
+
+getEntryIdFromABRelated: >
+  select ENTRY_ID from AddressBookRelated where GROUP_ID = ?
+  
+getEmailFromAddressBook: >
+  select Email from AddressBook where ID = ?
+  
+searchAddressBookEntries: >
+  select * from AddressBook where LOWER(FirstName) like ? or LOWER(LastName) like ? or LOWER(Email) like ? or LOWER(username) like ? or Phone like ? 
+
+getAddressBookEntries: >
+  select * from AddressBook order by LastName
+
+getAddressBookEntryById: >
+  select * from AddressBook where ID = ?
+
+deleteAddressBookGroup: >
+  delete from AddressBookGroup where ID = ?
+
+deleteAddressBookGroupRelated: >
+  delete from AddressBookRelated where GROUP_ID = ?
+
+deleteAddressBookEntry: >
+  delete from AddressBook where ID = ?
+
+deleteAddressBookEntryRelated: >
+  delete from AddressBookRelated where ENTRY_ID = ?
+
+updateAddressBookEntryById: >
+  update AddressBook set username = ?, LastName = ?, FirstName = ?, Email = ?, Phone = ? where ID = ?
+
+addMemberToGroup: >
+  insert into AddressBookRelated (GROUP_ID,ENTRY_ID) values (?,?)
+  
+removeMemberFromGroup: >
+  delete from AddressBookRelated where ENTRY_ID = ? and GROUP_ID = ?
+  
+getAddressBookGroupById: >
+  select * from AddressBookGroup where ID = ?
+
+createAddressBookGroup: >
+  insert into AddressBookGroup (NAME) values (?)
+
+getLatestAbGroup: >
+  select ID from AddressBookGroup ORDER BY ID DESC LIMIT 1
+
+getAllServices: >
+  Select * from Services order by NAME
+  
+getAllOrganizations: >
+  Select * from Organizations order by NAME
+  
+getOrganizationById: >
+  Select * from Organizations where ID = ?
+
+getServiceById: >
+  Select * from Services where ID = ?

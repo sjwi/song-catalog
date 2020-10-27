@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+	<th:block th:replace="partial/head :: head('Set Lists')"></th:block>
+	<th:block th:replace="partial/header"></th:block>
+	<body id="setListsBody">
+		<div class="scroll-lock">
+			<th:block th:replace="partial/off-navbar :: offNavBar('addSetList',false)"></th:block>
+			<div class="wrapper setlists-page text-center">
+				<div class="row h-100 no-gutters">
+					<div class="col left-side h-100 setlist-scroll-column" style="overflow:scroll">
+						<div class="container shrinkable">
+							<div class="col-12 pt-3"></div>
+							<div class="template-container" id="setListTableContainer">
+								<th:block th:replace="dynamic/set-list-table :: setListResults(${sets})"></th:block>
+							</div>
+						</div>
+					</div>
+					<div class="col-6 right-side setlists-song-container">
+						<div class="song-page-container hover text-center mt-3 mb-2" th:id="${sets[0].id}">
+							<th:block th:replace="dynamic/song-container :: songContainer(${sets[0].songs})"></th:block>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div id="overlay">
+			</div>
+			<div class="modal-container">
+				<th:block th:replace="modal/download"></th:block>
+				<th:block th:replace="modal/qrcode"></th:block>
+				<th:block sec:authorize="hasAuthority('USER')">
+					<th:block th:replace="modal/edit-song"></th:block>
+					<th:block th:replace="modal/edit-set"></th:block>
+					<th:block th:replace="modal/add-song-from-select"></th:block>
+					<th:block th:replace="modal/delete-setlist"></th:block>
+					<th:block th:replace="modal/change-version"></th:block>
+					<th:block th:replace="modal/create-item"></th:block>
+					<th:block th:replace="modal/email-set"></th:block>
+				</th:block>
+			</div>
+		</div>
+	</body>
+
+	<th:block sec:authorize="hasAuthority('USER')">
+		<script th:inline="javascript" th:src="@{/js/page/set-list/user.js}"></script>
+		<script th:inline="javascript" th:src="@{/js/page/set-list/static-user.js}"></script>
+		<script th:inline="javascript" th:src="@{/js/page/song/user.js}"></script>
+		<script th:inline="javascript" th:src="@{/js/page/set-list/key-change/user.js}"></script>
+		<script type="text/javascript">
+			var setContainerIgnoreSelector = '.delete-set,.delete-set span,.ignore-nav,a,table,tbody,td,tr,img,.col,.btn,.dropdown-item,button,.close-dark,.grip-container,.set-grip';
+		</script>
+	</th:block>
+	<script th:inline="javascript" th:src="@{/js/page/set-list/page.js}"></script>
+	<script th:inline="javascript" th:src="@{/js/page/set-list/static.js}"></script>
+
+	<script th:inline="javascript" th:src="@{/js/page/song/page.js}"></script>
+	<script th:inline="javascript" th:src="@{/js/page/song/static.js}"></script>
+
+	<script type="text/javascript" sec:authorize="!hasAuthority('USER')">
+		var setContainerIgnoreSelector = '.col,img';
+	</script>
+	<script>
+		var focusedSet;
+		var ignoreTdAction = '.grip-container,.set-grip,img,.action-btn-container,key-select,button,.close-dark';
+		$(document).ready(function(){
+
+			focusedSet = $('.song-page-container').attr('id');
+			$('#setListContainer_' + focusedSet).addClass('focused-set-container');
+			$('.offnav-right-header').html($('#setListContainer_' + focusedSet).find('.set-list-title').html());
+
+			$(document).on('click','.set-list-container',function(e){
+				if ($(e.target).closest('.set-list-container').data('target') != focusedSet && $('.setlists-song-container').is(':visible')){
+					e.stopPropagation();
+					e.preventDefault();
+					$('.offnav-right-header').html($(this).find('.set-list-title').html());
+					$('.song-page-container').attr('id',$(this).data('target'));
+					focusedSlickPage = 0;
+					reloadSetSongContainerIfPresent($(this).data('target'));
+					focusedSet = $(this).data('target');
+					$('.set-list-container').removeClass('focused-set-container');
+					$(e.target).closest('.set-list-container').addClass('focused-set-container');
+				} else if($(e.target).is('td, td span') && !$(e.target).is(ignoreTdAction) && $('.setlists-song-container').is(':visible')){
+					if ($('#slickContainer').length){
+						$('#slickContainer').slick('slickGoTo',$(e.target).closest('.set-song-row').attr('data-sort') - 1);
+					}
+				} else if(!$(e.target).is(setContainerIgnoreSelector)){
+					location.href = contextpath +'setlist/' +  $(this).data('target');
+				}
+			});
+			
+			$(".slick-container").on("beforeChange", function (e, slick, currentSlide, nextSlide){
+				resetSongPageAudio($(slick.$slides.get(nextSlide)).data('recording'));
+			});
+			if (window.length < 900){
+				addScrollListener('#offNav');
+			}
+		});
+	</script>
+</html>

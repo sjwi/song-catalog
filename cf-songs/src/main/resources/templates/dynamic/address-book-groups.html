@@ -1,0 +1,15 @@
+<th:block th:if="${!addressbookgroups.empty}">
+	<div th:each="group: ${addressbookgroups}" class="row mb-2 no-gutters">
+		<div class="col text-center my-auto col-12" th:id="${'appendAbGroup_' + group.id}">
+			<th:block th:include="dynamic/ab-group-container.html"></th:block>
+		</div>
+	</div>
+</th:block>
+<th:block th:if="${addressbookgroups.empty}">
+	<div class="text-center">
+		<h3>
+			<span style="color: #fff;">No groups found</span>
+		</h3>
+		<span sec:authorize="hasAuthority('USER')">Click <a style="color:#fff" onclick="createAddressBookGroup();" href="#">here</a> to create a group.</span>
+	</div>
+</th:block>

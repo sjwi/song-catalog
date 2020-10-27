@@ -1,0 +1,75 @@
+<div class="set-list-container mb-3 flex-wrap" th:id="${'setListContainer_' + set.id }" ondragover="allowDrop(event)" 
+	th:attr="ondrop=${'dropSongToSet(event,' + set.id + ')'},data-target=${set.id},data-setname=${set.setListName}" >
+	<div sec:authorize="hasAuthority('USER')" th:if="${#authentication.principal.username == set.createdBy || #authorization.expression('hasAuthority(''ADMIN'')')}" class="close edit-set">
+		<img width="20px" th:src="@{/images/dropdown.png}" data-toggle="dropdown">
+		<ul class="dropdown-menu dropdown-menu-right">
+			<li>
+				<a class="dropdown-item rename-set">Rename</a>
+			</li>
+			<li>
+				<a class="dropdown-item delete-set">Delete</a>
+			</li>
+		</ul>
+	</div>
+	<div class="set-list-title">
+		<span th:text="${set.setListName}"></span>
+	</div>
+	<div class="set-list-songs">
+		<table class="table set-table table-sm mb-0" th:attr="data-setid=${set.id}">
+			<tr class="set-song-row song-metadata" th:each="setSong, iter: ${set.songs}" 
+			th:attr="data-sort=${iter.index + 1},data-setsongid=${setSong.setListSongId},data-target=${setSong.id},data-key=${setSong.defaultKey},data-songname=${setSong.name},data-setid=${set.id}">
+				<td class="text-left set-row-primary-td" th:classappend="${#authorization.expression('hasAuthority(''USER'')')}? 'align-middle':'pt-2'">
+					<th:block sec:authorize="hasAuthority('USER')">
+						<div class="grip-container set-grip" data-toggle="tooltip" data-placement="bottom" title="Click and drag to sort">
+							<svg height="26" width="16">
+							  <polygon points="8,11 12,15 4,15" style="fill:#7B8A8B;stroke:#7B8A8B;stroke-width:1" />
+							  <polygon points="8,23 12,19 4,19" style="fill:#7B8A8B;stroke:#7B8A8B;stroke-width:1" />
+							</svg>
+						</div>
+					</th:block>
+					<span class="text-ellipsis set-row-title" th:text="${setSong.name}">
+					</span>
+				</td>
+				<td width="30px" class="align-middle">
+					<th:block sec:authorize="hasAuthority('USER')">
+						<img class="action-btn" th:src="@{/images/ellipse-inverse.png}" data-toggle="dropdown">	
+						<ul class="dropdown-menu">
+							<li>
+								<a class="dropdown-item edit-song-btn">Edit Song</a>
+							</li>
+							<li>
+								<a class="dropdown-item choose-version" th:attr="onclick=${'openChangeVersionModal(' + setSong.id + ',' + set.id + ',''' + setSong.name + ''',' + setSong.setListSongId +')'}">Select Version</a>
+							</li>
+						</ul>
+					</th:block>
+				</td>
+				<td width="80px" class="text-center key-select">
+					<th:block th:replace="partial/key-dropdown :: keySet(${setSong.defaultKey},'defaultKey')"></th:block>
+				</td>
+				<td width="10px" class="text-right align-middle">
+					<button sec:authorize="hasAuthority('USER')" type="button" class="close" aria-label="Close">
+					  <span aria-hidden="true" class="close-dark">&times;</span>
+					</button>
+				</td>
+			</tr>
+		</table>
+	</div>
+	<div class="action-container">
+		<div class="row no-gutters">
+			<div class="col text-center" data-toggle="tooltip" data-placement="bottom" title="Download" th:classappend="${#authorization.expression('hasAuthority(''USER'')')}?'col-3':''" th:attr="onclick=${'downloadFile(''setlist'', ' + set.id + ')'}">
+				 <img width="27px" class="set-list-dl" type="image/x-icon" th:src="@{/images/download-inverse.png}"/>
+			</div>
+			<th:block sec:authorize="hasAuthority('USER')">
+				<div class="col col-3 text-center" data-toggle="tooltip" data-placement="bottom" title="Add song to set" th:attr="onclick=${'addSongsFromSelect(' + set.id + ',''' + set.setListName + ''')'}">
+					<a href="javascript:void(0)"><img width="30px"type="image/x-icon" th:src="@{/images/plus-sign-inverse.png}"/></a>
+				</div>
+				<div class="col col-3 text-center" data-toggle="tooltip" data-placement="bottom" title="Email set list" th:attr="onclick=${'emailSet(' + set.id + ')'}">
+					<a href="javascript:void(0)"><img width="30px" type="image/x-icon" th:src="@{/images/email-inverse.png}"/></a>
+				</div>
+			</th:block>
+			<div class="col text-center" data-toggle="tooltip" data-placement="bottom" title="Distribute link" th:classappend="${#authorization.expression('hasAuthority(''USER'')')}?'col-3':''" th:attr="onclick=${'displayQrCode('''} + ${#request.getScheme() + '://' + #request.getServerName()} + @{/setlist/__${set.id}__} +  ${''',this)'}">
+				<a href="javascript:void(0)"><img width="30px" type="image/x-icon" th:src="@{/images/qrcode.png}"/></a>
+			</div>
+		</div>
+	</div>
+</div>

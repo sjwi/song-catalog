@@ -1,0 +1,144 @@
+<div class="modal fade" id="enrollModal">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class = "modal-header">
+				<h5 class="modal-title">New User Enrollment</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+				  <span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<form method="POST" th:action="@{/enroll}" id="enrollUserForm">
+				<input type="hidden" name="token" th:value="${token}">
+				<input type="hidden" name="user" th:value="${user}">
+				<div class="modal-body">
+					<h5 class="text-center">Welcome to the Christian Fellowship Song Catalog!</h5>
+					<div class="form-group row mt-5">
+						<div class="col-4">
+							<label class="col-form-label" for="firstName">First Name*</label>
+						</div>
+						<div class="col-8">
+							<input class="form-control first-name required autofocus" type="text" name="firstName"/>
+						</div>
+					</div>
+					<div class="form-group row">
+						<div class="col-4">
+							<label class="col-form-label" for="lastName">Last Name*</label>
+						</div>
+						<div class="col-8">
+							<input class="form-control last-name required" type="text" name="lastName"/>
+						</div>
+					</div>
+					<div class="form-group row">
+						<div class="col-4">
+							<label class="col-form-label" for="email">Email Address</label>
+						</div>
+						<div class="col-8">
+							<input class="form-control email required" readonly type="text" name="email" th:value="${user}"/>
+						</div>
+					</div>
+					<div class="form-group row">
+						<div class="col-4">
+							<label class="col-form-label" for="username">Choose a Username*</label>
+						</div>
+						<div class="col-8">
+							<input class="form-control username required" type="text" name="username"/>
+						</div>
+					</div>
+					<div class="form-group row">
+						<div class="col-4">
+							<label class="col-form-label" for="password">Choose a Password*</label>
+						</div>
+						<div class="col-8">
+							<input class="form-control password required" type="password" name="password"/>
+						</div>
+					</div>
+					<div class="form-group row">
+						<div class="col-4">
+							<label class="col-form-label" for="confirmPassword">Confirm Password*</label>
+						</div>
+						<div class="col-8">
+							<input class="form-control confirm-password required" type="password" name="confirmPassword"/>
+						</div>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary cancel" data-dismiss="modal">Cancel</button>
+					<button type="submit" data-toggle="tooltip" data-placement="bottom" title="Fill out all required (*) fields to enroll" class="btn btn-info" disabled id="enrollUserBtn">Enroll</button>
+				</div>
+			</form>	
+		</div>
+	</div>
+</div>
+
+<script>
+$(document).ready(function(){
+	$('#enrollModal').find('input').on('keyup',function(){
+		clearTimeout(typingTimer);
+		typingTimer = setTimeout(unlockForm($('#enrollUserForm'),true), doneTypingInterval);
+	});
+	$('#enrollModal').find('input').on('keydown',function(){
+		clearTimeout(typingTimer);
+	});
+
+	$('#enrollModal').find('.cancel').on('click',function(){
+		location.href = contextpath;
+	});
+	if (location.href.includes('enroll') && !alertOnLoad){
+		$('#enrollModal').modal('show');
+	}
+	$('#enrollModal').find('.username').focusout(function(e){
+		if ($(this).val().length > 2){
+			var usernameStatus = isUsernameTaken($(this).val());
+			if (usernameStatus == 1){
+				alertWithFade('danger',"This username is already taken [impressive, we dont't have many users]");
+				$(this).addClass('invalid-form-input');
+				$('#enrollModal button[type="submit"]').prop('disabled',true);
+			} else if (usernameStatus == 2){
+				alertWithFade('danger',"Username cannot contain spaces");
+				$(this).addClass('invalid-form-input');
+				$('#enrollModal button[type="submit"]').prop('disabled',true);
+			} else {
+				$(this).removeClass('invalid-form-input');
+				unlockForm($('#enrollUserForm'));
+			}
+		} else {
+			$(this).addClass('invalid-form-input');
+			$('#enrollModal button[type="submit"]').prop('disabled',true);
+			alertWithFade('danger','Username is too short');
+		}
+	});
+	$('#enrollUserForm').on('submit',function(e){
+		if (!isPasswordPolicyCompliant($(this).find('.password').val())){
+			e.preventDefault();
+			alertWithFade('danger','Password does not meet complexity requirements. [too short]');
+		} 
+		var usernameStatus = isUsernameTaken($('#enrollModal').find('.username').val());
+		if (usernameStatus == 1 || usernameStatus == 2){
+			e.preventDefault();
+			alertWithFade('danger','Invalid username');
+		}
+	});
+});
+function isUsernameTaken(tusername){
+	var retVal = false;
+	$.ajax({
+		url: contextpath + 'distinct-username',
+		method: "GET",
+		dataType: 'JSON',
+		async: false,
+		data: {username: tusername},
+		success: function(data) {
+			if (data.status == "taken_username"){
+				retVal = 1;
+			}
+			else if (data.status == "bad_username"){
+				retVal = 2;
+			} else {
+				retVal = 0;
+			}
+		}
+	});		
+	return retVal;
+}
+
+</script>

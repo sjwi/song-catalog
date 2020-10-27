@@ -1,0 +1,60 @@
+<div class="modal fade" id="addSongFromSelectModal">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class = "modal-header">
+				<h5 class="modal-title"></h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+				  <span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body text-center">
+				<span class="modal-message"></span>
+			</div>
+			<form id="addSongFromSelectForm">
+			</form>
+		</div>
+	</div>
+</div>
+
+
+<script>
+function addSongsFromSelect(setId,setName){
+	$('#addSongFromSelectModal').find('.modal-header').html(setName);
+	$('#addSongFromSelectModal').find('.modal-message').html('Click to select songs to add to ' + setName);
+	$.ajax({
+		url: contextpath + 'setlist/add-multiple-songs/' + setId,
+		method: "GET",
+		success: function(data) {
+			$('#addSongFromSelectForm').html(data);
+			$('#addSongFromSelectModal').modal('show');
+		},
+		error: function(data){
+			alertWithFade('danger','Something went wrong! Unable to retreive song list')
+		},
+	});
+}
+
+$(document).ready(function(){
+	$('#addSongFromSelectForm').on('submit',function(e){
+		e.preventDefault();
+		if (isFormFilled(this)){
+			$('#submitAddSongFromSelectBtn').attr('disabled',true);
+			$.ajax({
+				url: contextpath + 'setlist/add-multiple-songs',
+				method: "POST",
+				data: $('#addSongFromSelectForm').serialize(),
+				success: function() {
+					location.reload();
+				},
+				error: function(data){
+					alertWithFade('danger','Something went wrong! Unable to add songs to set')
+				},
+				complete: function(data){
+					$('#submitAddSongFromSelectBtn').attr('disabled',false);
+				}
+			});
+		}
+	});
+});
+
+</script>

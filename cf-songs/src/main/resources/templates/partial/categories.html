@@ -1,0 +1,33 @@
+<div id="categoriesControl" class="row no-gutters">
+	<div class="col text-center">
+		<ul class="ks-cboxtags">
+			<li th:each="category: ${categories}">
+				<input checked type="checkbox" th:id="${category.key}" th:value="${category.key}"><label th:for="${category.key}" th:text="${category.value}"></label>
+			</li>
+		</ul>
+	</div>
+</div>
+<script>
+$(document).ready(function(){
+	$(document).on('change','.ks-cboxtags input',function(e){
+		refreshCategories();
+	})
+});
+function refreshCategories(){
+	var hiddenCategories = []
+	$('.ks-cboxtags input').each(function(){
+		if (!$(this).is(':checked')){
+			hiddenCategories.push($(this).val());
+		}
+	})
+	$('.song-row').each(function(){
+		var cat = $(this).data('category').toString();
+		if (hiddenCategories.includes(cat)){
+			$(this).hide();
+		} else {
+			$(this).show();
+		}
+	})
+}
+
+</script>

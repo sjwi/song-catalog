@@ -1,0 +1,15 @@
+<th:block th:fragment="keySet(keySelected,className)">
+	<select class="custom-select custom-key-select required" title="Select a key" th:name="${className}">
+		<th:block th:if="${keySelected == 'N'}">
+			<option value="" selected></option>
+		</th:block>
+		<option value="A" th:selected="${keySelected == 'A'}">A</option>
+		<option value="B" th:selected="${keySelected == 'B'}">B</option>
+		<option value="C" th:selected="${keySelected == 'C'}">C</option>
+		<option value="D" th:selected="${keySelected == 'D'}">D</option>
+		<option value="E" th:selected="${keySelected == 'E'}">E</option>
+		<option value="F" th:selected="${keySelected == 'F'}">F</option>
+		<option value="G" th:selected="${keySelected == 'G'}">G</option>
+		<option value="L" th:selected="${keySelected == 'L'}" data-toggle="tooltip" data-placement="bottom" title="Lyrics only">L</option>
+	</select>
+</th:block>

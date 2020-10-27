@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<th:block th:replace="partial/head :: head('Address Book')"></th:block>
+<th:block th:replace="partial/header"></th:block>
+<body id="addressBookBody">
+	<div class="scroll-lock">
+		<div class="row no-gutters main">
+			<div class="col-lg-6 no-gutters address-book song-section">
+				<nav class="sticky-top ab-header" id="addressBookEntries">
+					<div class="row song-header no-gutters">
+						<div class="col-2">
+							<a th:href="@{/}"><img border="0"
+						th:src="${#session.getAttribute(T(com.sjwi.cfsongs.config.PreferencesConfiguration).NIGHT_MODE_PREFERENCE_KEY) == null || !#session.getAttribute(T(com.sjwi.cfsongs.config.PreferencesConfiguration).NIGHT_MODE_PREFERENCE_KEY)}? @{/images/logo_transparent.png}: @{/images/logo_transparent_dark.png}"  class="logo dark-swap" alt="Logo"></a>
+						</div>
+						<div class="col-8 text-center my-auto">
+							<div class="off-nav-title ab-title-full">Address Book Entries</div>
+							<div class="ab-title-min">Address Book</div>
+						</div>
+					</div>
+					<div class="row pb-2 no-gutters">
+						<div class="col-4 no-gutters">
+							<th:block th:replace="partial/navbar"></th:block>
+						</div>
+						<div class="col-4 my-auto text-center no-gutters" >
+							<div sec:authorize="hasAuthority('USER')" class="btn add-item-btn" onclick="createAddressBookEntry();" data-toggle="tooltip" data-placement="bottom" title="Add new address book entry"><img width="30px" th:src="@{/images/plus-blue.png}"></div>
+						</div>
+						<div class="col col-4 text-center no-gutters pr-2">
+							<th:block th:replace="partial/search-bar :: searchBar('addressbook','dynamic/address-book-entries','address book entries','abEntriesSearch','#addressBookEntriesContainer')"></th:block>
+						</div>
+					</div>
+					<div class="row address-book-tab no-gutters">
+						<div class="pt-2 pb-2 text-center col-6 no-gutters ab-tab-selector ab-entries-tab focused">
+							<span>Entries</span>
+						</div>
+						<div class="pt-2 pb-2 col-6 text-center no-gutters ab-tab-selector ab-groups-tab">
+							<span>Groups</span>
+						</div>
+					</div>
+				</nav>
+				<div class="container min-container shrinkable">
+					<div class="template-container" id="addressBookEntriesContainer">
+						<th:block th:replace="dynamic/address-book-entries"></th:block>
+					</div>
+				</div>
+			</div>
+			<div class="col-lg-6 no-gutters address-book setlist-section no-gutters">
+				<nav class="sticky-top ab-header">
+					<div class="row setlist-header no-gutters">
+							<div class="col-12 my-auto text-center off-nav-title">
+								Address Book Groups
+							</div>
+					</div>
+					<div class="row mr-2 pb-2 no-gutters">
+						<div class="col-5 my-auto pr-2"></div>
+						<div class="col-2 text-center">
+							<div sec:authorize="hasAuthority('USER')" class="btn add-item-btn" onclick="createAddressBookGroup();" data-toggle="tooltip" data-placement="bottom" title="Add new address book group"><img width="30px" th:src="@{/images/plus-inverse.png}"></div>
+						</div>
+						<div class="col-1 my-auto"></div>
+						<div class="col col-4 text-right no-gutters pl-2">
+							<th:block th:replace="partial/search-bar :: searchBar('addressbook','dynamic/address-book-groups','address book groups','abGroupSearch','#addressBookGroupContainer')"></th:block>
+						</div>
+					</div>
+				</nav>
+				<div class="container" >
+					<div class="template-container" id="addressBookGroupContainer">
+						<th:block th:replace="dynamic/address-book-groups"></th:block>
+					</div>
+				</div>
+			</div>
+		</div>
+	<!-- 	<th:block th:replace="partial/footer"></th:block> -->
+		<div class="modal-container">
+			<th:block th:replace="modal/edit-address-book-entry"></th:block>
+			<th:block th:replace="modal/create-address-book-entry"></th:block>
+			<th:block th:replace="modal/create-address-book-group"></th:block>
+			<th:block th:replace="modal/email-group"></th:block>
+			<th:block th:replace="modal/add-members-to-group"></th:block>
+			<th:block th:replace="modal/add-ab-entry-to-group"></th:block>
+		</div>
+	</div>
+</body>
+<script th:src="@{/js/page/address-book/page.js}"></script>
+<script sec:authorize="hasAuthority('USER')" th:src="@{/js/page/address-book/static.js}"></script>
+<script sec:authorize="hasAuthority('USER')" th:src="@{/js/page/address-book/user.js}"></script>
+</html>

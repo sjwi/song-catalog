@@ -1,0 +1,46 @@
+<div class="modal fade" id="qrCodeModel">
+	<div class="modal-dialog modal-md" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title"> <span class="modal-title-text">Distribute Link</span></h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+				  <span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body" style="border:none;border-radius:0 !important">
+				<div class="row no-gutters">
+					<div class="col w-100">
+						<div class="row">
+							<div class="col text-center">
+								<p>The link to <a class="set-list-link"><b><span class="set-list-placeholder"></span></b></a> has been copied to the clipboard.</p> 
+							</div>
+						</div>
+						<div class="row">
+							<div class="col text-center w-100">
+								<div id="qrCode" class="d-inline-block"></div>
+							</div>
+						</div>
+						<div class="row mt-3">
+							<div class="col text-center">
+								<p>Scan the QR code with another device to be taken directly to the set.</p>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+			</div>
+		</div>
+	</div>
+</div>
+<script>
+	function displayQrCode(link,element){
+		$('#qrCodeModel').find('.set-list-placeholder').html($(element).closest('.set-list-container').data('setname'));
+		$('#qrCodeModel').find('.set-list-link').attr("href",link);
+		copyTextToClipboard(link,false);
+		$('#qrCode').html('');
+		new QRCode(document.getElementById("qrCode"), link);
+		$('#qrCodeModel').modal('show');
+	}
+</script>
