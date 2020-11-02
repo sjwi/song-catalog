@@ -225,10 +225,10 @@ public class SqlSetListDao implements SetListDao {
 	}
 	
 	@Override
-	public int getLatestSet()  {
+	public SetList getLatestSet()  {
 		return jdbcTemplate.query(queryStore.get("getLatestSet"), r -> {
 			r.next();
-			return r.getInt("ID");
+			return getSetListById(r.getInt("ID"));
 		});
 	}
 
@@ -288,5 +288,13 @@ public class SqlSetListDao implements SetListDao {
 	@Override
 	public void renameSet(int id, String setListName) {
 		jdbcTemplate.update(queryStore.get("updateSetlistTitle"),new Object[] {setListName,id});
+	}
+
+	@Override
+	public SetList getLatestSetListByOrg(int id) {
+		return jdbcTemplate.query(queryStore.get("getLatestSetListByOrg"), new Object[] {id}, r -> {
+			r.next();
+			return getSetListById(r.getInt("ID"));
+		});
 	}
 }

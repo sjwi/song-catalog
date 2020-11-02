@@ -1346,7 +1346,7 @@ ul.ks-cboxtags li input[type="checkbox"] {
 		min-height: calc(100vh - 50px);
 	}
 	.song-body {
-		font-size:.9rem;
+		font-size:1rem;
 		padding-left:10px !important;
 	}
 	.setlists-song-container, .offnav-right-header {

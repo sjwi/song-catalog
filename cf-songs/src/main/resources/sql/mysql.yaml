@@ -117,6 +117,9 @@ createNewSet: >
 getLatestSet: >
   SELECT ID FROM SetListMaster order by ID desc LIMIT 1
   
+getLatestSetListByOrg: >
+  SELECT ID FROM SetListMaster where ORGANIZATION = ? order by ID desc LIMIT 1
+
 deleteFromSetlistMaster: >
   Delete from SetListMaster where ID = ?
   

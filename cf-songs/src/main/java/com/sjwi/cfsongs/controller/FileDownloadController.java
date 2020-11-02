@@ -61,7 +61,7 @@ public class FileDownloadController {
 		return mv;
 	}
 	
-	@RequestMapping(value = {"song/ppt/{id}/{fileName}"}, method = RequestMethod.GET)
+	@RequestMapping(value = {"/song/ppt/{id}/{fileName}"}, method = RequestMethod.GET)
 	public void downloadSongPpt(HttpServletRequest request, HttpServletResponse response,
 			@PathVariable int id,Authentication auth,
 			@PathVariable String fileName,
@@ -85,7 +85,7 @@ public class FileDownloadController {
 		}
 	}
 
-	@RequestMapping(value = {"setlist/ppt/{id}/{fileName}"}, method = RequestMethod.GET)
+	@RequestMapping(value = {"/setlist/ppt/{id}/{fileName}"}, method = RequestMethod.GET)
 	public void downloadSetPpt(HttpServletRequest request, HttpServletResponse response,
 			Authentication auth,
 			@PathVariable String fileName,
@@ -109,7 +109,7 @@ public class FileDownloadController {
 		}
 	}
 	
-	@RequestMapping(value = {"song/pdf/{id}/{fileName}"}, method = RequestMethod.GET)
+	@RequestMapping(value = {"/song/pdf/{id}/{fileName}"}, method = RequestMethod.GET)
 	public void downloadSongPdf(HttpServletRequest request, HttpServletResponse response,
 			Authentication auth,
 			@PathVariable int id,
@@ -142,7 +142,7 @@ public class FileDownloadController {
 		}
 	}
 
-	@RequestMapping(value = {"setlist/pdf/{id}/{fileName}"}, method = RequestMethod.GET)
+	@RequestMapping(value = {"/setlist/pdf/{id}/{fileName}"}, method = RequestMethod.GET)
 	public void downloadSetPdf(HttpServletRequest request, HttpServletResponse response,
 			Authentication auth,
 			@PathVariable int id,

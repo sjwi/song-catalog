@@ -32,8 +32,12 @@ public class SetListService {
 	}
 
 	public SetList getLatestSet(){
-		return setListDao.getSetListById(setListDao.getLatestSet());
+		return setListDao.getLatestSet();
 	}
+	
+	public SetList getLatestSetByOrg(int id){
+		return setListDao.getLatestSetListByOrg(id);
+	}	
 	
 	public synchronized List<SetList> searchSetLists(String searchTerm){
 		return setListDao.searchSetLists(searchTerm == null? null :"%" + searchTerm.toLowerCase() + "%");

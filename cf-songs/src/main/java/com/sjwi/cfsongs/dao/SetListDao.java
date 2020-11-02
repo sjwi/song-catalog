@@ -33,7 +33,7 @@ public interface SetListDao {
 
 	public List<SetList> searchSetLists(String searchTerm);
 	
-	public int getLatestSet();
+	public SetList getLatestSet();
 
 	public void updateSetTitle(int id, String title);
 	
@@ -44,4 +44,6 @@ public interface SetListDao {
 	public void changeVersion(int setSongId, int versionId);
 
 	public void renameSet(int id, String setListName);
+	
+	public SetList getLatestSetListByOrg(int id);
 }

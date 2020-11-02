@@ -60,11 +60,6 @@ public class SetListDetailsController {
 		return mv;
 	}
 	
-	@RequestMapping(value = {"/latest-set"})
-	public ModelAndView latestSet(HttpServletRequest request, HttpServletResponse response, Authentication auth) throws IOException {
-		return new ModelAndView("forward:/setlist/" + setListService.getLatestSet().getId());
-	}
-
 	@RequestMapping(value = {"setlists"}, method = RequestMethod.GET)
 	@ResponseStatus(value = HttpStatus.OK)
 	@LandingPageAspect

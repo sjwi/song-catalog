@@ -5,4 +5,5 @@
 /.classpath
 /logs
 /.project
+/cf-songs/src/main/resources/schema.sql
 

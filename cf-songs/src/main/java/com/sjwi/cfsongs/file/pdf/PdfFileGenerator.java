@@ -70,8 +70,8 @@ public class PdfFileGenerator implements FileGenerator {
 			if (fontSize == 0) {
 				songFont = DEF_SONG_FONT;
 				titleFont = DEF_TITLE_FONT;
-				leading = DEF_TITLE_LEADING;
-				titleLeading = DEF_LEADING;
+				titleLeading = DEF_TITLE_LEADING;
+				leading = DEF_LEADING;
 				headerFooterFont = DEF_HEADER_FOOTER_FONT;
 			} else {
 				fontSize = fontSize > 25? 25:fontSize < 6? 6: fontSize;
