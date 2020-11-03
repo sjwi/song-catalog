@@ -26,7 +26,7 @@ public class TransposableString {
 		this.storedKey = getKeyFromMaster(storedKey);
 	}
 	
-	public boolean isStringIsTransposable() {
+	public boolean isStringTransposable() {
 		return (transposableStringLines.stream().filter(l -> !isLineOnlyChords(l)).count() == 0);
 	}
 

@@ -1,4 +1,4 @@
-package com.sjwi.cfsongs.test;
+package com.sjwi.catalog.test;
 
 import static com.sjwi.catalog.model.KeySet.LYRICS_ONLY_KEY_CODE;
 import static org.junit.Assert.assertEquals;
@@ -16,7 +16,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import com.sjwi.catalog.model.TransposableString;
 import com.sjwi.catalog.service.SetListService;
 import com.sjwi.catalog.service.SongService;
-import com.sjwi.cfsongs.test.config.SpringTestConfiguration;
+import com.sjwi.catalog.test.config.SpringTestConfiguration;
 
 @EnableAutoConfiguration
 @SpringBootTest
@@ -51,7 +51,7 @@ public class SongTests {
 	@Test
 	public void whenBodyTransposedToLyrics_StringIsNotTransposable() {
 		songService.getSongs().stream().forEach(s -> {
-			assertFalse(new TransposableString(s.transpose(LYRICS_ONLY_KEY_CODE).getBody(),"G").isStringIsTransposable());
+			assertFalse(new TransposableString(s.transpose(LYRICS_ONLY_KEY_CODE).getBody(),"G").isStringTransposable());
 		});
 	}
 

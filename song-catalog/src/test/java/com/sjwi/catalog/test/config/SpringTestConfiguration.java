@@ -1,4 +1,4 @@
-package com.sjwi.cfsongs.test.config;
+package com.sjwi.catalog.test.config;
 
 import org.springframework.boot.test.context.TestConfiguration;
 

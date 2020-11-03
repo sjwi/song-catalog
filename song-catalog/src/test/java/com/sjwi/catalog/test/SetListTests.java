@@ -1,4 +1,4 @@
-package com.sjwi.cfsongs.test;
+package com.sjwi.catalog.test;
 
 import static org.junit.Assert.assertEquals;
 
@@ -11,7 +11,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.sjwi.catalog.service.SetListService;
-import com.sjwi.cfsongs.test.config.SpringTestConfiguration;
+import com.sjwi.catalog.test.config.SpringTestConfiguration;
 
 @EnableAutoConfiguration
 @SpringBootTest
@@ -24,7 +24,7 @@ public class SetListTests {
 
 	@Test
 	public void whenXNumberOfSetsRequested_SizeOfSetsListIsX() {
-		final int requestSize = 20;
+		final int requestSize = 4;
 		assertEquals(requestSize, setListService.getSetLists(requestSize).size());
 	}
 }

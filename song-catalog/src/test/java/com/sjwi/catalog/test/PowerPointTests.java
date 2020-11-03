@@ -1,4 +1,4 @@
-package com.sjwi.cfsongs.test;
+package com.sjwi.catalog.test;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -15,7 +15,7 @@ import com.sjwi.catalog.file.pdf.PdfFileGenerator;
 import com.sjwi.catalog.file.ppt.PptFileGenerator;
 import com.sjwi.catalog.service.SetListService;
 import com.sjwi.catalog.service.SongService;
-import com.sjwi.cfsongs.test.config.SpringTestConfiguration;
+import com.sjwi.catalog.test.config.SpringTestConfiguration;
 
 @EnableAutoConfiguration
 @SpringBootTest
