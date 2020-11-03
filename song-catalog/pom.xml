@@ -188,7 +188,7 @@
 				  <skipTests>false</skipTests>
 				  <systemPropertyVariables>
                     <SONG_MAIL_DBL>stephenjw@fastmail.com</SONG_MAIL_DBL>
-                    <SONG_MAIL_PW>pka2yf6y74z8mljd</SONG_MAIL_PW>
+                    <SONG_MAIL_PW>dummy_val</SONG_MAIL_PW>
                     <SONG_MAIL_UN>stephenjw@fastmail.com</SONG_MAIL_UN>
                     <SONG_MAIL_LEVEL>DEBUG</SONG_MAIL_LEVEL>
                     <SONG_MAIL_SMTP>smtp.fastmail.com</SONG_MAIL_SMTP>
