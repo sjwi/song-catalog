@@ -1,6 +1,6 @@
 package com.sjwi.cfsongs.test;
 
-import static com.sjwi.cfsongs.model.KeySet.LYRICS_ONLY_KEY_CODE;
+import static com.sjwi.catalog.model.KeySet.LYRICS_ONLY_KEY_CODE;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 
@@ -13,9 +13,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import com.sjwi.cfsongs.model.TransposableString;
-import com.sjwi.cfsongs.service.SetListService;
-import com.sjwi.cfsongs.service.SongService;
+import com.sjwi.catalog.model.TransposableString;
+import com.sjwi.catalog.service.SetListService;
+import com.sjwi.catalog.service.SongService;
 import com.sjwi.cfsongs.test.config.SpringTestConfiguration;
 
 @EnableAutoConfiguration

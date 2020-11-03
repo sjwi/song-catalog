@@ -35,7 +35,7 @@
 					<th:block sec:authorize="hasAuthority('USER')">
 						<div class="d-table-cell align-middle no-gutters text-center" data-toggle="tooltip" data-placement="bottom" title="Add song to set"
 						th:attr="onclick=${'addSongToSet(' + focusedSong[0].id + ')'}">
-							<a><img width="27px" type="image/x-icon" th:src="${#session.getAttribute(T(com.sjwi.cfsongs.config.PreferencesConfiguration).NIGHT_MODE_PREFERENCE_KEY) == null || !#session.getAttribute(T(com.sjwi.cfsongs.config.PreferencesConfiguration).NIGHT_MODE_PREFERENCE_KEY)}? @{/images/add-song-to-set-inverse.png} : @{/images/add-song-to-set.png}"/></a>
+							<a><img width="27px" type="image/x-icon" th:src="${#session.getAttribute(T(com.sjwi.catalog.config.PreferencesConfiguration).NIGHT_MODE_PREFERENCE_KEY) == null || !#session.getAttribute(T(com.sjwi.catalog.config.PreferencesConfiguration).NIGHT_MODE_PREFERENCE_KEY)}? @{/images/add-song-to-set-inverse.png} : @{/images/add-song-to-set.png}"/></a>
 						</div>
 					</th:block>
 					<div class="d-table-cell align-middle no-gutters text-center download-focused-song" data-toggle="tooltip" data-placement="bottom" title="Download"

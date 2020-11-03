@@ -9,12 +9,12 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import com.sjwi.cfsongs.exception.FileUtilityException;
-import com.sjwi.cfsongs.file.FileGenerator;
-import com.sjwi.cfsongs.file.pdf.PdfFileGenerator;
-import com.sjwi.cfsongs.file.ppt.PptFileGenerator;
-import com.sjwi.cfsongs.service.SetListService;
-import com.sjwi.cfsongs.service.SongService;
+import com.sjwi.catalog.exception.FileUtilityException;
+import com.sjwi.catalog.file.FileGenerator;
+import com.sjwi.catalog.file.pdf.PdfFileGenerator;
+import com.sjwi.catalog.file.ppt.PptFileGenerator;
+import com.sjwi.catalog.service.SetListService;
+import com.sjwi.catalog.service.SongService;
 import com.sjwi.cfsongs.test.config.SpringTestConfiguration;
 
 @EnableAutoConfiguration

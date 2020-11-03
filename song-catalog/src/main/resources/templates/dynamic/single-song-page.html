@@ -6,10 +6,10 @@
 		th:text="${song.name}"></a></span>
 		<div class="version-indicator w-100">
 			<span class="float-left" th:text="${'[' + song.defaultKey + ']'}"></span>
-			<th:block th:if="${song instanceof T(com.sjwi.cfsongs.model.song.SetListVersionSong) || song instanceof T(com.sjwi.cfsongs.model.song.VersionSong)}">
+			<th:block th:if="${song instanceof T(com.sjwi.catalog.model.song.SetListVersionSong) || song instanceof T(com.sjwi.catalog.model.song.VersionSong)}">
 				<span class="float-right" th:text="${'[' + song.versionName + ']'}"></span>
 			</th:block>
-			<th:block th:if="${song.class.name != 'com.sjwi.cfsongs.model.song.SetListVersionSong' && song.class.name != 'com.sjwi.cfsongs.model.song.VersionSong'}">
+			<th:block th:if="${song.class.name != 'com.sjwi.catalog.model.song.SetListVersionSong' && song.class.name != 'com.sjwi.catalog.model.song.VersionSong'}">
 				<span class="float-right" th:text="${'[**]'}"></span>
 			</th:block>
 		</div>
