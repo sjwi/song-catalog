@@ -5,7 +5,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -48,9 +47,6 @@ public class SetListEmailController {
 	@Autowired
 	Mailer mailer;
 	
-	@Autowired
-	ServletContext context;
-	
 	@RequestMapping(value = {"setlist/email/{id}"}, method = RequestMethod.GET)
 	public String populateEmailModal(HttpServletRequest request, HttpServletResponse response,
 			@PathVariable int id, Authentication auth) throws IOException {
@@ -80,7 +76,7 @@ public class SetListEmailController {
 		try {
 			Map<String, String> attachments = new HashMap<String, String>();
 			if (attachPpt != null) {
-				FileGenerator pptGenerator = new PptFileGenerator(true,0,context.getRealPath("/"));
+				FileGenerator pptGenerator = new PptFileGenerator(true,0);
 				SetList setList = controllerHelper.buildSetFile(id, pptGenerator, true);
 				attachments.put(pptGenerator.getFileName(), setList.getNormalizedSetListName() + ".pptx");
 			}

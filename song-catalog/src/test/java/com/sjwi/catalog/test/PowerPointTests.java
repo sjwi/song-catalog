@@ -37,12 +37,12 @@ public class PowerPointTests {
 	public void generateMasterPowerPoint() throws FileUtilityException, InterruptedException {
 		int setListId = setListService.createSet("Master SetList", "sjwi", 1);
 		songService.getSongs().stream().forEach(s -> setListService.addSongToSet(s.getId(), setListId, s.getDefaultKey(), 0 ));
-		FileGenerator fileGenerator = new PptFileGenerator(false,0,"C:/");
+		FileGenerator fileGenerator = new PptFileGenerator(false,0);
 		fileGenerator.buildFile(setListService.getLatestSet().transposeToLyrics());
 		fileGenerator = new PdfFileGenerator(0,null);
 		fileGenerator.buildFile(setListService.getLatestSet().transposeToLyrics());
 		fileGenerator = new PdfFileGenerator(0,null);
 		fileGenerator.buildFile(setListService.getLatestSet());
-//		fileGenerator.removeFile();
+		fileGenerator.removeFile();
 	}
 }

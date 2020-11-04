@@ -15,19 +15,21 @@ public class SetList {
 	private final Date createdOn;
 	private final Date lastModifiedOn;
 	private final String createdBy;
+	private final int organization;
 	private final List<Song> songs;
 	
-	public SetList(int id, String setListName, Date createdOn, Date lastModifiedOn, String createdBy, List<Song> songs) {
+	public SetList(int id, String setListName, Date createdOn, Date lastModifiedOn, String createdBy, int organization, List<Song> songs) {
 		super();
 		this.id = id;
 		this.setListName = setListName;
 		this.createdOn = createdOn;
 		this.lastModifiedOn = lastModifiedOn;
 		this.createdBy = createdBy;
+		this.organization = organization;
 		this.songs = songs;
 	}
 	public SetList transposeToLyrics() {
-		return new SetList(id,setListName,createdOn,lastModifiedOn,createdBy,songs.stream()
+		return new SetList(id,setListName,createdOn,lastModifiedOn,createdBy,organization,songs.stream()
 				.map(s -> s.transpose(LYRICS_ONLY_KEY_CODE))
 				.collect(Collectors.toList()));
 	}
@@ -38,7 +40,7 @@ public class SetList {
 				transposedSongs.add(songs.get(i).transpose(keys.get(i)));
 			}
 		}
-		return new SetList(id,setListName,createdOn,lastModifiedOn,createdBy,transposedSongs.isEmpty() ? songs : transposedSongs);
+		return new SetList(id,setListName,createdOn,lastModifiedOn,createdBy,organization,transposedSongs.isEmpty() ? songs : transposedSongs);
 	}
 	public int getId() {
 		return id;
@@ -60,6 +62,9 @@ public class SetList {
 	}
 	public String getNormalizedSetListName() {
 		return setListName.replace("/", "_").replace("\\", "_").replace(";", ".");
+	}
+	public int getOrganization() {
+		return organization;
 	}
 	
 }

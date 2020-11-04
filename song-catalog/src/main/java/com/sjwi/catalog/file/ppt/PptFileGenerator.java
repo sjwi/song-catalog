@@ -18,6 +18,8 @@ import org.apache.poi.xslf.usermodel.XSLFTextBox;
 import org.apache.poi.xslf.usermodel.XSLFTextParagraph;
 import org.apache.poi.xslf.usermodel.XSLFTextRun;
 import org.apache.poi.xslf.usermodel.XSLFTextShape;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 import com.sjwi.catalog.exception.FileUtilityException;
 import com.sjwi.catalog.file.FileGenerator;
@@ -46,19 +48,18 @@ public class PptFileGenerator implements FileGenerator {
 	private final int lineSpacing;
 	private final boolean prependBlankSlide;
 	public final String file;
-	public final String contextFilePath;
 	private XMLSlideShow ppt;
 	private XSLFSlideLayout layout;
 	private XSLFSlide slide; 
 
-	public PptFileGenerator(boolean prependBlankSlide, int fontSize, String root) {
-		contextFilePath =
+	public PptFileGenerator(boolean prependBlankSlide, int fontSize) {
+		String root = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest().getServletContext().getRealPath("/");
+		file = root + "/" +
 				PPT_SUB_DIRECTORY + "/" + 
 				PREFIX + "_" + 
 				System.currentTimeMillis() + 
 				SUFFIX;
-		file = root + contextFilePath;
-		new File(root + PPT_SUB_DIRECTORY).mkdir();
+		new File(root + "/" + PPT_SUB_DIRECTORY).mkdir();
 		this.prependBlankSlide = prependBlankSlide;
 
 		if (fontSize == 0) {
@@ -222,9 +223,4 @@ public class PptFileGenerator implements FileGenerator {
 		}
 	}
 
-	@Override
-	public String getContextFilePath() {
-		return contextFilePath;
-	}	
-	
 }

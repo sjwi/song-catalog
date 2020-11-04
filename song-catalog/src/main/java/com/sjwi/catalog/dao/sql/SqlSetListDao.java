@@ -57,6 +57,7 @@ public class SqlSetListDao implements SetListDao {
 					r.getDate("CREATED_ON"),
 					r.getDate("LAST_UPDATED"),
 					r.getString("CREATED_BY"),
+					r.getInt("ORGANIZATION"),
 					getSetSongs(r.getInt("ID"))
 					));
 			}
@@ -75,6 +76,7 @@ public class SqlSetListDao implements SetListDao {
 					r.getDate("CREATED_ON"),
 					r.getDate("LAST_UPDATED"),
 					r.getString("CREATED_BY"),
+					r.getInt("ORGANIZATION"),
 					getSetSongs(r.getInt("ID"))
 					));
 			}
@@ -93,6 +95,7 @@ public class SqlSetListDao implements SetListDao {
 					r.getDate("CREATED_ON"),
 					r.getDate("LAST_UPDATED"),
 					r.getString("CREATED_BY"),
+					r.getInt("ORGANIZATION"),
 					getSetSongs(r.getInt("ID"))
 					));
 			}
@@ -148,8 +151,11 @@ public class SqlSetListDao implements SetListDao {
 	public int createSet(String setListName, String user, int unit) {
 		jdbcTemplate.update(queryStore.get("createNewSet"), new Object[] {setListName,user,unit});
 		return jdbcTemplate.query(queryStore.get("getLatestSet"), r -> {
-			r.next();
-			return r.getInt("ID");
+			if(r.next()) {
+				return r.getInt("ID");
+			} else {
+				return null;
+			}
 		});
 	}
 
@@ -163,13 +169,17 @@ public class SqlSetListDao implements SetListDao {
 	@Override
 	public SetList getSetListById(int id) {
 		return jdbcTemplate.query(queryStore.get("getSetlistById"), new Object[] {id}, r -> {
-			r.next();
+			if (r.next()) {
 			return new SetList(r.getInt("ID"),
 					r.getString("SETLIST_NAME"),
 					r.getDate("CREATED_ON"),
 					r.getDate("LAST_UPDATED"),
 					r.getString("CREATED_BY"),
+					r.getInt("ORGANIZATION"),
 					getSetSongs(r.getInt("ID")));
+			} else {
+				return null;
+			}
 		});
 	}	
 	
@@ -217,6 +227,7 @@ public class SqlSetListDao implements SetListDao {
 							r.getDate("CREATED_ON"),
 							r.getDate("LAST_UPDATED"),
 							r.getString("CREATED_BY"),
+							r.getInt("ORGANIZATION"),
 							getSetSongs(r.getInt("ID"))));
 				}
 				return setLists;
@@ -293,8 +304,11 @@ public class SqlSetListDao implements SetListDao {
 	@Override
 	public SetList getLatestSetListByOrg(int id) {
 		return jdbcTemplate.query(queryStore.get("getLatestSetListByOrg"), new Object[] {id}, r -> {
-			r.next();
-			return getSetListById(r.getInt("ID"));
+			if (r.next()) {
+				return getSetListById(r.getInt("ID"));
+			} else {
+				return null;
+			}
 		});
 	}
 }

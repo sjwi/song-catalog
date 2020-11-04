@@ -12,5 +12,4 @@ public interface FileGenerator {
 	public String buildFile(SetList setList) throws FileUtilityException;
 	public void removeFile() throws FileUtilityException;
 	public String getFileName();
-	public String getContextFilePath();
 }

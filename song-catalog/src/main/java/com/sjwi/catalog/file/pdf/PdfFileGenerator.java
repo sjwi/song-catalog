@@ -56,7 +56,6 @@ public class PdfFileGenerator implements FileGenerator {
 	private final int titleLeading;
 	private final int headerFooterFont;
 	private final String file;
-	private final String contextFilePath;
 	private final boolean includeQrCode;
 	private BufferedImage qrCode;
 	private PdfWriter writer;
@@ -91,9 +90,8 @@ public class PdfFileGenerator implements FileGenerator {
 					headerFooterFont = DEF_HEADER_FOOTER_FONT;
 				}
 			}
-			contextFilePath = PDF_SUB_DIRECTORY + "/" + PREFIX + "_" + System.currentTimeMillis() + SUFFIX;
-			file = root + contextFilePath;
-			new File(root + PDF_SUB_DIRECTORY).mkdir();
+			file = root + "/" + PDF_SUB_DIRECTORY + "/" + PREFIX + "_" + System.currentTimeMillis() + SUFFIX;
+			new File(root + "/" + PDF_SUB_DIRECTORY).mkdir();
 			document = new Document();
 			writer = PdfWriter.getInstance(document, new FileOutputStream(file));
 			if (qrCode != null) {
@@ -212,11 +210,6 @@ public class PdfFileGenerator implements FileGenerator {
 		}
 	}	
 
-	@Override
-	public String getContextFilePath() {
-		return contextFilePath;
-	}
-	
 	public class DrawHeaderAndFooter extends PdfPageEventHelper {
 		private final String headerText;
 		private int additionalPageCounter = 1;

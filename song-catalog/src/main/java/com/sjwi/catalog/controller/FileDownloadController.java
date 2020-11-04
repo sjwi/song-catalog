@@ -7,7 +7,6 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Optional;
 
-import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -33,9 +32,6 @@ import com.sjwi.catalog.service.SongService;
 public class FileDownloadController {
 	@Autowired
 	ControllerHelper controllerHelper;
-	
-	@Autowired
-	ServletContext context;
 	
 	@Autowired
 	SongService songService;
@@ -69,7 +65,7 @@ public class FileDownloadController {
 			@RequestParam (name="fontSize") Optional<Integer> fontSize
 			) throws IOException {
 		try {
-			FileGenerator pptGenerator = new PptFileGenerator(prependBlankSlide,fontSize.orElse(0),context.getRealPath("/"));
+			FileGenerator pptGenerator = new PptFileGenerator(prependBlankSlide,fontSize.orElse(0));
 			Song song = songService.getSongById(id).transpose(LYRICS_ONLY_KEY_CODE);
 			fileName = fileName == null? song.getNormalizedName(): controllerHelper.normalizeString(fileName);
             response.addHeader("Content-Disposition", "attachment; filename=\""+ fileName + ".pptx\"");
@@ -93,7 +89,7 @@ public class FileDownloadController {
 			@RequestParam (name="fontSize") Optional<Integer> fontSize,
 			@PathVariable int id) throws IOException {
 		try {
-			FileGenerator pptGenerator = new PptFileGenerator(prependBlankSlide, fontSize.orElse(0),context.getRealPath("/"));
+			FileGenerator pptGenerator = new PptFileGenerator(prependBlankSlide, fontSize.orElse(0));
 			SetList setList = controllerHelper.buildSetFile(id,pptGenerator,true);
 			fileName = fileName == null? setList.getNormalizedSetListName(): controllerHelper.normalizeString(fileName);
             response.addHeader("Content-Disposition", "attachment; filename=\"" + fileName + ".pptx\"");
