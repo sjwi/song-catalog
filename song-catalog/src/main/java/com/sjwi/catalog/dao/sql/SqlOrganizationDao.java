@@ -44,10 +44,10 @@ public class SqlOrganizationDao implements OrganizationDao {
 	}
 
 	@Override
-	public String getOrganizationById(int id) {
+	public Organization getOrganizationById(int id) {
 		return jdbcTemplate.query(queryStore.get("getOrganizationById"), new Object[] {id}, r -> {
 			if (r.next()) {
-				return r.getString("NAME");
+				return new Organization(r.getInt("ID"),r.getString("NAME"), r.getString("TITLE"));
 			} else {
 				return null;
 			}

@@ -71,10 +71,8 @@
 			</div>
 		<!-- 	<th:block th:replace="partial/footer"></th:block> -->
 			<div class="modal-container">
-				<th:block th:replace="modal/download"></th:block>
 				<th:block th:replace="modal/qrcode"></th:block>
 				<th:block sec:authorize="hasAuthority('USER')">
-					<th:block th:replace="modal/create-item"></th:block>
 					<th:block th:replace="modal/add-song-to-set"></th:block>
 					<th:block th:replace="modal/delete-song"></th:block>
 					<th:block th:replace="modal/edit-song"></th:block>

@@ -21,6 +21,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.sjwi.catalog.aspect.LandingPageAspect;
 import com.sjwi.catalog.controller.ControllerHelper;
 import com.sjwi.catalog.model.SetList;
+import com.sjwi.catalog.service.OrganizationService;
 import com.sjwi.catalog.service.SetListService;
 import com.sjwi.catalog.service.SongService;
 
@@ -34,6 +35,9 @@ public class SetListDetailsController {
 	
 	@Autowired
 	SetListService setListService;
+	
+	@Autowired
+	OrganizationService organizationService;
 	
 	@Autowired
 	SongService songService;
@@ -57,6 +61,7 @@ public class SetListDetailsController {
 			controllerHelper.errorHandler(e);
 			response.sendRedirect(request.getContextPath() + "/error");
 		}
+		mv.addObject("orgs",organizationService.getOrganizations());
 		return mv;
 	}
 	
@@ -80,6 +85,7 @@ public class SetListDetailsController {
 			controllerHelper.errorHandler(e);
 			response.sendRedirect(request.getContextPath() + "/error");
 		}
+		mv.addObject("orgs",organizationService.getOrganizations());
 		return mv;
 	}
 	

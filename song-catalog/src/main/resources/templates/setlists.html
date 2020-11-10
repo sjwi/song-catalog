@@ -4,7 +4,7 @@
 	<th:block th:replace="partial/header"></th:block>
 	<body id="setListsBody">
 		<div class="scroll-lock">
-			<th:block th:replace="partial/off-navbar :: offNavBar('addSetList',false)"></th:block>
+			<th:block th:replace="partial/off-navbar :: offNavBar('addSetList')"></th:block>
 			<div class="wrapper setlists-page text-center">
 				<div class="row h-100 no-gutters">
 					<div class="col left-side h-100 setlist-scroll-column" style="overflow:scroll">
@@ -25,7 +25,6 @@
 			<div id="overlay">
 			</div>
 			<div class="modal-container">
-				<th:block th:replace="modal/download"></th:block>
 				<th:block th:replace="modal/qrcode"></th:block>
 				<th:block sec:authorize="hasAuthority('USER')">
 					<th:block th:replace="modal/edit-song"></th:block>
@@ -33,7 +32,6 @@
 					<th:block th:replace="modal/add-song-from-select"></th:block>
 					<th:block th:replace="modal/delete-setlist"></th:block>
 					<th:block th:replace="modal/change-version"></th:block>
-					<th:block th:replace="modal/create-item"></th:block>
 					<th:block th:replace="modal/email-set"></th:block>
 				</th:block>
 			</div>

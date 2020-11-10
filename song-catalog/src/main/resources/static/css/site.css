@@ -6,6 +6,12 @@ hr {
 	background-color: var(--main-text-color) !important;
 	opacity:.1;
 }
+.bg-custom {
+	background-color: var(--secondary-bg-color);
+}
+.mh-100vh {
+	min-height: 100vh;
+}
 .logo{
 	opacity:1;
 	width:75px;
@@ -53,8 +59,17 @@ hr {
 .nav-link:hover {
 	opacity:.8;
 }
+.nav-item.sub-item a.nav-link {
+	font-size:.90rem;
+	margin-left:1.5rem;
+	padding-top:.25rem;
+	padding-bottom:.25rem;
+}
 .title-link {
 	text-decoration: none !important;
+	color: var(--main-text-color);
+}
+.header-text {
 	color: var(--main-text-color);
 }
 .title-link:hover {
@@ -195,7 +210,7 @@ a:hover {
 #setListBody .wrapper, #setListsBody .wrapper {
 	background-color: var(--secondary-bg-color) !important;
 }
-#setListBody #offNav > .row, #setListsBody #offNav > .row {
+#setListBody #offNav > .row, #setListsBody #offNav > .row, #errorBody #offNav > .row{
 	border-bottom:none !important;
 }
 .btn-group-xs > .btn, .btn-xs {
@@ -1289,7 +1304,12 @@ ul.ks-cboxtags li input[type="checkbox"] {
 	margin-top: -5px;
 }
 
-
+#organizationsBody .off-navline {
+	border-bottom-style: none !important;
+}
+.org-btn:hover {
+	opacity:.75;
+}
 @media screen and (max-width:1450px) {
 	.song-page-container, .song-action-container {
 		width:95%;

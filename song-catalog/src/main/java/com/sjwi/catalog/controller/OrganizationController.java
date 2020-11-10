@@ -17,6 +17,7 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.util.UriUtils;
 
 import com.sjwi.catalog.aspect.IgnoreAspect;
+import com.sjwi.catalog.aspect.LandingPageAspect;
 import com.sjwi.catalog.model.SetList;
 import com.sjwi.catalog.service.OrganizationService;
 import com.sjwi.catalog.service.SetListService;
@@ -62,10 +63,28 @@ public class OrganizationController {
 		return mv;
 	}
 	
-	@RequestMapping(value = {"/org/{id}/{endpoint}","/org/{id}"}, method = RequestMethod.GET)
-	public ModelAndView latestPdfByOrg(@PathVariable int id, @PathVariable(required = false) String endpoint, HttpServletResponse response) throws IOException {
+	@LandingPageAspect
+	@RequestMapping(value = {"/orgs"}, method = RequestMethod.GET)
+	public ModelAndView organizations() throws IOException {
+		ModelAndView mv = new ModelAndView("organizations");
+		mv.addObject("orgs",organizationService.getOrganizations());
+		return mv;
+	}
+
+	@LandingPageAspect
+	@RequestMapping(value = {"/org/{id}"}, method = RequestMethod.GET)
+	public ModelAndView organizations(@PathVariable int id) throws IOException {
+		ModelAndView mv = new ModelAndView("organization");
+		mv.addObject("sets",setListService.getSetListsByOrg(id));
+		mv.addObject("org",organizationService.getOrganizationById(id));
+		mv.addObject("orgs",organizationService.getOrganizations());
+		return mv;
+	}
+
+	@RequestMapping(value = {"/org/{id}/{endpoint}"}, method = RequestMethod.GET)
+	public ModelAndView latestPdfByOrg(@PathVariable int id, @PathVariable String endpoint, HttpServletResponse response) throws IOException {
 		SetList setList = setListService.getLatestSetByOrg(id);
-		switch (endpoint == null? "": endpoint) {
+		switch (endpoint) {
 			case "deck": case "slides": case "slideshow": case "ppt": case "presentation":
 				return new ModelAndView("forward:/" + context.getContextPath() 
 						+ "/setlist/ppt/" + setList.getId()

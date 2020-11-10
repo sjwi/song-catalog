@@ -90,4 +90,8 @@ public class SetListService {
 	public void renameSet(int id, String setListName) {
 		setListDao.renameSet(id, setListName);
 	}
+
+	public List<SetList> getSetListsByOrg(int id) {
+		return setListDao.getSetListsByOrg(id);
+	}
 }

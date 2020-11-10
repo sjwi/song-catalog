@@ -18,12 +18,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.sjwi.catalog.aspect.LandingPageAspect;
 import com.sjwi.catalog.mail.Mailer;
 import com.sjwi.catalog.model.addressbook.AddressBookEntry;
 import com.sjwi.catalog.model.addressbook.AddressBookGroup;
 import com.sjwi.catalog.model.mail.Email;
 import com.sjwi.catalog.model.user.CfUser;
 import com.sjwi.catalog.service.AddressBookService;
+import com.sjwi.catalog.service.OrganizationService;
 import com.sjwi.catalog.service.UserService;
 
 @Controller
@@ -39,8 +41,12 @@ public class AddressBookController {
 	AddressBookService addressBookService;
 	
 	@Autowired
+	OrganizationService organizationService;
+	
+	@Autowired
 	Mailer mailer;
 	
+	@LandingPageAspect
 	@RequestMapping(value = {"/addressbook"}, method = RequestMethod.GET)
 	public ModelAndView addressBook(Authentication auth, HttpServletRequest request,
 			@RequestParam(name="searchValue",required=false) String searchTerm, 
@@ -63,6 +69,7 @@ public class AddressBookController {
 		}
 		mv.addObject("addressbookentries",entries);
 		mv.addObject("addressbookgroups",groups);
+		mv.addObject("orgs",organizationService.getOrganizations());
 		return mv;
 	}
 

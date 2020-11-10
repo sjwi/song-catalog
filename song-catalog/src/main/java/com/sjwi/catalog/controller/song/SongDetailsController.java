@@ -19,6 +19,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.sjwi.catalog.aspect.LandingPageAspect;
 import com.sjwi.catalog.controller.ControllerHelper;
 import com.sjwi.catalog.model.song.Song;
+import com.sjwi.catalog.service.OrganizationService;
 import com.sjwi.catalog.service.SetListService;
 import com.sjwi.catalog.service.SongService;
 import com.sjwi.catalog.service.VersionService;
@@ -36,6 +37,9 @@ public class SongDetailsController {
 	
 	@Autowired
 	VersionService versionService;
+	
+	@Autowired
+	OrganizationService organizationService;
 	
 	@LandingPageAspect
 	@RequestMapping(value = { "/songs"}, method = RequestMethod.GET)
@@ -61,6 +65,7 @@ public class SongDetailsController {
 			mv.addObject("focusedSong", versionService.getAllRelatedSongs(songs.get(0).getId()));
 			mv.addObject("categories",songService.getSongCategories());
 			mv.addObject("searchTerm",searchTerm);
+			mv.addObject("orgs",organizationService.getOrganizations());
 			return mv;
 		}
 	}
@@ -101,6 +106,7 @@ public class SongDetailsController {
 		mv.addObject("songs",songs);
 		mv.addObject("sets",setListService.getSetLists(10));
 		mv.addObject("focusedSong", focusedSong);
+		mv.addObject("orgs",organizationService.getOrganizations());
 
 		return mv;
 	}

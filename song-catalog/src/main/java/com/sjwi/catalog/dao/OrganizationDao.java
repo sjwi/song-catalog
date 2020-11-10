@@ -11,7 +11,7 @@ public interface OrganizationDao {
 	
 	public Map<Integer, String> getMeetingServices();
 
-	public String getOrganizationById(int id);
+	public Organization getOrganizationById(int id);
 
 	public String getMeetingServiceById(int id);
 

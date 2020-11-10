@@ -81,10 +81,10 @@ public class FileDownloadController {
 		}
 	}
 
-	@RequestMapping(value = {"/setlist/ppt/{id}/{fileName}"}, method = RequestMethod.GET)
+	@RequestMapping(value = {"/setlist/ppt/{id}/{fileName}", "/setlist/ppt/{id}"}, method = RequestMethod.GET)
 	public void downloadSetPpt(HttpServletRequest request, HttpServletResponse response,
 			Authentication auth,
-			@PathVariable String fileName,
+			@PathVariable (required = false) String fileName,
 			@RequestParam (name="blankSlide", required = false) boolean prependBlankSlide,
 			@RequestParam (name="fontSize") Optional<Integer> fontSize,
 			@PathVariable int id) throws IOException {
@@ -109,9 +109,9 @@ public class FileDownloadController {
 	public void downloadSongPdf(HttpServletRequest request, HttpServletResponse response,
 			Authentication auth,
 			@PathVariable int id,
-			@PathVariable String fileName,
+			@PathVariable (required = false) String fileName,
 			@RequestParam (name="fontSize") Optional<Integer> fontSize,
-			@RequestParam(value = "lyricsOnly", required = false, defaultValue = "false") boolean lyricsOnly,
+			@RequestParam (value = "lyricsOnly", required = false, defaultValue = "false") boolean lyricsOnly,
 			@RequestParam (name="qrCode", required=false, defaultValue = "false") boolean qrCode,
 			@RequestParam (name="key",required=false) String key) throws IOException {
 		try {
@@ -138,11 +138,11 @@ public class FileDownloadController {
 		}
 	}
 
-	@RequestMapping(value = {"/setlist/pdf/{id}/{fileName}"}, method = RequestMethod.GET)
+	@RequestMapping(value = {"/setlist/pdf/{id}/{fileName}", "/setlist/pdf/{id}"}, method = RequestMethod.GET)
 	public void downloadSetPdf(HttpServletRequest request, HttpServletResponse response,
 			Authentication auth,
 			@PathVariable int id,
-			@PathVariable String fileName,
+			@PathVariable (required = false) String fileName,
 			@RequestParam (name="fontSize") Optional<Integer> fontSize,
 			@RequestParam(value = "lyricsOnly", required = false, defaultValue = "false") boolean lyricsOnly,
 			@RequestParam (name="qrCode",required=false, defaultValue = "false") boolean qrCode

@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+	<th:block th:replace="partial/head :: head('Organizations')"></th:block>
+	<th:block th:replace="partial/header"></th:block>
+	<body id="organizationsBody">
+		<th:block th:replace="partial/off-navbar :: offNavBar('addSong')"></th:block>
+		<div class="row no-gutters flex-nowrap bg-custom mh-100vh">
+			<div class="col text-center">
+				<div class="mt-5">
+					<div class="org-btn pt-3 pb-3" th:each="org : ${orgs}">
+						<a th:href="@{/org/__${org.id}__}" class="text-decoration-none"> <h2 th:text="${org.title}" class="text-white"></h2></a>
+					</div>
+					<div class="org-btn pt-3 pb-3">
+						<a th:href="@{/org/0}" class="text-decoration-none"> <h2 th:text="${'Other Organizations'}" class="text-white"></h2></a>
+					</div>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>

@@ -8,10 +8,10 @@
 		<meta property="og:image" th:attr="content=@{/images/logo_preview.png}" />
 		<title th:text="${title}"></title>
 		<link rel="shortcut icon" th:href="@{/public/favicon.png}" type="image/x-icon">
-		<link th:if="${#session.getAttribute(T(com.sjwi.catalog.config.PreferencesConfiguration).NIGHT_MODE_PREFERENCE_KEY) == null || !#session.getAttribute(T(com.sjwi.catalog.config.PreferencesConfiguration).NIGHT_MODE_PREFERENCE_KEY)}" rel="stylesheet" th:href="@{/css/bootstrap.css}" />
-		<link th:if="${#session.getAttribute(T(com.sjwi.catalog.config.PreferencesConfiguration).NIGHT_MODE_PREFERENCE_KEY) == null || !#session.getAttribute(T(com.sjwi.catalog.config.PreferencesConfiguration).NIGHT_MODE_PREFERENCE_KEY)}" rel="stylesheet" th:href="@{/css/colors.css}" />
-		<link th:if="${#session.getAttribute(T(com.sjwi.catalog.config.PreferencesConfiguration).NIGHT_MODE_PREFERENCE_KEY)}" rel="stylesheet" th:href="@{/css/bootstrap-dark.css}" />
-		<link th:if="${#session.getAttribute(T(com.sjwi.catalog.config.PreferencesConfiguration).NIGHT_MODE_PREFERENCE_KEY)}" rel="stylesheet" th:href="@{/css/colors-dark.css}" />
+		<link th:if="${#session == null || #session.getAttribute(T(com.sjwi.catalog.config.PreferencesConfiguration).NIGHT_MODE_PREFERENCE_KEY) == null || !#session.getAttribute(T(com.sjwi.catalog.config.PreferencesConfiguration).NIGHT_MODE_PREFERENCE_KEY)}" rel="stylesheet" th:href="@{/css/bootstrap.css}" />
+		<link th:if="${#session == null || #session.getAttribute(T(com.sjwi.catalog.config.PreferencesConfiguration).NIGHT_MODE_PREFERENCE_KEY) == null || !#session.getAttribute(T(com.sjwi.catalog.config.PreferencesConfiguration).NIGHT_MODE_PREFERENCE_KEY)}" rel="stylesheet" th:href="@{/css/colors.css}" />
+		<link th:if="${#session != null && #session.getAttribute(T(com.sjwi.catalog.config.PreferencesConfiguration).NIGHT_MODE_PREFERENCE_KEY)}" rel="stylesheet" th:href="@{/css/bootstrap-dark.css}" />
+		<link th:if="${#session != null && #session.getAttribute(T(com.sjwi.catalog.config.PreferencesConfiguration).NIGHT_MODE_PREFERENCE_KEY)}" rel="stylesheet" th:href="@{/css/colors-dark.css}" />
 		<link rel="stylesheet" type="text/css" th:href="@{/css/slick.css}"/>
 		<link rel="stylesheet" type="text/css" th:href="@{/css/select2.min.css}"/>
 		<link rel="apple-touch-icon" th:href="@{/images/icon_dark.png}">
@@ -37,12 +37,14 @@
 			var alertOnLoad = /*[[${ALERT_ON_LOAD}]]*/ false;
 		</script>
 
-		<th:block th:replace="modal/login"></th:block>
+		<th:block th:replace="modal/download"></th:block>
 		<th:block sec:authorize="hasAuthority('USER')">
 			<th:block th:replace="modal/change-password"></th:block>
 			<th:block th:replace="modal/invite"></th:block>
+			<th:block th:replace="modal/create-item"></th:block>
 		</th:block>
 		<th:block sec:authorize="!hasAuthority('USER')">
+			<th:block th:replace="modal/login"></th:block>
 			<th:block th:replace="modal/reset-password"></th:block>
 			<th:block th:replace="modal/prompt-for-reset"></th:block>
 			<th:block th:replace="modal/enroll"></th:block>

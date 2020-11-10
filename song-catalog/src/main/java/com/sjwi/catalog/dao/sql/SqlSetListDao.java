@@ -70,15 +70,35 @@ public class SqlSetListDao implements SetListDao {
 		return jdbcTemplate.query(queryStore.get("getXNumberOfSetlistsOrderByCreatedOnDesc"),new Object[] {qty}, r -> {
 			List<SetList> setLists = new ArrayList<>();
 			while(r.next()) {
-					setLists.add(new SetList(
-					r.getInt("ID"),
-					r.getString("SETLIST_NAME"),
-					r.getDate("CREATED_ON"),
-					r.getDate("LAST_UPDATED"),
-					r.getString("CREATED_BY"),
-					r.getInt("ORGANIZATION"),
-					getSetSongs(r.getInt("ID"))
-					));
+				setLists.add(new SetList(
+				r.getInt("ID"),
+				r.getString("SETLIST_NAME"),
+				r.getDate("CREATED_ON"),
+				r.getDate("LAST_UPDATED"),
+				r.getString("CREATED_BY"),
+				r.getInt("ORGANIZATION"),
+				getSetSongs(r.getInt("ID"))
+				));
+			}
+			return setLists;
+		});
+	}
+
+
+	@Override
+	public List<SetList> getSetListsByOrg(int id) {
+		return jdbcTemplate.query(queryStore.get("getSetListsByOrg"), new Object[] {id}, r -> {
+			List<SetList> setLists = new ArrayList<>();
+			while(r.next()) {
+				setLists.add(new SetList(
+				r.getInt("ID"),
+				r.getString("SETLIST_NAME"),
+				r.getDate("CREATED_ON"),
+				r.getDate("LAST_UPDATED"),
+				r.getString("CREATED_BY"),
+				r.getInt("ORGANIZATION"),
+				getSetSongs(r.getInt("ID"))
+				));
 			}
 			return setLists;
 		});

@@ -71,7 +71,10 @@ deleteFromAllSetlistsBySongId: >
   
 getAllSetlistsOrderByCreatedOnDesc: >
   Select * from SetListMaster order by CREATED_ON DESC
-  
+
+getSetListsByOrg: >
+  Select * from SetListMaster where ORGANIZATION = ? order by CREATED_ON DESC
+
 getXNumberOfSetlistsOrderByCreatedOnDesc: >
   Select * from SetListMaster order by CREATED_ON DESC LIMIT ?
   

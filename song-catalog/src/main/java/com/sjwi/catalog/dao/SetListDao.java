@@ -46,4 +46,6 @@ public interface SetListDao {
 	public void renameSet(int id, String setListName);
 	
 	public SetList getLatestSetListByOrg(int id);
+
+	public List<SetList> getSetListsByOrg(int id);
 }

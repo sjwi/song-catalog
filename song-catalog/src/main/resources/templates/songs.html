@@ -4,7 +4,7 @@
 	<th:block th:replace="partial/header"></th:block>
 	<body id="songCatalogBody">
 		<div class="scroll-lock">
-			<th:block th:replace="partial/off-navbar :: offNavBar('addSong',true)"></th:block>
+			<th:block th:replace="partial/off-navbar :: offNavBar('addSong')"></th:block>
 			<div class="song-catalog-row row no-gutters flex-nowrap">
 				<div class="col song-column no-gutters" th:classappend="${!#strings.contains(#request.requestURI,'/songs')}? 'hide-song-catalog':''">
 					<div class="template-container song-catalog-table" id="songTableContainer">
@@ -24,9 +24,7 @@
 			</div>
 		<!-- 	<th:block th:replace="partial/footer"></th:block> -->
 			<div class="modal-container">
-				<th:block th:replace="modal/download"></th:block>
 				<th:block sec:authorize="hasAuthority('USER')">
-					<th:block th:replace="modal/create-item"></th:block>
 					<th:block th:replace="modal/add-song-to-set"></th:block>
 					<th:block th:replace="modal/delete-song"></th:block>
 					<th:block th:replace="modal/edit-song"></th:block>

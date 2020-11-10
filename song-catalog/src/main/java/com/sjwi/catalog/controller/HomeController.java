@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.sjwi.catalog.aspect.LandingPageAspect;
+import com.sjwi.catalog.service.OrganizationService;
 import com.sjwi.catalog.service.SetListService;
 import com.sjwi.catalog.service.SongService;
 
@@ -26,12 +27,16 @@ public class HomeController {
 	@Autowired
 	ControllerHelper controllerHelper;
 	
+	@Autowired
+	OrganizationService organizationService;
+
 	@LandingPageAspect
 	@RequestMapping(value = { "/home", "/"})
 	public ModelAndView home(HttpServletRequest request,
 			HttpServletResponse response, Authentication auth, @RequestParam (name="searchTerm", required=false) String searchTerm) {
 		ModelAndView mv = new ModelAndView("home");
 		mv.addObject("songs",songService.searchSongs(searchTerm));
+		mv.addObject("orgs",organizationService.getOrganizations());
 		mv.addObject("sets",setListService.getSetLists(10));
 		mv.addObject("searchTerm",searchTerm);
 		mv.addObject("categories",songService.getSongCategories());

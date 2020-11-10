@@ -80,7 +80,7 @@ public class ControllerHelper {
 		if (org == 0) {
 			setListName = otherOrgName==null || "".equals(otherOrgName)? "Untitled" : otherOrgName;
 		} else {
-			setListName = organizationService.getOrganizationById(org);
+			setListName = organizationService.getOrganizationById(org).getName();
 		}
 		if (0 == service) {
 			setListName = otherServiceName==null || "".equals(otherServiceName)? setListName : setListName + " " + WordUtils.capitalizeFully(otherServiceName);

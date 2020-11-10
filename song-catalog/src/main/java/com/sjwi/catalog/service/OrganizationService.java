@@ -15,7 +15,7 @@ public class OrganizationService {
 	@Autowired
 	OrganizationDao organizationDao;
 
-	public String getOrganizationById(int org) {
+	public Organization getOrganizationById(int org) {
 		return organizationDao.getOrganizationById(org);
 	}
 

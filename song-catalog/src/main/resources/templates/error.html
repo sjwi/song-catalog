@@ -1,17 +1,8 @@
 <!DOCTYPE html>
-<head>
-	<meta charset="utf-8" />
-	<meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no maximum-scale=1.0,user-scalable=0, minimal-ui" />
-	<title th:text="${'Uh oh..'}"></title>
-	<link rel="shortcut icon" th:href="@{/public/favicon.png}" type="image/x-icon">
-	<link rel="stylesheet" th:href="@{/css/bootstrap.css}" />
-	<link rel="stylesheet" th:href="@{/css/colors.css}" />
-	<link rel="stylesheet" th:href="@{/css/site.css}" />
-	<script th:src="@{/js/lib/jquery-3.3.1.min.js}"></script>
-	<script th:src="@{/js/lib/jquery-ui.min.js}"></script>
-	<script th:src="@{/js/lib/bootstrap.bundle.js}"></script>
-</head>
-<body>
+<th:block th:replace="partial/head :: head('Uh oh...')"></th:block>
+<body id="errorBody">
+	<th:block th:replace="partial/header"></th:block>
+	<th:block th:replace="partial/off-navbar :: offNavBar('addSong')"></th:block>
 	<div class="row setlist-section error text-center no-gutters">
 		<div class="col h-100 my-auto">
 			<div class="set-list-container">
