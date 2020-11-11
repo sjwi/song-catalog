@@ -5,19 +5,83 @@
 	<body id="organizationBody">
 		<th:block th:replace="partial/off-navbar :: offNavBar('addSong')"></th:block>
 		<div class="row no-gutters flex-nowrap mh-100vh">
-			<div class="col text-center">
-				<h4 class="mt-3 mb-3 header-text" th:text="${org == null}? 'Other Organizations' : ${org.title + ' Set Lists'}"></h4>
-				<table class="table table-hover table-striped container org-sl">
-					<tr class="pt-3 pb-3" th:each="set : ${sets}">
-						<td class="text-left text-nowrap align-middle"><a th:text="${set.setListName}" th:href="@{/setlist/__${set.id}__}"></a></td>
-						<td class="text-right align-middle">
-							<a class="mr-3 text-nowrap org-dl-link" th:href="@{/setlist/pdf/__${set.id}__?lyricsOnly=on&fontSize=18}"><span class="long-word">Download</span> Lyrics</a>
-							<a class="mr-3 text-nowrap org-dl-link" th:href="@{/setlist/pdf/__${set.id}__}"><span class="long-word">Download</span> PDF</a>
-							<a class="text-nowrap org-dl-link" th:href="@{/setlist/ppt/__${set.id}__}"><span class="long-word">Download</span> PowerPoint</a>
-						</td>
-					</tr>
-				</table>
+			<div th:with="orgId=${org == null? '0':org.id}" class="col text-center">
+				<h4 class="mt-3 mb-4 header-text" th:text="${org == null}? 'Other Organizations' : ${org.title}"></h4>
+				<h5 class="d-block header-text mb-3">Permalinks</h5>
+				<div class="row no-gutters mb-1">
+					<div class="col-3"></div>
+					<div class="col-sm-6 text-center">
+						<div class="input-group col org-permalink">
+							<div class="input-group-prepend">
+								<span class="input-group-text">Latest Lyrics <span class="long-word">Handout</span></span>
+						    </div>
+							<input class="form-control mono-space" disabled type="text" id="orgLyrics" th:value="${'https://' + #request.getServerName()} + ${!#strings.equals(#request.getServerPort(),'80')? ':' + #request.getServerPort(): ''} + @{/org/__${orgId}__/lyrics-handout}">
+							<div class="input-group-append copy-text copy-input" data-target="#orgLyrics" title="Copy permalink to lyrics handout to clip-board">
+								 <div class="input-group-text"><img width="23px" th:src="@{/images/copy.png}"><span class="collapse copy-checkmark">&#10003;</span></div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row no-gutters mb-1">
+					<div class="col-3"></div>
+					<div class="col-sm-6 text-center">
+						<div class="input-group col org-permalink">
+							<div class="input-group-prepend">
+								<span class="input-group-text">Latest Set List <span class="long-word">Page</span></span>
+						    </div>
+							<input class="form-control mono-space" disabled type="text" id="orgPdf" th:value="${'https://' + #request.getServerName()} + ${!#strings.equals(#request.getServerPort(),'80')? ':' + #request.getServerPort(): ''} + @{/org/__${orgId}__/setlist}">
+							<div class="input-group-append copy-text copy-input" data-target="#orgPdf" title="Copy permalink to set list to clip-board">
+								 <div class="input-group-text"><img width="23px" th:src="@{/images/copy.png}"><span class="collapse copy-checkmark">&#10003;</span></div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row no-gutters mb-4">
+					<div class="col-3"></div>
+					<div class="col-sm-6 text-center">
+						<div class="input-group col org-permalink">
+							<div class="input-group-prepend">
+								<span class="input-group-text">Latest&nbsp;<span class="long-word">PowerPoint</span><span class="short-word">PPT</span></span>
+						    </div>
+							<input class="form-control mono-space" disabled type="text" id="orgSet" th:value="${'https://' + #request.getServerName()} + ${!#strings.equals(#request.getServerPort(),'80')? ':' + #request.getServerPort(): ''} + @{/org/__${orgId}__/ppt}">
+							<div class="input-group-append copy-text copy-input" data-target="#orgSet" title="Copy permalink to powerpoint to clip-board">
+								 <div class="input-group-text"><img width="23px" th:src="@{/images/copy.png}"><span class="collapse copy-checkmark">&#10003;</span></div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<h5 class="d-block header-text mb-3">Set List Archive</h5>
+				<div class="container archive pr-0 pl-0 mb-4">
+					<table class="table table-hover table-striped org-sl mb-0">
+						<tr class="pt-3 pb-3" th:each="set : ${sets}">
+							<td class="text-left text-nowrap align-middle"><a th:text="${set.setListName}" th:href="@{/setlist/__${set.id}__}"></a></td>
+							<td class="text-right align-middle">
+								<a class="mr-3 text-nowrap org-dl-link btn btn-info btn-sm" th:href="@{/setlist/pdf/__${set.id}__?lyricsOnly=on&fontSize=18}"><span class="long-word">Download</span> Lyrics</a>
+								<a class="mr-3 text-nowrap org-dl-link btn btn-info btn-sm" th:href="@{/setlist/pdf/__${set.id}__}"><span class="long-word">Download</span> PDF</a>
+								<a class="text-nowrap org-dl-link btn btn-info btn-sm" th:href="@{/setlist/ppt/__${set.id}__}"><span class="long-word">Download</span> PowerPoint</a>
+							</td>
+						</tr>
+					</table>
+				</div>
 			</div>
 		</div>
 	</body>
+	<script>
+	$(document).ready(function(){
+		$('.copy-input').on('click',function(){
+			copyTextToClipboard($($(this).data('target')).val(),false);
+			checked(this);
+		});	
+	})
+	function checked(elem){
+		$(elem).find('div').addClass('bg-primary');
+		$(elem).find('div > img').hide('slow');
+		$(elem).find('div > span').show('slow');
+		setTimeout(function(){
+			$(elem).find('div').removeClass('bg-primary');
+			$(elem).find('div > img').show('slow');
+			$(elem).find('div > span').hide('slow');
+		},1000);
+	}
+	</script>
 </html>

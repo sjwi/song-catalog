@@ -27,7 +27,7 @@
 	}
 	function alertWithFade(alertType, msg){
 		if (alertType == 'success'){
-			alertType = 'info';
+			alertType = 'warning';
 		}
 		var dynamicElement = $('#custom-alert').clone();
 		$(dynamicElement).find('.alert-message').html(msg);

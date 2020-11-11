@@ -68,7 +68,7 @@
 		</div>
 		<div class="col-6 text-right">
 			<button class="btn btn-sm btn-primary dl-copy-btn" id="copyDownloadLinkBtn" onclick="copyDownloadUrl(event)"
-			th:attr="data-baseContext=${#request.getScheme() + '://' + #request.getServerName()} + ${!#strings.equals(#request.getServerPort(),'80')? #request.getServerPort(): ''}">
+			th:attr="data-baseContext=${'https://' + #request.getServerName()} + ${!#strings.equals(#request.getServerPort(),'80')? ':' + #request.getServerPort(): ''}">
 				<img width="20px" type="image/x-icon" th:src="@{/images/copy-inverse.png}"/>
 				<span>Copy Download URL</span>
 			</button>

@@ -1310,6 +1310,36 @@ ul.ks-cboxtags li input[type="checkbox"] {
 .org-btn:hover {
 	opacity:.75;
 }
+.copy-org-link {
+	max-width:50%;
+}
+.copy-text, .copy-text div {
+	min-width: 49px;
+}
+.copy-text:hover {
+	cursor:pointer;
+	opacity:.9;
+}
+.input-group-append > div {
+	transition: background-color 1s ease;
+}
+.copy-checkmark {
+	color:#fff !important;
+	font-weight:900;
+	padding-left: .4rem;
+	padding-right: .4rem;
+}
+.org-permalink > .input-group-prepend > span{
+	width:175px;
+	font-weight:bold;
+}
+
+span.short-word {
+	display:none;
+}
+.archive.container {
+	max-height:50vh; overflow-y:scroll;border-radius:3px; border:1px solid rgba(75, 75, 75,.5);
+}
 @media screen and (max-width:1450px) {
 	.song-page-container, .song-action-container {
 		width:95%;
@@ -1413,6 +1443,16 @@ ul.ks-cboxtags li input[type="checkbox"] {
 	}
 }
 @media screen and (max-width:991px){
+	.org-permalink .input-group-text {
+		padding-left:.2rem;
+		padding-right:.2rem;
+	}
+	.org-permalink, .org-permalink div, .org-permalink span, .org-permalink input {
+		font-size:1rem !important;
+	}
+	.org-permalink .input-group-prepend {
+		height:auto !important;
+	}
 	.address-book.song-section  .container{
 		margin-top: calc(102px + 2rem);
 	}
@@ -1614,8 +1654,15 @@ ul.ks-cboxtags li input[type="checkbox"] {
 	span.long-word {
 		display:none;
 	}
+	span.short-word {
+		display:block;
+	}
 	.org-dl-link.mr-3 {
 		margin-right:.55rem !important;
+	}
+	.org-permalink > .input-group-prepend > span{
+		width:115px;
+		font-weight:100;
 	}
 }
 @media screen and (max-width: 700px) {
@@ -1647,8 +1694,8 @@ ul.ks-cboxtags li input[type="checkbox"] {
 	}
 }
 @media screen and (max-width: 550px){
-	table.org-sl {
-		font-size: .75rem;
+	.archive.container {
+		max-height:none;
 	}
 	.org-dl-link.mr-3 {
 		margin-right:.25rem !important;
@@ -1700,8 +1747,13 @@ ul.ks-cboxtags li input[type="checkbox"] {
 		margin: 20px 0 0 0;
 	}
 }
-@media screen and (max-width: 321px){
+@media screen and (max-width: 466px){
+	.btn.org-dl-link {
+		margin-right: 0 !important;
+		margin-top:.5rem;
+		display:block;
+	}
 	table.org-sl {
-		font-size: .70rem;
+		font-size: 1rem;
 	}
 }
