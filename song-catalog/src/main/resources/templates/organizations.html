@@ -8,10 +8,10 @@
 			<div class="col text-center">
 				<div class="mt-5">
 					<div class="org-btn pt-3 pb-3" th:each="org : ${orgs}">
-						<a th:href="@{/org/__${org.id}__}" class="text-decoration-none"> <h2 th:text="${org.title}" class="text-white"></h2></a>
+						<a th:href="@{/org/__${org.id}__}" class="text-decoration-none"> <h3 th:text="${org.title}" class="text-white"></h3></a>
 					</div>
 					<div class="org-btn pt-3 pb-3">
-						<a th:href="@{/org/0}" class="text-decoration-none"> <h2 th:text="${'Other Organizations'}" class="text-white"></h2></a>
+						<a th:href="@{/org/0}" class="text-decoration-none"> <h3 th:text="${'Other Organizations'}" class="text-white"></h3></a>
 					</div>
 				</div>
 			</div>
