@@ -10,6 +10,12 @@
 </div>
 
 <script>
+	$(document).ready(function(){
+		$(document).on('click','.alert-close, .alert-close > span',function(){
+			$(this).closest('#custom-alert').css('-webkit-transition-duration','0s');
+			$(this).closest('#custom-alert').css('transition-duration','0s');
+		})
+	})
 	function alertWithoutFade(alertType,msg){
 		if (alertType == 'success'){
 			alertType = 'info';

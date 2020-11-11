@@ -1610,6 +1610,14 @@ ul.ks-cboxtags li input[type="checkbox"] {
 		padding-right:.5rem !important;
 	}
 }
+@media screen and (max-width: 767px) {
+	span.long-word {
+		display:none;
+	}
+	.org-dl-link.mr-3 {
+		margin-right:.55rem !important;
+	}
+}
 @media screen and (max-width: 700px) {
 	.static-song-page-title > span {
 		max-width:190px !important;
@@ -1639,6 +1647,12 @@ ul.ks-cboxtags li input[type="checkbox"] {
 	}
 }
 @media screen and (max-width: 550px){
+	table.org-sl {
+		font-size: .75rem;
+	}
+	.org-dl-link.mr-3 {
+		margin-right:.25rem !important;
+	}
 	.setlist-section.error .set-list-container{
 		top:calc(25% - 150px);
 	}
@@ -1684,5 +1698,10 @@ ul.ks-cboxtags li input[type="checkbox"] {
 	.modal-dialog.modal-md {
 		width:100%;
 		margin: 20px 0 0 0;
+	}
+}
+@media screen and (max-width: 321px){
+	table.org-sl {
+		font-size: .70rem;
 	}
 }
