@@ -54,4 +54,7 @@ public class SongService {
 	public Map<Integer, String> getSongCategories(){
 		return songDao.getSongCategories();
 	}
+	public Map<Song, Integer> getFrequencyCountByOrg(int orgId) {
+		return songDao.getFrequencyCountByOrg(orgId);
+	}
 }

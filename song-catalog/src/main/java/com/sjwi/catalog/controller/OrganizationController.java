@@ -73,16 +73,17 @@ public class OrganizationController {
 
 	@LandingPageAspect
 	@RequestMapping(value = {"/org/{id}"}, method = RequestMethod.GET)
-	public ModelAndView organizations(@PathVariable int id) throws IOException {
+	public ModelAndView organizationDetails(@PathVariable int id) throws IOException {
 		ModelAndView mv = new ModelAndView("organization");
 		mv.addObject("sets",setListService.getSetListsByOrg(id));
+		mv.addObject("frequentSongs",songService.getFrequencyCountByOrg(id));
 		mv.addObject("org",organizationService.getOrganizationById(id));
 		mv.addObject("orgs",organizationService.getOrganizations());
 		return mv;
 	}
 
 	@RequestMapping(value = {"/org/{id}/{endpoint}"}, method = RequestMethod.GET)
-	public ModelAndView latestPdfByOrg(@PathVariable int id, @PathVariable String endpoint, HttpServletResponse response) throws IOException {
+	public ModelAndView latestOrgResource(@PathVariable int id, @PathVariable String endpoint, HttpServletResponse response) throws IOException {
 		SetList setList = setListService.getLatestSetByOrg(id);
 		switch (endpoint) {
 			case "deck": case "slides": case "slideshow": case "ppt": case "presentation":

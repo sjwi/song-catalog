@@ -1326,8 +1326,7 @@ ul.ks-cboxtags li input[type="checkbox"] {
 .copy-checkmark {
 	color:#fff !important;
 	font-weight:900;
-	padding-left: .4rem;
-	padding-right: .4rem;
+	padding-left:5px;
 }
 .org-permalink > .input-group-prepend > span{
 	width:175px;
@@ -1336,9 +1335,6 @@ ul.ks-cboxtags li input[type="checkbox"] {
 
 span.short-word {
 	display:none;
-}
-.archive.container {
-	max-height:50vh; overflow-y:scroll;border-radius:3px; border:1px solid rgba(75, 75, 75,.5);
 }
 @media screen and (max-width:1450px) {
 	.song-page-container, .song-action-container {
@@ -1443,7 +1439,7 @@ span.short-word {
 	}
 }
 @media screen and (max-width:991px){
-	.org-permalink .input-group-text {
+	.org-permalink span.input-group-text {
 		padding-left:.2rem;
 		padding-right:.2rem;
 	}
@@ -1538,6 +1534,9 @@ span.short-word {
 	}
 }
 @media screen and (max-width: 900px) {
+	.dataTables_filter {
+		display:none !important;
+	}
 	#songCatalogBody {
 		background-color: var(--primary-grey);
 	}
@@ -1694,9 +1693,6 @@ span.short-word {
 	}
 }
 @media screen and (max-width: 550px){
-	.archive.container {
-		max-height:none;
-	}
 	.org-dl-link.mr-3 {
 		margin-right:.25rem !important;
 	}

@@ -32,7 +32,8 @@ public class PageRequestLogger {
 	" && !@target(com.sjwi.catalog.aspect.IgnoreAspect)" +
 	" && @target(org.springframework.stereotype.Controller))" + 
 	" || execution(* com.sjwi.catalog.controller.song.*.*(..)) " +
-	" || execution(* com.sjwi.catalog.controller.setlist.*.*(..)) " 
+	" || execution(* com.sjwi.catalog.controller.setlist.*.*(..)) " +
+	" || execution(* com.sjwi.catalog.controller.OrganizationController.organizationDetails(..)) " 
 			)
 	public void logPageRequest(JoinPoint joinPoint) {
 		HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();

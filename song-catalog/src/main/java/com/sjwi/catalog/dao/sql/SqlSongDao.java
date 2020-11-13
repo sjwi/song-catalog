@@ -237,6 +237,29 @@ public class SqlSongDao implements SongDao {
 		}
 	}
 
+	public Song buildSongFromResultSetWithoutIteration(ResultSet rs) {
+		try {
+			return new MasterSong(
+					versionService.getVersionsByRelatedId(rs.getInt("ID")),
+					rs.getInt("ID"),
+					rs.getString("NAME"),
+					new TransposableString(rs.getString("BODY"),NUMBER_SYSTEM_KEY_CODE),
+					rs.getInt("FREQUENCY"),
+					rs.getString("DEFAULT_KEY"),
+					rs.getString("ARTIST"),
+					rs.getString("NOTES"),
+					rs.getString("CREATED_BY"),
+					rs.getString("MODIFIED_BY"),
+					rs.getDate("CHANGED_ON"),
+					rs.getInt("RELATED"),
+					("Y").equals(rs.getString("PRIVATE"))? true: false,
+					rs.getInt("CATEGORY"),
+					recordingService.getRecordingBySongId(rs.getInt("ID")));
+		} catch (Exception e) {
+			return null;
+		}
+	}
+
 	@Override
 	public Map<Integer, String> getSongCategories() {
 		return jdbcTemplate.query(queryStore.get("getSongCategories"), r -> {
@@ -245,6 +268,17 @@ public class SqlSongDao implements SongDao {
 				categories.put(r.getInt("ID"), r.getString("NAME"));
 			}
 			return categories;
+		});
+	}
+
+	@Override
+	public Map<Song, Integer> getFrequencyCountByOrg(int orgId) {
+		return jdbcTemplate.query(queryStore.get("getFrequencyCountByOrg"), new Object[] {orgId}, r -> {
+			Map<Song, Integer> songMap = new HashMap<>();
+			while (r.next()) {
+				songMap.put(buildSongFromResultSetWithoutIteration(r),r.getInt("CT"));
+			}
+			return songMap;
 		});
 	}
 }

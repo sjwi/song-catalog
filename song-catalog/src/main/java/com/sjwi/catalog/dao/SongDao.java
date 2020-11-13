@@ -42,4 +42,6 @@ public interface SongDao {
 	public Song buildSongFromResultSet(ResultSet rs);
 
 	public Map<Integer, String> getSongCategories();
+
+	public Map<Song, Integer> getFrequencyCountByOrg(int orgId);
 }
