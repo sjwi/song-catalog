@@ -88,7 +88,7 @@ public class OrganizationController {
 		mv.addObject("org",organizationService.getOrganizationById(id));
 		mv.addObject("orgs",organizationService.getOrganizations());
 		mv.addObject("services",organizationService.getMeetingServices());
-		log.logMessageWithEmail("Organization Page " + id + " visited", auth);
+		log.logUserActionWithEmail("Organization Page " + id + " visited");
 		return mv;
 	}
 

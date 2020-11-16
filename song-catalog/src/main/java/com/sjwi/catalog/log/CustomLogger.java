@@ -6,6 +6,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
 import com.sjwi.catalog.exception.MailException;
@@ -43,7 +44,8 @@ public class CustomLogger {
 		new Thread(new SendLogMessageWithEmail(message)).start();
 	}
 
-	public void logMessageWithEmail(String message, Authentication auth) {
+	public void logUserActionWithEmail(String message) {
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		if (auth != null) {
 			message = message + " by " + auth.getName();
 		} else {

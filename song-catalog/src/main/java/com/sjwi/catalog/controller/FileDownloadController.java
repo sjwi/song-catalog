@@ -59,7 +59,7 @@ public class FileDownloadController {
 	
 	@RequestMapping(value = {"/song/ppt/{id}/{fileName}"}, method = RequestMethod.GET)
 	public void downloadSongPpt(HttpServletRequest request, HttpServletResponse response,
-			@PathVariable int id,Authentication auth,
+			@PathVariable int id,
 			@PathVariable String fileName,
 			@RequestParam (name="blankSlide", required = false) boolean prependBlankSlide,
 			@RequestParam (name="fontSize") Optional<Integer> fontSize
@@ -70,11 +70,10 @@ public class FileDownloadController {
 			fileName = fileName == null? song.getNormalizedName(): controllerHelper.normalizeString(fileName);
             response.addHeader("Content-Disposition", "attachment; filename=\""+ fileName + ".pptx\"");
             Files.copy(Paths.get(pptGenerator.buildFile(song)), response.getOutputStream());
-            logger.logMessageWithEmail(fileName + " ppt downloaded. <br>blankPage = " +  
+            logger.logUserActionWithEmail(fileName + " ppt downloaded. <br>blankPage = " +  
             		prependBlankSlide + "<br>fontSize = " + 
             		fontSize + "<br>fileName = " + fileName + "<br>" +
-            		controllerHelper.buildHtmlLinkFromUrl(controllerHelper.getFullUrL(request), "Download Link") + "<br>",
-            		auth);
+            		controllerHelper.buildHtmlLinkFromUrl(controllerHelper.getFullUrL(request), "Download Link") + "<br>");
 		} catch (Exception e) {
 			controllerHelper.errorHandler(e);
 			response.sendRedirect(request.getContextPath() + "/error");
@@ -83,7 +82,6 @@ public class FileDownloadController {
 
 	@RequestMapping(value = {"/setlist/ppt/{id}/{fileName}", "/setlist/ppt/{id}"}, method = RequestMethod.GET)
 	public void downloadSetPpt(HttpServletRequest request, HttpServletResponse response,
-			Authentication auth,
 			@PathVariable (required = false) String fileName,
 			@RequestParam (name="blankSlide", required = false) boolean prependBlankSlide,
 			@RequestParam (name="fontSize") Optional<Integer> fontSize,
@@ -94,11 +92,10 @@ public class FileDownloadController {
 			fileName = fileName == null? setList.getNormalizedSetListName(): controllerHelper.normalizeString(fileName);
             response.addHeader("Content-Disposition", "attachment; filename=\"" + fileName + ".pptx\"");
             Files.copy(Paths.get(pptGenerator.getFileName()), response.getOutputStream());
-            logger.logMessageWithEmail(fileName + " ppt downloaded. <br>blankPage = " +  
+            logger.logUserActionWithEmail(fileName + " ppt downloaded. <br>blankPage = " +  
             		prependBlankSlide + "<br>fontSize = " + 
             		fontSize + "<br>fileName = " + fileName + "<br>" +
-            		controllerHelper.buildHtmlLinkFromUrl(controllerHelper.getFullUrL(request), "Download Link") + "<br>",
-            		auth);
+            		controllerHelper.buildHtmlLinkFromUrl(controllerHelper.getFullUrL(request), "Download Link") + "<br>");
 		} catch (Exception e) {
 			controllerHelper.errorHandler(e);
 			response.sendRedirect(request.getContextPath() + "/error");
@@ -127,11 +124,10 @@ public class FileDownloadController {
 			response.setContentType("application/pdf; name=\"" + fileName+ "\"");
             response.addHeader("Content-Disposition", "inline; filename=\""+ fileName + ".pdf\"");
             Files.copy(Paths.get(pdfGenerator.buildFile(song)), response.getOutputStream());
-            logger.logMessageWithEmail(fileName + " pdf downloaded. <br>lyricsOnly = " +  
+            logger.logUserActionWithEmail(fileName + " pdf downloaded. <br>lyricsOnly = " +  
             		lyricsOnly + "<br>fontSize = " + 
             		fontSize + "<br>fileName = " + fileName + "<br>" +
-            		controllerHelper.buildHtmlLinkFromUrl(controllerHelper.getFullUrL(request), "Download Link") + "<br>",
-            		auth);
+            		controllerHelper.buildHtmlLinkFromUrl(controllerHelper.getFullUrL(request), "Download Link") + "<br>");
 		} catch (Exception e) {
 			controllerHelper.errorHandler(e);
 			response.sendRedirect(request.getContextPath() + "/error");
