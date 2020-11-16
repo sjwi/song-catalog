@@ -1345,6 +1345,12 @@ table > thead > tr > th[class*="sort"]:after {
 	border-left: 1px solid rgb(75,75,75,.2);
 	border-bottom: 1px solid rgb(75,75,75,.2);
 }
+.container.archive .dataTables_wrapper {
+	border:none !important;
+}
+.dataTables_paginate.paging_simple_numbers {
+	padding-bottom:.5rem;
+}
 @media screen and (max-width:1450px) {
 	.song-page-container, .song-action-container {
 		width:95%;

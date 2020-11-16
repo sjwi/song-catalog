@@ -52,7 +52,7 @@ public class SetListLifecycleController {
 			HttpServletRequest request, HttpServletResponse response) throws IOException {
 		try {
 			String setListName = controllerHelper.buildSetlistName(unit,subUnit,otherUnit,otherSubUnit,date,homegroupName);
-			setListService.createSet(setListName,principal.getName(), unit);
+			setListService.createSet(setListName,principal.getName(), unit,subUnit);
 		} catch (Exception e) {
 			controllerHelper.errorHandler(e);
 			response.sendRedirect(request.getContextPath() + "/error");

@@ -44,4 +44,10 @@ public interface SongDao {
 	public Map<Integer, String> getSongCategories();
 
 	public Map<Song, Integer> getFrequencyCountByOrg(int orgId);
+
+	public Map<Song, Integer> getServiceFrequencyCountByOrg(int id, List<Integer> services);
+
+	public Map<Song, Integer> getFrequencyCount();
+
+	public Map<Song, Integer> getServiceFrequencyCount(List<Integer> services);
 }

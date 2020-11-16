@@ -19,7 +19,7 @@ public interface SetListDao {
 
 	public void addSongsToSet(List<Integer> songIds, int setListId);
 	
-	public int createSet(String setListName, String user, int unit);
+	public int createSet(String setListName, String user, int unit, int subUnit);
 
 	public void deleteSet(int id);
 

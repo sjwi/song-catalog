@@ -5,6 +5,7 @@ import static com.sjwi.catalog.model.KeySet.NUMBER_SYSTEM_KEY_CODE;
 
 import java.sql.ResultSet;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -267,6 +268,17 @@ public class SqlSongDao implements SongDao {
 	}
 
 	@Override
+	public Map<Song, Integer> getFrequencyCount() {
+		return jdbcTemplate.query(queryStore.get("getFrequencyCount"), r -> {
+			Map<Song, Integer> songMap = new HashMap<>();
+			while (r.next()) {
+				songMap.put(buildSongFromResultSetWithoutIteration(r),r.getInt("CT"));
+			}
+			return songMap;
+		});
+	}
+
+	@Override
 	public Map<Song, Integer> getFrequencyCountByOrg(int orgId) {
 		return jdbcTemplate.query(queryStore.get("getFrequencyCountByOrg"), new Object[] {orgId}, r -> {
 			Map<Song, Integer> songMap = new HashMap<>();
@@ -275,5 +287,35 @@ public class SqlSongDao implements SongDao {
 			}
 			return songMap;
 		});
+	}
+
+	@Override
+	public Map<Song, Integer> getServiceFrequencyCountByOrg(int id, List<Integer> services) {
+		List<Object> params = new ArrayList<>();
+		params.add(id);
+		params.addAll(services);
+		return jdbcTemplate.query(String.format(queryStore.get("getServiceFrequencyCountByOrg"), String.join(",", Collections.nCopies(services.size(), "?"))), 
+				params.toArray(), 
+				r -> {
+					Map<Song, Integer> songMap = new HashMap<>();
+					while (r.next()) {
+						songMap.put(buildSongFromResultSetWithoutIteration(r),r.getInt("CT"));
+					}
+					return songMap;
+				}
+			);
+	}
+	@Override
+	public Map<Song, Integer> getServiceFrequencyCount(List<Integer> services) {
+		return jdbcTemplate.query(String.format(queryStore.get("getServiceFrequencyCount"), String.join(",", Collections.nCopies(services.size(), "?"))), 
+				services.toArray(), 
+				r -> {
+					Map<Song, Integer> songMap = new HashMap<>();
+					while (r.next()) {
+						songMap.put(buildSongFromResultSetWithoutIteration(r),r.getInt("CT"));
+					}
+					return songMap;
+				}
+			);
 	}
 }

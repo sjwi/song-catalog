@@ -162,8 +162,8 @@ public class SqlSetListDao implements SetListDao {
 	}
 
 	@Override
-	public int createSet(String setListName, String user, int unit) {
-		jdbcTemplate.update(queryStore.get("createNewSet"), new Object[] {setListName,user,unit});
+	public int createSet(String setListName, String user, int unit, int subUnit) {
+		jdbcTemplate.update(queryStore.get("createNewSet"), new Object[] {setListName,user,unit,subUnit});
 		return jdbcTemplate.query(queryStore.get("getLatestSet"), r -> {
 			if(r.next()) {
 				return r.getInt("ID");

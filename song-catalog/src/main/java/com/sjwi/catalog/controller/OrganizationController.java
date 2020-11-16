@@ -1,6 +1,7 @@
 package com.sjwi.catalog.controller;
 
 import java.io.IOException;
+import java.util.List;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
@@ -71,7 +72,10 @@ public class OrganizationController {
 	@RequestMapping(value = {"/orgs"}, method = RequestMethod.GET)
 	public ModelAndView organizations() throws IOException {
 		ModelAndView mv = new ModelAndView("organizations");
+		mv.addObject("frequentSongs",songService.getFrequencyCount());
 		mv.addObject("orgs",organizationService.getOrganizations());
+		mv.addObject("services",organizationService.getMeetingServices());
+		mv.addObject("sets",setListService.getSetLists());
 		return mv;
 	}
 
@@ -83,7 +87,15 @@ public class OrganizationController {
 		mv.addObject("frequentSongs",songService.getFrequencyCountByOrg(id));
 		mv.addObject("org",organizationService.getOrganizationById(id));
 		mv.addObject("orgs",organizationService.getOrganizations());
+		mv.addObject("services",organizationService.getMeetingServices());
 		log.logMessageWithEmail("Organization Page " + id + " visited", auth);
+		return mv;
+	}
+
+	@RequestMapping(value = {"/org/{id}/song-frequency", "/orgs/song-frequency"}, method = RequestMethod.GET)
+	public ModelAndView organizationSongFrequency(@PathVariable(required = false) Integer id, @RequestParam String view, @RequestParam(required = false) List<Integer> services, Authentication auth) throws IOException {
+		ModelAndView mv = new ModelAndView(view);
+		mv.addObject("frequentSongs", id==null? songService.getServiceFrequencyCount(services): songService.getServiceFrequencyCountByOrg(id,services));
 		return mv;
 	}
 

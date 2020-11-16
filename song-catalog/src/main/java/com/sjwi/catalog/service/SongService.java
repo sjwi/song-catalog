@@ -2,6 +2,7 @@ package com.sjwi.catalog.service;
 
 import java.sql.ResultSet;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -54,7 +55,16 @@ public class SongService {
 	public Map<Integer, String> getSongCategories(){
 		return songDao.getSongCategories();
 	}
+	public Map<Song, Integer> getFrequencyCount() {
+		return songDao.getFrequencyCount();
+	}
 	public Map<Song, Integer> getFrequencyCountByOrg(int orgId) {
 		return songDao.getFrequencyCountByOrg(orgId);
+	}
+	public Map<Song, Integer> getServiceFrequencyCountByOrg(int id, List<Integer> services) {
+		return services == null? new HashMap<Song, Integer>(): songDao.getServiceFrequencyCountByOrg(id,services);
+	}
+	public Map<Song, Integer> getServiceFrequencyCount(List<Integer> services) {
+		return services == null? new HashMap<Song, Integer>(): songDao.getServiceFrequencyCount(services);
 	}
 }

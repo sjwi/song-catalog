@@ -294,7 +294,7 @@ CREATE TABLE Services (
 --
 
 /*!40000 ALTER TABLE Services DISABLE KEYS */;
-INSERT INTO Services VALUES (1,'Church Service'),(2,'Small Group'),(3,'Campus Ministry'),(4,'Worship Service');
+INSERT INTO Services VALUES (1,'Service'),(2,'Small Group'),(3,'Campus Ministry'),(4,'Worship Service');
 /*!40000 ALTER TABLE Services ENABLE KEYS */;
 
 
@@ -438,6 +438,7 @@ CREATE TABLE SetListMaster (
   CREATED_ON datetime DEFAULT NULL,
   LAST_UPDATED datetime DEFAULT NULL,
   ORGANIZATION int(11) DEFAULT NULL,
+  SERVICE int(11) DEFAULT NULL,
   CREATED_BY varchar(255) DEFAULT NULL,
   PRIMARY KEY (ID)
 ) ENGINE=InnoDB AUTO_INCREMENT=101 DEFAULT CHARSET=utf8;
@@ -449,25 +450,25 @@ CREATE TABLE SetListMaster (
 
 /*!40000 ALTER TABLE SetListMaster DISABLE KEYS */;
 INSERT INTO SetListMaster VALUES 
-(1,'Church1 Service 06-22-2020','2019-08-23 17:40:55','2019-08-23 17:40:55',1,'admin'),
-(2,'Church2 Small Group 06-22-2020','2019-07-23 17:40:55','2019-07-23 17:40:55',2,'admin'),
-(3,'Church3 Campus Ministry 06-22-2020','2019-06-23 17:40:55','2019-06-23 17:40:55',3,'admin'),
-(4,'Church4 Worship 06-22-2020','2019-05-23 17:40:55','2019-05-23 17:40:55',4,'admin'),
-(5,'Church2 Small Group 06-22-2020','2019-07-23 17:40:55','2019-07-23 17:40:55',2,'admin'),
-(6,'Church2 Small Group 06-22-2020','2019-07-23 17:40:55','2019-07-23 17:40:55',2,'admin'),
-(7,'Church2 Small Group 06-22-2020','2019-07-23 17:40:55','2019-07-23 17:40:55',2,'admin'),
-(8,'Church2 Small Group 06-22-2020','2019-07-23 17:40:55','2019-07-23 17:40:55',2,'admin'),
-(9,'Church2 Small Group 06-22-2020','2019-07-23 17:40:55','2019-07-23 17:40:55',2,'admin'),
-(10,'Church2 Small Group 06-22-2020','2019-07-23 17:40:55','2019-07-23 17:40:55',2,'admin'),
-(11,'Church2 Small Group 06-22-2020','2019-07-23 17:40:55','2019-07-23 17:40:55',2,'admin'),
-(12,'Church2 Small Group 06-22-2020','2019-07-23 17:40:55','2019-07-23 17:40:55',2,'admin'),
-(13,'Church2 Small Group 06-22-2020','2019-07-23 17:40:55','2019-07-23 17:40:55',2,'admin'),
-(14,'Church2 Small Group 06-22-2020','2019-07-23 17:40:55','2019-07-23 17:40:55',2,'admin'),
-(15,'Church2 Small Group 06-22-2020','2019-07-23 17:40:55','2019-07-23 17:40:55',2,'admin'),
-(16,'Church2 Small Group 06-22-2020','2019-07-23 17:40:55','2019-07-23 17:40:55',2,'admin'),
-(17,'Church2 Small Group 06-22-2020','2019-07-23 17:40:55','2019-07-23 17:40:55',2,'admin'),
-(18,'Church2 Small Group 06-22-2020','2019-07-23 17:40:55','2019-07-23 17:40:55',2,'admin'),
-(19,'Church2 Small Group 06-22-2020','2019-07-23 17:40:55','2019-07-23 17:40:55',2,'admin');
+(1,'Church1 Service 06-22-2020','2019-08-23 17:40:55','2019-08-23 17:40:55',1,1,'admin'),
+(2,'Church2 Small Group 06-22-2020','2019-07-23 17:40:55','2019-07-23 17:40:55',2,2,'admin'),
+(3,'Church3 Campus Ministry 06-22-2020','2019-06-23 17:40:55','2019-06-23 17:40:55',3,3,'admin'),
+(4,'Church4 Worship 06-22-2020','2019-05-23 17:40:55','2019-05-23 17:40:55',4,4,'admin'),
+(5,'Church2 Worship 06-22-2020','2019-07-23 17:40:55','2019-07-23 17:40:55',2,4,'admin'),
+(6,'Church2 Worship 06-22-2020','2019-07-23 17:40:55','2019-07-23 17:40:55',2,4,'admin'),
+(7,'Church2 Worship 06-22-2020','2019-07-23 17:40:55','2019-07-23 17:40:55',2,4,'admin'),
+(8,'Church2 Worship 06-22-2020','2019-07-23 17:40:55','2019-07-23 17:40:55',2,4,'admin'),
+(9,'Church2 Campus Ministry 06-22-2020','2019-07-23 17:40:55','2019-07-23 17:40:55',2,3,'admin'),
+(10,'Church2 Campus Ministry 06-22-2020','2019-07-23 17:40:55','2019-07-23 17:40:55',2,3,'admin'),
+(11,'Church2 Campus Ministry 06-22-2020','2019-07-23 17:40:55','2019-07-23 17:40:55',2,3,'admin'),
+(12,'Church2 Campus Ministry 06-22-2020','2019-07-23 17:40:55','2019-07-23 17:40:55',2,3,'admin'),
+(13,'Church2 Campus Ministry 06-22-2020','2019-07-23 17:40:55','2019-07-23 17:40:55',2,3,'admin'),
+(14,'Church2 Service 06-22-2020','2019-07-23 17:40:55','2019-07-23 17:40:55',2,1,'admin'),
+(15,'Church2 Service 06-22-2020','2019-07-23 17:40:55','2019-07-23 17:40:55',2,1,'admin'),
+(16,'Church2 Service 06-22-2020','2019-07-23 17:40:55','2019-07-23 17:40:55',2,1,'admin'),
+(17,'Church2 Service 06-22-2020','2019-07-23 17:40:55','2019-07-23 17:40:55',2,1,'admin'),
+(18,'Church2 Small Group 06-22-2020','2019-07-23 17:40:55','2019-07-23 17:40:55',2,2,'admin'),
+(19,'Church2 Small Group 06-22-2020','2019-07-23 17:40:55','2019-07-23 17:40:55',2,2,'admin');
 
 /*!40000 ALTER TABLE SetListMaster ENABLE KEYS */;
 

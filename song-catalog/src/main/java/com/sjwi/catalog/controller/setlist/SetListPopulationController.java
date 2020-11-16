@@ -62,7 +62,7 @@ public class SetListPopulationController {
 		try {
 			if(setListId == 0) {
 				String setListName = controllerHelper.buildSetlistName(unit,subUnit,otherUnit,otherSubUnit,date,homegroupName);
-				setListId = setListService.createSet(setListName,principal.getName(), unit);
+				setListId = setListService.createSet(setListName,principal.getName(), unit, subUnit);
 			}
 			if (!"master".equals(version) && version != null) {
 				if(!"newVersion".equals(version)) {

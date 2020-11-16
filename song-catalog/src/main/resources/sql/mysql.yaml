@@ -75,8 +75,17 @@ getAllSetlistsOrderByCreatedOnDesc: >
 getSetListsByOrg: >
   Select * from SetListMaster where ORGANIZATION = ? order by CREATED_ON DESC
 
+getFrequencyCount: >
+  select  CASE WHEN s.related is null then s.id else s.related end as M_ID,  s.*, count(*) as CT  from Song s  JOIN SetList sl on s.id = sl.SONG_ID  JOIN SetListMaster slm on sl.SETLIST_ID = slm.ID group by M_ID
+
 getFrequencyCountByOrg: >
   select  CASE WHEN s.related is null then s.id else s.related end as M_ID,  s.*, count(*) as CT  from Song s  JOIN SetList sl on s.id = sl.SONG_ID  JOIN SetListMaster slm on sl.SETLIST_ID = slm.ID WHERE slm.ORGANIZATION = ? group by M_ID
+
+getServiceFrequencyCountByOrg: >
+  select  CASE WHEN s.related is null then s.id else s.related end as M_ID,  s.*, count(*) as CT  from Song s  JOIN SetList sl on s.id = sl.SONG_ID  JOIN SetListMaster slm on sl.SETLIST_ID = slm.ID WHERE slm.ORGANIZATION = ? and slm.SERVICE in (%s) group by M_ID
+
+getServiceFrequencyCount: >
+  select  CASE WHEN s.related is null then s.id else s.related end as M_ID,  s.*, count(*) as CT  from Song s  JOIN SetList sl on s.id = sl.SONG_ID  JOIN SetListMaster slm on sl.SETLIST_ID = slm.ID WHERE slm.SERVICE in (%s) group by M_ID
 
 getXNumberOfSetlistsOrderByCreatedOnDesc: >
   Select * from SetListMaster order by CREATED_ON DESC LIMIT ?
@@ -115,7 +124,7 @@ getSongsInSetBySetId: >
   from SetList a INNER JOIN Song b on a.SONG_ID = b.ID where a.SETLIST_ID = ? order by SORT_ORDER ASC
   
 createNewSet: >
-  INSERT INTO SetListMaster (SETLIST_NAME,CREATED_ON,LAST_UPDATED,CREATED_BY,ORGANIZATION) VALUES (?,CURRENT_TIMESTAMP,CURRENT_TIMESTAMP,?,?)
+  INSERT INTO SetListMaster (SETLIST_NAME,CREATED_ON,LAST_UPDATED,CREATED_BY,ORGANIZATION,SERVICE) VALUES (?,CURRENT_TIMESTAMP,CURRENT_TIMESTAMP,?,?,?)
   
 getLatestSet: >
   SELECT ID FROM SetListMaster order by ID desc LIMIT 1

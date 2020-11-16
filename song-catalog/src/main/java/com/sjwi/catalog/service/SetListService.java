@@ -27,6 +27,10 @@ public class SetListService {
 		return setListDao.getSetListById(id).transposeToLyrics();
 	}
 
+	public List<SetList> getSetLists() {
+		return setListDao.getSetLists();
+	}
+
 	public List<SetList> getSetLists(int quantity){
 		return setListDao.getSetLists(quantity);
 	}
@@ -50,9 +54,9 @@ public class SetListService {
 		return setListDao.getSetSongs(id);
 	}
 	
-	public int createSet(String setListName, String user, int unit) {
+	public int createSet(String setListName, String user, int unit, int subUnit) {
 		log.logMessageWithEmail("New setlist created: " + setListName + " | created by: " + user);
-		return setListDao.createSet(setListName,user, unit);
+		return setListDao.createSet(setListName,user, unit, subUnit);
 	}
 	
 	public void deleteSet(int id) {
