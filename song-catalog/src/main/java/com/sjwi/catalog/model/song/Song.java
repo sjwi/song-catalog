@@ -13,7 +13,6 @@ public abstract class Song {
 	protected final String name;
 	protected final TransposableString transposableString;
 	protected final String body;
-	protected final int freq;
 	protected final String defaultKey;
 	protected final String artist;
 	protected final String notes;
@@ -25,13 +24,12 @@ public abstract class Song {
 	protected final int category;
 	protected final Recording recording;
 	
-	public Song(int id, String name, TransposableString transposableString, int freq, String defaultKey, String artist, String notes,
+	public Song(int id, String name, TransposableString transposableString, String defaultKey, String artist, String notes,
 			String createdBy, String modifiedBy, Date changedOn, int related, boolean priv, int category,
 			Recording recording) {
 		this.id = id;
 		this.name = name;
 		this.transposableString = transposableString;
-		this.freq = freq;
 		this.defaultKey = defaultKey;
 		this.artist = artist;
 		this.notes = notes;
@@ -69,9 +67,6 @@ public abstract class Song {
 		return arr.split("[\n]{2,}");
 	}
 
-	public int getFreq() {
-		return freq;
-	}
 	public String getDefaultKey() {
 		return defaultKey;
 	}

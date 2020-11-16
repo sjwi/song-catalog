@@ -118,7 +118,7 @@ public class SongLifecycleController {
 			HttpServletRequest request, HttpServletResponse response) throws IOException {
 		
 		Song existingSong = songService.getSongById(id);
-		Song updatedSong = new MasterSong(null, existingSong.getId(),songTitle,new TransposableString(songBody,defaultKey),existingSong.getFreq(),
+		Song updatedSong = new MasterSong(null, existingSong.getId(),songTitle,new TransposableString(songBody,defaultKey),
 				updatedKey,existingSong.getArtist(),existingSong.getNotes(),existingSong.getCreatedBy(),
 				principal.getName(),new Date(), existingSong.getRelated(),existingSong.isPriv(),category,existingSong.getRecording());
 		if (newVersion != null) {

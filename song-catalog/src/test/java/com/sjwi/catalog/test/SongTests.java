@@ -54,12 +54,4 @@ public class SongTests {
 			assertFalse(new TransposableString(s.transpose(LYRICS_ONLY_KEY_CODE).getBody(),"G").isStringTransposable());
 		});
 	}
-
-	@Test
-	public void whenSongAddedToSet_FrequencyIsIncrimentedByOne() {
-		final int id = 13;
-		int initialFrequency = songService.getSongById(id).getFreq();
-		setListService.addSongToSet(13, setListService.getLatestSet().getId(), LYRICS_ONLY_KEY_CODE, 0);
-		assertEquals(initialFrequency + 1, songService.getSongById(id).getFreq());
-	}
 }

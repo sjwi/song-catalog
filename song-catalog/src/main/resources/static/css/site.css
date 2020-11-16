@@ -1336,6 +1336,15 @@ ul.ks-cboxtags li input[type="checkbox"] {
 span.short-word {
 	display:none;
 }
+table > thead > tr > th[class*="sort"]:before,
+table > thead > tr > th[class*="sort"]:after {
+    content: "" !important;
+}
+.dataTables_wrapper {
+	border-right: 1px solid rgb(75,75,75,.2);
+	border-left: 1px solid rgb(75,75,75,.2);
+	border-bottom: 1px solid rgb(75,75,75,.2);
+}
 @media screen and (max-width:1450px) {
 	.song-page-container, .song-action-container {
 		width:95%;

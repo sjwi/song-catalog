@@ -37,7 +37,7 @@ public class SongService {
 				0,
 				songTitle,
 				new TransposableString(songBody,chordedIn),
-				0,chordedIn,null,null,name,name, new Date(),0,false,category,null));
+				chordedIn,null,null,name,name, new Date(),0,false,category,null));
 	}
 	public void deleteSong(int songId) {
 		songDao.deleteSong(songId);

@@ -18,6 +18,7 @@ import org.springframework.web.util.UriUtils;
 
 import com.sjwi.catalog.aspect.IgnoreAspect;
 import com.sjwi.catalog.aspect.LandingPageAspect;
+import com.sjwi.catalog.log.CustomLogger;
 import com.sjwi.catalog.model.SetList;
 import com.sjwi.catalog.service.OrganizationService;
 import com.sjwi.catalog.service.SetListService;
@@ -39,6 +40,9 @@ public class OrganizationController {
 	@Autowired
 	ServletContext context;
 	
+	@Autowired
+	CustomLogger log;
+
 	@RequestMapping(value = {"/organizations"}, method = RequestMethod.GET)
 	public ModelAndView getOrganizations(Authentication auth, HttpServletRequest request,
 			@RequestParam(name="view",required=true) String view) {
@@ -73,12 +77,13 @@ public class OrganizationController {
 
 	@LandingPageAspect
 	@RequestMapping(value = {"/org/{id}"}, method = RequestMethod.GET)
-	public ModelAndView organizationDetails(@PathVariable int id) throws IOException {
+	public ModelAndView organizationDetails(@PathVariable int id, Authentication auth) throws IOException {
 		ModelAndView mv = new ModelAndView("organization");
 		mv.addObject("sets",setListService.getSetListsByOrg(id));
 		mv.addObject("frequentSongs",songService.getFrequencyCountByOrg(id));
 		mv.addObject("org",organizationService.getOrganizationById(id));
 		mv.addObject("orgs",organizationService.getOrganizations());
+		log.logMessageWithEmail("Organization Page " + id + " visited", auth);
 		return mv;
 	}
 

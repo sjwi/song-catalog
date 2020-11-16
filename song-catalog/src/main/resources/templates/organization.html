@@ -41,7 +41,7 @@
 					<div class="col-sm-6 text-center">
 						<div class="input-group col org-permalink">
 							<div class="input-group-prepend">
-								<span class="input-group-text">Latest&nbsp;<span class="long-word">PowerPoint</span><span class="short-word">.pttx</span></span>
+								<span class="input-group-text">Latest&nbsp;<span class="long-word">PowerPoint</span><span class="short-word">.pptx</span></span>
 						    </div>
 							<input class="form-control mono-space" disabled type="text" id="orgSet" th:value="${'https://' + #request.getServerName()} + ${!#strings.equals(#request.getServerPort(),'80')? ':' + #request.getServerPort(): ''} + @{/org/__${orgId}__/ppt}">
 							<div class="input-group-append copy-text copy-input" data-target="#orgSet" title="Copy permalink to powerpoint to clip-board">
@@ -52,6 +52,7 @@
 				</div>
 				<h5 class="d-block header-text mt-5 mb-3">Frequently Played Songs</h5>
 				<div class="container pr-0 pl-0">
+					<div class="pr-2 pl-2">
 					<table class="table table-hover table-striped org-sl mb-0 frequency-table">
 						<thead>
 							<tr>
@@ -66,27 +67,30 @@
 							</tr>
 						</tbody>
 					</table>
+					</div>
 				</div>
 				<h5 class="d-block header-text mt-5 mb-3">Set List Archive</h5>
 				<div class="container archive pr-0 pl-0 mb-4">
-					<table class="table table-hover table-striped org-sl mb-0 archive-table">
-						<thead>
-							<tr>
-								<th>Sets</th>
-								<th>Resources</th>
-							</tr>
-						</thead>
-						<tbody>
-							<tr class="pt-3 pb-3" th:each="set : ${sets}">
-								<td class="text-left text-nowrap align-middle"><a th:text="${set.setListName}" th:href="@{/setlist/__${set.id}__}"></a></td>
-								<td class="text-right align-middle text-nowrap">
-									<a class="mr-3 text-nowrap org-dl-link btn btn-info btn-sm" th:href="@{/setlist/pdf/__${set.id}__?lyricsOnly=on&fontSize=18}"><span class="long-word">Download</span> Lyrics</a>
-									<a class="mr-3 text-nowrap org-dl-link btn btn-info btn-sm" th:href="@{/setlist/pdf/__${set.id}__}"><span class="long-word">Download</span> PDF</a>
-									<a class="text-nowrap org-dl-link btn btn-info btn-sm" th:href="@{/setlist/ppt/__${set.id}__}"><span class="long-word">Download</span> PowerPoint</a>
-								</td>
-							</tr>
-						</tbody>
-					</table>
+					<div class="pr-2 pl-2">
+						<table class="table table-hover table-striped org-sl mb-0 archive-table">
+							<thead>
+								<tr>
+									<th>Sets</th>
+									<th>Resources</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr class="pt-3 pb-3" th:each="set : ${sets}">
+									<td class="text-left text-nowrap align-middle"><a th:text="${set.setListName}" th:href="@{/setlist/__${set.id}__}"></a></td>
+									<td class="text-right align-middle text-nowrap">
+										<a class="mr-3 text-nowrap org-dl-link btn btn-info btn-sm" th:href="@{/setlist/pdf/__${set.id}__?lyricsOnly=on&fontSize=18}"><span class="long-word">Download</span> Lyrics</a>
+										<a class="mr-3 text-nowrap org-dl-link btn btn-info btn-sm" th:href="@{/setlist/pdf/__${set.id}__}"><span class="long-word">Download</span> PDF</a>
+										<a class="text-nowrap org-dl-link btn btn-info btn-sm" th:href="@{/setlist/ppt/__${set.id}__}"><span class="long-word">Download</span> PowerPoint</a>
+									</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
 				</div>
 			</div>
 		</div>
@@ -99,8 +103,7 @@
 			  "pageLength": 10,
 			  lengthChange: false,
 			  info: false,
-			  "order": [ 1, "desc" ],
-			  "aaSorting": []
+			  "order": [ 1, "desc" ]
 		});
 		$(".archive-table").DataTable({
 			  language: {
@@ -112,8 +115,7 @@
 			  "pageLength": 10,
 			  lengthChange: false,
 			  info: true,
-			  "order": [ 1, "desc" ],
-			  "aaSorting": []
+			  "order": [ 1, "desc" ]
 		});
 		$('.copy-input').on('click',function(){
 			copyTextToClipboard($($(this).data('target')).val(),false);

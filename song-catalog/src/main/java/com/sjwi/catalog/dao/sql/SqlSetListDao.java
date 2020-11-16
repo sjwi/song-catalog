@@ -135,7 +135,6 @@ public class SqlSetListDao implements SetListDao {
 		} else {
 			jdbcTemplate.update(queryStore.get("insertSongIntoSetOverrideKey"), new Object[] {setListId, setDefaultKey,sort, java.sql.Types.VARCHAR,null,songId});
 		}
-		jdbcTemplate.update(queryStore.get("updateSongFrequencyById"), new Object[] {songId});
 		jdbcTemplate.update(queryStore.get("updateSetlistLastUpdated"), new Object[] {setListId});
 	}
 
@@ -146,11 +145,6 @@ public class SqlSetListDao implements SetListDao {
 				ps.setInt(1, setListId);
 				ps.setInt(2, setListId);
 				ps.setInt(3, s);
-			}
-		});
-		jdbcTemplate.batchUpdate(queryStore.get("updateSongFrequencyById"), songIds, songIds.size(), new ParameterizedPreparedStatementSetter<Integer>() {
-			public void setValues(PreparedStatement ps, Integer s) throws SQLException {
-				ps.setInt(1, s);
 			}
 		});
 		jdbcTemplate.update(queryStore.get("updateSetlistLastUpdated"), new Object[] {setListId});
@@ -208,11 +202,6 @@ public class SqlSetListDao implements SetListDao {
 	public void removeSongFromSet(int setId, int songId) {
 		int sortOrder = jdbcTemplate.query(queryStore.get("getSortOrderForSongInSet"),new Object[] {songId}, r -> {r.next(); return r.getInt("SORT_ORDER");});
 		jdbcTemplate.update(queryStore.get("decreaseSortOrder"),new Object[] {setId, sortOrder});
-		jdbcTemplate.query(queryStore.get("getSongFromSetlistBySongId"),new Object[] {songId}, r -> {
-				if(r.next()) {
-					jdbcTemplate.update(queryStore.get("decreaseFrequencyBySongId"),new Object[] {r.getInt("SONG_ID")});
-				}
-			});
 		jdbcTemplate.update(queryStore.get("deleteFromSetlistBySongId"),new Object[] {setId,songId});
 		jdbcTemplate.update(queryStore.get("updateSetListMasterLastModified"),new Object[] {setId});
 	}
@@ -282,7 +271,6 @@ public class SqlSetListDao implements SetListDao {
 							r.getInt("SONG_ID"),
 							r.getString("NAME"),
 							new TransposableString(r.getString("BODY"),NUMBER_SYSTEM_KEY_CODE),
-							r.getInt("FREQUENCY"),
 							r.getString("DEFAULT_KEY"),
 							r.getString("ARTIST"),
 							r.getString("NOTES"),

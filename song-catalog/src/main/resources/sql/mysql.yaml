@@ -5,22 +5,22 @@ getMySongsByUserName: >
   Select * from Song WHERE RELATED IS NULL AND CREATED_BY = ? order by NAME
 
 getSongVersionsByRelatedIdExcludePrivate: >
-  select v.ID as VERSION_ID,vc.VERSION,s.ID,s.NAME,s.BODY,s.FREQUENCY,s.DEFAULT_KEY,s.ARTIST,s.NOTES,s.CREATED_BY,s.MODIFIED_BY,s.CHANGED_ON,s.RELATED,s.PRIVATE,s.CATEGORY
+  select v.ID as VERSION_ID,vc.VERSION,s.ID,s.NAME,s.BODY,s.DEFAULT_KEY,s.ARTIST,s.NOTES,s.CREATED_BY,s.MODIFIED_BY,s.CHANGED_ON,s.RELATED,s.PRIVATE,s.CATEGORY
     from Song s inner join Version v on s.ID = v.SONG_ID INNER JOIN VersionControl vc on vc.ID = v.VERSION_NAME
     WHERE s.RELATED = ? and s.PRIVATE IS NULL
   
 getSongVersionsByRelatedIdIncludePrivate: >
-  select v.ID as VERSION_ID,vc.VERSION,s.ID,s.NAME,s.BODY,s.FREQUENCY,s.DEFAULT_KEY,s.ARTIST,s.NOTES,s.CREATED_BY,s.MODIFIED_BY,s.CHANGED_ON,s.RELATED,s.PRIVATE,s.CATEGORY
+  select v.ID as VERSION_ID,vc.VERSION,s.ID,s.NAME,s.BODY,s.DEFAULT_KEY,s.ARTIST,s.NOTES,s.CREATED_BY,s.MODIFIED_BY,s.CHANGED_ON,s.RELATED,s.PRIVATE,s.CATEGORY
     from Song s inner join Version v on s.ID = v.SONG_ID INNER JOIN VersionControl vc on vc.ID = v.VERSION_NAME
     WHERE s.RELATED = ?
   
 getSongVersionById: >
-  select v.ID as VERSION_ID,vc.VERSION,s.ID,s.NAME,s.BODY,s.FREQUENCY,s.DEFAULT_KEY,s.ARTIST,s.NOTES,s.CREATED_BY,s.MODIFIED_BY,s.CHANGED_ON,s.RELATED,s.PRIVATE,s.CATEGORY
+  select v.ID as VERSION_ID,vc.VERSION,s.ID,s.NAME,s.BODY,s.DEFAULT_KEY,s.ARTIST,s.NOTES,s.CREATED_BY,s.MODIFIED_BY,s.CHANGED_ON,s.RELATED,s.PRIVATE,s.CATEGORY
     from Song s inner join Version v on s.ID = v.SONG_ID INNER JOIN VersionControl vc on vc.ID = v.VERSION_NAME
     WHERE s.ID = ?
 
 getSetListVersionById: >
-  select sl.ID as SET_SONG_ID, sl.SETLIST_ID, sl.SORT_ORDER, v.ID as VERSION_ID,vc.VERSION,s.ID,s.NAME,s.BODY,s.FREQUENCY,sl.DEFAULT_KEY,s.ARTIST,s.NOTES,s.CREATED_BY,s.MODIFIED_BY,s.CHANGED_ON,s.RELATED,s.PRIVATE,s.CATEGORY
+  select sl.ID as SET_SONG_ID, sl.SETLIST_ID, sl.SORT_ORDER, v.ID as VERSION_ID,vc.VERSION,s.ID,s.NAME,s.BODY,sl.DEFAULT_KEY,s.ARTIST,s.NOTES,s.CREATED_BY,s.MODIFIED_BY,s.CHANGED_ON,s.RELATED,s.PRIVATE,s.CATEGORY
     from Song s inner join Version v on s.ID = v.SONG_ID inner join SetList sl on sl.SONG_ID = s.ID INNER JOIN VersionControl vc on vc.ID = v.VERSION_NAME
     WHERE sl.ID = ?
 
@@ -34,7 +34,7 @@ getXNumberOfSongsOrderByNameAsc: >
   Select * from Song WHERE RELATED IS NULL and PRIVATE IS NULL order by NAME LIMIT ?
 
 insertNewSong: >
-  insert into Song (NAME, BODY, DEFAULT_KEY,FREQUENCY,CREATED_BY,MODIFIED_BY,CHANGED_ON,PRIVATE,CATEGORY) values (?,?,?,?,?,?,CURRENT_TIMESTAMP(),?,?)
+  insert into Song (NAME, BODY, DEFAULT_KEY,CREATED_BY,MODIFIED_BY,CHANGED_ON,PRIVATE,CATEGORY) values (?,?,?,?,?,CURRENT_TIMESTAMP(),?,?)
   
 getSongById: >
   Select * from Song where ID = ?
@@ -49,7 +49,7 @@ getSongCategories: >
   Select * from SongCategories;
 
 updateSongById: >
-  update Song set NAME = ?, BODY = ?, FREQUENCY = ?, DEFAULT_KEY = ?, ARTIST = ?,MODIFIED_BY = ?,CATEGORY = ?, CHANGED_ON = CURRENT_TIMESTAMP() where ID = ?
+  update Song set NAME = ?, BODY = ?, DEFAULT_KEY = ?, ARTIST = ?,MODIFIED_BY = ?,CATEGORY = ?, CHANGED_ON = CURRENT_TIMESTAMP() where ID = ?
   
 insertSongIntoArchive: >
   Insert into SongArchive select * from Song where ID = ?
@@ -97,11 +97,8 @@ updateSetListVersion: >
   UPDATE SetList set SONG_ID = ? where SETLIST_ID = ? and SONG_ID = ?
   
 updateSetListVersionBySetSongId: >
-   UPDATE SetList set SONG_ID = ?, DEFAULT_KEY = (select DEFAULT_KEY from Song where ID = ?)  where ID = ?
+  UPDATE SetList set SONG_ID = ?, DEFAULT_KEY = (select DEFAULT_KEY from Song where ID = ?)  where ID = ?
 
-updateSongFrequencyById: >
-  UPDATE Song SET FREQUENCY = FREQUENCY + 1 WHERE ID = ?
-  
 updateSetlistLastUpdated: >
   UPDATE SetListMaster SET LAST_UPDATED = CURRENT_TIMESTAMP() WHERE ID = ?
   
@@ -114,7 +111,7 @@ insertSongsIntoSetDefaultKey: >
   FROM Song WHERE ID = ?
   
 getSongsInSetBySetId: >
-  Select a.ID, a.SETLIST_ID,a.SONG_ID,b.NAME,b.BODY,b.FREQUENCY,a.DEFAULT_KEY,a.SORT_ORDER,a.ARTIST,a.NOTES,b.CREATED_BY,b.MODIFIED_BY,b.CHANGED_ON,b.RELATED,b.PRIVATE,b.CATEGORY
+  Select a.ID, a.SETLIST_ID,a.SONG_ID,b.NAME,b.BODY,a.DEFAULT_KEY,a.SORT_ORDER,a.ARTIST,a.NOTES,b.CREATED_BY,b.MODIFIED_BY,b.CHANGED_ON,b.RELATED,b.PRIVATE,b.CATEGORY
   from SetList a INNER JOIN Song b on a.SONG_ID = b.ID where a.SETLIST_ID = ? order by SORT_ORDER ASC
   
 createNewSet: >
@@ -150,9 +147,6 @@ decreaseSortOrder: >
 getSongFromSetlistBySongId: >
   SELECT SONG_ID FROM SetList where ID = ?
   
-decreaseFrequencyBySongId: >
-  UPDATE Song SET FREQUENCY = FREQUENCY - 1 WHERE ID = ?
-  
 deleteFromSetlistBySongId: >
   Delete from SetList where SETLIST_ID = ? and ID = ?
   
@@ -178,8 +172,8 @@ setDefaultKeyForSong: >
   UPDATE Song set DEFAULT_KEY = ?,CHANGED_ON = CURRENT_TIMESTAMP(), MODIFIED_BY = ? where ID = ?
   
 createNewVersionForSong: >
-  INSERT INTO Song (NAME,BODY,FREQUENCY,DEFAULT_KEY,ARTIST,CREATED_BY,MODIFIED_BY,CHANGED_ON,RELATED)
-  SELECT NAME,?,0,?,ARTIST,?,?,CURRENT_TIMESTAMP(),? FROM Song WHERE ID = ?
+  INSERT INTO Song (NAME,BODY,DEFAULT_KEY,ARTIST,CREATED_BY,MODIFIED_BY,CHANGED_ON,RELATED)
+  SELECT NAME,?,?,ARTIST,?,?,CURRENT_TIMESTAMP(),? FROM Song WHERE ID = ?
 
 getLatestSongId: >
   SELECT * FROM Song ORDER BY ID DESC LIMIT 1
@@ -202,7 +196,7 @@ swapVersionById: >
   UPDATE Version SET SONG_ID = ? WHERE SONG_ID = ?
   
 getVersionById: >
-  select v.ID as VERSION_ID,vc.VERSION,s.ID,s.NAME,s.BODY,s.FREQUENCY,s.DEFAULT_KEY,s.ARTIST,s.NOTES,s.CREATED_BY,s.MODIFIED_BY,s.CHANGED_ON,s.RELATED,s.PRIVATE,s.CATEGORY
+  select v.ID as VERSION_ID,vc.VERSION,s.ID,s.NAME,s.BODY,s.DEFAULT_KEY,s.ARTIST,s.NOTES,s.CREATED_BY,s.MODIFIED_BY,s.CHANGED_ON,s.RELATED,s.PRIVATE,s.CATEGORY
     from Song s inner join Version v on s.ID = v.SONG_ID INNER JOIN VersionControl vc on vc.ID = v.VERSION_NAME
     WHERE s.ID = ?
 
