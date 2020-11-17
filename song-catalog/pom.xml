@@ -185,7 +185,7 @@
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-surefire-plugin</artifactId>
 				<configuration>
-				  <skipTests>false</skipTests>
+				  <skipTests>true</skipTests>
 				  <systemPropertyVariables>
                     <SONG_MAIL_DBL>stephenjw@fastmail.com</SONG_MAIL_DBL>
                     <SONG_MAIL_PW>dummy_val</SONG_MAIL_PW>

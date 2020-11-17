@@ -25,13 +25,13 @@
 											<a class="dropdown-item edit-abEntry-btn">Edit Contact</a>
 										</li>
 										<li>
-											<a class="dropdown-item add-abEntry-to-group">Add Contact To Group</a>
+											<a class="dropdown-item ignore-prop add-abEntry-to-group">Add Contact To Group</a>
 										</li>
 										<li th:if="${abEntry.username == null || abEntry.username == ''}">
-											<a class="dropdown-item invite-user" th:attr="onclick=${'inviteUser(''' + abEntry.email  + ''')'}">Invite to Create Account</a>
+											<a class="dropdown-item ignore-prop invite-user" th:attr="onclick=${'inviteUser(''' + abEntry.email  + ''')'}">Invite to Create Account</a>
 										</li>
 										<li>
-											<a class="dropdown-item delete-abEntry-btn">Delete Contact</a>
+											<a class="dropdown-item ignore-prop delete-abEntry-btn">Delete Contact</a>
 										</li>
 									</ul>
 						</td>

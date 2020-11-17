@@ -31,7 +31,7 @@ $(document).ready(function(){
 		addAbEntryToGroupFromModal($(this).closest('.ab-metadata').data('target'));
 	});
 	$(document).on('click','.edit-abEntry-btn, #addressBookBody .song-row',function(e){
-		if (!$(e.target).is("a")){
+		if (!$(e.target).is("a.ignore-prop")){
 			editEntry($(this).closest('.ab-metadata').data('target'));
 		}
 	});
