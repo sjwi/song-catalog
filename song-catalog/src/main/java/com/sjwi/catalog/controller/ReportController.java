@@ -11,17 +11,20 @@ import java.util.stream.Collectors;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.sjwi.catalog.aspect.IgnoreAspect;
+import com.sjwi.catalog.aspect.LandingPageAspect;
+import com.sjwi.catalog.exception.MailException;
+import com.sjwi.catalog.model.ResponseMessage;
+import com.sjwi.catalog.model.user.CfUser;
+import com.sjwi.catalog.service.UserService;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
-
-import com.sjwi.catalog.aspect.IgnoreAspect;
-import com.sjwi.catalog.aspect.LandingPageAspect;
-import com.sjwi.catalog.exception.MailException;
-import com.sjwi.catalog.model.user.CfUser;
-import com.sjwi.catalog.service.UserService;
+import org.springframework.web.bind.annotation.ResponseStatus;
 
 @Controller
 @IgnoreAspect
@@ -45,5 +48,12 @@ public class ReportController {
 	public String displayUserReport(HttpServletRequest request) throws MailException {
 		List<CfUser> user = userService.getAllActiveUsers();
 		return "Active users (" + user.size() + ")<br>" +  user.stream().map(u -> u.getUsername()).collect(Collectors.joining("<br>"));
+	}
+
+	@RequestMapping(value = {"/server-availability"}, method = RequestMethod.GET)
+	@ResponseStatus(HttpStatus.OK)
+	@ResponseBody
+	public ResponseMessage displayServerAvailability(HttpServletRequest request) throws MailException {
+		return new ResponseMessage("available","none");
 	}
 }
