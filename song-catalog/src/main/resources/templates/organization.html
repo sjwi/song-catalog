@@ -90,9 +90,25 @@
 	</body>
 	<script th:inline="javascript">
 		var orgId = /*[[${org == null}? 0: ${org.id}]]*/;
+		var updateFrequencyRequest;
 		$(document).ready(function(){
 			$('.service-filter').on('click',function(){
-				$('#frequencyAppend').load(contextpath + 'org/' + orgId + '/song-frequency?view=dynamic/frequency-table&' + $('.service-filter').serialize());
+				updateFrequencyRequest = $.ajax({
+					url: contextpath + 'org/' + orgId + '/song-frequency?view=dynamic/frequency-table&' + $('.service-filter').serialize(),
+					type: 'GET',
+					beforeSend: function(){
+						if(updateFrequencyRequest != null) {
+							updateFrequencyRequest.abort();
+						}
+						$('#frequencyAppend').css('opacity','.5');
+					},
+					success: function(response){
+						$('#frequencyAppend').html(response);
+					},
+					complete: function(){
+						$('#frequencyAppend').css('opacity','1');
+					}
+				});	
 			})
 			$(".archive-table").DataTable({
 				  language: {
