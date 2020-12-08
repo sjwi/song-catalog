@@ -46,13 +46,11 @@ function pollForSetListUpdate(setListId) {
 				lastUpdatedTime = newUpdatedTime;
 			} else {
 				if (lastUpdatedTime != newUpdatedTime) {
-					console.log("reloading..");
 					reloadSetSongContainerIfPresent(setListId);
 					reloadSetContainerIfPresent(setListId);
 					lastUpdatedTime = newUpdatedTime;
 				}
 			}
-			console.log(lastUpdatedTime + " || " + newUpdatedTime);
 		}
 	});
 	}
