@@ -48,6 +48,7 @@ function pollForSetListUpdate(setListId) {
 				if (lastUpdatedTime != newUpdatedTime) {
 					console.log("reloading..");
 					reloadSetSongContainerIfPresent(setListId);
+					reloadSetContainerIfPresent(setListId);
 					lastUpdatedTime = newUpdatedTime;
 				}
 			}
