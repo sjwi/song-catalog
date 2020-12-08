@@ -8,6 +8,7 @@ function reloadSetSongContainerIfPresent(setId){
 				$(songContainer).html($('.loading'));
 			},
 			success: function(data) {
+				lastUpdatedTime = undefined;
 				$(songContainer).html(data);
 				slick();
 			}
@@ -32,6 +33,28 @@ function reloadSetContainerIfPresent(setId){
 			}
 		});
 	}	
+}
+
+function pollForSetListUpdate(setListId) {
+	if (isOnline()){
+	$.ajax({
+		url: contextpath + "setlist/getSetListObject/" + setListId,
+		method: "GET",
+		success: function(setList){
+			var newUpdatedTime = setList.lastModifiedOn;
+			if (lastUpdatedTime == undefined){
+				lastUpdatedTime = newUpdatedTime;
+			} else {
+				if (lastUpdatedTime != newUpdatedTime) {
+					console.log("reloading..");
+					reloadSetSongContainerIfPresent(setListId);
+					lastUpdatedTime = newUpdatedTime;
+				}
+			}
+			console.log(lastUpdatedTime + " || " + newUpdatedTime);
+		}
+	});
+	}
 }
 
 

@@ -46,7 +46,9 @@ function lockScroll(){
 function unlockScroll(){
 	$('body, body>.scroll-lock').attr('style','');
 }
-
+function isOnline() { 
+    return ( navigator.onLine) 
+}
 function resetSongPageAudio(recording){
 	var audioClone = $('.audio-box-template').clone();
 	$(audioClone).removeClass('audio-box-template');

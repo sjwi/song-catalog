@@ -80,7 +80,7 @@ public class SetListService {
 	}
 
 	public void setDefaultSetKey(String newKey, int songId) {
-		setListDao.setDefaultSetKey(newKey, songId);
+		setListDao.setDefaultSetKey(newKey, songId, setListDao.getSetListIdForSetSong(songId));
 	}
 
 	public void changeVersion(int setSongId, int versionId) {

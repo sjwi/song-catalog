@@ -47,7 +47,9 @@
 	<script th:inline="javascript" th:src="@{/js/page/song/page.js}"></script>
 	<script th:inline="javascript" th:src="@{/js/page/song/static.js}"></script>
 
-	<script>
+	<script th:inline="javascript">
+		var lastUpdatedTime;
+		var setListId = /*[[${set.id}]]*/;
 		var ignoreTdAction = '.grip-container,.set-grip,img,.action-btn-container,key-select,button,.close-dark';
 		$(document).ready(function(){
 			$(document).on('click','.set-list-container',function(e){
@@ -61,6 +63,9 @@
 				resetSongPageAudio($(slick.$slides.get(nextSlide)).data('recording'));
 			});
 			$('.wrapper').css('height',$(document).height() - 30);
+			setInterval(function(){
+				pollForSetListUpdate(setListId);
+			}, 5000)
 		});
 	</script>
 </html>

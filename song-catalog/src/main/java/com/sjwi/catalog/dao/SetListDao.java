@@ -27,7 +27,9 @@ public interface SetListDao {
 	
 	public void removeSongFromSet(int setId, int songId);
 
-	public void setDefaultSetKey(String toKey, int songToTrans);
+	public void setDefaultSetKey(String toKey, int songToTrans, int setListId);
+
+	public int getSetListIdForSetSong(int setSongId);
 
 	public void sortSetList(List<Integer> sortedSongs);
 
@@ -35,8 +37,6 @@ public interface SetListDao {
 	
 	public SetList getLatestSet();
 
-	public void updateSetTitle(int id, String title);
-	
 	public List<Song> getSetSongs(int setListId);
 
 	public void changeVersion(int setId, int oldVersion, int newVersion);

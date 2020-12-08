@@ -54,8 +54,8 @@ public class SqlSetListDao implements SetListDao {
 					setLists.add(new SetList(
 					r.getInt("ID"),
 					r.getString("SETLIST_NAME"),
-					r.getDate("CREATED_ON"),
-					r.getDate("LAST_UPDATED"),
+					r.getTimestamp("CREATED_ON"),
+					r.getTimestamp("LAST_UPDATED"),
 					r.getString("CREATED_BY"),
 					r.getInt("ORGANIZATION"),
 					getSetSongs(r.getInt("ID"))
@@ -73,8 +73,8 @@ public class SqlSetListDao implements SetListDao {
 				setLists.add(new SetList(
 				r.getInt("ID"),
 				r.getString("SETLIST_NAME"),
-				r.getDate("CREATED_ON"),
-				r.getDate("LAST_UPDATED"),
+				r.getTimestamp("CREATED_ON"),
+				r.getTimestamp("LAST_UPDATED"),
 				r.getString("CREATED_BY"),
 				r.getInt("ORGANIZATION"),
 				getSetSongs(r.getInt("ID"))
@@ -93,8 +93,8 @@ public class SqlSetListDao implements SetListDao {
 				setLists.add(new SetList(
 				r.getInt("ID"),
 				r.getString("SETLIST_NAME"),
-				r.getDate("CREATED_ON"),
-				r.getDate("LAST_UPDATED"),
+				r.getTimestamp("CREATED_ON"),
+				r.getTimestamp("LAST_UPDATED"),
 				r.getString("CREATED_BY"),
 				r.getInt("ORGANIZATION"),
 				getSetSongs(r.getInt("ID"))
@@ -112,8 +112,8 @@ public class SqlSetListDao implements SetListDao {
 					setLists.add(new SetList(
 					r.getInt("ID"),
 					r.getString("SETLIST_NAME"),
-					r.getDate("CREATED_ON"),
-					r.getDate("LAST_UPDATED"),
+					r.getTimestamp("CREATED_ON"),
+					r.getTimestamp("LAST_UPDATED"),
 					r.getString("CREATED_BY"),
 					r.getInt("ORGANIZATION"),
 					getSetSongs(r.getInt("ID"))
@@ -186,8 +186,8 @@ public class SqlSetListDao implements SetListDao {
 			if (r.next()) {
 			return new SetList(r.getInt("ID"),
 					r.getString("SETLIST_NAME"),
-					r.getDate("CREATED_ON"),
-					r.getDate("LAST_UPDATED"),
+					r.getTimestamp("CREATED_ON"),
+					r.getTimestamp("LAST_UPDATED"),
 					r.getString("CREATED_BY"),
 					r.getInt("ORGANIZATION"),
 					getSetSongs(r.getInt("ID")));
@@ -208,8 +208,9 @@ public class SqlSetListDao implements SetListDao {
 	
 
 	@Override
-	public void setDefaultSetKey(String toKey, int songToTrans) {
+	public void setDefaultSetKey(String toKey, int songToTrans, int setListId) {
 		jdbcTemplate.update(queryStore.get("updateDefaultKeyForSet"),new Object[] {toKey, songToTrans});
+		jdbcTemplate.update(queryStore.get("updateSetlistLastUpdated"), new Object[] {setListId});
 	}
 
 	@Override
@@ -233,8 +234,8 @@ public class SqlSetListDao implements SetListDao {
 				while (r.next()) {
 					setLists.add(new SetList(r.getInt("ID"),
 							r.getString("SETLIST_NAME"),
-							r.getDate("CREATED_ON"),
-							r.getDate("LAST_UPDATED"),
+							r.getTimestamp("CREATED_ON"),
+							r.getTimestamp("LAST_UPDATED"),
 							r.getString("CREATED_BY"),
 							r.getInt("ORGANIZATION"),
 							getSetSongs(r.getInt("ID"))));
@@ -252,11 +253,6 @@ public class SqlSetListDao implements SetListDao {
 		});
 	}
 
-	@Override
-	public void updateSetTitle(int id, String title)  {
-		jdbcTemplate.update(queryStore.get("updateSetlistTitle"), new Object[] {title,id});
-	}
-	
 	@Override
 	public List<Song> getSetSongs(int setListId) {
 		try {
@@ -276,7 +272,7 @@ public class SqlSetListDao implements SetListDao {
 							r.getString("NOTES"),
 							r.getString("CREATED_BY"),
 							r.getString("MODIFIED_BY"),
-							r.getDate("CHANGED_ON"),
+							r.getTimestamp("CHANGED_ON"),
 							r.getInt("RELATED"),
 							("Y").equals(r.getString("PRIVATE"))? true: false,
 							r.getInt("CATEGORY"),
@@ -297,16 +293,19 @@ public class SqlSetListDao implements SetListDao {
 	@Override
 	public void changeVersion(int setId, int oldVersion, int newVersion) {
 		jdbcTemplate.update(queryStore.get("updateSetListVersion"),new Object[] {newVersion,setId,oldVersion});
+		jdbcTemplate.update(queryStore.get("updateSetlistLastUpdated"), new Object[] {setId});
 	}
 
 	@Override
 	public void changeVersion(int setSongId, int versionId) {
 		jdbcTemplate.update(queryStore.get("updateSetListVersionBySetSongId"),new Object[] {versionId,versionId,setSongId});
+		jdbcTemplate.update(queryStore.get("updateSetlistLastUpdated"), new Object[] {getSetListIdForSetSong(setSongId)});
 	}
 
 	@Override
 	public void renameSet(int id, String setListName) {
 		jdbcTemplate.update(queryStore.get("updateSetlistTitle"),new Object[] {setListName,id});
+		jdbcTemplate.update(queryStore.get("updateSetlistLastUpdated"), new Object[] {id});
 	}
 
 	@Override
@@ -317,6 +316,14 @@ public class SqlSetListDao implements SetListDao {
 			} else {
 				return null;
 			}
+		});
+	}
+
+	@Override
+	public int getSetListIdForSetSong(int setSongId) {
+		return jdbcTemplate.query(queryStore.get("getSetListIdForSetSong"), new Object[]{setSongId}, r -> {
+			r.next();
+			return r.getInt("ID");
 		});
 	}
 }

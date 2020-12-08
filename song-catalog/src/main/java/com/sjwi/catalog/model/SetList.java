@@ -7,12 +7,15 @@ import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.sjwi.catalog.model.song.Song;
 
 public class SetList {
 	private final int id;
 	private final String setListName;
 	private final Date createdOn;
+
+	@JsonFormat(shape=JsonFormat.Shape.STRING, pattern="dd-MM-yyyy HH:mm:ss", timezone="US/New York")
 	private final Date lastModifiedOn;
 	private final String createdBy;
 	private final int organization;

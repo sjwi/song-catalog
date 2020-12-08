@@ -75,6 +75,9 @@ getAllSetlistsOrderByCreatedOnDesc: >
 getSetListsByOrg: >
   Select * from SetListMaster where ORGANIZATION = ? order by CREATED_ON DESC
 
+getSetListIdForSetSong: >
+  Select slm.ID from  SetList sl JOIN SetListMaster slm on sl.SETLIST_ID = slm.ID where sl.ID = ?
+
 getFrequencyCount: >
   select  CASE WHEN s.related is null then s.id else s.related end as M_ID,  s.*, count(*) as CT  from Song s  JOIN SetList sl on s.id = sl.SONG_ID  JOIN SetListMaster slm on sl.SETLIST_ID = slm.ID group by M_ID
 
