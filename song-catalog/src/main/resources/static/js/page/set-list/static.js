@@ -36,7 +36,7 @@ function reloadSetContainerIfPresent(setId){
 }
 
 function pollForSetListUpdate(setListId) {
-	if (isOnline()){
+	if (isOnline() && !document.hidden){
 	$.ajax({
 		url: contextpath + "setlist/getSetListObject/" + setListId,
 		method: "GET",
