@@ -172,9 +172,6 @@ updateSortOrderForSong: >
 updateSetListSortForInsert: >
   UPDATE SetList SET SORT_ORDER = SORT_ORDER + 1 where SETLIST_ID = ? and SORT_ORDER >= ?
   
-updateSetListMasterLastModified: >
-  UPDATE SetListMaster SET LAST_UPDATED = CURRENT_TIMESTAMP() WHERE ID = ?
-  
 searchSetlistsByTerm: >
   select DISTINCT m.ID,m.SETLIST_NAME,m.CREATED_ON,m.LAST_UPDATED,m.CREATED_BY,m.ORGANIZATION
   from SetListMaster m INNER JOIN SetList s on m.ID = s.SETLIST_ID INNER JOIN Song a on s.SONG_ID = a.ID 

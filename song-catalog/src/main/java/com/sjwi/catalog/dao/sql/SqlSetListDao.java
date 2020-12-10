@@ -9,11 +9,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.ParameterizedPreparedStatementSetter;
-import org.springframework.stereotype.Repository;
-
 import com.sjwi.catalog.controller.ControllerHelper;
 import com.sjwi.catalog.dao.SetListDao;
 import com.sjwi.catalog.log.CustomLogger;
@@ -23,6 +18,11 @@ import com.sjwi.catalog.model.song.SetListSong;
 import com.sjwi.catalog.model.song.Song;
 import com.sjwi.catalog.service.RecordingService;
 import com.sjwi.catalog.service.VersionService;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.ParameterizedPreparedStatementSetter;
+import org.springframework.stereotype.Repository;
 
 @Repository
 public class SqlSetListDao implements SetListDao {
@@ -203,7 +203,7 @@ public class SqlSetListDao implements SetListDao {
 		int sortOrder = jdbcTemplate.query(queryStore.get("getSortOrderForSongInSet"),new Object[] {songId}, r -> {r.next(); return r.getInt("SORT_ORDER");});
 		jdbcTemplate.update(queryStore.get("decreaseSortOrder"),new Object[] {setId, sortOrder});
 		jdbcTemplate.update(queryStore.get("deleteFromSetlistBySongId"),new Object[] {setId,songId});
-		jdbcTemplate.update(queryStore.get("updateSetListMasterLastModified"),new Object[] {setId});
+		jdbcTemplate.update(queryStore.get("updateSetlistLastUpdated"), new Object[] {setId});
 	}
 	
 
@@ -222,6 +222,7 @@ public class SqlSetListDao implements SetListDao {
 				ps.setInt(2, s);
 			}
 		});
+		jdbcTemplate.update(queryStore.get("updateSetlistLastUpdated"), new Object[] {getSetListIdForSetSong(sortedSongs.get(0))});
 	}
 
 	@Override
