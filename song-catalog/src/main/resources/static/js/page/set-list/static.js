@@ -37,22 +37,22 @@ function reloadSetContainerIfPresent(setId){
 
 function pollForSetListUpdate(setListId) {
 	if (isOnline() && !document.hidden){
-	$.ajax({
-		url: contextpath + "setlist/getSetListObject/" + setListId,
-		method: "GET",
-		success: function(setList){
-			var newUpdatedTime = setList.lastModifiedOn;
-			if (lastUpdatedTime == undefined){
-				lastUpdatedTime = newUpdatedTime;
-			} else {
-				if (lastUpdatedTime != newUpdatedTime) {
-					reloadSetSongContainerIfPresent(setListId);
-					reloadSetContainerIfPresent(setListId);
+		$.ajax({
+			url: contextpath + "setlist/getSetListObject/" + setListId,
+			method: "GET",
+			success: function(setList){
+				var newUpdatedTime = setList.lastModifiedOn;
+				if (lastUpdatedTime == undefined){
 					lastUpdatedTime = newUpdatedTime;
+				} else {
+					if (lastUpdatedTime != newUpdatedTime) {
+						reloadSetSongContainerIfPresent(setListId);
+						reloadSetContainerIfPresent(setListId);
+						lastUpdatedTime = newUpdatedTime;
+					}
 				}
 			}
-		}
-	});
+		});
 	}
 }
 
