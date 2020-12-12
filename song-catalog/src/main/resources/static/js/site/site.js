@@ -5,7 +5,7 @@ var BAD_ENROLLMENT_TOKEN = "Your enrollment token has already been used or is in
 var BAD_RESET_TOKEN = "Your password reset token has expired or is invalid.";
 var isMobile = false; 
 var currentScroll=0;
-$(document).mousedown(function(e){
+$(document).on('mousedown touchstart', function(e){
 	if ($(e.target).is('.open-nav,.open-nav>span,.nav-item .nav-link,#sideNav')){
 		$('#sideNav').addClass('slide-in');
 	} else {
@@ -13,7 +13,7 @@ $(document).mousedown(function(e){
 	}
 	mousedown = true;
 });
-$(document).mouseup(function(){
+$(document).on('mousedown touchstart', function(){
 	mousedown = false;
 });
 $(document).ready(function(e){
