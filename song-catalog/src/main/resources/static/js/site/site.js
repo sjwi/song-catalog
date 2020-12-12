@@ -11,7 +11,7 @@ $(document).on('mousedown', function(e){
 $(document).on('mousedown', function(){
 	mousedown = false;
 });
-$(document).on('click touch',function(){
+$(document).on('click touch',function(e){
 	if ($(e.target).is('.open-nav,.open-nav>span,.nav-item .nav-link,#sideNav')){
 		$('#sideNav').addClass('slide-in');
 	} else {
