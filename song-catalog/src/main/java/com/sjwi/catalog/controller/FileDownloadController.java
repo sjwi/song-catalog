@@ -75,12 +75,12 @@ public class FileDownloadController {
 			@RequestParam (name="alignCenter", required = false) boolean alignCenter,
 			@RequestParam (name="fontSize") Optional<Integer> fontSize
 	) throws IOException {
-		FileGenerator pptGenerator = new PptFileGenerator(prependBlankSlide,fontSize.orElse(0),alignCenter);
-		List<Song> songs = songService.getSongs().stream().map(s -> s.transpose(LYRICS_ONLY_KEY_CODE)).collect(Collectors.toList());
-		fileName = fileName == null? "Song_Catalog_Export_" + new SimpleDateFormat("MMddyyyy").format(new Date()): controllerHelper.normalizeString(fileName);
-		response.addHeader("Content-Disposition", "attachment; filename=\""+ fileName + ".pptx\"");
 		try {
-			Files.copy(Paths.get(pptGenerator.buildFile(songs)), response.getOutputStream());
+			FileGenerator pptGenerator = new PptFileGenerator(prependBlankSlide,fontSize.orElse(0),alignCenter);
+			List<Song> songs = songService.getSongs().stream().map(s -> s.transpose(LYRICS_ONLY_KEY_CODE)).collect(Collectors.toList());
+			fileName = fileName == null? "Song_Catalog_Export_" + new SimpleDateFormat("MMddyyyy").format(new Date()): controllerHelper.normalizeString(fileName);
+			response.addHeader("Content-Disposition", "attachment; filename=\""+ fileName + ".pptx\"");
+			Files.copy(Paths.get(pptGenerator.buildFile(new SetList(fileName,songs))), response.getOutputStream());
 			logger.logUserActionWithEmail(fileName + " ppt downloaded. <br>blankPage = " +  
 					prependBlankSlide + "<br>fontSize = " + 
 					fontSize + "<br>fileName = " + fileName + "<br>" +
@@ -102,11 +102,11 @@ public class FileDownloadController {
 			List<Song> songs = songService.getSongs().stream()
 									.map(s -> lyricsOnly? s.transpose(LYRICS_ONLY_KEY_CODE): s)
 									.collect(Collectors.toList());
-			pdfGenerator.buildFile(songs);
 			fileName = fileName == null? "Song_Catalog_Export_" + new SimpleDateFormat("MMddyyyy").format(new Date()): controllerHelper.normalizeString(fileName);
+			pdfGenerator.buildFile(new SetList(fileName,songs));
 			response.setContentType("application/pdf; name=\"" + fileName + "\"");
             response.addHeader("Content-Disposition", "inline; filename=\"" + fileName + ".pdf\"");
-            Files.copy(Paths.get(pdfGenerator.getFileName()), response.getOutputStream());
+            Files.copy(Paths.get(pdfGenerator.getFilePath()), response.getOutputStream());
 		} catch (Exception e) {
 			controllerHelper.errorHandler(e);
 			response.sendRedirect(request.getContextPath() + "/error");
@@ -148,7 +148,7 @@ public class FileDownloadController {
 			SetList setList = controllerHelper.buildSetFile(id,pptGenerator,true);
 			fileName = fileName == null? setList.getNormalizedSetListName(): controllerHelper.normalizeString(fileName);
             response.addHeader("Content-Disposition", "attachment; filename=\"" + fileName + ".pptx\"");
-            Files.copy(Paths.get(pptGenerator.getFileName()), response.getOutputStream());
+            Files.copy(Paths.get(pptGenerator.getFilePath()), response.getOutputStream());
             logger.logUserActionWithEmail(fileName + " ppt downloaded. <br>blankPage = " +  
             		prependBlankSlide + "<br>fontSize = " + 
             		fontSize + "<br>fileName = " + fileName + "<br>" +
@@ -206,7 +206,7 @@ public class FileDownloadController {
 			fileName = fileName == null? setList.getNormalizedSetListName(): controllerHelper.normalizeString(fileName);
 			response.setContentType("application/pdf; name=\"" + fileName + "\"");
             response.addHeader("Content-Disposition", "inline; filename=\"" + fileName + ".pdf\"");
-            Files.copy(Paths.get(pdfGenerator.getFileName()), response.getOutputStream());
+            Files.copy(Paths.get(pdfGenerator.getFilePath()), response.getOutputStream());
 		} catch (Exception e) {
 			controllerHelper.errorHandler(e);
 			response.sendRedirect(request.getContextPath() + "/error");

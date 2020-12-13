@@ -31,6 +31,15 @@ public class SetList {
 		this.organization = organization;
 		this.songs = songs;
 	}
+	public SetList(String setListName, List<Song> songs){
+		this.id = 0;
+		this.setListName = setListName;
+		this.createdOn = new Date();
+		this.lastModifiedOn = new Date();
+		this.createdBy = "automated";
+		this.organization = 0;
+		this.songs = songs;
+	}
 	public SetList transposeToLyrics() {
 		return new SetList(id,setListName,createdOn,lastModifiedOn,createdBy,organization,songs.stream()
 				.map(s -> s.transpose(LYRICS_ONLY_KEY_CODE))
