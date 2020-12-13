@@ -64,7 +64,7 @@ public class FileDownloadController {
 	@RequestMapping(value = {"/exportDatabase"}, method = RequestMethod.GET)
 	public ModelAndView exportModal() {
 		ModelAndView mv = new ModelAndView("modal/dynamic/download");
-		mv.addObject("defaultFileName","Song_Catalog_Export_" + new SimpleDateFormat("MMddyyyy").format(new Date()));
+		mv.addObject("defaultFileName","Song_Catalog_Export");
 		return mv;
 	}
 
@@ -78,7 +78,8 @@ public class FileDownloadController {
 		try {
 			FileGenerator pptGenerator = new PptFileGenerator(prependBlankSlide,fontSize.orElse(0),alignCenter);
 			List<Song> songs = songService.getSongs().stream().map(s -> s.transpose(LYRICS_ONLY_KEY_CODE)).collect(Collectors.toList());
-			fileName = fileName == null? "Song_Catalog_Export_" + new SimpleDateFormat("MMddyyyy").format(new Date()): controllerHelper.normalizeString(fileName);
+			String date = "_" + new SimpleDateFormat("MM/dd/yyyy").format(new Date());
+			fileName = fileName == null? "Song_Catalog_Export" + date: controllerHelper.normalizeString(fileName + date);
 			response.addHeader("Content-Disposition", "attachment; filename=\""+ fileName + ".pptx\"");
 			Files.copy(Paths.get(pptGenerator.buildFile(new SetList(new SimpleDateFormat("MM/dd/yyyy").format(new Date()),songs))), response.getOutputStream());
 			logger.logUserActionWithEmail(fileName + " ppt downloaded. <br>blankPage = " +  
@@ -102,7 +103,8 @@ public class FileDownloadController {
 			List<Song> songs = songService.getSongs().stream()
 									.map(s -> lyricsOnly? s.transpose(LYRICS_ONLY_KEY_CODE): s)
 									.collect(Collectors.toList());
-			fileName = fileName == null? "Song_Catalog_Export_" + new SimpleDateFormat("MMddyyyy").format(new Date()): controllerHelper.normalizeString(fileName);
+			String date = "_" + new SimpleDateFormat("MM/dd/yyyy").format(new Date());
+			fileName = fileName == null? "Song_Catalog_Export" + date: controllerHelper.normalizeString(fileName + date);
 			pdfGenerator.buildFile(new SetList(new SimpleDateFormat("MM/dd/yyyy").format(new Date()),songs));
 			response.setContentType("application/pdf; name=\"" + fileName + "\"");
             response.addHeader("Content-Disposition", "inline; filename=\"" + fileName + ".pdf\"");
