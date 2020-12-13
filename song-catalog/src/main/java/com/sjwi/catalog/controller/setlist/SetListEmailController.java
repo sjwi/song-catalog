@@ -78,12 +78,12 @@ public class SetListEmailController {
 			if (attachPpt != null) {
 				FileGenerator pptGenerator = new PptFileGenerator(true,0,false);
 				SetList setList = controllerHelper.buildSetFile(id, pptGenerator, true);
-				attachments.put(pptGenerator.getFileName(), setList.getNormalizedSetListName() + ".pptx");
+				attachments.put(pptGenerator.getFilePath(), setList.getNormalizedSetListName() + ".pptx");
 			}
 			if (attachPdf != null) {
 				FileGenerator pdfGenerator = new PdfFileGenerator(0,controllerHelper.getFullUrL(request));
 				SetList setList = controllerHelper.buildSetFile(id, pdfGenerator, false);
-				attachments.put(pdfGenerator.getFileName(), setList.getNormalizedSetListName() + ".pdf");
+				attachments.put(pdfGenerator.getFilePath(), setList.getNormalizedSetListName() + ".pdf");
 			}
 			String userEmail = ((CfUser) auth.getPrincipal()).getEmail();
 			String emailToStr = controllerHelper.recipientsToString(emailTo);
