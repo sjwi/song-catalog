@@ -10,15 +10,6 @@ import java.util.Optional;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.servlet.ModelAndView;
-
 import com.sjwi.catalog.file.FileGenerator;
 import com.sjwi.catalog.file.pdf.PdfFileGenerator;
 import com.sjwi.catalog.file.ppt.PptFileGenerator;
@@ -27,6 +18,15 @@ import com.sjwi.catalog.model.SetList;
 import com.sjwi.catalog.model.song.Song;
 import com.sjwi.catalog.service.SetListService;
 import com.sjwi.catalog.service.SongService;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.ModelAndView;
 
 @Controller
 public class FileDownloadController {
@@ -62,10 +62,11 @@ public class FileDownloadController {
 			@PathVariable int id,
 			@PathVariable String fileName,
 			@RequestParam (name="blankSlide", required = false) boolean prependBlankSlide,
+			@RequestParam (name="alignCenter", required = false) boolean alignCenter,
 			@RequestParam (name="fontSize") Optional<Integer> fontSize
 			) throws IOException {
 		try {
-			FileGenerator pptGenerator = new PptFileGenerator(prependBlankSlide,fontSize.orElse(0));
+			FileGenerator pptGenerator = new PptFileGenerator(prependBlankSlide,fontSize.orElse(0),alignCenter);
 			Song song = songService.getSongById(id).transpose(LYRICS_ONLY_KEY_CODE);
 			fileName = fileName == null? song.getNormalizedName(): controllerHelper.normalizeString(fileName);
             response.addHeader("Content-Disposition", "attachment; filename=\""+ fileName + ".pptx\"");
@@ -84,10 +85,11 @@ public class FileDownloadController {
 	public void downloadSetPpt(HttpServletRequest request, HttpServletResponse response,
 			@PathVariable (required = false) String fileName,
 			@RequestParam (name="blankSlide", required = false) boolean prependBlankSlide,
+			@RequestParam (name="alignCenter", required = false) boolean alignCenter,
 			@RequestParam (name="fontSize") Optional<Integer> fontSize,
 			@PathVariable int id) throws IOException {
 		try {
-			FileGenerator pptGenerator = new PptFileGenerator(prependBlankSlide, fontSize.orElse(0));
+			FileGenerator pptGenerator = new PptFileGenerator(prependBlankSlide, fontSize.orElse(0),alignCenter);
 			SetList setList = controllerHelper.buildSetFile(id,pptGenerator,true);
 			fileName = fileName == null? setList.getNormalizedSetListName(): controllerHelper.normalizeString(fileName);
             response.addHeader("Content-Disposition", "attachment; filename=\"" + fileName + ".pptx\"");

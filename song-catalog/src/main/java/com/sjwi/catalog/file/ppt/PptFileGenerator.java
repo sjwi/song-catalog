@@ -9,6 +9,12 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
 
+import com.sjwi.catalog.exception.FileUtilityException;
+import com.sjwi.catalog.file.FileGenerator;
+import com.sjwi.catalog.model.SetList;
+import com.sjwi.catalog.model.song.Song;
+
+import org.apache.poi.sl.usermodel.TextParagraph.TextAlign;
 import org.apache.poi.xslf.usermodel.SlideLayout;
 import org.apache.poi.xslf.usermodel.XMLSlideShow;
 import org.apache.poi.xslf.usermodel.XSLFSlide;
@@ -20,11 +26,6 @@ import org.apache.poi.xslf.usermodel.XSLFTextRun;
 import org.apache.poi.xslf.usermodel.XSLFTextShape;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
-
-import com.sjwi.catalog.exception.FileUtilityException;
-import com.sjwi.catalog.file.FileGenerator;
-import com.sjwi.catalog.model.SetList;
-import com.sjwi.catalog.model.song.Song;
 
 
 public class PptFileGenerator implements FileGenerator {
@@ -47,12 +48,13 @@ public class PptFileGenerator implements FileGenerator {
 	private final int titleSizeMax;
 	private final int lineSpacing;
 	private final boolean prependBlankSlide;
+	private final TextAlign textAlign;
 	public final String file;
 	private XMLSlideShow ppt;
 	private XSLFSlideLayout layout;
 	private XSLFSlide slide; 
 
-	public PptFileGenerator(boolean prependBlankSlide, int fontSize) {
+	public PptFileGenerator(boolean prependBlankSlide, int fontSize, boolean alignCenter) {
 		String root = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest().getServletContext().getRealPath("/");
 		file = root + "/" +
 				PPT_SUB_DIRECTORY + "/" + 
@@ -78,7 +80,7 @@ public class PptFileGenerator implements FileGenerator {
 			lineSpacing = LINE_SPACING + (2 * (DEF_FONT_SIZE - this.fontSize));
 			titleFontSize = this.fontSize + 3;
 		}
-
+		textAlign = alignCenter? TextAlign.CENTER: TextAlign.LEFT;
 		ppt = new XMLSlideShow();
 		XSLFSlideMaster defaultMaster = ppt.getSlideMasters().get(0);
 		layout = defaultMaster.getLayout(SlideLayout.TITLE_AND_CONTENT);
@@ -170,6 +172,7 @@ public class PptFileGenerator implements FileGenerator {
 		cp.setRightMargin(0.);
 		cp.setLineSpacing((double) lineSpacing);
 		cp.setBulletStyle();
+		cp.setTextAlign(textAlign);
 		for (String line: lines) {
 			
 			XSLFTextRun contentRun = cp.addNewTextRun();

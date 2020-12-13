@@ -8,16 +8,6 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.security.core.Authentication;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseStatus;
-
 import com.sjwi.catalog.controller.ControllerHelper;
 import com.sjwi.catalog.dao.sql.SqlVersionDao;
 import com.sjwi.catalog.file.FileGenerator;
@@ -29,6 +19,16 @@ import com.sjwi.catalog.model.mail.EmailWithAttachment;
 import com.sjwi.catalog.model.user.CfUser;
 import com.sjwi.catalog.service.AddressBookService;
 import com.sjwi.catalog.service.SetListService;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.security.core.Authentication;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseStatus;
 
 @Controller
 public class SetListEmailController {
@@ -76,7 +76,7 @@ public class SetListEmailController {
 		try {
 			Map<String, String> attachments = new HashMap<String, String>();
 			if (attachPpt != null) {
-				FileGenerator pptGenerator = new PptFileGenerator(true,0);
+				FileGenerator pptGenerator = new PptFileGenerator(true,0,false);
 				SetList setList = controllerHelper.buildSetFile(id, pptGenerator, true);
 				attachments.put(pptGenerator.getFileName(), setList.getNormalizedSetListName() + ".pptx");
 			}
