@@ -108,7 +108,12 @@ public class FileDownloadController {
 			pdfGenerator.buildFile(new SetList("",songs));
 			response.setContentType("application/pdf; name=\"" + fileName + "\"");
             response.addHeader("Content-Disposition", "inline; filename=\"" + fileName + ".pdf\"");
-            Files.copy(Paths.get(pdfGenerator.getFilePath()), response.getOutputStream());
+			Files.copy(Paths.get(pdfGenerator.getFilePath()), response.getOutputStream());
+			logger.logUserActionWithEmail(fileName + " pdf downloaded. <br> lyricsOnly = " +  
+					lyricsOnly + "<br>fontSize = " + 
+					fontSize + "<br>qrCode = " + 
+					qrCode + "<br>fileName = " + fileName + "<br>" +
+					controllerHelper.buildHtmlLinkFromUrl(controllerHelper.getFullUrL(request), "Download Link") + "<br>");
 		} catch (Exception e) {
 			controllerHelper.errorHandler(e);
 			response.sendRedirect(request.getContextPath() + "/error");
