@@ -81,7 +81,7 @@ public class FileDownloadController {
 			String date = "_" + new SimpleDateFormat("MM/dd/yyyy").format(new Date());
 			fileName = fileName == null? "Song_Catalog_Export" + date: controllerHelper.normalizeString(fileName + date);
 			response.addHeader("Content-Disposition", "attachment; filename=\""+ fileName + ".pptx\"");
-			Files.copy(Paths.get(pptGenerator.buildFile(new SetList(new SimpleDateFormat("MM/dd/yyyy").format(new Date()),songs))), response.getOutputStream());
+			Files.copy(Paths.get(pptGenerator.buildFile(new SetList("",songs))), response.getOutputStream());
 			logger.logUserActionWithEmail(fileName + " ppt downloaded. <br>blankPage = " +  
 					prependBlankSlide + "<br>fontSize = " + 
 					fontSize + "<br>fileName = " + fileName + "<br>" +
@@ -105,7 +105,7 @@ public class FileDownloadController {
 									.collect(Collectors.toList());
 			String date = "_" + new SimpleDateFormat("MM/dd/yyyy").format(new Date());
 			fileName = fileName == null? "Song_Catalog_Export" + date: controllerHelper.normalizeString(fileName + date);
-			pdfGenerator.buildFile(new SetList(new SimpleDateFormat("MM/dd/yyyy").format(new Date()),songs));
+			pdfGenerator.buildFile(new SetList("",songs));
 			response.setContentType("application/pdf; name=\"" + fileName + "\"");
             response.addHeader("Content-Disposition", "inline; filename=\"" + fileName + ".pdf\"");
             Files.copy(Paths.get(pdfGenerator.getFilePath()), response.getOutputStream());
