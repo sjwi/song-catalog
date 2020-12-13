@@ -80,7 +80,7 @@ public class FileDownloadController {
 			List<Song> songs = songService.getSongs().stream().map(s -> s.transpose(LYRICS_ONLY_KEY_CODE)).collect(Collectors.toList());
 			fileName = fileName == null? "Song_Catalog_Export_" + new SimpleDateFormat("MMddyyyy").format(new Date()): controllerHelper.normalizeString(fileName);
 			response.addHeader("Content-Disposition", "attachment; filename=\""+ fileName + ".pptx\"");
-			Files.copy(Paths.get(pptGenerator.buildFile(new SetList("CF Song Catalog " + new SimpleDateFormat("MM-dd-yyyy").format(new Date()),songs))), response.getOutputStream());
+			Files.copy(Paths.get(pptGenerator.buildFile(new SetList(new SimpleDateFormat("MM/dd/yyyy").format(new Date()),songs))), response.getOutputStream());
 			logger.logUserActionWithEmail(fileName + " ppt downloaded. <br>blankPage = " +  
 					prependBlankSlide + "<br>fontSize = " + 
 					fontSize + "<br>fileName = " + fileName + "<br>" +
@@ -103,7 +103,7 @@ public class FileDownloadController {
 									.map(s -> lyricsOnly? s.transpose(LYRICS_ONLY_KEY_CODE): s)
 									.collect(Collectors.toList());
 			fileName = fileName == null? "Song_Catalog_Export_" + new SimpleDateFormat("MMddyyyy").format(new Date()): controllerHelper.normalizeString(fileName);
-			pdfGenerator.buildFile(new SetList("CF Song Catalog " + new SimpleDateFormat("MM-dd-yyyy").format(new Date()),songs));
+			pdfGenerator.buildFile(new SetList(new SimpleDateFormat("MM/dd/yyyy").format(new Date()),songs));
 			response.setContentType("application/pdf; name=\"" + fileName + "\"");
             response.addHeader("Content-Disposition", "inline; filename=\"" + fileName + ".pdf\"");
             Files.copy(Paths.get(pdfGenerator.getFilePath()), response.getOutputStream());
