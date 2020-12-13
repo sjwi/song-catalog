@@ -12,7 +12,7 @@ $(document).on('mousedown', function(){
 	mousedown = false;
 });
 $(document).on('click touch',function(e){
-	if ($(e.target).is('.open-nav,.open-nav>span,.nav-item .nav-link,#sideNav')){
+	if ($(e.target).is('.open-nav,.open-nav>span,.nav-item .nav-link:not(.export),#sideNav')){
 		$('#sideNav').addClass('slide-in');
 	} else {
 		$('#sideNav').removeClass('slide-in');
