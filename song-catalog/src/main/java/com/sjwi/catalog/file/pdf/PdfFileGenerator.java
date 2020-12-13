@@ -9,11 +9,9 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 import javax.imageio.ImageIO;
-
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
 
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.client.j2se.MatrixToImageWriter;
@@ -37,6 +35,9 @@ import com.sjwi.catalog.file.FileGenerator;
 import com.sjwi.catalog.model.SetList;
 import com.sjwi.catalog.model.TransposableString;
 import com.sjwi.catalog.model.song.Song;
+
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 
 
@@ -146,7 +147,29 @@ public class PdfFileGenerator implements FileGenerator {
 		return file;
 	}
 
-	
+	@Override
+	public String buildFile(List<Song> songs) throws FileUtilityException {
+
+		try {
+			writer.setPageEvent(new DrawHeaderAndFooter(songs.get(0)));
+			for (Song song: songs) {
+				if (!document.isOpen()) {
+					document.open();
+				} else {
+					pageNumber = writer.getPageNumber() + 1;
+					document.newPage();
+				}
+				drawSong(song.getName(), song.getBodyAsChunks());
+			}
+		}
+		catch (Exception e) {
+			throw new FileUtilityException("Unable to export song database");
+		} finally {
+			cleanup();
+		}
+		return file;
+	}
+
 	private void drawSong(String name, String[] body) throws DocumentException {
 		currentSongTitle = name;
 		document.add(buildSongTitle(name));

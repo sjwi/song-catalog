@@ -5,7 +5,11 @@ import static com.sjwi.catalog.model.KeySet.LYRICS_ONLY_KEY_CODE;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -57,6 +61,57 @@ public class FileDownloadController {
 		return mv;
 	}
 	
+	@RequestMapping(value = {"/exportDatabase"}, method = RequestMethod.GET)
+	public ModelAndView exportModal() {
+		ModelAndView mv = new ModelAndView("modal/dynamic/download");
+		mv.addObject("defaultFileName","Song_Catalog_Export_" + new SimpleDateFormat("MMddyyyy").format(new Date()));
+		return mv;
+	}
+
+	@RequestMapping(value = {"/exportDatabase/ppt/{fileName}"}, method = RequestMethod.GET)
+	public void exportSongDatabaseAsPpt(HttpServletRequest request, HttpServletResponse response,
+			@PathVariable String fileName,
+			@RequestParam (name="blankSlide", required = false) boolean prependBlankSlide,
+			@RequestParam (name="alignCenter", required = false) boolean alignCenter,
+			@RequestParam (name="fontSize") Optional<Integer> fontSize
+	) throws IOException {
+		FileGenerator pptGenerator = new PptFileGenerator(prependBlankSlide,fontSize.orElse(0),alignCenter);
+		List<Song> songs = songService.getSongs().stream().map(s -> s.transpose(LYRICS_ONLY_KEY_CODE)).collect(Collectors.toList());
+		fileName = fileName == null? "Song_Catalog_Export_" + new SimpleDateFormat("MMddyyyy").format(new Date()): controllerHelper.normalizeString(fileName);
+		response.addHeader("Content-Disposition", "attachment; filename=\""+ fileName + ".pptx\"");
+		try {
+			Files.copy(Paths.get(pptGenerator.buildFile(songs)), response.getOutputStream());
+			logger.logUserActionWithEmail(fileName + " ppt downloaded. <br>blankPage = " +  
+					prependBlankSlide + "<br>fontSize = " + 
+					fontSize + "<br>fileName = " + fileName + "<br>" +
+					controllerHelper.buildHtmlLinkFromUrl(controllerHelper.getFullUrL(request), "Download Link") + "<br>");
+		} catch (Exception e) {
+			controllerHelper.errorHandler(e);
+			response.sendRedirect(request.getContextPath() + "/error");
+		}
+	}
+	@RequestMapping(value = {"/exportDatabase/pdf/{fileName}"}, method = RequestMethod.GET)
+	public void exportSongDatabaseAsPdf(HttpServletRequest request, HttpServletResponse response,
+			@PathVariable String fileName,
+			@RequestParam (name="fontSize") Optional<Integer> fontSize,
+			@RequestParam (value = "lyricsOnly", required = false, defaultValue = "false") boolean lyricsOnly,
+			@RequestParam (name="qrCode", required=false, defaultValue = "false") boolean qrCode
+		) throws IOException {
+		try {
+			FileGenerator pdfGenerator = new PdfFileGenerator(fontSize.orElse(0), qrCode? controllerHelper.getFullUrL(request): null);
+			List<Song> songs = songService.getSongs().stream()
+									.map(s -> lyricsOnly? s.transpose(LYRICS_ONLY_KEY_CODE): s)
+									.collect(Collectors.toList());
+			pdfGenerator.buildFile(songs);
+			fileName = fileName == null? "Song_Catalog_Export_" + new SimpleDateFormat("MMddyyyy").format(new Date()): controllerHelper.normalizeString(fileName);
+			response.setContentType("application/pdf; name=\"" + fileName + "\"");
+            response.addHeader("Content-Disposition", "inline; filename=\"" + fileName + ".pdf\"");
+            Files.copy(Paths.get(pdfGenerator.getFileName()), response.getOutputStream());
+		} catch (Exception e) {
+			controllerHelper.errorHandler(e);
+			response.sendRedirect(request.getContextPath() + "/error");
+		}
+	}
 	@RequestMapping(value = {"/song/ppt/{id}/{fileName}"}, method = RequestMethod.GET)
 	public void downloadSongPpt(HttpServletRequest request, HttpServletResponse response,
 			@PathVariable int id,

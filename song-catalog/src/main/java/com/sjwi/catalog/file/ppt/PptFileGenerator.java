@@ -122,6 +122,25 @@ public class PptFileGenerator implements FileGenerator {
 
 	}
 
+	@Override
+	public String buildFile(List<Song> songs) throws FileUtilityException {
+		
+		try {
+			if (prependBlankSlide)
+				drawBlankSlide();
+			for (Song song: songs) {
+				drawSong(new PowerPointDeck(song.getBodyAsChunks(), lineSizeMax, lineSize),song.getName());
+			}
+			writeFileToSystem();
+		}
+		catch (Exception e) {
+			throw new FileUtilityException("Unable to export song database");
+		}
+		
+		return file;
+
+	}
+
 	private void writeFileToSystem() throws IOException {
 		FileOutputStream out = new FileOutputStream(file);
 		ppt.write(out);

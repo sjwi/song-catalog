@@ -27,4 +27,19 @@ function downloadFile(endpoint,id,key){
 		},
 	});		
 }
+function exportDatabase(){
+	pptDownloadBaseUri = contextpath + "exportDatabase/ppt";
+	pdfDownloadBaseUri = contextpath + "exportDatabase/pdf";
+	$.ajax({
+		url: contextpath + "exportDatabase",
+		method: "GET",
+		success: function(data) {
+			$('#downloadModal').find('.modal-content').html(data);
+			$('#downloadModal').modal('show');
+		},
+		error: function(data){
+			alertWithFade('danger','Something went wrong! Unable to retrieve download details');
+		},
+	});		
+}
 </script>
