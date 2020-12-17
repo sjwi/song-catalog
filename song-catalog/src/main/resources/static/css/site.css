@@ -1354,6 +1354,9 @@ table > thead > tr > th[class*="sort"]:after {
 .dataTables_paginate.paging_simple_numbers {
 	padding-bottom:.5rem;
 }
+.text-sub {
+	font-size:.7rem !important;
+}
 @media screen and (max-width:1450px) {
 	.song-page-container, .song-action-container {
 		width:95%;

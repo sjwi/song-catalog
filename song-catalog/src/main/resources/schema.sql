@@ -234,6 +234,7 @@ CREATE TABLE Organizations (
   ID int(11) NOT NULL AUTO_INCREMENT,
   NAME varchar(255) NOT NULL,
   TITLE varchar(255) NOT NULL,
+  LINK varchar(255),
   PRIMARY KEY (ID)
 ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -243,7 +244,7 @@ CREATE TABLE Organizations (
 --
 
 /*!40000 ALTER TABLE Organizations DISABLE KEYS */;
-INSERT INTO Organizations VALUES (1,'Church1','Church 1'),(2,'Church2','Church 2'),(3,'Church3','Church 3'),(4,'Church4','Church 4');
+INSERT INTO Organizations VALUES (1,'Church1','Church 1','http://fakeurl1.com'),(2,'Church2','Church 2',null),(3,'Church3','Church 3','http://fakeurl1.com'),(4,'Church4','Church 4','http://fakeurl1.com');
 /*!40000 ALTER TABLE Organizations ENABLE KEYS */;
 
 

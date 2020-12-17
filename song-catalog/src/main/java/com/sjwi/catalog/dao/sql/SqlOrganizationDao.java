@@ -26,7 +26,7 @@ public class SqlOrganizationDao implements OrganizationDao {
 		return jdbcTemplate.query(queryStore.get("getAllOrganizations"), r -> {
 			List<Organization> organizations = new ArrayList<Organization>();
 			while (r.next()) {
-				organizations.add(new Organization(r.getInt("ID"),r.getString("NAME"),r.getString("TITLE")));
+				organizations.add(new Organization(r.getInt("ID"),r.getString("NAME"),r.getString("TITLE"), r.getString("LINK")));
 			}
 			return organizations;
 		});
@@ -47,7 +47,7 @@ public class SqlOrganizationDao implements OrganizationDao {
 	public Organization getOrganizationById(int id) {
 		return jdbcTemplate.query(queryStore.get("getOrganizationById"), new Object[] {id}, r -> {
 			if (r.next()) {
-				return new Organization(r.getInt("ID"),r.getString("NAME"), r.getString("TITLE"));
+				return new Organization(r.getInt("ID"),r.getString("NAME"), r.getString("TITLE"),r.getString("LINK"));
 			} else {
 				return null;
 			}

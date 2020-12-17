@@ -6,8 +6,15 @@
 		<th:block th:replace="partial/off-navbar :: offNavBar('addSong')"></th:block>
 		<div class="row no-gutters flex-nowrap mh-100vh">
 			<div th:with="orgId=${org == null? '0':org.id}" class="col text-center">
-				<h4 class="mt-3 mb-4 header-text" th:text="${org == null}? 'Other Organizations' : ${org.title}"></h4>
-				<h5 class="d-block header-text mb-3">Permalinks</h5>
+				<h4 class="mt-3 mb-0"><a th:href="${org?.link != null? org.link: ''}" class="header-text text-decoration-none" target="_blank" th:text="${org == null}? 'Other Organizations' : ${org.title}"></a></h4>
+				<h6 class="mt-0 text-sub pl-1" th:if="${org?.link != null}"><a th:href="${org.link}" target="_blank">
+					Visit Website
+					<svg class="pb-1 external-link" fill="#000000" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="20px" height="20px">
+						<path d="M 18 5 L 18 7 L 23.5625 7 L 11.28125 19.28125 L 12.71875 20.71875 L 25 8.4375 L 25 14 L 27 14 L 27 5 Z M 5 9 L 5 27 L 23 27 L 23 14 L 21 16 L 21 25 L 7 25 L 7 11 L 16 11 L 18 9 Z"/>
+					</svg>
+					</a>
+				</h6>
+				<h5 class="d-block header-text mb-3 mt-4">Permalinks</h5>
 				<div class="row no-gutters mb-1">
 					<div class="col-3"></div>
 					<div class="col-sm-6 text-center">

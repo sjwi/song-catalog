@@ -2,14 +2,16 @@ package com.sjwi.catalog.model;
 
 public class Organization {
 	
-	private int id;
-	private String name;
-	private String title;
-	public Organization(int id, String name, String title) {
+	private final int id;
+	private final String name;
+	private final String title;
+	private final String link;
+	public Organization(int id, String name, String title, String link) {
 		super();
 		this.id = id;
 		this.name = name;
 		this.title = title;
+		this.link = link;
 	}
 	public int getId() {
 		return id;
@@ -20,6 +22,7 @@ public class Organization {
 	public String getTitle() {
 		return title;
 	}
-	
-
+	public String getLink() {
+		return link;
+	}
 }
