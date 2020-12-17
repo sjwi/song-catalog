@@ -54,6 +54,9 @@ public class SetList {
 		}
 		return new SetList(id,setListName,createdOn,lastModifiedOn,createdBy,organization,transposedSongs.isEmpty() ? songs : transposedSongs);
 	}
+	public SetList setSetListName(String name){
+		return new SetList(id,name == null? setListName: name,createdOn,lastModifiedOn,createdBy,organization,songs);
+	}
 	public int getId() {
 		return id;
 	}

@@ -143,7 +143,6 @@ public class ControllerHelper {
 		fileGenerator.buildFile(setList);
 		return setList;
 	}
-	
 	public String normalizeString (String string) {
 		return string == null? null: string.replace("/", "_").replace("\\", "_").replace(";", ".");
 	}

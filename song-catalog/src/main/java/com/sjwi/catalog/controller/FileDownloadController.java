@@ -209,7 +209,10 @@ public class FileDownloadController {
 			) throws IOException {
 		try {
 			FileGenerator pdfGenerator = new PdfFileGenerator(fontSize.orElse(0), qrCode? controllerHelper.getFullUrL(request): null);
-			SetList setList = controllerHelper.buildSetFile(id,pdfGenerator,lyricsOnly);
+			SetList setList = lyricsOnly? 
+								setListService.getLyricsToSetListById(id).setSetListName(fileName): 
+								setListService.getSetListById(id).setSetListName(fileName);
+			pdfGenerator.buildFile(setList);
 			fileName = fileName == null? setList.getNormalizedSetListName(): controllerHelper.normalizeString(fileName);
 			response.setContentType("application/pdf; name=\"" + fileName + "\"");
             response.addHeader("Content-Disposition", "inline; filename=\"" + fileName + ".pdf\"");
