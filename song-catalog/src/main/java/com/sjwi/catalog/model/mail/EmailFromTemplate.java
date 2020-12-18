@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
+import java.util.ArrayList;
 
 import javax.mail.BodyPart;
 import javax.mail.MessagingException;
@@ -16,7 +17,7 @@ import org.apache.commons.io.IOUtils;
 public class EmailFromTemplate extends Email {
 	
 	private String msgTemplate;
-	private List<String> imagePath;
+	private List<String> imagePath = new ArrayList<String>();
 	private String[] msgArgs;
 
 	@Override

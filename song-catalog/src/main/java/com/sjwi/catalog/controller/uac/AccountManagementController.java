@@ -93,7 +93,6 @@ public class AccountManagementController {
 		try {
 			mailer.sendMail(new EmailFromTemplate()
 					.setMsgArgs(new String[] {controllerHelper.buildTokenLink(request, token, "enroll")})
-					.setImagePath(new ArrayList<String>(Arrays.asList(LOGO_IMG_PATH, LOGO_IMG_PATH_DARK)))
 					.setMsgTemplate(INVITE_MSG_TEMPLATE)
 					.setTo(invitee)
 					.setSubject(MailConstants.INVITATION_SUBJECT.replace("{{USERNAME}}", ((CfUser)auth.getPrincipal()).getFullName())));
@@ -115,7 +114,6 @@ public class AccountManagementController {
 			tokenService.storePasswordResetToken(token);
 			mailer.sendMail(new EmailFromTemplate()
 					.setMsgArgs(new String[] {user.getUsername(),controllerHelper.buildTokenLink(request, token, "reset-password")})
-					.setImagePath(new ArrayList<String>(Arrays.asList(LOGO_IMG_PATH, LOGO_IMG_PATH_DARK)))
 					.setMsgTemplate(RESET_PASSWORD_MSG_TEMPLATE)
 					.setTo(user.getEmail())
 					.setSubject(MailConstants.PASSWORD_RESET_SUBJECT));
