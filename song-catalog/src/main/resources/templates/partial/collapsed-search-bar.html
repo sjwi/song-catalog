@@ -17,6 +17,7 @@
 			$('#collapsedSearch').focus().focusTextToEnd();
 			$('.user-btn,.static-song-page-title').css({'opacity':'0'});
 			$('.top-nav').addClass('min-z');
+			focusCollapsedSearch();
 		});
 		$(document).on('focusout','.search-input',function(e){
 			$('.search-glass').show();
