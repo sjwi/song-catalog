@@ -10,6 +10,7 @@
 	<script th:inline="javascript">
 		var searchType;
 		var searchRequest = null;
+		var searchExpanded = false;
 		$(document).on('click','.search-glass', function(e){
 			$('.search-glass').hide();
 			$('.search-input').addClass('sliding');
@@ -17,7 +18,9 @@
 			$('#collapsedSearch').focus().focusTextToEnd();
 			$('.user-btn,.static-song-page-title').css({'opacity':'0'});
 			$('.top-nav').addClass('min-z');
-			focusCollapsedSearch();
+			if (!searchExpanded){
+				focusCollapsedSearch();
+			}
 		});
 		$(document).on('focusout','.search-input',function(e){
 			$('.search-glass').show();
@@ -90,6 +93,7 @@
 				$('#collapsedSearch').focus();
 				fakeInput.remove()
 			}, 1000)
+			searchExpanded = true;
 		}
 	</script>
 </th:block>
