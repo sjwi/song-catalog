@@ -4,22 +4,12 @@ import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.security.Principal;
 import java.security.spec.InvalidKeySpecException;
-import java.util.ArrayList;
-import java.util.Arrays;
 
 import javax.security.auth.login.LoginException;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.sjwi.catalog.controller.ControllerHelper;
 import com.sjwi.catalog.exception.InvalidOperationException;
@@ -37,13 +27,19 @@ import com.sjwi.catalog.model.user.CfUser;
 import com.sjwi.catalog.service.TokenService;
 import com.sjwi.catalog.service.UserService;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+
 @Controller
 public class AccountManagementController {
 
 	private final static String INVITE_MSG_TEMPLATE = "email-templates/invitation.html";
 	private final static String RESET_PASSWORD_MSG_TEMPLATE = "email-templates/password-reset.html";
-	private final static String LOGO_IMG_PATH = "static/images/logo_transparent.png";
-	private final static String LOGO_IMG_PATH_DARK = "static/images/logo_transparent_dark.png";
 
 	@Autowired
 	ControllerHelper controllerHelper;
