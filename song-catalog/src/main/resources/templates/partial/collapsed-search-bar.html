@@ -3,7 +3,7 @@
 		<form th:id="${id + '_form'}" class="w-100">
 			<img th:src="@{/images/mag-glass-inverse.png}" class="search-glass">
 			<div class="collapsed-search input-group collapse w-100">
-				<input class="form-control search-input" type="text" name="searchTerm" th:value="${searchTerm != null}? ${searchTerm}:''" th:placeholder="${'Search ' + type + '...'}" /> 
+				<input id="collapsedSearch" class="form-control search-input" type="text" name="searchTerm" th:value="${searchTerm != null}? ${searchTerm}:''" th:placeholder="${'Search ' + type + '...'}" /> 
 			</div>
 		</form>
 	</div>
@@ -14,7 +14,7 @@
 			$('.search-glass').hide();
 			$('.search-input').addClass('sliding');
 			$('.collapsed-search').show();
-			$('.search-input').focus().focusTextToEnd();
+			$('#collapsedSearch').focus().focusTextToEnd();
 			$('.user-btn,.static-song-page-title').css({'opacity':'0'});
 			$('.top-nav').addClass('min-z');
 		});
@@ -75,6 +75,20 @@
 					$(append).html(data);
 				}
 			});
+		}
+		function focusCollapsedSearch() {
+			const fakeInput = document.createElement('input')
+			fakeInput.setAttribute('type', 'text')
+			fakeInput.style.position = 'absolute'
+			fakeInput.style.opacity = 0
+			fakeInput.style.height = 0
+			fakeInput.style.fontSize = '16px'
+			document.body.prepend(fakeInput)
+			fakeInput.focus()
+			setTimeout(() => {
+			$('#collapsedSearch').focus().focusTextToEnd();
+			fakeInput.remove()
+			}, 500)
 		}
 	</script>
 </th:block>
