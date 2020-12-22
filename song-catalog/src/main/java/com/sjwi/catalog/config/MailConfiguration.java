@@ -5,13 +5,13 @@ import java.util.Properties;
 import javax.annotation.PostConstruct;
 import javax.mail.Session;
 
+import com.sjwi.catalog.mail.MailAuthenticator;
+import com.sjwi.catalog.mail.MailConstants;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-
-import com.sjwi.catalog.mail.MailAuthenticator;
-import com.sjwi.catalog.mail.MailConstants;
 
 @Configuration
 public class MailConfiguration {
@@ -27,6 +27,9 @@ public class MailConfiguration {
 
 	@Value("${com.sjwi.settings.adminDistributionList}")
 	private String adminDistributionList;
+
+	@Value("${com.sjwi.settings.app.properName}")
+	private String properName;
 
 	@Value("${com.sjwi.settings.mail_un}")
 	private String defaultFromAddress;
@@ -48,6 +51,6 @@ public class MailConfiguration {
 
 	@PostConstruct
 	public void initializeEmailConstants(){
-		MailConstants.initializeMailConstants(defaultFromAddress, adminDistributionList);
+		MailConstants.initializeMailConstants(defaultFromAddress, adminDistributionList, properName);
 	}
 }

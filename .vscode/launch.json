@@ -22,7 +22,8 @@
                 "SONG_JDBC_DRIVER_H2": "org.h2.Driver",
                 "SONG_JDBC_PASSWORD": "sa",
                 "SONG_JDBC_PLATFORM": "org.hibernate.dialect.H2Dialect",
-                "SONG_JDBC_USERNAME": "sa"
+                "SONG_JDBC_USERNAME": "sa",
+                "APPLICATION_PROPER_NAME": "CF Song Catalog"
             }
         },
         {

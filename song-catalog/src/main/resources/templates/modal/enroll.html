@@ -11,7 +11,7 @@
 				<input type="hidden" name="token" th:value="${token}">
 				<input type="hidden" name="user" th:value="${user}">
 				<div class="modal-body">
-					<h5 class="text-center">Welcome to the Christian Fellowship Song Catalog!</h5>
+					<h5 class="text-center" th:text="${'Welcome to the ' + @environment.getProperty('com.sjwi.settings.app.properName')}"></h5>
 					<div class="form-group row mt-5">
 						<div class="col-4">
 							<label class="col-form-label" for="firstName">First Name*</label>
@@ -90,7 +90,7 @@ $(document).ready(function(){
 		if ($(this).val().length > 2){
 			var usernameStatus = isUsernameTaken($(this).val());
 			if (usernameStatus == 1){
-				alertWithFade('danger',"This username is already taken [impressive, we dont't have many users]");
+				alertWithFade('danger',"This username is already taken [impressive -- we don't have many users]");
 				$(this).addClass('invalid-form-input');
 				$('#enrollModal button[type="submit"]').prop('disabled',true);
 			} else if (usernameStatus == 2){

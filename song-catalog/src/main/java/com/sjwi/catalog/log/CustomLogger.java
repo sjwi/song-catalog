@@ -3,16 +3,17 @@ package com.sjwi.catalog.log;
 import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.stereotype.Component;
-
 import com.sjwi.catalog.exception.MailException;
 import com.sjwi.catalog.mail.MailConstants;
 import com.sjwi.catalog.mail.Mailer;
 import com.sjwi.catalog.model.mail.Email;
+
+import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Component;
 
 import eu.bitwalker.useragentutils.UserAgent;
 
@@ -23,6 +24,9 @@ public class CustomLogger {
 
 	@Autowired
 	Mailer mailer;
+
+	@Value("${com.sjwi.settings.app.properName}")
+	String properName;
 
 	private Logger log;
 
@@ -94,7 +98,7 @@ public class CustomLogger {
 				mailer.sendMail(new Email()
 						.setBody(message)
 						.setTo(MailConstants.ADMIN_DISTRIBUTION_LIST)
-						.setSubject("Song Catalog Log Notification"));
+						.setSubject(properName + " Log Notification"));
 			} catch (MailException e) {
 				e.printStackTrace();
 				error(e);

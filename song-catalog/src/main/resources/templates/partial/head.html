@@ -3,8 +3,8 @@
 	<head>
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no maximum-scale=1.0,user-scalable=0, minimal-ui" />
-		<meta name="apple-mobile-web-app-title" content="Song Catalog">
-		<meta property="og:title" content="Song Catalog" />
+		<meta name="apple-mobile-web-app-title" th:attr="content=${@environment.getProperty('com.sjwi.settings.app.properName')}">
+		<meta property="og:title"  th:attr="content=${@environment.getProperty('com.sjwi.settings.app.properName')}">
 		<meta property="og:image" th:attr="content=@{/images/logo_preview.png}" />
 		<title th:text="${title}"></title>
 		<link rel="shortcut icon" th:href="@{/public/favicon.png}" type="image/x-icon">
@@ -19,7 +19,7 @@
 		<link rel="stylesheet" th:href="@{/css/font-awesome.all.min.css}" />
 		<link rel="stylesheet" th:href="@{/css/datatable.min.css}" />
 		<link rel="stylesheet" th:href="@{/css/jquery.datatable.min.css}" />
-		<link rel="search" th:href="@{/search.xml}" type="application/opensearchdescription+xml" title="CF Worship Songs"/>
+		<link rel="search" th:href="@{/search.xml}" type="application/opensearchdescription+xml" th:attr="title=${@environment.getProperty('com.sjwi.settings.app.properName')}">
 		<script th:src="@{/js/lib/jquery-3.3.1.min.js}"></script>
 		<script th:src="@{/js/lib/jquery-ui.min.js}"></script>
 		<script th:src="@{/js/lib/datatable.js}"></script>

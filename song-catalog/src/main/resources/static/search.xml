@@ -1,7 +1,7 @@
 <OpenSearchDescription xmlns="http://a9.com/-/spec/opensearch/1.1/" xmlns:moz="http://www.mozilla.org/2006/browser/search/">
-    <ShortName>CF Worship Songs</ShortName>
+    <ShortName>CF Song Catalog</ShortName>
     <Description>
-        Search the Song Catalog by title or content
+        Search the CF Song Catalog by title or content
     </Description>
     <InputEncoding>UTF-8</InputEncoding>
     <Image width="16" height="16" type="image/x-icon">https://worship.cfchurches.com/public/favicon.png</Image>
