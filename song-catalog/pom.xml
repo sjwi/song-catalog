@@ -200,6 +200,7 @@
                     <SONG_JDBC_PASSWORD>sa</SONG_JDBC_PASSWORD>
                     <SONG_JDBC_PLATFORM>org.hibernate.dialect.H2Dialect</SONG_JDBC_PLATFORM>
                     <SONG_JDBC_USERNAME>sa</SONG_JDBC_USERNAME>
+                    <APPLICATION_PROPER_NAME>Song Catalog</APPLICATION_PROPER_NAME>
 				  </systemPropertyVariables>
 				</configuration>
 			</plugin>
