@@ -185,8 +185,18 @@ public class PdfFileGenerator implements FileGenerator {
 	}
 
 
-	private void cleanup() {
-		document.close();
+	private void cleanup() throws FileUtilityException {
+		if (document.isOpen()){
+			document.close();
+		} else {
+			try {
+				document.open();
+				document.add(buildSongTitle("Empty set list"));
+				document.close();
+			} catch (Exception e) {
+				throw new FileUtilityException(e);
+			}
+		}
 	}
 	
 	private BufferedImage generateQRCodeImage(String barcodeText) throws Exception {
