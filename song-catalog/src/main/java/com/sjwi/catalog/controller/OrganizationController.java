@@ -1,6 +1,8 @@
 package com.sjwi.catalog.controller;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import javax.servlet.ServletContext;
@@ -20,6 +22,7 @@ import org.springframework.web.util.UriUtils;
 import com.sjwi.catalog.aspect.IgnoreAspect;
 import com.sjwi.catalog.aspect.LandingPageAspect;
 import com.sjwi.catalog.log.CustomLogger;
+import com.sjwi.catalog.model.Organization;
 import com.sjwi.catalog.model.SetList;
 import com.sjwi.catalog.service.OrganizationService;
 import com.sjwi.catalog.service.SetListService;
@@ -102,17 +105,19 @@ public class OrganizationController {
 	@RequestMapping(value = {"/org/{id}/{endpoint}"}, method = RequestMethod.GET)
 	public ModelAndView latestOrgResource(@PathVariable int id, @PathVariable String endpoint, HttpServletResponse response) throws IOException {
 		SetList setList = setListService.getLatestSetByOrg(id);
+		Organization organization = organizationService.getOrganizationById(id);
+		String today = new SimpleDateFormat("MM-dd-yyyy").format(new Date());
 		switch (endpoint) {
 			case "deck": case "slides": case "slideshow": case "ppt": case "presentation":
 				return new ModelAndView("forward:/" + context.getContextPath() 
 						+ "/setlist/ppt/" + setList.getId()
-						+ "/" + UriUtils.encode(setList.getNormalizedSetListName(),"UTF-8"));
+						+ "/" + UriUtils.encode(organization.getName() + " PowerPoint Deck " + today,"UTF-8"));
 			case "set": case "setlist":
 				return new ModelAndView("forward:/setlist/" + setListService.getLatestSetByOrg(id).getId());
 			default:
 				return new ModelAndView("forward:/" + context.getContextPath() 
 						+ "/setlist/pdf/" + setList.getId()
-						+ "/" + UriUtils.encode(setList.getNormalizedSetListName(),"UTF-8")
+						+ "/" + UriUtils.encode(organization.getName() + " Worship Handout " + today,"UTF-8")
 						+ "?lyricsOnly=true&fontSize=18");
 		}
 	}

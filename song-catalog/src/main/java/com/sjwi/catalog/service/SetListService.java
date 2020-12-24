@@ -98,4 +98,9 @@ public class SetListService {
 	public List<SetList> getSetListsByOrg(int id) {
 		return setListDao.getSetListsByOrg(id);
 	}
+
+	public void pinLatestSetList(int id) {
+		setListDao.flagSetListAsMostRecent(id);
+	}
+
 }

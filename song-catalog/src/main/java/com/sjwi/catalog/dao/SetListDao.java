@@ -48,4 +48,6 @@ public interface SetListDao {
 	public SetList getLatestSetListByOrg(int id);
 
 	public List<SetList> getSetListsByOrg(int id);
+
+	public void flagSetListAsMostRecent(int id);
 }

@@ -47,6 +47,17 @@ $(document).ready(function(){
 		$('#deleteSetModal').find('.modal-message').html('Are you sure you want to permenantly remove <b>' + $(this).closest('.set-list-container').data('setname') + '</b>? This action cannot be undone.');
 		$('#deleteSetModal').modal('show');
 	});
+	$(document).on('click','.set-list-container .pin-set',function(e){
+		var setId = $(this).closest('.set-list-container').data('target');
+		var setName = $(this).closest('.set-list-container').data('setname');
+		$.ajax({
+			url: contextpath + 'setlist/pin-latest/' + setId,
+			method: "POST",
+			success: function(data, textStatus, jqXHR) {
+				alertWithFade('success','Updated permalinks to redirect to ' + setName)
+			}
+		});
+	});
 	$('table.set-table').each(function(){
 		initializeSortableSetListTable(this);
 	});

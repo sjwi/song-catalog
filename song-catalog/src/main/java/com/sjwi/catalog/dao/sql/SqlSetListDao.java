@@ -56,6 +56,7 @@ public class SqlSetListDao implements SetListDao {
 					r.getString("SETLIST_NAME"),
 					r.getTimestamp("CREATED_ON"),
 					r.getTimestamp("LAST_UPDATED"),
+					r.getTimestamp("FLAGGED_AS_MOST_RECENT_ON"),
 					r.getString("CREATED_BY"),
 					r.getInt("ORGANIZATION"),
 					getSetSongs(r.getInt("ID"))
@@ -75,6 +76,7 @@ public class SqlSetListDao implements SetListDao {
 				r.getString("SETLIST_NAME"),
 				r.getTimestamp("CREATED_ON"),
 				r.getTimestamp("LAST_UPDATED"),
+				r.getTimestamp("FLAGGED_AS_MOST_RECENT_ON"),
 				r.getString("CREATED_BY"),
 				r.getInt("ORGANIZATION"),
 				getSetSongs(r.getInt("ID"))
@@ -95,6 +97,7 @@ public class SqlSetListDao implements SetListDao {
 				r.getString("SETLIST_NAME"),
 				r.getTimestamp("CREATED_ON"),
 				r.getTimestamp("LAST_UPDATED"),
+				r.getTimestamp("FLAGGED_AS_MOST_RECENT_ON"),
 				r.getString("CREATED_BY"),
 				r.getInt("ORGANIZATION"),
 				getSetSongs(r.getInt("ID"))
@@ -114,6 +117,7 @@ public class SqlSetListDao implements SetListDao {
 					r.getString("SETLIST_NAME"),
 					r.getTimestamp("CREATED_ON"),
 					r.getTimestamp("LAST_UPDATED"),
+					r.getTimestamp("FLAGGED_AS_MOST_RECENT_ON"),
 					r.getString("CREATED_BY"),
 					r.getInt("ORGANIZATION"),
 					getSetSongs(r.getInt("ID"))
@@ -188,6 +192,7 @@ public class SqlSetListDao implements SetListDao {
 					r.getString("SETLIST_NAME"),
 					r.getTimestamp("CREATED_ON"),
 					r.getTimestamp("LAST_UPDATED"),
+					r.getTimestamp("FLAGGED_AS_MOST_RECENT_ON"),
 					r.getString("CREATED_BY"),
 					r.getInt("ORGANIZATION"),
 					getSetSongs(r.getInt("ID")));
@@ -237,6 +242,7 @@ public class SqlSetListDao implements SetListDao {
 							r.getString("SETLIST_NAME"),
 							r.getTimestamp("CREATED_ON"),
 							r.getTimestamp("LAST_UPDATED"),
+							r.getTimestamp("FLAGGED_AS_MOST_RECENT_ON"),
 							r.getString("CREATED_BY"),
 							r.getInt("ORGANIZATION"),
 							getSetSongs(r.getInt("ID"))));
@@ -326,5 +332,10 @@ public class SqlSetListDao implements SetListDao {
 			r.next();
 			return r.getInt("ID");
 		});
+	}
+
+	@Override
+	public void flagSetListAsMostRecent(int id) {
+		jdbcTemplate.update(queryStore.get("flagSetListAsMostRecent"), new Object[]{id});
 	}
 }

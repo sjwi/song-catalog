@@ -127,13 +127,16 @@ getSongsInSetBySetId: >
   from SetList a INNER JOIN Song b on a.SONG_ID = b.ID where a.SETLIST_ID = ? order by SORT_ORDER ASC
   
 createNewSet: >
-  INSERT INTO SetListMaster (SETLIST_NAME,CREATED_ON,LAST_UPDATED,CREATED_BY,ORGANIZATION,SERVICE) VALUES (?,CURRENT_TIMESTAMP,CURRENT_TIMESTAMP,?,?,?)
-  
+  INSERT INTO SetListMaster (SETLIST_NAME,CREATED_ON,LAST_UPDATED,FLAGGED_AS_MOST_RECENT_ON,CREATED_BY,ORGANIZATION,SERVICE) VALUES (?,CURRENT_TIMESTAMP,CURRENT_TIMESTAMP,CURRENT_TIMESTAMP,?,?,?)
+
+flagSetListAsMostRecent: >
+  UPDATE SetListMaster set FLAGGED_AS_MOST_RECENT_ON = CURRENT_TIMESTAMP where id = ?
+
 getLatestSet: >
   SELECT ID FROM SetListMaster order by ID desc LIMIT 1
   
 getLatestSetListByOrg: >
-  SELECT ID FROM SetListMaster where ORGANIZATION = ? order by ID desc LIMIT 1
+  SELECT ID FROM SetListMaster where ORGANIZATION = ? order by FLAGGED_AS_MOST_RECENT_ON desc LIMIT 1
 
 deleteFromSetlistMaster: >
   Delete from SetListMaster where ID = ?
@@ -166,8 +169,7 @@ updateDefaultKeyForSet: >
   UPDATE SetList set DEFAULT_KEY = ? where ID = ?
  
 updateSortOrderForSong: >
-  UPDATE SetList SET SORT_ORDER = ?
-  where ID = ?
+  UPDATE SetList SET SORT_ORDER = ? where ID = ?
   
 updateSetListSortForInsert: >
   UPDATE SetList SET SORT_ORDER = SORT_ORDER + 1 where SETLIST_ID = ? and SORT_ORDER >= ?
