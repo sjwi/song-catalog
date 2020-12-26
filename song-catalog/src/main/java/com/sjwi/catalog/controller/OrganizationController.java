@@ -9,6 +9,15 @@ import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.sjwi.catalog.aspect.IgnoreAspect;
+import com.sjwi.catalog.aspect.LandingPageAspect;
+import com.sjwi.catalog.log.CustomLogger;
+import com.sjwi.catalog.model.Organization;
+import com.sjwi.catalog.model.SetList;
+import com.sjwi.catalog.service.OrganizationService;
+import com.sjwi.catalog.service.SetListService;
+import com.sjwi.catalog.service.SongService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
@@ -18,15 +27,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.util.UriUtils;
-
-import com.sjwi.catalog.aspect.IgnoreAspect;
-import com.sjwi.catalog.aspect.LandingPageAspect;
-import com.sjwi.catalog.log.CustomLogger;
-import com.sjwi.catalog.model.Organization;
-import com.sjwi.catalog.model.SetList;
-import com.sjwi.catalog.service.OrganizationService;
-import com.sjwi.catalog.service.SetListService;
-import com.sjwi.catalog.service.SongService;
 
 @Controller
 @IgnoreAspect
@@ -117,7 +117,7 @@ public class OrganizationController {
 			default:
 				return new ModelAndView("forward:/" + context.getContextPath() 
 						+ "/setlist/pdf/" + setList.getId()
-						+ "/" + UriUtils.encode(organization.getName() + " Worship Handout " + today,"UTF-8")
+						+ "/" + UriUtils.encode(organization.getName() + " Worship " + today,"UTF-8")
 						+ "?lyricsOnly=true&fontSize=18");
 		}
 	}

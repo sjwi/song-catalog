@@ -298,7 +298,7 @@ a:hover {
 .set-list-container > .action-container {
 	position:absolute;
 	bottom:0;
-	max-height:0;
+	max-height:40px;
 	overflow:hidden;
 	background: var(--action-container-bg);
 	transition:max-height 250ms ease-in;
@@ -310,12 +310,6 @@ a:hover {
 .set-list-container > .action-container  .col:hover {
 	background: var(--action-container-hover);
 	opacity:.9;
-}
-.set-list-container:hover > .action-container {
-	max-height:40px;
-}
-.set-list-container:active {
-/* 	box-shadow:none; */
 }
 .edit-song-form {
 	border: 1px solid;
