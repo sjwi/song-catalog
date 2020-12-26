@@ -7,7 +7,7 @@
 		<meta property="og:title"  th:attr="content=${@environment.getProperty('com.sjwi.settings.app.properName')}">
 		<meta property="og:image" th:attr="content=@{/images/logo_preview.png}" />
 		<title th:text="${title}"></title>
-		<link rel="shortcut icon" th:href="@{/public/favicon.png}" type="image/x-icon">
+		<link rel="shortcut icon" th:href="@{/favicon.ico}" type="image/x-icon">
 		<link th:if="${#session == null || #session.getAttribute(T(com.sjwi.catalog.config.PreferencesConfiguration).NIGHT_MODE_PREFERENCE_KEY) == null || !#session.getAttribute(T(com.sjwi.catalog.config.PreferencesConfiguration).NIGHT_MODE_PREFERENCE_KEY)}" rel="stylesheet" th:href="@{/css/bootstrap.css}" />
 		<link th:if="${#session == null || #session.getAttribute(T(com.sjwi.catalog.config.PreferencesConfiguration).NIGHT_MODE_PREFERENCE_KEY) == null || !#session.getAttribute(T(com.sjwi.catalog.config.PreferencesConfiguration).NIGHT_MODE_PREFERENCE_KEY)}" rel="stylesheet" th:href="@{/css/colors.css}" />
 		<link th:if="${#session != null && #session.getAttribute(T(com.sjwi.catalog.config.PreferencesConfiguration).NIGHT_MODE_PREFERENCE_KEY) != null && #session.getAttribute(T(com.sjwi.catalog.config.PreferencesConfiguration).NIGHT_MODE_PREFERENCE_KEY)}" rel="stylesheet" th:href="@{/css/bootstrap-dark.css}" />
