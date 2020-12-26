@@ -35,6 +35,7 @@ function initializeSortableSetListTable(element){
 						focusedSlickPage = 0;
 						slick();
 					}
+					lastUpdatedTime = undefined;
 				},
 				error : function(e) {
 					alertWithFade('danger','Unable to sort set list.');
