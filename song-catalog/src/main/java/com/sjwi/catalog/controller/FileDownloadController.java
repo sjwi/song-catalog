@@ -82,10 +82,12 @@ public class FileDownloadController {
 			fileName = fileName == null? "Song_Catalog_Export" + date: controllerHelper.normalizeString(fileName + date);
 			response.addHeader("Content-Disposition", "attachment; filename=\""+ fileName + ".pptx\"");
 			Files.copy(Paths.get(pptGenerator.buildFile(new SetList("",songs))), response.getOutputStream());
-			logger.logUserActionWithEmail(fileName + " ppt downloaded. <br>blankPage = " +  
-					prependBlankSlide + "<br>fontSize = " + 
-					fontSize + "<br>fileName = " + fileName + "<br>" +
-					controllerHelper.buildHtmlLinkFromUrl(controllerHelper.getFullUrL(request), "Download Link") + "<br>");
+			logger.logUserActionWithEmail(fileName + " ppt downloaded." + 
+					"<br>blankPage = " +  prependBlankSlide + 
+					"<br>alignCenter = " +  alignCenter + 
+					"<br>fontSize = " + fontSize + 
+					"<br>fileName = " + fileName + 
+					"<br>" + controllerHelper.buildHtmlLinkFromUrl(controllerHelper.getFullUrL(request), "Download Link") + "<br>");
 		} catch (Exception e) {
 			controllerHelper.errorHandler(e);
 			response.sendRedirect(request.getContextPath() + "/error");
@@ -133,10 +135,12 @@ public class FileDownloadController {
 			fileName = fileName == null? song.getNormalizedName(): controllerHelper.normalizeString(fileName);
             response.addHeader("Content-Disposition", "attachment; filename=\""+ fileName + ".pptx\"");
             Files.copy(Paths.get(pptGenerator.buildFile(song)), response.getOutputStream());
-            logger.logUserActionWithEmail(fileName + " ppt downloaded. <br>blankPage = " +  
-            		prependBlankSlide + "<br>fontSize = " + 
-            		fontSize + "<br>fileName = " + fileName + "<br>" +
-            		controllerHelper.buildHtmlLinkFromUrl(controllerHelper.getFullUrL(request), "Download Link") + "<br>");
+			logger.logUserActionWithEmail(fileName + " ppt downloaded." + 
+					"<br>blankPage = " +  prependBlankSlide + 
+					"<br>alignCenter = " +  alignCenter + 
+					"<br>fontSize = " + fontSize + 
+					"<br>fileName = " + fileName + 
+					"<br>" + controllerHelper.buildHtmlLinkFromUrl(controllerHelper.getFullUrL(request), "Download Link") + "<br>");
 		} catch (Exception e) {
 			controllerHelper.errorHandler(e);
 			response.sendRedirect(request.getContextPath() + "/error");
@@ -156,10 +160,12 @@ public class FileDownloadController {
 			fileName = fileName == null? setList.getNormalizedSetListName(): controllerHelper.normalizeString(fileName);
             response.addHeader("Content-Disposition", "attachment; filename=\"" + fileName + ".pptx\"");
             Files.copy(Paths.get(pptGenerator.getFilePath()), response.getOutputStream());
-            logger.logUserActionWithEmail(fileName + " ppt downloaded. <br>blankPage = " +  
-            		prependBlankSlide + "<br>fontSize = " + 
-            		fontSize + "<br>fileName = " + fileName + "<br>" +
-            		controllerHelper.buildHtmlLinkFromUrl(controllerHelper.getFullUrL(request), "Download Link") + "<br>");
+			logger.logUserActionWithEmail(fileName + " ppt downloaded." + 
+					"<br>blankPage = " +  prependBlankSlide + 
+					"<br>alignCenter = " +  alignCenter + 
+					"<br>fontSize = " + fontSize + 
+					"<br>fileName = " + fileName + 
+					"<br>" + controllerHelper.buildHtmlLinkFromUrl(controllerHelper.getFullUrL(request), "Download Link") + "<br>");
 		} catch (Exception e) {
 			controllerHelper.errorHandler(e);
 			response.sendRedirect(request.getContextPath() + "/error");
