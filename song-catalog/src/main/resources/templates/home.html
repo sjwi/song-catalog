@@ -123,7 +123,11 @@
 				}
 			});	
 			if (window.innerWidth < 900){
-				addScrollListener('#songNav');
+				if (window.innerWidth < 577) {
+					addScrollListener('#songNav', -133);
+				} else {
+					addScrollListener('#songNav', -137);
+				}
 			} else {
 				hideCategoriesOnScrollListener('#categoriesControl', '.song-section');
 			}
