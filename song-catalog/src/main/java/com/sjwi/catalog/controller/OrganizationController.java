@@ -108,7 +108,7 @@ public class OrganizationController {
 		Organization organization = organizationService.getOrganizationById(id);
 		String today = new SimpleDateFormat("MM-dd-yyyy").format(new Date());
 		switch (endpoint) {
-			case "lyrics-handout":
+			case "lyrics-handout": case "latest-handout":
 				log.logUserActionWithEmail(organization.getName() + " lyric handout shortlink visited");
 				return new ModelAndView("redirect:" + context.getContextPath() + "/org/" + id + "/" + organization.getName() + "%20Worship%20Handout");
 			case "deck": case "slides": case "slideshow": case "ppt": case "presentation":
