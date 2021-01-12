@@ -13,12 +13,5 @@
 	</tbody>
 </table>
 <script>
-	$(".frequency-table").DataTable({
-		  searching:false,
-		  paging:true,
-		  "pageLength": 10,
-		  lengthChange: false,
-		  info: false,
-		  "order": [ 1, "desc" ]
-	});
+	initializeFrequencyTable(".frequency-table");
 </script>

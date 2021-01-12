@@ -1339,10 +1339,10 @@ table > thead > tr > th[class*="sort"]:after {
 	border-left: 1px solid rgb(75,75,75,.2);
 	border-bottom: 1px solid rgb(75,75,75,.2);
 }
-.container.archive .dataTables_wrapper {
+.container.archive .dataTables_wrapper, .container.freq-container .dataTables_wrapper {
 	border:none !important;
 }
-.container.archive table{
+.container.archive table, .container.freq-container table {
 	border: 1px solid rgb(75,75,75,.2);
 }
 .dataTables_paginate.paging_simple_numbers {

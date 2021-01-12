@@ -2,6 +2,11 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 	<th:block th:replace="partial/head :: head(${org == null}? 'Other Organizations': ${org.title})"></th:block>
 	<th:block th:replace="partial/header"></th:block>
+	<th:block th:replace="partial/data-table"></th:block>
+	<script th:inline="javascript">
+		var orgId = /*[[${org == null}? 0: ${org.id}]]*/;
+		var orgName = /*[[${org == null}? Other: ${org.name}]]*/;
+	</script>
 	<body id="organizationBody">
 		<th:block th:replace="partial/off-navbar :: offNavBar('addSong')"></th:block>
 		<div class="row no-gutters flex-nowrap mh-100vh">
@@ -58,7 +63,7 @@
 					</div>
 				</div>
 				<h5 class="d-block header-text mt-5 mb-3">Frequently Played Songs</h5>
-				<div class="container pr-0 pl-0">
+				<div class="container freq-container pr-0 pl-0">
 					<div class="row no-gutters mb-2">
 						<div th:each="service : ${services}" class="col">
 							<div class="custom-control custom-checkbox ml-2 mr-2">
@@ -96,7 +101,6 @@
 		</div>
 	</body>
 	<script th:inline="javascript">
-		var orgId = /*[[${org == null}? 0: ${org.id}]]*/;
 		var updateFrequencyRequest;
 		$(document).ready(function(){
 			$('.service-filter').on('click',function(){
@@ -116,19 +120,8 @@
 						$('#frequencyAppend').css('opacity','1');
 					}
 				});	
-			})
-			$(".archive-table").DataTable({
-				  language: {
-					search:'',
-					  searchPlaceholder: "Search archive..."
-				  },
-				  searching:true,
-				  paging:true,
-				  "pageLength": 10,
-				  lengthChange: true,
-				  info: true,
-				  "order": [ 1, "desc" ]
 			});
+			initializeArchiveTable(".archive-table");
 			$('.copy-input').on('click',function(){
 				copyTextToClipboard($($(this).data('target')).val(),false);
 				checked(this);
