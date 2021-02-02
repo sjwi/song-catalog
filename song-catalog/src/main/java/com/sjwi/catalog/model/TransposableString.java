@@ -49,7 +49,7 @@ public class TransposableString {
 					(isLineOnlyChords(line) && !storedKey.getKeyId().equals(LYRICS_ONLY_KEY_CODE)? transposeChordLine(line, storedKey, transpositionKey): line) + 
 					APPEND_LINE_DELIMITER;
 		}
-		return transposedString.trim();
+		return StringUtils.stripEnd(transposedString, null);
 	}
 
 	private String getLyricsFromTransposableString() {
@@ -202,6 +202,7 @@ public class TransposableString {
 					Arrays.stream(standardizeUnicodeCharacters(transposableString).split(SPLIT_LINE_DELIMITER))
 							.map(l -> stripKeywordsFromLine(l))
 							.filter(Objects::nonNull)
+							.map(l -> firstCharToUpper(l))
 							.collect(Collectors.toList())
 				); 
 	}
@@ -213,6 +214,9 @@ public class TransposableString {
 				,null);
 	}
 
+	private String firstCharToUpper(String line){
+		return StringUtils.capitalize(line);
+	}
 	private String stripKeywordsFromLine(String line) {
 		String l = StringUtils.stripEnd(line,null);
 		String keywordSubString = l.replaceAll("[^a-zA-Z ]", "").trim();

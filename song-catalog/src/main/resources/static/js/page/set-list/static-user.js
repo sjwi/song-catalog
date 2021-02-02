@@ -4,7 +4,7 @@ function initializeSortableSetListTable(element){
 	}
 	$(element).sortable({
 		items: 'tr',
-		handle: '.set-grip,.set-row-title',
+		handle: '.set-grip',
 		cursor: 'grabbing',
 		axis: 'y',
 		delay: 50,
