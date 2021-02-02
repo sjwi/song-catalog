@@ -17,7 +17,7 @@ public class TransposableString {
 	private static final String SPLIT_LINE_DELIMITER = "\\n";
 	private static final String APPEND_LINE_DELIMITER = "\n";
 	private static final List<String> CHORD_CHART_KEYWORDS = new ArrayList<String>(Arrays.asList("min","maj","dim","minor","major","sus","dom","aug"));
-	private static final List<String> STRIPPABLE_KEYWORDS = new ArrayList<String>(Arrays.asList("verse","chorus","bridge","prechorus","refrain","interlude"));
+	private static final List<String> STRIPPABLE_KEYWORDS = new ArrayList<String>(Arrays.asList("verse","chorus","bridge","prechorus","refrain","interlude","tag","instrumental"));
 	private final List<String> transposableStringLines;
 	private final KeySet storedKey;
 	
