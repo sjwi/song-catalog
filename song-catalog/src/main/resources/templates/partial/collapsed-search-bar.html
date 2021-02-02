@@ -81,18 +81,20 @@
 			});
 		}
 		function focusCollapsedSearch() {
-			const fakeInput = document.createElement('input')
-			fakeInput.setAttribute('type', 'text')
-			fakeInput.style.position = 'absolute'
-			fakeInput.style.opacity = 0
-			fakeInput.style.height = 0
-			fakeInput.style.fontSize = '16px'
-			document.body.prepend(fakeInput)
-			fakeInput.focus()
-			setTimeout(() => {
-				$('#collapsedSearch').focus();
-				fakeInput.remove()
-			}, 1000)
+			if (!$('#collapsedSearch').is(':focus')){
+				const fakeInput = document.createElement('input')
+				fakeInput.setAttribute('type', 'text')
+				fakeInput.style.position = 'absolute'
+				fakeInput.style.opacity = 0
+				fakeInput.style.height = 0
+				fakeInput.style.fontSize = '16px'
+				document.body.prepend(fakeInput)
+				fakeInput.focus()
+				setTimeout(() => {
+					$('#collapsedSearch').focus();
+					fakeInput.remove()
+				}, 1000)
+			}
 			searchExpanded = true;
 		}
 	</script>
