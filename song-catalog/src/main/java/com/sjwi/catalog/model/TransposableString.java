@@ -8,9 +8,9 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-import org.apache.commons.lang.StringUtils;
-
 import com.sjwi.catalog.config.KeySetConfiguration;
+
+import org.apache.commons.lang.StringUtils;
 
 public class TransposableString {
 
@@ -215,7 +215,7 @@ public class TransposableString {
 	}
 
 	private String firstCharToUpper(String line){
-		return StringUtils.capitalize(line);
+		return isLineOnlyChords(line)? line: StringUtils.capitalize(line);
 	}
 	private String stripKeywordsFromLine(String line) {
 		String l = StringUtils.stripEnd(line,null);
