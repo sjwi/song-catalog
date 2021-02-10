@@ -48,14 +48,14 @@ public class PptFileGenerator implements FileGenerator {
 	private final int titleSizeMax;
 	private final int lineSpacing;
 	private final boolean prependBlankSlide;
-	private final boolean blankSlideDelimeter;
+	private final boolean blankSlideDelimiter;
 	private final TextAlign textAlign;
 	public final String file;
 	private XMLSlideShow ppt;
 	private XSLFSlideLayout layout;
 	private XSLFSlide slide; 
 
-	public PptFileGenerator(boolean prependBlankSlide, int fontSize, boolean alignCenter, boolean blankSlideDelimeter) {
+	public PptFileGenerator(boolean prependBlankSlide, int fontSize, boolean alignCenter, boolean blankSlideDelimiter) {
 		String root = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest().getServletContext().getRealPath("/");
 		file = root + "/" +
 				PPT_SUB_DIRECTORY + "/" + 
@@ -64,7 +64,7 @@ public class PptFileGenerator implements FileGenerator {
 				SUFFIX;
 		new File(root + "/" + PPT_SUB_DIRECTORY).mkdir();
 		this.prependBlankSlide = prependBlankSlide;
-		this.blankSlideDelimeter = blankSlideDelimeter;
+		this.blankSlideDelimiter = blankSlideDelimiter;
 
 		if (fontSize == 0) {
 			this.fontSize = DEF_FONT_SIZE;
@@ -113,7 +113,7 @@ public class PptFileGenerator implements FileGenerator {
 				drawBlankSlide();
 			for (Song song: setList.getSongs()) {
 				drawSong(new PowerPointDeck(song.getBodyAsChunks(), lineSizeMax, lineSize),song.getName());
-				if (blankSlideDelimeter)
+				if (blankSlideDelimiter)
 					drawBlankSlide();
 			}
 			writeFileToSystem();
