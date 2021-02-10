@@ -73,10 +73,11 @@ public class FileDownloadController {
 			@PathVariable String fileName,
 			@RequestParam (name="blankSlide", required = false) boolean prependBlankSlide,
 			@RequestParam (name="alignCenter", required = false) boolean alignCenter,
+			@RequestParam (name="blankSlideDelimeter", required = false) boolean blankSlideDelimeter,
 			@RequestParam (name="fontSize") Optional<Integer> fontSize
 	) throws IOException {
 		try {
-			FileGenerator pptGenerator = new PptFileGenerator(prependBlankSlide,fontSize.orElse(0),alignCenter);
+			FileGenerator pptGenerator = new PptFileGenerator(prependBlankSlide,fontSize.orElse(0),alignCenter, blankSlideDelimeter);
 			List<Song> songs = songService.getSongs().stream().map(s -> s.transpose(LYRICS_ONLY_KEY_CODE)).collect(Collectors.toList());
 			String date = "_" + new SimpleDateFormat("MMddyyyy").format(new Date());
 			fileName = fileName == null? "Song_Catalog_Export" + date: controllerHelper.normalizeString(fileName + date);
@@ -126,11 +127,12 @@ public class FileDownloadController {
 			@PathVariable int id,
 			@PathVariable String fileName,
 			@RequestParam (name="blankSlide", required = false) boolean prependBlankSlide,
+			@RequestParam (name="blankSlideDelimeter", required = false) boolean blankSlideDelimeter,
 			@RequestParam (name="alignCenter", required = false) boolean alignCenter,
 			@RequestParam (name="fontSize") Optional<Integer> fontSize
 			) throws IOException {
 		try {
-			FileGenerator pptGenerator = new PptFileGenerator(prependBlankSlide,fontSize.orElse(0),alignCenter);
+			FileGenerator pptGenerator = new PptFileGenerator(prependBlankSlide,fontSize.orElse(0),alignCenter,blankSlideDelimeter);
 			Song song = songService.getSongById(id).transpose(LYRICS_ONLY_KEY_CODE);
 			fileName = fileName == null? song.getNormalizedName(): controllerHelper.normalizeString(fileName);
             response.addHeader("Content-Disposition", "attachment; filename=\""+ fileName + ".pptx\"");
@@ -151,11 +153,12 @@ public class FileDownloadController {
 	public void downloadSetPpt(HttpServletRequest request, HttpServletResponse response,
 			@PathVariable (required = false) String fileName,
 			@RequestParam (name="blankSlide", required = false) boolean prependBlankSlide,
+			@RequestParam (name="blankSlideDelimeter", required = false) boolean blankSlideDelimeter,
 			@RequestParam (name="alignCenter", required = false) boolean alignCenter,
 			@RequestParam (name="fontSize") Optional<Integer> fontSize,
 			@PathVariable int id) throws IOException {
 		try {
-			FileGenerator pptGenerator = new PptFileGenerator(prependBlankSlide, fontSize.orElse(0),alignCenter);
+			FileGenerator pptGenerator = new PptFileGenerator(prependBlankSlide, fontSize.orElse(0),alignCenter,blankSlideDelimeter);
 			SetList setList = controllerHelper.buildSetFile(id,pptGenerator,true);
 			fileName = fileName == null? setList.getNormalizedSetListName(): controllerHelper.normalizeString(fileName);
             response.addHeader("Content-Disposition", "attachment; filename=\"" + fileName + ".pptx\"");
