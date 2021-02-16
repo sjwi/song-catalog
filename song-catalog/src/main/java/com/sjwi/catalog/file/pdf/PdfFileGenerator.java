@@ -50,11 +50,13 @@ public class PdfFileGenerator implements FileGenerator {
 	private static final int DEF_LEADING = 18;
 	private static final int DEF_TITLE_LEADING = 30;
 	private static final int DEF_HEADER_FOOTER_FONT = 10;
-	private final int songFont;
-	private final int titleFont;
+	private static final String FONT_KEY = "segoe ui";
+	private static final String FONT_BOLD_KEY = "segoe ui bold";
+	private final Font songFont;
+	private final Font titleFont;
+	private final Font headerFooterFont;
 	private final int leading;
 	private final int titleLeading;
-	private final int headerFooterFont;
 	private final String file;
 	private final boolean includeQrCode;
 	private BufferedImage qrCode;
@@ -66,28 +68,30 @@ public class PdfFileGenerator implements FileGenerator {
 	public PdfFileGenerator(int fontSize, String qrCode) throws FileUtilityException {
 		try {
 			String root = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest().getServletContext().getRealPath("/");
+			FontFactory.register("fonts/bold.ttf");
+			FontFactory.register("fonts/normal.ttf");
 			if (fontSize == 0) {
-				songFont = DEF_SONG_FONT;
-				titleFont = DEF_TITLE_FONT;
+				songFont = generateFont(DEF_SONG_FONT,false);
+				titleFont = generateFont(DEF_TITLE_FONT,true);
+				headerFooterFont = generateFont(DEF_HEADER_FOOTER_FONT,false);
 				titleLeading = DEF_TITLE_LEADING;
 				leading = DEF_LEADING;
-				headerFooterFont = DEF_HEADER_FOOTER_FONT;
 			} else {
 				fontSize = fontSize > 25? 25:fontSize < 6? 6: fontSize;
-				songFont = fontSize;
-				titleFont = fontSize + 2;
+				songFont = generateFont(fontSize,false);
+				titleFont = generateFont(fontSize + 2,true);
 				if (fontSize > 16 && fontSize <= 20) {
 					leading = 24;
 					titleLeading = 40;
-					headerFooterFont = 11;
+					headerFooterFont = generateFont(11,false);
 				} else if (fontSize > 20) {
 					leading = 28;
 					titleLeading = 50;
-					headerFooterFont = 11;
+					headerFooterFont = generateFont(11,false);
 				} else {
 					leading = DEF_LEADING;
 					titleLeading = DEF_TITLE_LEADING;
-					headerFooterFont = DEF_HEADER_FOOTER_FONT;
+					headerFooterFont = generateFont(DEF_HEADER_FOOTER_FONT,false);
 				}
 			}
 			file = root + "/" + PDF_SUB_DIRECTORY + "/" + PREFIX + "_" + System.currentTimeMillis() + SUFFIX;
@@ -105,6 +109,10 @@ public class PdfFileGenerator implements FileGenerator {
 			throw new FileUtilityException("Unable to initialize PDF file generator", e);
 		}
 		
+	}
+
+	private Font generateFont (int size, boolean bold){
+		return FontFactory.getFont(bold? FONT_BOLD_KEY: FONT_KEY, size, BaseColor.BLACK);
 	}
 	
 	@Override
@@ -171,13 +179,13 @@ public class PdfFileGenerator implements FileGenerator {
 			}
 			songBody = songBody + body[i] + "\n";
 		}
-		return new Phrase(new Chunk(songBody + "\n",FontFactory.getFont(FontFactory.HELVETICA,songFont,BaseColor.BLACK)));
+		return new Phrase(new Chunk(songBody + "\n",songFont));
 
 	}
 
 	private Paragraph buildSongTitle(String songName) {
 		
-		Paragraph titleParagraph = new Paragraph(new Chunk(songName,FontFactory.getFont(FontFactory.HELVETICA_BOLD, titleFont, BaseColor.BLACK)));
+		Paragraph titleParagraph = new Paragraph(new Chunk(songName,titleFont));
 		titleParagraph.setAlignment(Element.ALIGN_CENTER);
 		titleParagraph.setLeading(titleLeading);
 		titleParagraph.setSpacingAfter(25);
@@ -255,11 +263,10 @@ public class PdfFileGenerator implements FileGenerator {
 		private void addHeader(String headerText, int x, int y, int alignment) {
 			ColumnText.showTextAligned(writer.getDirectContent(), 
 					alignment, 
-					new Phrase(headerText, FontFactory.getFont(FontFactory.HELVETICA,headerFooterFont,BaseColor.BLACK)), x, y, 0);
+					new Phrase(headerText, headerFooterFont), x, y, 0);
 		}
 		private void addCurrentSongTitle() {
-			Phrase headerPhrase = new Phrase(currentSongTitle, 
-					FontFactory.getFont(FontFactory.HELVETICA_BOLD,headerFooterFont,BaseColor.BLACK));
+			Phrase headerPhrase = new Phrase(currentSongTitle, headerFooterFont);
 			if (includePageNumberInHeader) {
 				headerPhrase.add("  |  Page " + additionalPageCounter);
 			}
@@ -267,9 +274,8 @@ public class PdfFileGenerator implements FileGenerator {
 			addAdditionalPageSpacer();
 		}
 		private void addFooter(PdfWriter writer, int count) {
-			Font footerFont = FontFactory.getFont(FontFactory.HELVETICA,headerFooterFont,BaseColor.BLACK);
-			Phrase pageNumber = new Phrase(Integer.toString(count),footerFont);
-			Phrase licenseText = new Phrase(LICENSE_TEXT, footerFont);
+			Phrase pageNumber = new Phrase(Integer.toString(count),headerFooterFont);
+			Phrase licenseText = new Phrase(LICENSE_TEXT, headerFooterFont);
 			ColumnText.showTextAligned(writer.getDirectContent(), Element.ALIGN_LEFT, licenseText, 55, 20, 0);
 			ColumnText.showTextAligned(writer.getDirectContent(), Element.ALIGN_RIGHT, pageNumber, 545, 20, 0);
 		}
