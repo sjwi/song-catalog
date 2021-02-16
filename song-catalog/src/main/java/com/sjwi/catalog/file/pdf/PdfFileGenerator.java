@@ -50,8 +50,8 @@ public class PdfFileGenerator implements FileGenerator {
 	private static final int DEF_LEADING = 18;
 	private static final int DEF_TITLE_LEADING = 30;
 	private static final int DEF_HEADER_FOOTER_FONT = 10;
-	private static final String FONT_KEY = "segoe ui";
-	private static final String FONT_BOLD_KEY = "segoe ui bold";
+	private static final String FONT_KEY = FontFactory.HELVETICA;
+	private static final String FONT_BOLD_KEY = FontFactory.HELVETICA_BOLD;
 	private final Font songFont;
 	private final Font titleFont;
 	private final Font headerFooterFont;
