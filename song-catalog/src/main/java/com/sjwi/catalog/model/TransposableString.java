@@ -43,23 +43,18 @@ public class TransposableString {
 	}
 
 	private String transposeStringLines(KeySet transpositionKey) {
-		String transposedString = "";
-		for (String line: transposableStringLines) {
-			transposedString = transposedString +
-					(isLineOnlyChords(line) && !storedKey.getKeyId().equals(LYRICS_ONLY_KEY_CODE)? transposeChordLine(line, storedKey, transpositionKey): line) + 
-					APPEND_LINE_DELIMITER;
-		}
-		return StringUtils.stripEnd(transposedString, null);
+		return StringUtils.stripEnd(
+				transposableStringLines.stream()
+					.map(line -> isLineOnlyChords(line) && !storedKey.getKeyId().equals(LYRICS_ONLY_KEY_CODE)? transposeChordLine(line, storedKey, transpositionKey): line)
+					.collect(Collectors.joining(APPEND_LINE_DELIMITER))
+				,null);
 	}
 
 	private String getLyricsFromTransposableString() {
-		String lyrics = "";
-		for (String line: transposableStringLines) {
-			if (!isLineOnlyChords(line)) {
-				lyrics = lyrics + line + APPEND_LINE_DELIMITER;
-			}
-		}
-		return lyrics.trim();
+		return transposableStringLines.stream()
+			.filter(line -> !isLineOnlyChords(line))
+			.collect(Collectors.joining(APPEND_LINE_DELIMITER))
+			.replaceAll(" +"," ").trim();
 	}
 
 	public static boolean isLineOnlyChords(String line) {
@@ -88,10 +83,8 @@ public class TransposableString {
 	
 	private static boolean doesLineContainChordKeyword(String line, String character) {
 
-		return (CHORD_CHART_KEYWORDS.stream()
-				.filter(c -> c.contains(character))
-				.filter(c -> line.contains(c))
-				.collect(Collectors.toList()).size() > 0);
+		return CHORD_CHART_KEYWORDS.stream()
+				.anyMatch(c -> StringUtils.containsIgnoreCase(c, character) && StringUtils.containsIgnoreCase(line,c));
 	}
 
 	/*
