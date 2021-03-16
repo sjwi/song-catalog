@@ -6,6 +6,7 @@ import static com.sjwi.catalog.model.security.StoredCookieToken.STORED_COOKIE_TO
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
@@ -20,13 +21,6 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.commons.lang.WordUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.stereotype.Component;
-
 import com.sjwi.catalog.exception.DatabaseException;
 import com.sjwi.catalog.exception.FileUtilityException;
 import com.sjwi.catalog.exception.MailException;
@@ -34,6 +28,7 @@ import com.sjwi.catalog.file.FileGenerator;
 import com.sjwi.catalog.log.CustomLogger;
 import com.sjwi.catalog.mail.MailConstants;
 import com.sjwi.catalog.mail.Mailer;
+import com.sjwi.catalog.model.Organization;
 import com.sjwi.catalog.model.SetList;
 import com.sjwi.catalog.model.mail.Email;
 import com.sjwi.catalog.model.security.SecurityToken;
@@ -43,6 +38,14 @@ import com.sjwi.catalog.service.OrganizationService;
 import com.sjwi.catalog.service.SetListService;
 import com.sjwi.catalog.service.TokenService;
 import com.sjwi.catalog.service.UserService;
+
+import org.apache.commons.lang.WordUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.stereotype.Component;
+import org.springframework.web.servlet.ModelAndView;
 
 import eu.bitwalker.useragentutils.UserAgent;
 
@@ -103,7 +106,7 @@ public class ControllerHelper {
 		return UserAgent.parseUserAgentString(agent).getOperatingSystem().toString();
 	}
 	
-	public void errorHandler(Exception e) {
+	public ModelAndView errorHandler(Exception e) {
 		StringWriter sw = new StringWriter();
         e.printStackTrace(new PrintWriter(sw));
         String exceptionAsString = sw.toString();	
@@ -113,9 +116,16 @@ public class ControllerHelper {
 					.setTo(MailConstants.ADMIN_DISTRIBUTION_LIST)
 					.setBody("Please reference below error:\n\n\n" + exceptionAsString)
 					.setSubject(MailConstants.ERROR_SUBJECT));
-		} catch (MailException e1) {
-			logger.error(e1);
+		} catch (MailException mailException) {
+			logger.error(mailException);
 		}
+		ModelAndView mv = new ModelAndView("error");
+		try {
+			mv.addObject("orgs",organizationService.getOrganizations());
+		} catch (Exception exception){
+			mv.addObject("orgs", new ArrayList<Organization>());
+		}
+		return mv;
 	}
 
 

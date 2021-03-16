@@ -2,7 +2,6 @@ package com.sjwi.catalog.controller;
 
 import static com.sjwi.catalog.model.KeySet.LYRICS_ONLY_KEY_CODE;
 
-import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
@@ -49,23 +48,26 @@ public class FileDownloadController {
 	@RequestMapping(value = {"{downloadType}/download/{id}"}, method = RequestMethod.GET)
 	public ModelAndView downloadModal(@PathVariable String downloadType, @PathVariable int id,
 			@RequestParam (name="key", required = false) String key) {
-		ModelAndView mv = new ModelAndView("modal/dynamic/download");
-		String defaultFileName = null;
-		if (downloadType.equalsIgnoreCase("song")) {
-			defaultFileName = songService.getSongById(id).getNormalizedName();
-		} else {
-			defaultFileName = setListService.getSetListById(id).getNormalizedSetListName();
+        try {
+			ModelAndView mv = new ModelAndView("modal/dynamic/download");
+			mv.addObject("defaultFileName",downloadType.equalsIgnoreCase("song")? 
+				songService.getSongById(id).getNormalizedName() : setListService.getSetListById(id).getNormalizedSetListName());
+			mv.addObject("key",key);
+			return mv;
+		} catch (Exception e){
+			return controllerHelper.errorHandler(e);
 		}
-		mv.addObject("defaultFileName",defaultFileName);
-		mv.addObject("key",key);
-		return mv;
 	}
 	
 	@RequestMapping(value = {"/exportDatabase"}, method = RequestMethod.GET)
 	public ModelAndView exportModal() {
-		ModelAndView mv = new ModelAndView("modal/dynamic/download");
-		mv.addObject("defaultFileName","Song_Catalog_Export");
-		return mv;
+		try {
+			ModelAndView mv = new ModelAndView("modal/dynamic/download");
+			mv.addObject("defaultFileName","Song_Catalog_Export");
+			return mv;
+		} catch (Exception e){
+			return controllerHelper.errorHandler(e);
+		}
 	}
 
 	@RequestMapping(value = {"/exportDatabase/ppt/{fileName}"}, method = RequestMethod.GET)
@@ -74,8 +76,7 @@ public class FileDownloadController {
 			@RequestParam (name="blankSlide", required = false) boolean prependBlankSlide,
 			@RequestParam (name="alignCenter", required = false) boolean alignCenter,
 			@RequestParam (name="blankSlideDelimiter", required = false) boolean blankSlideDelimiter,
-			@RequestParam (name="fontSize") Optional<Integer> fontSize
-	) throws IOException {
+			@RequestParam (name="fontSize") Optional<Integer> fontSize) {
 		try {
 			FileGenerator pptGenerator = new PptFileGenerator(prependBlankSlide,fontSize.orElse(0),alignCenter, blankSlideDelimiter);
 			List<Song> songs = songService.getSongs().stream().map(s -> s.transpose(LYRICS_ONLY_KEY_CODE)).collect(Collectors.toList());
@@ -84,14 +85,14 @@ public class FileDownloadController {
 			response.addHeader("Content-Disposition", "attachment; filename=\""+ fileName + ".pptx\"");
 			Files.copy(Paths.get(pptGenerator.buildFile(new SetList("",songs))), response.getOutputStream());
 			logger.logUserActionWithEmail(fileName + " ppt downloaded." + 
-					"<br>blankPage = " +  prependBlankSlide + 
+					"<br>prependBlankSlide = " +  prependBlankSlide + 
+					"<br>blankSlideDelimeter = " +  blankSlideDelimiter + 
 					"<br>alignCenter = " +  alignCenter + 
 					"<br>fontSize = " + fontSize + 
 					"<br>fileName = " + fileName + 
 					"<br>" + controllerHelper.buildHtmlLinkFromUrl(controllerHelper.getFullUrL(request), "Download Link") + "<br>");
 		} catch (Exception e) {
 			controllerHelper.errorHandler(e);
-			response.sendRedirect(request.getContextPath() + "/error");
 		}
 	}
 	@RequestMapping(value = {"/exportDatabase/pdf/{fileName}"}, method = RequestMethod.GET)
@@ -99,8 +100,7 @@ public class FileDownloadController {
 			@PathVariable String fileName,
 			@RequestParam (name="fontSize") Optional<Integer> fontSize,
 			@RequestParam (value = "lyricsOnly", required = false, defaultValue = "false") boolean lyricsOnly,
-			@RequestParam (name="qrCode", required=false, defaultValue = "false") boolean qrCode
-		) throws IOException {
+			@RequestParam (name="qrCode", required=false, defaultValue = "false") boolean qrCode) {
 		try {
 			FileGenerator pdfGenerator = new PdfFileGenerator(fontSize.orElse(0), qrCode? controllerHelper.getFullUrL(request): null);
 			List<Song> songs = songService.getSongs().stream()
@@ -119,7 +119,6 @@ public class FileDownloadController {
 					controllerHelper.buildHtmlLinkFromUrl(controllerHelper.getFullUrL(request), "Download Link") + "<br>");
 		} catch (Exception e) {
 			controllerHelper.errorHandler(e);
-			response.sendRedirect(request.getContextPath() + "/error");
 		}
 	}
 	@RequestMapping(value = {"/song/ppt/{id}/{fileName}"}, method = RequestMethod.GET)
@@ -129,8 +128,7 @@ public class FileDownloadController {
 			@RequestParam (name="blankSlide", required = false) boolean prependBlankSlide,
 			@RequestParam (name="blankSlideDelimiter", required = false) boolean blankSlideDelimiter,
 			@RequestParam (name="alignCenter", required = false) boolean alignCenter,
-			@RequestParam (name="fontSize") Optional<Integer> fontSize
-			) throws IOException {
+			@RequestParam (name="fontSize") Optional<Integer> fontSize) {
 		try {
 			FileGenerator pptGenerator = new PptFileGenerator(prependBlankSlide,fontSize.orElse(0),alignCenter,blankSlideDelimiter);
 			Song song = songService.getSongById(id).transpose(LYRICS_ONLY_KEY_CODE);
@@ -138,14 +136,14 @@ public class FileDownloadController {
             response.addHeader("Content-Disposition", "attachment; filename=\""+ fileName + ".pptx\"");
             Files.copy(Paths.get(pptGenerator.buildFile(song)), response.getOutputStream());
 			logger.logUserActionWithEmail(fileName + " ppt downloaded." + 
-					"<br>blankPage = " +  prependBlankSlide + 
+					"<br>prependBlankSlide = " +  prependBlankSlide + 
+					"<br>blankSlideDelimeter = " +  blankSlideDelimiter + 
 					"<br>alignCenter = " +  alignCenter + 
 					"<br>fontSize = " + fontSize + 
 					"<br>fileName = " + fileName + 
 					"<br>" + controllerHelper.buildHtmlLinkFromUrl(controllerHelper.getFullUrL(request), "Download Link") + "<br>");
 		} catch (Exception e) {
 			controllerHelper.errorHandler(e);
-			response.sendRedirect(request.getContextPath() + "/error");
 		}
 	}
 
@@ -156,7 +154,7 @@ public class FileDownloadController {
 			@RequestParam (name="blankSlideDelimiter", required = false) boolean blankSlideDelimiter,
 			@RequestParam (name="alignCenter", required = false) boolean alignCenter,
 			@RequestParam (name="fontSize") Optional<Integer> fontSize,
-			@PathVariable int id) throws IOException {
+			@PathVariable int id) {
 		try {
 			FileGenerator pptGenerator = new PptFileGenerator(prependBlankSlide, fontSize.orElse(0),alignCenter,blankSlideDelimiter);
 			SetList setList = controllerHelper.buildSetFile(id,pptGenerator,true);
@@ -171,7 +169,6 @@ public class FileDownloadController {
 					"<br>" + controllerHelper.buildHtmlLinkFromUrl(controllerHelper.getFullUrL(request), "Download Link") + "<br>");
 		} catch (Exception e) {
 			controllerHelper.errorHandler(e);
-			response.sendRedirect(request.getContextPath() + "/error");
 		}
 	}
 	
@@ -183,17 +180,15 @@ public class FileDownloadController {
 			@RequestParam (name="fontSize") Optional<Integer> fontSize,
 			@RequestParam (value = "lyricsOnly", required = false, defaultValue = "false") boolean lyricsOnly,
 			@RequestParam (name="qrCode", required=false, defaultValue = "false") boolean qrCode,
-			@RequestParam (name="key",required=false) String key) throws IOException {
+			@RequestParam (name="key",required=false) String key) {
 		try {
 			FileGenerator pdfGenerator = new PdfFileGenerator(fontSize.orElse(0), qrCode? controllerHelper.getFullUrL(request): null);
 			Song song = songService.getSongById(id);
 			fileName = fileName == null? song.getNormalizedName(): controllerHelper.normalizeString(fileName);
-			if (lyricsOnly) {
+			if (lyricsOnly)
 				song = song.transpose(LYRICS_ONLY_KEY_CODE);
-			} else if (key != null) {
-				System.out.println(key);
+			else if (key != null)
 				song = song.transpose(key);
-			}
 			response.setContentType("application/pdf; name=\"" + fileName+ "\"");
             response.addHeader("Content-Disposition", "inline; filename=\""+ fileName + ".pdf\"");
             Files.copy(Paths.get(pdfGenerator.buildFile(song)), response.getOutputStream());
@@ -203,7 +198,6 @@ public class FileDownloadController {
             		controllerHelper.buildHtmlLinkFromUrl(controllerHelper.getFullUrL(request), "Download Link") + "<br>");
 		} catch (Exception e) {
 			controllerHelper.errorHandler(e);
-			response.sendRedirect(request.getContextPath() + "/error");
 		}
 	}
 
@@ -214,8 +208,7 @@ public class FileDownloadController {
 			@PathVariable (required = false) String fileName,
 			@RequestParam (name="fontSize") Optional<Integer> fontSize,
 			@RequestParam(value = "lyricsOnly", required = false, defaultValue = "false") boolean lyricsOnly,
-			@RequestParam (name="qrCode",required=false, defaultValue = "false") boolean qrCode
-			) throws IOException {
+			@RequestParam (name="qrCode",required=false, defaultValue = "false") boolean qrCode) {
 		try {
 			FileGenerator pdfGenerator = new PdfFileGenerator(fontSize.orElse(0), qrCode? controllerHelper.getFullUrL(request): null);
 			SetList setList = lyricsOnly? 
@@ -228,7 +221,6 @@ public class FileDownloadController {
             Files.copy(Paths.get(pdfGenerator.getFilePath()), response.getOutputStream());
 		} catch (Exception e) {
 			controllerHelper.errorHandler(e);
-			response.sendRedirect(request.getContextPath() + "/error");
 		}
 	}
 }

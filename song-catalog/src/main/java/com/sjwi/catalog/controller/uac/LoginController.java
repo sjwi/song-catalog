@@ -2,23 +2,11 @@ package com.sjwi.catalog.controller.uac;
 
 import static com.sjwi.catalog.model.security.StoredCookieToken.STORED_COOKIE_TOKEN_KEY;
 
-import java.io.IOException;
-import java.security.NoSuchAlgorithmException;
 import java.security.Principal;
-import java.security.spec.InvalidKeySpecException;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.sjwi.catalog.controller.ControllerHelper;
 import com.sjwi.catalog.log.CustomLogger;
@@ -28,6 +16,16 @@ import com.sjwi.catalog.model.security.StoredCookieToken;
 import com.sjwi.catalog.model.user.CfUser;
 import com.sjwi.catalog.service.TokenService;
 import com.sjwi.catalog.service.UserService;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
 
 @Controller
 public class LoginController {
@@ -45,9 +43,14 @@ public class LoginController {
 	TokenService tokenService;
 	
 	@RequestMapping(value = {"/login"}, method = RequestMethod.GET)
-	public String login(HttpServletRequest request, Authentication auth, HttpServletResponse response) throws IOException {
-		request.setAttribute("LOGIN", true);
-		return "forward:/home";
+	public ModelAndView login(HttpServletRequest request, Authentication auth, HttpServletResponse response) {
+		try{
+			ModelAndView mv = new ModelAndView("forward:/home");
+			mv.addObject("LOGIN", true);
+			return mv;
+		} catch (Exception e){
+			return controllerHelper.errorHandler(e);
+		}
 	}
 
 	@RequestMapping(value = {"/login"}, method = RequestMethod.POST)
@@ -55,7 +58,7 @@ public class LoginController {
 	public ResponseMessage login(HttpServletRequest request, HttpServletResponse response,
 			@RequestParam (name = "username", required = true) String username,
 			Principal principal, Authentication auth,
-			@RequestParam (name = "password", required = true) String password) throws IOException {
+			@RequestParam (name = "password", required = true) String password) {
 		try {
 			request.login(username, password);
 			logger.logSignIn(request, username);
@@ -63,10 +66,10 @@ public class LoginController {
 			generateCookieToken(request, response, username);
 			return new ResponseMessage("success");
 		} catch (ServletException e) {
-			e.printStackTrace();
+			controllerHelper.errorHandler(e);
 			return new ResponseMessage("bad_password");
 		} catch (Exception e) {
-			e.printStackTrace();
+			controllerHelper.errorHandler(e);
 			return new ResponseMessage("bad_login_attempt");
 		}
 	}
@@ -76,8 +79,8 @@ public class LoginController {
 			SecurityToken cookieToken = new StoredCookieToken(user);
 			tokenService.storeCookieToken(cookieToken);
 			response.addCookie(controllerHelper.buildStaticCookie(request.getServerName(), STORED_COOKIE_TOKEN_KEY, cookieToken.getTokenString(),request.getCookies()));
-		} catch (InvalidKeySpecException | NoSuchAlgorithmException e) {
-			logger.logErrorWithEmail(e.getMessage());
+		} catch (Exception e) {
+			controllerHelper.errorHandler(e);
 		}
 	}
 }

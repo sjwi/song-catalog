@@ -27,14 +27,13 @@ $(document).ready(function(e){
 		alertWithFade('success',window[alertOnLoad]);
 	}
 	$(document).on('keydown','textarea',function(e){
-		if(event.keyCode===9){var v=this.value,s=this.selectionStart,e=this.selectionEnd;this.value=v.substring(0, s)+'\t'+v.substring(e);this.selectionStart=this.selectionEnd=s+1;return false;}
+		if(e.keyCode===9){var v=this.value,s=this.selectionStart,e=this.selectionEnd;this.value=v.substring(0, s)+'\t'+v.substring(e);this.selectionStart=this.selectionEnd=s+1;return false;}
 	});
 	$(document).on('shown.bs.modal','.modal', function() {
 		$(this).find('.autofocus').focus();
 		lockScroll();
 	});
 	$(document).on('hide.bs.modal','.modal', function() {
-		$(this).find('.autofocus').focus();
 		unlockScroll();
 	});
 });

@@ -34,12 +34,16 @@ public class HomeController {
 	@RequestMapping(value = { "/home", "/"})
 	public ModelAndView home(HttpServletRequest request,
 			HttpServletResponse response, Authentication auth, @RequestParam (name="searchTerm", required=false) String searchTerm) {
-		ModelAndView mv = new ModelAndView("home");
-		mv.addObject("songs",songService.searchSongs(searchTerm));
-		mv.addObject("orgs",organizationService.getOrganizations());
-		mv.addObject("sets",setListService.getSetLists(10));
-		mv.addObject("searchTerm",searchTerm);
-		mv.addObject("categories",songService.getSongCategories());
-		return mv;
+		try {
+			ModelAndView mv = new ModelAndView("home");
+			mv.addObject("songs",songService.searchSongs(searchTerm));
+			mv.addObject("orgs",organizationService.getOrganizations());
+			mv.addObject("sets",setListService.getSetLists(10));
+			mv.addObject("searchTerm",searchTerm);
+			mv.addObject("categories",songService.getSongCategories());
+			return mv;
+		} catch (Exception e) {
+			return controllerHelper.errorHandler(e);
+		}
 	}
 }

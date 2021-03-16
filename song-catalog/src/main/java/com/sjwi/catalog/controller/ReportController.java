@@ -28,17 +28,25 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 @Controller
 @IgnoreAspect
 public class ReportController {
+
 	@Autowired
 	UserService userService;
+
+	@Autowired
+	ControllerHelper controllerHelper;
 
 	@RequestMapping(value = {"log"}, method = RequestMethod.GET)
 	@LandingPageAspect
 	public void streamUserFeed(HttpServletResponse response, HttpServletRequest request) throws IOException {
-		if (request.getUserPrincipal() == null)
-			response.sendRedirect("/login");
-		response.setContentType("text/plain; name=\"userfeed.txt\"");
-		response.addHeader("Content-Disposition", "inline; filename=\"userfeed.txt\"");
-		Files.copy(Paths.get(System.getProperty(LOG_FILE_PROPERTY_KEY)), response.getOutputStream());
+		try {
+			if (request.getUserPrincipal() == null)
+				response.sendRedirect("/login");
+			response.setContentType("text/plain; name=\"userfeed.txt\"");
+			response.addHeader("Content-Disposition", "inline; filename=\"userfeed.txt\"");
+			Files.copy(Paths.get(System.getProperty(LOG_FILE_PROPERTY_KEY)), response.getOutputStream());
+		} catch (Exception e){
+			controllerHelper.errorHandler(e);
+		}
 	}
 
 	@RequestMapping(value = {"/user-report"}, method = RequestMethod.GET)

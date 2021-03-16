@@ -1,11 +1,20 @@
 package com.sjwi.catalog.controller;
 
-import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import com.sjwi.catalog.aspect.LandingPageAspect;
+import com.sjwi.catalog.mail.Mailer;
+import com.sjwi.catalog.model.addressbook.AddressBookEntry;
+import com.sjwi.catalog.model.addressbook.AddressBookGroup;
+import com.sjwi.catalog.model.mail.Email;
+import com.sjwi.catalog.model.user.CfUser;
+import com.sjwi.catalog.service.AddressBookService;
+import com.sjwi.catalog.service.OrganizationService;
+import com.sjwi.catalog.service.UserService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,16 +26,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.servlet.ModelAndView;
-
-import com.sjwi.catalog.aspect.LandingPageAspect;
-import com.sjwi.catalog.mail.Mailer;
-import com.sjwi.catalog.model.addressbook.AddressBookEntry;
-import com.sjwi.catalog.model.addressbook.AddressBookGroup;
-import com.sjwi.catalog.model.mail.Email;
-import com.sjwi.catalog.model.user.CfUser;
-import com.sjwi.catalog.service.AddressBookService;
-import com.sjwi.catalog.service.OrganizationService;
-import com.sjwi.catalog.service.UserService;
 
 @Controller
 public class AddressBookController {
@@ -51,26 +50,30 @@ public class AddressBookController {
 	public ModelAndView addressBook(Authentication auth, HttpServletRequest request,
 			@RequestParam(name="searchValue",required=false) String searchTerm, 
 			@RequestParam(name="searchType",required=false) String searchType, 
-			@RequestParam(name="view",required=false) String view) throws IOException {
-		ModelAndView mv = new ModelAndView(view==null?"address-book":view);
-		List<AddressBookEntry> entries = null;
-		List<AddressBookGroup> groups = null;
-		if (searchType != null && searchTerm != null) {
-			if ("group".equals(searchType)) {
-				groups = addressBookService.getAddressBookGroupEntries(searchTerm);
-				entries = addressBookService.getAddressBookEntries();
+			@RequestParam(name="view",required=false) String view) {
+		try {
+			ModelAndView mv = new ModelAndView(view==null?"address-book":view);
+			List<AddressBookEntry> entries = null;
+			List<AddressBookGroup> groups = null;
+			if (searchType != null && searchTerm != null) {
+				if ("group".equals(searchType)) {
+					groups = addressBookService.getAddressBookGroupEntries(searchTerm);
+					entries = addressBookService.getAddressBookEntries();
+				} else {
+					entries = addressBookService.getAddressBookEntries(searchTerm);
+					groups = addressBookService.getAddressBookGroups();
+				}
 			} else {
-				entries = addressBookService.getAddressBookEntries(searchTerm);
+				entries = addressBookService.getAddressBookEntries();
 				groups = addressBookService.getAddressBookGroups();
 			}
-		} else {
-			entries = addressBookService.getAddressBookEntries();
-			groups = addressBookService.getAddressBookGroups();
+			mv.addObject("addressbookentries",entries);
+			mv.addObject("addressbookgroups",groups);
+			mv.addObject("orgs",organizationService.getOrganizations());
+			return mv;
+		} catch (Exception e){
+			return controllerHelper.errorHandler(e);
 		}
-		mv.addObject("addressbookentries",entries);
-		mv.addObject("addressbookgroups",groups);
-		mv.addObject("orgs",organizationService.getOrganizations());
-		return mv;
 	}
 
 	@RequestMapping(value= {"/addressbook/create/entry"}, method = RequestMethod.POST)
@@ -95,11 +98,10 @@ public class AddressBookController {
 	@RequestMapping(value= {"/addressbook/{type}/delete/{id}"}, method = RequestMethod.DELETE)
 	@ResponseStatus(HttpStatus.OK)
 	public void deleteAddressBookItem(Authentication auth, @PathVariable String type, @PathVariable int id) {
-		if ("group".equals(type)) {
+		if ("group".equals(type))
 			addressBookService.deleteGroup(id);
-		} else {
+		else
 			addressBookService.deleteEntry(id);
-		}
 	}
 
 	@RequestMapping(value= {"/addressbook/group/{id}"}, method = RequestMethod.GET)
@@ -128,12 +130,11 @@ public class AddressBookController {
 			@RequestParam(value="emailToCC", required=false) List<String> emailToCc,
 			@RequestParam(value="subject", required=true) String subject,
 			@RequestParam(value="finalMessageBody", required=true) String finalMessageBody,
-			Authentication auth) throws IOException {
+			Authentication auth) {
 		try {
 			String userEmail = ((CfUser) auth.getPrincipal()).getEmail();
-			if (!emailTo.contains(userEmail) && !emailToCc.contains(userEmail)) {
+			if (!emailTo.contains(userEmail) && !emailToCc.contains(userEmail)) 
 				emailTo.add(userEmail);
-			}
 			mailer.sendMail(new Email()
 					.setTo(controllerHelper.recipientsToString(emailTo))
 					.setCc(controllerHelper.recipientsToString(emailToCc))
@@ -141,7 +142,6 @@ public class AddressBookController {
 					.setSubject(subject));
 		} catch (Exception e) {
 			controllerHelper.errorHandler(e);
-			response.sendRedirect(request.getContextPath() + "/error");
 		}
 	}
 

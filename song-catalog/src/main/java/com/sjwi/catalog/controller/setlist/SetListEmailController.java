@@ -1,6 +1,5 @@
 package com.sjwi.catalog.controller.setlist;
 
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -29,6 +28,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.servlet.ModelAndView;
 
 @Controller
 public class SetListEmailController {
@@ -48,19 +48,19 @@ public class SetListEmailController {
 	Mailer mailer;
 	
 	@RequestMapping(value = {"setlist/email/{id}"}, method = RequestMethod.GET)
-	public String populateEmailModal(HttpServletRequest request, HttpServletResponse response,
-			@PathVariable int id, Authentication auth) throws IOException {
+	public ModelAndView populateEmailModal(HttpServletRequest request, HttpServletResponse response,
+			@PathVariable int id, Authentication auth) {
 		try {
+			ModelAndView mv = new ModelAndView("modal/dynamic/email-set");
 			SetList setList = setListService.getSetListById(id);
-			request.setAttribute("set", setList);	
-			request.setAttribute("addressBook", addressBookService.getAddressBookEntries());
-			request.setAttribute("addressBookGroups", addressBookService.getAddressBookGroups());
-			request.setAttribute("from", ((CfUser)auth.getPrincipal()).getFirstName());
+			mv.addObject("set", setList);	
+			mv.addObject("addressBook", addressBookService.getAddressBookEntries());
+			mv.addObject("addressBookGroups", addressBookService.getAddressBookGroups());
+			mv.addObject("from", ((CfUser)auth.getPrincipal()).getFirstName());
+			return mv;
 		} catch (Exception e) {
-			controllerHelper.errorHandler(e);
-			response.sendRedirect(request.getContextPath() + "/error");
+			return controllerHelper.errorHandler(e);
 		}
-		return "modal/dynamic/email-set";
 	}
 	@RequestMapping(value = {"setlist/email/{id}"}, method = RequestMethod.POST)
 	@ResponseStatus(value = HttpStatus.OK)
@@ -72,7 +72,7 @@ public class SetListEmailController {
 			@RequestParam(value="includePpt", required=false) String attachPpt,
 			@RequestParam(value="includePdf", required=false) String attachPdf,
 			Authentication auth,
-			@PathVariable int id) throws IOException {
+			@PathVariable int id) {
 		try {
 			Map<String, String> attachments = new HashMap<String, String>();
 			if (attachPpt != null) {
@@ -99,7 +99,6 @@ public class SetListEmailController {
 					.setSubject(subject));
 		} catch (Exception e) {
 			controllerHelper.errorHandler(e);
-			response.sendRedirect(request.getContextPath() + "/error");
 		}
 	}
 }

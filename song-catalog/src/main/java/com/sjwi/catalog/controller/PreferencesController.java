@@ -2,8 +2,6 @@ package com.sjwi.catalog.controller;
 
 import static com.sjwi.catalog.config.PreferencesConfiguration.NIGHT_MODE_PREFERENCE_KEY;
 
-import java.io.IOException;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -31,17 +29,25 @@ public class PreferencesController {
 	@RequestMapping(value = {"/toggle-night-mode"})
 	public void toggleNightMode(HttpServletRequest request,
 			HttpServletResponse response, Authentication auth, @RequestParam (name="setting", required=true) String setting) {
-		request.getSession().setAttribute(NIGHT_MODE_PREFERENCE_KEY, setting);
-		response.addCookie(controllerHelper.buildStaticCookie(request.getServerName(),NIGHT_MODE_PREFERENCE_KEY,setting,request.getCookies()));
-		if (auth != null) 
-			preferencesService.setUserPreference(NIGHT_MODE_PREFERENCE_KEY,setting, auth.getName());
+		try {
+			request.getSession().setAttribute(NIGHT_MODE_PREFERENCE_KEY, setting);
+			response.addCookie(controllerHelper.buildStaticCookie(request.getServerName(),NIGHT_MODE_PREFERENCE_KEY,setting,request.getCookies()));
+			if (auth != null) 
+				preferencesService.setUserPreference(NIGHT_MODE_PREFERENCE_KEY,setting, auth.getName());
+		} catch (Exception e){
+			controllerHelper.errorHandler(e);
+		}
 	}
 
 	@RequestMapping(value = {"/dark"})
 	public void darkMode(HttpServletRequest request,
-			HttpServletResponse response, Authentication auth) throws IOException {
-		request.getSession().setAttribute(NIGHT_MODE_PREFERENCE_KEY, "true");
-		response.addCookie(controllerHelper.buildStaticCookie(request.getServerName(),NIGHT_MODE_PREFERENCE_KEY,"true",request.getCookies()));
-		response.sendRedirect("home");
+			HttpServletResponse response, Authentication auth) {
+		try {
+			request.getSession().setAttribute(NIGHT_MODE_PREFERENCE_KEY, "true");
+			response.addCookie(controllerHelper.buildStaticCookie(request.getServerName(),NIGHT_MODE_PREFERENCE_KEY,"true",request.getCookies()));
+			response.sendRedirect("home");
+		} catch (Exception e) {
+			controllerHelper.errorHandler(e);
+		}
 	}
 }

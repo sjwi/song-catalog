@@ -1,11 +1,17 @@
 package com.sjwi.catalog.controller.setlist;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import com.sjwi.catalog.aspect.LandingPageAspect;
+import com.sjwi.catalog.controller.ControllerHelper;
+import com.sjwi.catalog.model.SetList;
+import com.sjwi.catalog.service.OrganizationService;
+import com.sjwi.catalog.service.SetListService;
+import com.sjwi.catalog.service.SongService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,13 +23,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.servlet.ModelAndView;
-
-import com.sjwi.catalog.aspect.LandingPageAspect;
-import com.sjwi.catalog.controller.ControllerHelper;
-import com.sjwi.catalog.model.SetList;
-import com.sjwi.catalog.service.OrganizationService;
-import com.sjwi.catalog.service.SetListService;
-import com.sjwi.catalog.service.SongService;
 
 @Controller
 public class SetListDetailsController {
@@ -48,21 +47,18 @@ public class SetListDetailsController {
 	public ModelAndView setListDetails(HttpServletRequest request, HttpServletResponse response,
 			Authentication auth,
 			@RequestParam(name="keys[]",required=false) List<String> keys,
-			@PathVariable int id) throws IOException {
+			@PathVariable int id) {
 		ModelAndView mv = new ModelAndView("setlist");
 		try {
 			SetList setList = setListService.getSetListById(id);
-			if (keys != null) {
+			if (keys != null) 
 				setList = setList.transpose(keys);
-			}
 			mv.addObject("set", setList);
-
+			mv.addObject("orgs",organizationService.getOrganizations());
+			return mv;
 		} catch (Exception e) {
-			controllerHelper.errorHandler(e);
-			response.sendRedirect(request.getContextPath() + "/error");
+			return controllerHelper.errorHandler(e);
 		}
-		mv.addObject("orgs",organizationService.getOrganizations());
-		return mv;
 	}
 	
 	@RequestMapping(value = {"setlists"}, method = RequestMethod.GET)
@@ -71,22 +67,15 @@ public class SetListDetailsController {
 	public ModelAndView setListPage(
 			@RequestParam(name = "view",required=false) Optional<String> view,
 			@RequestParam(name = "additionalSets",required=false) boolean page,
-			HttpServletRequest request, Authentication auth, HttpServletResponse response) throws IOException {
+			HttpServletRequest request, Authentication auth, HttpServletResponse response) {
 		ModelAndView mv = new ModelAndView(view.filter(v -> !v.trim().isEmpty()).orElse("setlists"));
 		try {
-			List<SetList> setLists = null;
-			if (page) {
-				setLists = setListService.getSetListPage(SET_LISTS_PER_PAGE);
-			} else {
-				setLists = setListService.getSetLists(SET_LISTS_PER_PAGE);
-			}
-			mv.addObject("sets", setLists);
+			mv.addObject("sets", page? setListService.getSetListPage(SET_LISTS_PER_PAGE): setListService.getSetLists(SET_LISTS_PER_PAGE));
+			mv.addObject("orgs",organizationService.getOrganizations());
+			return mv;
 		} catch (Exception e) {
-			controllerHelper.errorHandler(e);
-			response.sendRedirect(request.getContextPath() + "/error");
+			return controllerHelper.errorHandler(e);
 		}
-		mv.addObject("orgs",organizationService.getOrganizations());
-		return mv;
 	}
 	
 	@RequestMapping(value = {"setlist/details/{id}"}, method = RequestMethod.GET)
@@ -94,18 +83,16 @@ public class SetListDetailsController {
 	public ModelAndView setListPartialDetails(HttpServletRequest request, HttpServletResponse response,
 			Authentication auth,
 			@PathVariable int id, @RequestParam(name="view",required=true) String view,
-			@RequestParam(name="keys[]",required=false) List<String> keys) throws IOException {
+			@RequestParam(name="keys[]",required=false) List<String> keys) {
 		ModelAndView mv = new ModelAndView(view);
 		try {
 			SetList setList = setListService.getSetListById(id);
-			if (keys != null) {
+			if (keys != null)
 				setList = setList.transpose(keys);
-			}
 			mv.addObject("set", setList);
 			mv.addObject("songs", setList.getSongs());
 		} catch (Exception e) {
-			controllerHelper.errorHandler(e);
-			response.sendRedirect(request.getContextPath() + "/error");
+			return controllerHelper.errorHandler(e);
 		}
 		return mv;
 	}
