@@ -55,16 +55,10 @@ public abstract class Song {
 		return body;
 	}
 	public String[] getBodyAsChunks() {
-		String arr = Arrays.stream(body.split("\n"))
-				.map(s -> {
-					if (s.trim().isEmpty()) {
-						return s.trim();
-					} else {
-						return s;
-					}
-				})
-				.collect(Collectors.joining("\n"));
-		return arr.split("[\n]{2,}");
+		return Arrays.stream(body.split("\n"))
+				.map(s -> s.trim().isEmpty()? s.trim(): s) 
+				.collect(Collectors.joining("\n"))
+				.split("[\n]{2,}");
 	}
 
 	public String getDefaultKey() {
