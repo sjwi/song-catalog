@@ -1,9 +1,12 @@
 package com.sjwi.catalog.aspect;
 
-import java.util.Map;
 import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
+
+import com.sjwi.catalog.controller.ControllerHelper;
+import com.sjwi.catalog.log.CustomLogger;
+import com.sjwi.catalog.model.user.CfUser;
 
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;
@@ -13,10 +16,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
-
-import com.sjwi.catalog.controller.ControllerHelper;
-import com.sjwi.catalog.log.CustomLogger;
-import com.sjwi.catalog.model.user.CfUser;
 
 @Aspect
 @Configuration
@@ -40,7 +39,8 @@ public class PageRequestLogger {
 		
 		String signature = joinPoint.getSignature().toShortString();
 		String requestUrl = request.getRequestURL().toString();
-		String parameters = getParametersAsFormattedString(request.getParameterMap());
+		String parameters = request.getParameterMap().entrySet().stream()
+				.map(p -> "\n\t\t" + p.getKey() + ": " + String.join(",", request.getParameterMap().get(p.getKey()))).collect(Collectors.joining());
 		String username = getSessionUser(joinPoint.getArgs());
 		String os =  controllerHelper.getOs(request);
 
@@ -53,21 +53,5 @@ public class PageRequestLogger {
 		} catch (Exception e) {
 			return "anonymousUser";
 		}
-	}
-	
-	private String getParametersAsFormattedString(Map<String,String[]> parameterMap) {
-		String parameters = parameterMap.entrySet().stream().map(p -> {
-            String params = "\n\t\t" + p.getKey() + ": ";
-            String[] paramValues = parameterMap.get(p.getKey());
-            for (int i = 0; i < paramValues.length; i++) {
-            	if (i == 0) {
-					params = params +  paramValues[i];
-            	} else {
-					params = params + "," + paramValues[i];
-            	}
-            }
-            return params;
-		}).collect(Collectors.joining());
-        return parameters;
 	}
 }

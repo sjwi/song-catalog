@@ -9,6 +9,7 @@ public class PowerPointDeck {
 	
 	private static final int MAX_NUMBER_OF_LINES_PER_PAGE = 8;
 	private static final String NEW_LINE_DELIMITER = "\n";
+	private static List<Character> BREAK_CHARS = new ArrayList<Character>(Arrays.asList(',','!',';','.',':'));
 
 	private final String[] songBodyInChunks;
 	private final int lineSizeMax;
@@ -91,20 +92,10 @@ public class PowerPointDeck {
 	private List<String> reduceLineToLessThanLineSizeMax(String line) {
 		List<String> lines = new ArrayList<String>();
 		while (line.length() > lineSizeMax) {
-			int index = 0;
-			if (doesLineHaveSplittableDelimiter(line,",")) {
-				index = line.lastIndexOf(',');
-			}
-			else if (doesLineHaveSplittableDelimiter(line,"!")) {
-				index = line.lastIndexOf('!');
-			}
-			else if (doesLineHaveSplittableDelimiter(line,";")) {
-				index = line.lastIndexOf(';');
-			}
-			else if (doesLineHaveSplittableDelimiter(line,".")) {
-				index = line.lastIndexOf('.');
-			} else {
-				index = splitStringAtEndOfWord(line);
+			int index = splitStringAtEndOfWord(line); 
+			for (char c : BREAK_CHARS){
+				if (doesLineHaveSplittableDelimiter(line,String.valueOf(c)))
+					index = line.lastIndexOf(c);
 			}
 			lines.add(line.substring(0, index));
 			line = removeAddedSubstring(line, index);

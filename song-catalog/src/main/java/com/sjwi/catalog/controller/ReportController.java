@@ -13,7 +13,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.sjwi.catalog.aspect.IgnoreAspect;
 import com.sjwi.catalog.aspect.LandingPageAspect;
-import com.sjwi.catalog.exception.MailException;
 import com.sjwi.catalog.model.ResponseMessage;
 import com.sjwi.catalog.model.user.CfUser;
 import com.sjwi.catalog.service.UserService;
@@ -35,9 +34,8 @@ public class ReportController {
 	@RequestMapping(value = {"log"}, method = RequestMethod.GET)
 	@LandingPageAspect
 	public void streamUserFeed(HttpServletResponse response, HttpServletRequest request) throws IOException {
-		if (request.getUserPrincipal() == null) {
+		if (request.getUserPrincipal() == null)
 			response.sendRedirect("/login");
-		}
 		response.setContentType("text/plain; name=\"userfeed.txt\"");
 		response.addHeader("Content-Disposition", "inline; filename=\"userfeed.txt\"");
 		Files.copy(Paths.get(System.getProperty(LOG_FILE_PROPERTY_KEY)), response.getOutputStream());
@@ -45,7 +43,7 @@ public class ReportController {
 
 	@RequestMapping(value = {"/user-report"}, method = RequestMethod.GET)
 	@ResponseBody
-	public String displayUserReport(HttpServletRequest request) throws MailException {
+	public String displayUserReport(HttpServletRequest request) {
 		List<CfUser> user = userService.getAllActiveUsers();
 		return "Active users (" + user.size() + ")<br>" +  user.stream().map(u -> u.getUsername()).collect(Collectors.joining("<br>"));
 	}
@@ -53,7 +51,7 @@ public class ReportController {
 	@RequestMapping(value = {"/server-availability"}, method = RequestMethod.GET)
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
-	public ResponseMessage displayServerAvailability(HttpServletRequest request) throws MailException {
+	public ResponseMessage displayServerAvailability(HttpServletRequest request) {
 		return new ResponseMessage("available","none");
 	}
 }

@@ -50,11 +50,10 @@ public class CustomLogger {
 
 	public void logUserActionWithEmail(String message) {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		if (auth != null) {
+		if (auth != null)
 			message = message + " by " + auth.getName();
-		} else {
+		else 
 			message = message + " by anonymous user";
-		}
 		log.info(message);
 		new Thread(new SendLogMessageWithEmail(message)).start();
 	}

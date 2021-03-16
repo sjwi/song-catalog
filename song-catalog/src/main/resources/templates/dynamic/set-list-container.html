@@ -63,7 +63,7 @@
 				 <img width="27px" class="set-list-dl" type="image/x-icon" th:src="@{/images/download-inverse.png}"/>
 			</div>
 			<th:block sec:authorize="hasAuthority('USER')">
-				<div class="col col-3 text-center" data-toggle="tooltip" data-placement="bottom" title="Add song to set" th:attr="onclick=${'addSongsFromSelect(' + set.id + ',''' + set.setListName + ''')'}">
+				<div class="col col-3 text-center" data-toggle="tooltip" data-placement="bottom" title="Add song to set" th:attr="onclick=${'addSongsFromSelect(' + set.id + ',''' + #strings.replace(set.setListName,'''','') + ''')'}">
 					<a href="javascript:void(0)"><img width="30px"type="image/x-icon" th:src="@{/images/plus-sign-inverse.png}"/></a>
 				</div>
 				<div class="col col-3 text-center" data-toggle="tooltip" data-placement="bottom" title="Email set list" th:attr="onclick=${'emailSet(' + set.id + ')'}">

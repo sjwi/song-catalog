@@ -17,7 +17,7 @@ public class TransposableString {
 	private static final String SPLIT_LINE_DELIMITER = "\\n";
 	private static final String APPEND_LINE_DELIMITER = "\n";
 	private static final List<String> CHORD_CHART_KEYWORDS = new ArrayList<String>(Arrays.asList("min","maj","dim","minor","major","sus","dom","aug"));
-	private static final List<String> STRIPPABLE_KEYWORDS = new ArrayList<String>(Arrays.asList("verse","chorus","bridge","prechorus","refrain","interlude","tag","instrumental"));
+	private static final List<String> STRIPPABLE_KEYWORDS = new ArrayList<String>(Arrays.asList("verse","chorus","bridge","prechorus","refrain","interlude","tag","instrumental","intro","intro."));
 	private final List<String> transposableStringLines;
 	private final KeySet storedKey;
 	
@@ -54,7 +54,8 @@ public class TransposableString {
 		return transposableStringLines.stream()
 			.filter(line -> !isLineOnlyChords(line))
 			.collect(Collectors.joining(APPEND_LINE_DELIMITER))
-			.replaceAll(" +"," ").trim();
+			.replaceAll(" +"," ")
+			.replace(" - "," ").trim();
 	}
 
 	public static boolean isLineOnlyChords(String line) {
@@ -212,7 +213,7 @@ public class TransposableString {
 	}
 	private String stripKeywordsFromLine(String line) {
 		String l = StringUtils.stripEnd(line,null);
-		String keywordSubString = l.replaceAll("[^a-zA-Z ]", "").trim();
+		String keywordSubString = l.replaceAll("[^a-zA-Z ]", "").replaceAll("(?i)repeat", "").trim();
 		return STRIPPABLE_KEYWORDS.stream()
 			.map(k -> k.equalsIgnoreCase(keywordSubString))
 			.anyMatch(k -> k == true)? null: l;

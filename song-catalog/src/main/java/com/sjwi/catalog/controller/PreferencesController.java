@@ -7,14 +7,14 @@ import java.io.IOException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.sjwi.catalog.log.CustomLogger;
+import com.sjwi.catalog.service.PreferencesService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-
-import com.sjwi.catalog.log.CustomLogger;
-import com.sjwi.catalog.service.PreferencesService;
 
 @Controller
 public class PreferencesController {
@@ -33,9 +33,8 @@ public class PreferencesController {
 			HttpServletResponse response, Authentication auth, @RequestParam (name="setting", required=true) String setting) {
 		request.getSession().setAttribute(NIGHT_MODE_PREFERENCE_KEY, setting);
 		response.addCookie(controllerHelper.buildStaticCookie(request.getServerName(),NIGHT_MODE_PREFERENCE_KEY,setting,request.getCookies()));
-		if (auth != null) {
+		if (auth != null) 
 			preferencesService.setUserPreference(NIGHT_MODE_PREFERENCE_KEY,setting, auth.getName());
-		}
 	}
 
 	@RequestMapping(value = {"/dark"})

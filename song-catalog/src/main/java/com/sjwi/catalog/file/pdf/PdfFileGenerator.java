@@ -55,6 +55,7 @@ public class PdfFileGenerator implements FileGenerator {
 	private final Font songFont;
 	private final Font titleFont;
 	private final Font headerFooterFont;
+	private final Font headerFooterFontBold;
 	private final int leading;
 	private final int titleLeading;
 	private final String file;
@@ -74,6 +75,7 @@ public class PdfFileGenerator implements FileGenerator {
 				songFont = generateFont(DEF_SONG_FONT,false);
 				titleFont = generateFont(DEF_TITLE_FONT,true);
 				headerFooterFont = generateFont(DEF_HEADER_FOOTER_FONT,false);
+				headerFooterFontBold = generateFont(DEF_HEADER_FOOTER_FONT,true);
 				titleLeading = DEF_TITLE_LEADING;
 				leading = DEF_LEADING;
 			} else {
@@ -84,14 +86,17 @@ public class PdfFileGenerator implements FileGenerator {
 					leading = 24;
 					titleLeading = 40;
 					headerFooterFont = generateFont(11,false);
+					headerFooterFontBold = generateFont(11,true);
 				} else if (fontSize > 20) {
 					leading = 28;
 					titleLeading = 50;
 					headerFooterFont = generateFont(11,false);
+					headerFooterFontBold = generateFont(11,true);
 				} else {
 					leading = DEF_LEADING;
 					titleLeading = DEF_TITLE_LEADING;
 					headerFooterFont = generateFont(DEF_HEADER_FOOTER_FONT,false);
+					headerFooterFontBold = generateFont(DEF_HEADER_FOOTER_FONT,true);
 				}
 			}
 			file = root + "/" + PDF_SUB_DIRECTORY + "/" + PREFIX + "_" + System.currentTimeMillis() + SUFFIX;
@@ -266,7 +271,7 @@ public class PdfFileGenerator implements FileGenerator {
 					new Phrase(headerText, headerFooterFont), x, y, 0);
 		}
 		private void addCurrentSongTitle() {
-			Phrase headerPhrase = new Phrase(currentSongTitle, headerFooterFont);
+			Phrase headerPhrase = new Phrase(currentSongTitle, headerFooterFontBold);
 			if (includePageNumberInHeader) {
 				headerPhrase.add("  |  Page " + additionalPageCounter);
 			}
