@@ -138,8 +138,9 @@ public class AccountManagementController {
 				mv.addObject("token", token);
 				mv.addObject("user", user);
 				return mv;
-			} else
+			} else {
 				throw new InvalidOperationException("Invalid Secuirty Token");
+			}
 		} catch (NullPointerException | InvalidOperationException e ) {
 			mv.addObject("ALERT_ON_LOAD", "BAD_RESET_TOKEN");
 			return mv;
@@ -165,8 +166,9 @@ public class AccountManagementController {
 				controllerHelper.setSessionPreferences(cfUser, request, response);
 				tokenService.deletePasswordResetToken(cfUser.getUsername());
 				return new ResponseMessage("success");
-			} else
+			} else {
 				throw new LoginException();
+			}
 		} catch (LoginException e){
 			return new ResponseMessage("bad_token");
 		} catch (Exception e) {

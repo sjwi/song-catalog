@@ -36,7 +36,7 @@ public class HomeController {
 			HttpServletResponse response, Authentication auth, @RequestParam (name="searchTerm", required=false) String searchTerm) {
 		try {
 			ModelAndView mv = new ModelAndView("home");
-			mv.addObject("songs",songService.searchSongs(searchTerm));
+			mv.addObject("songs", searchTerm == null? songService.getSongs(): songService.searchSongs(searchTerm));
 			mv.addObject("orgs",organizationService.getOrganizations());
 			mv.addObject("sets",setListService.getSetLists(10));
 			mv.addObject("searchTerm",searchTerm);
