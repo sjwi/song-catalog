@@ -84,7 +84,11 @@ public class AddressBookController {
 			@RequestParam(name="phone", required=true) String phone,
 			@RequestParam(name="email", required=true) String email,
 			HttpServletRequest request) {
-		addressBookService.createEntry(new AddressBookEntry(0,firstName,lastName,null,email,phone));
+		try {
+			addressBookService.createEntry(new AddressBookEntry(0,firstName,lastName,null,email,phone));
+		} catch (Exception e){
+			controllerHelper.errorHandler(e);
+		}
 	}
 	
 	@RequestMapping(value= {"/addressbook/create/group"}, method = RequestMethod.POST)
@@ -92,35 +96,51 @@ public class AddressBookController {
 	public void createAddressBookGroup(Authentication auth, 
 			@RequestParam(name="groupName", required=true) String groupName,
 			HttpServletRequest request) {
-		addressBookService.createGroup(groupName);
+		try{
+			addressBookService.createGroup(groupName);
+		} catch (Exception e){
+			controllerHelper.errorHandler(e);
+		}
 	}
 
 	@RequestMapping(value= {"/addressbook/{type}/delete/{id}"}, method = RequestMethod.DELETE)
 	@ResponseStatus(HttpStatus.OK)
 	public void deleteAddressBookItem(Authentication auth, @PathVariable String type, @PathVariable int id) {
-		if ("group".equals(type))
-			addressBookService.deleteGroup(id);
-		else
-			addressBookService.deleteEntry(id);
+		try {
+			if ("group".equals(type))
+				addressBookService.deleteGroup(id);
+			else
+				addressBookService.deleteEntry(id);
+		} catch (Exception e){
+			controllerHelper.errorHandler(e);
+		}
 	}
 
 	@RequestMapping(value= {"/addressbook/group/{id}"}, method = RequestMethod.GET)
 	public ModelAndView getAddressBookGroupDetails(Authentication auth, 
 			@RequestParam(name="view",required = true) String view,
 			@PathVariable int id, HttpServletRequest request) {
-		ModelAndView mv =  new ModelAndView(view);
-		mv.addObject("group",addressBookService.getAddressBookGroupById(id));
-		return mv;
+		try {
+			ModelAndView mv =  new ModelAndView(view);
+			mv.addObject("group",addressBookService.getAddressBookGroupById(id));
+			return mv;
+		} catch (Exception e){
+			return controllerHelper.errorHandler(e);
+		}
 	}
 
 	@RequestMapping(value= {"/addressbook/email/{id}"}, method = RequestMethod.GET)
 	public ModelAndView emailAddressBookGroup(Authentication auth, 
 			@PathVariable int id, HttpServletRequest request) {
-		ModelAndView mv =  new ModelAndView("modal/dynamic/email-group");
-		mv.addObject("group",addressBookService.getAddressBookGroupById(id));
-		mv.addObject("addressBook",addressBookService.getAddressBookEntries());
-		mv.addObject("addressBookGroups",addressBookService.getAddressBookGroups());
-		return mv;
+		try {
+			ModelAndView mv =  new ModelAndView("modal/dynamic/email-group");
+			mv.addObject("group",addressBookService.getAddressBookGroupById(id));
+			mv.addObject("addressBook",addressBookService.getAddressBookEntries());
+			mv.addObject("addressBookGroups",addressBookService.getAddressBookGroups());
+			return mv;
+		} catch (Exception e){
+			return controllerHelper.errorHandler(e);
+		}
 	}
 	
 	@RequestMapping(value = {"addressbook/email"}, method = RequestMethod.POST)
@@ -147,9 +167,13 @@ public class AddressBookController {
 
 	@RequestMapping(value= {"/addressbook/edit/{id}"}, method = RequestMethod.GET)
 	public ModelAndView getAddressBookEntryDetails(Authentication auth, @PathVariable int id, HttpServletRequest request) {
-		ModelAndView mv = new ModelAndView("modal/dynamic/edit-address-book-entry");
-		mv.addObject("entry",addressBookService.getAddressBookEntryById(id));
-		return mv;
+		try {
+			ModelAndView mv = new ModelAndView("modal/dynamic/edit-address-book-entry");
+			mv.addObject("entry",addressBookService.getAddressBookEntryById(id));
+			return mv;
+		} catch (Exception e) {
+			return controllerHelper.errorHandler(e);
+		}
 	}
 
 	@RequestMapping(value= {"/addressbook/edit/{id}"}, method = RequestMethod.POST)
@@ -161,46 +185,61 @@ public class AddressBookController {
 			@RequestParam(name="email", required=true) String email,
 			@RequestParam(name="username", required=false) String username,
 			HttpServletRequest request) {
-		addressBookService.editEntryById(new AddressBookEntry(id,firstName,lastName,username,email,phone));
+		try {
+			addressBookService.editEntryById(new AddressBookEntry(id,firstName,lastName,username,email,phone));
+		} catch (Exception e) {
+			controllerHelper.errorHandler(e);
+		}
 	}
 
 	@RequestMapping(value= {"/addressbook/add-member-to-group"}, method = RequestMethod.GET)
 	public ModelAndView addMemberToGroupModal(Authentication auth,
 			@RequestParam(name="entryId",required=true) int entryId
 			) {
-		ModelAndView mv = new ModelAndView("modal/dynamic/add-ab-entry-to-group");
-		mv.addObject("entry", addressBookService.getAddressBookEntryById(entryId));
-		mv.addObject("groups", addressBookService.getAddressBookGroups());
-		return mv;
+		try {
+			ModelAndView mv = new ModelAndView("modal/dynamic/add-ab-entry-to-group");
+			mv.addObject("entry", addressBookService.getAddressBookEntryById(entryId));
+			mv.addObject("groups", addressBookService.getAddressBookGroups());
+			return mv;
+		} catch (Exception e) {
+			return controllerHelper.errorHandler(e);
+		}
 	}
 	@RequestMapping(value= {"/addressbook/add-member-to-group"}, method = RequestMethod.POST)
 	@ResponseStatus(HttpStatus.OK)
 	public void addMemberToGroup(Authentication auth,
 			@RequestParam(name="entryId",required=true) int entryId,
 			@RequestParam(name="groupId",required=true) int groupId,
-			@RequestParam(name="newGroup",required=false) String newGroup
-			) {
-		if (groupId == 0 && newGroup != null) {
-			groupId = addressBookService.createGroup(newGroup);
+			@RequestParam(name="newGroup",required=false) String newGroup) {
+		try{
+			if (groupId == 0 && newGroup != null) {
+				groupId = addressBookService.createGroup(newGroup);
+			}
+			addressBookService.addMemberToGroup(entryId,groupId);
+		} catch (Exception e) {
+			controllerHelper.errorHandler(e);
 		}
-		addressBookService.addMemberToGroup(entryId,groupId);
 	}
 	@RequestMapping(value= {"/addressbook/add-multiple-members"}, method = RequestMethod.POST)
 	@ResponseStatus(HttpStatus.OK)
 	public void addMultipleMemberToGroup(Authentication auth,
 			@RequestParam(name="abEntriesToAdd",required=true) int[] entryIds,
-			@RequestParam(name="groupId",required=true) int groupId
-			) {
-		Arrays.stream(entryIds).forEach(e -> {
-			addressBookService.addMemberToGroup(e,groupId);
-		});
+			@RequestParam(name="groupId",required=true) int groupId) {
+		try {
+			Arrays.stream(entryIds).forEach(e -> addressBookService.addMemberToGroup(e,groupId));
+		} catch (Exception e) {
+			controllerHelper.errorHandler(e);
+		}
 	}
 	@RequestMapping(value= {"/addressbook/remove-member-from-group"}, method = RequestMethod.POST)
 	@ResponseStatus(HttpStatus.OK)
 	public void removeMemberFromGroup(Authentication auth,
 			@RequestParam(name="entryId",required=true) int entryId,
-			@RequestParam(name="groupId",required=true) int groupId
-			) {
-		addressBookService.removeMemberFromGroup(entryId,groupId);
+			@RequestParam(name="groupId",required=true) int groupId) {
+		try {
+			addressBookService.removeMemberFromGroup(entryId,groupId);
+		} catch (Exception e) {
+			controllerHelper.errorHandler(e);
+		}
 	}
 }
