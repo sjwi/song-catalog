@@ -99,13 +99,16 @@ public class ControllerHelper {
 		return setListName;
 	}
 
-	public String getOs(HttpServletRequest request) {
+	public String getOs() {
+		HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
 		String agent = request.getHeader("User-Agent");
 		return UserAgent.parseUserAgentString(agent).getOperatingSystem().toString();
 	}
 	
 	public ModelAndView errorHandler(Exception e) {
-        logger.logErrorWithEmail(httpServletRequestToString() + "\n\n" + ExceptionUtils.getStackTrace(e));
+        logger.logErrorWithEmail("User " + getSessionUsername() + " on a " + getOs() + " device.\n" + 
+			httpServletRequestToString() + "\n" + 
+			ExceptionUtils.getStackTrace(e));
 		ModelAndView mv = new ModelAndView("error");
 		try {
 			mv.addObject("orgs",organizationService.getOrganizations());
@@ -115,6 +118,13 @@ public class ControllerHelper {
 		return mv;
 	}
 
+	public String getSessionUsername() {
+		try {
+			return ((CfUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername();
+		} catch (Exception e) {
+			return "anonymousUser";
+		}
+	}
 
 	public String recipientsToString(List<String> recipients) {
 		return recipients == null? "": recipients.stream().map(t -> {
@@ -148,7 +158,8 @@ public class ControllerHelper {
 		return "<a href=\"" + link + "\">" + linkName + "</a>";
 	}
 
-	public String getFullUrL(HttpServletRequest request) {
+	public String getFullUrl() {
+		HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
 	    StringBuilder requestURL = new StringBuilder(request.getRequestURL().toString());
 	    String queryString = request.getQueryString();
 
@@ -189,7 +200,8 @@ public class ControllerHelper {
 		return sb.toString();
 	}
 
-	public void setCookiesInSession(HttpServletRequest request) {
+	public void setCookiesInSession() {
+		HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
 		if (request.getSession(false) == null) {
 			request.getSession(true);
 			logger.logSessionCreation(request);
@@ -203,7 +215,8 @@ public class ControllerHelper {
 		}
 	}
 	
-	public void attemptUserLoginViaCookie(HttpServletRequest request, HttpServletResponse response) {
+	public void attemptUserLoginViaCookie() {
+		HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
 		try {
 			if (request.getSession(false) == null 
 					|| (SecurityContextHolder.getContext().getAuthentication() != null
@@ -217,7 +230,7 @@ public class ControllerHelper {
 					if (token != null && token.isTokenValid()) {
 						CfUser user = (CfUser) userService.loadUserByUsername(token.getUser());
 						SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities()));
-						setSessionPreferences(user,request,response);
+						setSessionPreferences(user);
 						logger.logSignInFromCookie(request, user.getUsername());
 					}
 				}
@@ -227,7 +240,9 @@ public class ControllerHelper {
 		}
 	}
 
-	public void setSessionPreferences(CfUser cfUser, HttpServletRequest request, HttpServletResponse response) {
+	public void setSessionPreferences(CfUser cfUser) {
+		HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
+		HttpServletResponse response = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getResponse();
 		if (request.getSession(false) == null) {
 			request.getSession(true);
 		}

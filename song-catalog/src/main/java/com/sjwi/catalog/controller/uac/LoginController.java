@@ -62,7 +62,7 @@ public class LoginController {
 		try {
 			request.login(username, password);
 			logger.logSignIn(request, username);
-			controllerHelper.setSessionPreferences((CfUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal(), request, response);
+			controllerHelper.setSessionPreferences((CfUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal());
 			generateCookieToken(request, response, username);
 			return new ResponseMessage("success");
 		} catch (ServletException e) {

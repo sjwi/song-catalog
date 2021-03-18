@@ -81,7 +81,7 @@ public class SetListEmailController {
 				attachments.put(pptGenerator.getFilePath(), setList.getNormalizedSetListName() + ".pptx");
 			}
 			if (attachPdf != null) {
-				FileGenerator pdfGenerator = new PdfFileGenerator(0,controllerHelper.getFullUrL(request));
+				FileGenerator pdfGenerator = new PdfFileGenerator(0,controllerHelper.getFullUrl());
 				SetList setList = controllerHelper.buildSetFile(id, pdfGenerator, false);
 				attachments.put(pdfGenerator.getFilePath(), setList.getNormalizedSetListName() + ".pdf");
 			}

@@ -6,14 +6,12 @@ import javax.servlet.http.HttpServletRequest;
 
 import com.sjwi.catalog.controller.ControllerHelper;
 import com.sjwi.catalog.log.CustomLogger;
-import com.sjwi.catalog.model.user.CfUser;
 
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
@@ -41,17 +39,10 @@ public class PageRequestLogger {
 		String requestUrl = request.getRequestURL().toString();
 		String parameters = request.getParameterMap().entrySet().stream()
 				.map(p -> "\n\t\t" + p.getKey() + ": " + String.join(",", request.getParameterMap().get(p.getKey()))).collect(Collectors.joining());
-		String username = getSessionUser(joinPoint.getArgs());
-		String os =  controllerHelper.getOs(request);
+		String username = controllerHelper.getSessionUsername();
+		String os =  controllerHelper.getOs();
 
 		log.info(signature + "\n\t" + requestUrl + parameters + "\n\tcalled by " + username + " on a " + os + " device.\n\n");
 	}
 	
-	private String getSessionUser(Object[] objects) {
-		try {
-			return ((CfUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername();
-		} catch (Exception e) {
-			return "anonymousUser";
-		}
-	}
 }

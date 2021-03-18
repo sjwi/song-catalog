@@ -163,7 +163,7 @@ public class AccountManagementController {
 				userService.resetPassword(cfUser.getUsername(), password);
 				request.login(cfUser.getUsername(), password);
 				logger.logSignIn(request, cfUser.getUsername());
-				controllerHelper.setSessionPreferences(cfUser, request, response);
+				controllerHelper.setSessionPreferences(cfUser);
 				tokenService.deletePasswordResetToken(cfUser.getUsername());
 				return new ResponseMessage("success");
 			} else {

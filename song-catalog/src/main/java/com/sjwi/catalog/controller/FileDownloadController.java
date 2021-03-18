@@ -90,7 +90,7 @@ public class FileDownloadController {
 					"<br>alignCenter = " +  alignCenter + 
 					"<br>fontSize = " + fontSize + 
 					"<br>fileName = " + fileName + 
-					"<br>" + controllerHelper.buildHtmlLinkFromUrl(controllerHelper.getFullUrL(request), "Download Link") + "<br>");
+					"<br>" + controllerHelper.buildHtmlLinkFromUrl(controllerHelper.getFullUrl(), "Download Link") + "<br>");
 		} catch (Exception e) {
 			controllerHelper.errorHandler(e);
 		}
@@ -102,7 +102,7 @@ public class FileDownloadController {
 			@RequestParam (value = "lyricsOnly", required = false, defaultValue = "false") boolean lyricsOnly,
 			@RequestParam (name="qrCode", required=false, defaultValue = "false") boolean qrCode) {
 		try {
-			FileGenerator pdfGenerator = new PdfFileGenerator(fontSize.orElse(0), qrCode? controllerHelper.getFullUrL(request): null);
+			FileGenerator pdfGenerator = new PdfFileGenerator(fontSize.orElse(0), qrCode? controllerHelper.getFullUrl(): null);
 			List<Song> songs = songService.getSongs().stream()
 									.map(s -> lyricsOnly? s.transpose(LYRICS_ONLY_KEY_CODE): s)
 									.collect(Collectors.toList());
@@ -116,7 +116,7 @@ public class FileDownloadController {
 					lyricsOnly + "<br>fontSize = " + 
 					fontSize + "<br>qrCode = " + 
 					qrCode + "<br>fileName = " + fileName + "<br>" +
-					controllerHelper.buildHtmlLinkFromUrl(controllerHelper.getFullUrL(request), "Download Link") + "<br>");
+					controllerHelper.buildHtmlLinkFromUrl(controllerHelper.getFullUrl(), "Download Link") + "<br>");
 		} catch (Exception e) {
 			controllerHelper.errorHandler(e);
 		}
@@ -141,7 +141,7 @@ public class FileDownloadController {
 					"<br>alignCenter = " +  alignCenter + 
 					"<br>fontSize = " + fontSize + 
 					"<br>fileName = " + fileName + 
-					"<br>" + controllerHelper.buildHtmlLinkFromUrl(controllerHelper.getFullUrL(request), "Download Link") + "<br>");
+					"<br>" + controllerHelper.buildHtmlLinkFromUrl(controllerHelper.getFullUrl(), "Download Link") + "<br>");
 		} catch (Exception e) {
 			controllerHelper.errorHandler(e);
 		}
@@ -166,7 +166,7 @@ public class FileDownloadController {
 					"<br>alignCenter = " +  alignCenter + 
 					"<br>fontSize = " + fontSize + 
 					"<br>fileName = " + fileName + 
-					"<br>" + controllerHelper.buildHtmlLinkFromUrl(controllerHelper.getFullUrL(request), "Download Link") + "<br>");
+					"<br>" + controllerHelper.buildHtmlLinkFromUrl(controllerHelper.getFullUrl(), "Download Link") + "<br>");
 		} catch (Exception e) {
 			controllerHelper.errorHandler(e);
 		}
@@ -182,7 +182,7 @@ public class FileDownloadController {
 			@RequestParam (name="qrCode", required=false, defaultValue = "false") boolean qrCode,
 			@RequestParam (name="key",required=false) String key) {
 		try {
-			FileGenerator pdfGenerator = new PdfFileGenerator(fontSize.orElse(0), qrCode? controllerHelper.getFullUrL(request): null);
+			FileGenerator pdfGenerator = new PdfFileGenerator(fontSize.orElse(0), qrCode? controllerHelper.getFullUrl(): null);
 			Song song = songService.getSongById(id);
 			fileName = fileName == null? song.getNormalizedName(): controllerHelper.normalizeString(fileName);
 			if (lyricsOnly)
@@ -195,7 +195,7 @@ public class FileDownloadController {
             logger.logUserActionWithEmail(fileName + " pdf downloaded. <br>lyricsOnly = " +  
             		lyricsOnly + "<br>fontSize = " + 
             		fontSize + "<br>fileName = " + fileName + "<br>" +
-            		controllerHelper.buildHtmlLinkFromUrl(controllerHelper.getFullUrL(request), "Download Link") + "<br>");
+            		controllerHelper.buildHtmlLinkFromUrl(controllerHelper.getFullUrl(), "Download Link") + "<br>");
 		} catch (Exception e) {
 			controllerHelper.errorHandler(e);
 		}
@@ -210,7 +210,7 @@ public class FileDownloadController {
 			@RequestParam(value = "lyricsOnly", required = false, defaultValue = "false") boolean lyricsOnly,
 			@RequestParam (name="qrCode",required=false, defaultValue = "false") boolean qrCode) {
 		try {
-			FileGenerator pdfGenerator = new PdfFileGenerator(fontSize.orElse(0), qrCode? controllerHelper.getFullUrL(request): null);
+			FileGenerator pdfGenerator = new PdfFileGenerator(fontSize.orElse(0), qrCode? controllerHelper.getFullUrl(): null);
 			SetList setList = lyricsOnly? 
 								setListService.getLyricsToSetListById(id).setSetListName(fileName): 
 								setListService.getSetListById(id).setSetListName(fileName);
