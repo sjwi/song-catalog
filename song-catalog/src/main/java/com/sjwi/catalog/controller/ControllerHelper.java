@@ -3,8 +3,6 @@ package com.sjwi.catalog.controller;
 import static com.sjwi.catalog.config.PreferencesConfiguration.NIGHT_MODE_PREFERENCE_KEY;
 import static com.sjwi.catalog.model.security.StoredCookieToken.STORED_COOKIE_TOKEN_KEY;
 
-import java.io.PrintWriter;
-import java.io.StringWriter;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -23,14 +21,11 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.sjwi.catalog.exception.DatabaseException;
 import com.sjwi.catalog.exception.FileUtilityException;
-import com.sjwi.catalog.exception.MailException;
 import com.sjwi.catalog.file.FileGenerator;
 import com.sjwi.catalog.log.CustomLogger;
-import com.sjwi.catalog.mail.MailConstants;
 import com.sjwi.catalog.mail.Mailer;
 import com.sjwi.catalog.model.Organization;
 import com.sjwi.catalog.model.SetList;
-import com.sjwi.catalog.model.mail.Email;
 import com.sjwi.catalog.model.security.SecurityToken;
 import com.sjwi.catalog.model.user.CfUser;
 import com.sjwi.catalog.service.AddressBookService;
@@ -40,11 +35,14 @@ import com.sjwi.catalog.service.TokenService;
 import com.sjwi.catalog.service.UserService;
 
 import org.apache.commons.lang.WordUtils;
+import org.apache.commons.lang.exception.ExceptionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.servlet.ModelAndView;
 
 import eu.bitwalker.useragentutils.UserAgent;
@@ -107,18 +105,7 @@ public class ControllerHelper {
 	}
 	
 	public ModelAndView errorHandler(Exception e) {
-		StringWriter sw = new StringWriter();
-        e.printStackTrace(new PrintWriter(sw));
-        String exceptionAsString = sw.toString();	
-        logger.error(exceptionAsString);
-		try {
-			mailer.sendMail(new Email()
-					.setTo(MailConstants.ADMIN_DISTRIBUTION_LIST)
-					.setBody("Please reference below error:\n\n\n" + exceptionAsString)
-					.setSubject(MailConstants.ERROR_SUBJECT));
-		} catch (MailException mailException) {
-			logger.error(mailException);
-		}
+        logger.logErrorWithEmail(httpServletRequestToString() + "\n\n" + ExceptionUtils.getStackTrace(e));
 		ModelAndView mv = new ModelAndView("error");
 		try {
 			mv.addObject("orgs",organizationService.getOrganizations());
@@ -171,7 +158,9 @@ public class ControllerHelper {
 	        return requestURL.append('?').append(queryString).toString();
 	    }
 	}
-	public String httpServletRequestToString(HttpServletRequest request) {
+	public String httpServletRequestToString() {
+
+		HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
 		StringBuilder sb = new StringBuilder();
 
 		sb.append("Request Method = [" + request.getMethod() + "], ");

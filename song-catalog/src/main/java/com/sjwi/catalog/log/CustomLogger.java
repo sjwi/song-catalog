@@ -60,7 +60,7 @@ public class CustomLogger {
 
 	public void logErrorWithEmail(String message) {
 		log.error(message);
-		new Thread(new SendLogMessageWithEmail(message)).start();
+		new Thread(new SendLogMessageWithEmail(message, MailConstants.ERROR_SUBJECT)).start();
 	}
 	
 	public void logSignIn(HttpServletRequest request, String user) {
@@ -86,10 +86,16 @@ public class CustomLogger {
 	
 	private class SendLogMessageWithEmail implements Runnable {
 		
-		private String message;
+		private final String message;
+		private final String subject;
 		
 		SendLogMessageWithEmail(String message){
 			this.message = message;
+			this.subject = properName + " Log Notification";
+		}
+		SendLogMessageWithEmail(String message, String subject){
+			this.message = message;
+			this.subject = subject;
 		}
 		@Override
 		public void run() {
@@ -97,9 +103,8 @@ public class CustomLogger {
 				mailer.sendMail(new Email()
 						.setBody(message)
 						.setTo(MailConstants.ADMIN_DISTRIBUTION_LIST)
-						.setSubject(properName + " Log Notification"));
+						.setSubject(subject));
 			} catch (MailException e) {
-				e.printStackTrace();
 				error(e);
 			}
 		}
