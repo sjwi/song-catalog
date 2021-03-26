@@ -380,7 +380,7 @@ getAllServices: >
   Select * from Services order by NAME
   
 getAllOrganizations: >
-  Select * from Organizations order by NAME
+  Select * from Organizations order by ID
   
 getOrganizationById: >
   Select * from Organizations where ID = ?
