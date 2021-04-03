@@ -67,7 +67,7 @@ public class PowerPointDeck {
 	}
 
 	private List<List<String>> reduceChunksToLinesLessThanLineSizeMax(List<String> chunkSplitIntoLines, int defaultLinesPerSlide) {
-		List<List<String>> chunksInDefaultLinesPerSlide = partitionListIntoSubLists(chunkSplitIntoLines ,defaultLinesPerSlide);
+		List<List<String>> chunksInDefaultLinesPerSlide = partitionListIntoSubLists(chunkSplitIntoLines, defaultLinesPerSlide);
 		return chunksInDefaultLinesPerSlide.stream()
 				.map(this::reduceLinesToLessThanLineSizeMax)
 				.flatMap(s -> {
@@ -119,10 +119,7 @@ public class PowerPointDeck {
 	}
 
 	private String removeAddedSubstring(String line, int index) {
-			line = line.substring(index + 1).trim();
-		if (line.length() > 1) {
-			return (line.substring(0,1).toUpperCase() + line.substring(1)).trim();
-		} else return line;
+			return line.substring(index + 1).trim();
 	}
 	
 	private List<List<String>> partitionListIntoSubLists(List<String> list, int partitionSize)
@@ -141,6 +138,11 @@ public class PowerPointDeck {
 
 			partition.add(new ArrayList<String>(list.subList(fromIndex, toIndex)));
 		}
+		if (partition.get(partition.size() - 1).size() == 1 && partition.size() > 1 && partition.get(partition.size() - 2).size() < MAX_NUMBER_OF_LINES_PER_PAGE){
+			partition.get(partition.size() - 2).add(partition.get(partition.size() - 1).get(0));
+			partition.remove(partition.size() - 1);
+		}
+
 
 		return partition;
 	}
