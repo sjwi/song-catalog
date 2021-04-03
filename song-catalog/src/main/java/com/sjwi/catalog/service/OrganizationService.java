@@ -16,7 +16,7 @@ public class OrganizationService {
 	OrganizationDao organizationDao;
 
 	public Organization getOrganizationById(int org) {
-		return org == 0? new Organization(0,"CF","CF",null): organizationDao.getOrganizationById(org);
+		return org == 0? new Organization(0,"Other","Other",null): organizationDao.getOrganizationById(org);
 	}
 
 	public String getMeetingServiceById(int service) {

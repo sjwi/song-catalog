@@ -138,7 +138,8 @@ public class OrganizationController {
 			switch (endpoint) {
 				case "lyrics-handout": case "latest-handout":
 					log.logUserActionWithEmail(organization.getName() + " lyric handout shortlink visited");
-					return new ModelAndView("redirect:" + context.getContextPath() + "/org/" + id + "/" + organization.getName() + "%20Worship%20Handout");
+					String dynamicName = organization.getId() == 0? "CF" : organization.getName();
+					return new ModelAndView("redirect:" + context.getContextPath() + "/org/" + id + "/" + dynamicName + "%20Worship%20Handout");
 				case "deck": case "slides": case "slideshow": case "ppt": case "presentation":
 					return new ModelAndView("forward:/" + context.getContextPath() 
 							+ "/setlist/ppt/" + setList.getId()
