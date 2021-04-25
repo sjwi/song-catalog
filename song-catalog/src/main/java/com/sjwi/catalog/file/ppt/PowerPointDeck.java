@@ -111,8 +111,8 @@ public class PowerPointDeck {
 		}
 		if (index > 10) {
 			index = 0;
-			while (line.charAt(defaultLineSize - index) != ' ') {
-				index = index + 1;
+			while (line.charAt(defaultLineSize + index) != ' ') {
+				index = index - 1;
 			}
 		}
 		return index + defaultLineSize;
