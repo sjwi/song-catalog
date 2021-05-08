@@ -645,12 +645,6 @@ p.song-body {
 	margin-right: auto;
 	width: 600px;
 }
-.alert-close {
-	position:absolute;
-	top: 0;
-	right:3px;
-	padding-right:2px;
-}
 #custom-alert > span {
 	word-wrap: break-word;
 	max-width:95%;
