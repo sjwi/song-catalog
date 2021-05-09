@@ -7,16 +7,18 @@
 						<td class="pl-2 no-gutters title col" >
 							<span th:text="${song.name}"></span>
 						</td>
-						<th:block sec:authorize="hasAuthority('USER')">
-							<td class="col-1 no-gutters d-flex align-items-center justify-content-end song-dropdown-btn">
-								<img th:src="@{/images/ellipse-inverse.png}" class="action-btn" data-toggle="dropdown">
-								<ul class="dropdown-menu">
+						<td class="col-1 no-gutters d-flex align-items-center justify-content-end song-dropdown-btn" th:classappend="${!#authorization.expression('hasAuthority(''USER'')')}? 'pr-2': ''">
+							<img th:src="@{/images/ellipse-inverse.png}" class="action-btn" data-toggle="dropdown">
+							<ul class="dropdown-menu">
+								<th:block sec:authorize="hasAuthority('USER')">
 									<li>
 										<a class="dropdown-item add-to-set-btn">Add to Set</a>
 									</li>
-									<li>
-										<a class="dropdown-item" th:attr="onclick=${'downloadFile(''song'', ' + song.id + ')'}">Download</a>
-									</li>
+								</th:block>
+								<li>
+									<a class="dropdown-item" th:attr="onclick=${'downloadFile(''song'', ' + song.id + ')'}">Download</a>
+								</li>
+								<th:block sec:authorize="hasAuthority('USER')">
 									<li>
 										<a class="dropdown-item edit-song-btn">Edit</a>
 									</li>
@@ -26,8 +28,10 @@
 									<li>
 										<a class="dropdown-item delete-btn">Delete</a>
 									</li>
-								</ul>
-							</td>
+								</th:block>
+							</ul>
+						</td>
+						<th:block sec:authorize="hasAuthority('USER')">
 							<td draggable="true" ondragstart="dragSong(event)" 
 								data-toggle="tooltip" data-placement="bottom" title="Click and drag over a set list to add song."
 								class="col-1 no-gutters pt-0 pb-0 d-flex align-items-center justify-content-center song-grip-container grip-container">
