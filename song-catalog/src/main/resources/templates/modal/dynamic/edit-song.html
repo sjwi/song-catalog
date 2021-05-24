@@ -26,8 +26,7 @@
 			<label for="defaultKey" class="col-form-label">Chorded In</label>
 		</div>
 		<div class="col-5 text-left flex-nowrap">
-			<select disabled class="custom-select custom-key-select btn-sm dropdown-toggle"><option selected th:text="${song.defaultKey}"></option></select>
-			<input type="hidden" name="defaultKey" th:value="${song.defaultKey}">
+			<th:block th:replace="partial/key-dropdown-select :: keySet(${song.defaultKey},'defaultKey')"></th:block>
 		</div>
 		<div class="offset-1 col-4 justify-content-end d-flex flex-nowrap">
 			<label for="updatedKey" class="col-form-label pr-1">Default Key</label>
