@@ -15,7 +15,9 @@ pipeline {
                     usernamePassword(credentialsId: 'dreamhost_cfsongs', usernameVariable: 'DREAMHOST_UN', passwordVariable: 'DREAMHOST_PW'),
                     string(credentialsId:'cfsongs_dns', variable: 'DNS')
                 ]) {
-                    rollbackWar = sh(script: "sshpass -p '$DREAMHOST_PW' ssh $DREAMHOST_UN@$DNS -o StrictHostKeyChecking=no '/home/$DREAMHOST_UN/scripts/backup_cfsongs.sh'", returnStdout: true).trim()
+                    script {
+                        rollbackWar = sh(script: "sshpass -p '$DREAMHOST_PW' ssh $DREAMHOST_UN@$DNS -o StrictHostKeyChecking=no '/home/$DREAMHOST_UN/scripts/backup_cfsongs.sh'", returnStdout: true).trim()
+                    }
                 }
             }
         }
