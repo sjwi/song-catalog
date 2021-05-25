@@ -2,14 +2,14 @@ String rollbackWar
 pipeline {
     agent any
     stages {
-        stage('Build') {
+        stage('Build WAR') {
             steps {
                 dir('song-catalog') {
                     sh 'mvn clean install package'
                 }
             }
         }
-        stage('Backup') {
+        stage('Backup Existing WAR') {
             steps {
                 withCredentials([
                     usernamePassword(credentialsId: 'dreamhost_cfsongs', usernameVariable: 'DREAMHOST_UN', passwordVariable: 'DREAMHOST_PW'),
@@ -21,7 +21,7 @@ pipeline {
                 }
             }
         }
-        stage('Deploy') {
+        stage('Deploy to App Server') {
             steps {
                 withCredentials([
                     usernamePassword(credentialsId: 'dreamhost_cfsongs', usernameVariable: 'DREAMHOST_UN', passwordVariable: 'DREAMHOST_PW'),
@@ -33,7 +33,7 @@ pipeline {
                 }
             }
         }
-        stage('Test availability') {
+        stage('Test Availability') {
             steps {
                 withCredentials([
                     string(credentialsId:'cfsongs_dns', variable: 'DNS')
@@ -59,7 +59,7 @@ pipeline {
                     ]) {
                         echo "Reverting app back to war $rollbackWar ..."
                         sh "sshpass -p '$DREAMHOST_PW' ssh $DREAMHOST_UN@$DNS -o StrictHostKeyChecking=no 'cp $rollbackWar /home/$DREAMHOST_UN/$DNS/tomcat/webapps/ROOT.war'"
-                        echo "Rollback finished"
+                        echo "Rollback finished."
                     }
                 }
             }
