@@ -40,13 +40,11 @@ pipeline {
                 ]) {
                     script {
                         int testCounter = 0
-                        def appStatus = getAppServerStatusCode()
-                        sh "echo $appStatus"
+                        def appStatus = "0" //init value to wait at least 10 seconds
                         while (appStatus != "200" && testCounter < 12) {
                             sleep(10)
                             testCounter++
-                            sh "echo $appStatus"
-                            appStatus = getAppServerStatusCode()
+                            appStatus = sh(script: "curl -s -o /dev/null -w '%{http_code}' https://$DNS/server-availability", returnStdout: true).trim()
                         }
                         if (appStatus != "400")
                             throw new Exception("Application failed to deploy new .war")
@@ -59,14 +57,12 @@ pipeline {
                         usernamePassword(credentialsId: 'dreamhost_cfsongs', usernameVariable: 'DREAMHOST_UN', passwordVariable: 'DREAMHOST_PW'),
                         string(credentialsId:'cfsongs_dns', variable: 'DNS')
                     ]) {
-                        echo "Reverting app back to war $rollbackWar"
+                        echo "Reverting app back to war $rollbackWar ..."
                         sh "sshpass -p '$DREAMHOST_PW' ssh $DREAMHOST_UN@$DNS -o StrictHostKeyChecking=no 'cp $rollbackWar /home/$DREAMHOST_UN/$DNS/tomcat/webapps/ROOT.war'"
+                        echo "Rollback finished"
                     }
                 }
             }
         }
     }
-}
-def getAppServerStatusCode(){
-    return sh(script: "curl -s -o /dev/null -w '%{http_code}' https://$DNS/server-availability", returnStdout: true).trim()
 }
