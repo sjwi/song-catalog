@@ -46,7 +46,7 @@ pipeline {
                             testCounter++
                             appStatus = sh(script: "curl -s -o /dev/null -w '%{http_code}' https://$DNS/server-availability", returnStdout: true).trim()
                         }
-                        if (appStatus != "400")
+                        if (appStatus != "200")
                             throw new Exception("Application failed to deploy new .war")
                     }
                 }
