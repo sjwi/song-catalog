@@ -41,13 +41,14 @@ pipeline {
                     script {
                         int testCounter = 0
                         def appStatus = getAppServerStatusCode()
+                        sh "echo $appStatus"
                         while (appStatus != "200" && testCounter < 12) {
                             sleep(10)
                             testCounter++
                             sh "echo $appStatus"
                             appStatus = getAppServerStatusCode()
                         }
-                        if (appStatus != "200")
+                        if (appStatus != "400")
                             throw new Exception("Application failed to deploy new .war")
                     }
                 }
