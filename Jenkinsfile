@@ -65,5 +65,5 @@ pipeline {
     }
 }
 def getAppServerStatusCode(){
-    return sh(script:"$(curl -s -o /dev/null -w '%{http_code}' https://$DNS/server-availability)", returnStdout: true).trim()
+    return sh(script: "curl -s -o /dev/null -w '%{http_code}' https://$DNS/server-availability", returnStdout: true).trim()
 }
