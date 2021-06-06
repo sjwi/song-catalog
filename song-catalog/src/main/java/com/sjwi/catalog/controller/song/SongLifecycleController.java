@@ -69,7 +69,7 @@ public class SongLifecycleController {
 			if (songAudio != null) {
 				recordingService.addOrUpdateRecording(id, songAudio);
 			}
-			logger.logMessageWithEmail("New song created by " + auth.getName() + ": " + songTitle);
+			logger.logMessageWithEmail("New song created by " + auth.getName() + ": " + songTitle + "\n " + controllerHelper.getBaseUrl() + "/song/" + id);
 			return new ResponseMessage("success",id);
 		} catch (Exception e) {
 			controllerHelper.errorHandler(e);

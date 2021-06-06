@@ -84,13 +84,7 @@ public class FileDownloadController {
 			fileName = fileName == null? "Song_Catalog_Export" + date: controllerHelper.normalizeString(fileName + date);
 			response.addHeader("Content-Disposition", "attachment; filename=\""+ fileName + ".pptx\"");
 			Files.copy(Paths.get(pptGenerator.buildFile(new SetList("",songs))), response.getOutputStream());
-			logger.logUserActionWithEmail(fileName + " ppt downloaded." + 
-					"<br>prependBlankSlide = " +  prependBlankSlide + 
-					"<br>blankSlideDelimeter = " +  blankSlideDelimiter + 
-					"<br>alignCenter = " +  alignCenter + 
-					"<br>fontSize = " + fontSize + 
-					"<br>fileName = " + fileName + 
-					"<br>" + controllerHelper.buildHtmlLinkFromUrl(controllerHelper.getFullUrl(), "Download Link") + "<br>");
+			logger.logUserActionWithEmail(fileName + " ppt downloaded." + "\n" + controllerHelper.getFullUrl());
 		} catch (Exception e) {
 			controllerHelper.errorHandler(e);
 		}
@@ -112,11 +106,7 @@ public class FileDownloadController {
 			response.setContentType("application/pdf; name=\"" + fileName + "\"");
             response.addHeader("Content-Disposition", "inline; filename=\"" + fileName + ".pdf\"");
 			Files.copy(Paths.get(pdfGenerator.getFilePath()), response.getOutputStream());
-			logger.logUserActionWithEmail(fileName + " pdf downloaded. <br> lyricsOnly = " +  
-					lyricsOnly + "<br>fontSize = " + 
-					fontSize + "<br>qrCode = " + 
-					qrCode + "<br>fileName = " + fileName + "<br>" +
-					controllerHelper.buildHtmlLinkFromUrl(controllerHelper.getFullUrl(), "Download Link") + "<br>");
+			logger.logUserActionWithEmail(fileName + " pdf downloaded." + "\n" + controllerHelper.getFullUrl());
 		} catch (Exception e) {
 			controllerHelper.errorHandler(e);
 		}
@@ -135,13 +125,7 @@ public class FileDownloadController {
 			fileName = fileName == null? song.getNormalizedName(): controllerHelper.normalizeString(fileName);
             response.addHeader("Content-Disposition", "attachment; filename=\""+ fileName + ".pptx\"");
             Files.copy(Paths.get(pptGenerator.buildFile(song)), response.getOutputStream());
-			logger.logUserActionWithEmail(fileName + " ppt downloaded." + 
-					"<br>prependBlankSlide = " +  prependBlankSlide + 
-					"<br>blankSlideDelimeter = " +  blankSlideDelimiter + 
-					"<br>alignCenter = " +  alignCenter + 
-					"<br>fontSize = " + fontSize + 
-					"<br>fileName = " + fileName + 
-					"<br>" + controllerHelper.buildHtmlLinkFromUrl(controllerHelper.getFullUrl(), "Download Link") + "<br>");
+			logger.logUserActionWithEmail(fileName + " ppt downloaded." + "\n" + controllerHelper.getFullUrl());
 		} catch (Exception e) {
 			controllerHelper.errorHandler(e);
 		}
@@ -161,12 +145,7 @@ public class FileDownloadController {
 			fileName = fileName == null? setList.getNormalizedSetListName(): controllerHelper.normalizeString(fileName);
             response.addHeader("Content-Disposition", "attachment; filename=\"" + fileName + ".pptx\"");
             Files.copy(Paths.get(pptGenerator.getFilePath()), response.getOutputStream());
-			logger.logUserActionWithEmail(fileName + " ppt downloaded." + 
-					"<br>blankPage = " +  prependBlankSlide + 
-					"<br>alignCenter = " +  alignCenter + 
-					"<br>fontSize = " + fontSize + 
-					"<br>fileName = " + fileName + 
-					"<br>" + controllerHelper.buildHtmlLinkFromUrl(controllerHelper.getFullUrl(), "Download Link") + "<br>");
+			logger.logUserActionWithEmail(fileName + " ppt downloaded." + "\n" + controllerHelper.getFullUrl());
 		} catch (Exception e) {
 			controllerHelper.errorHandler(e);
 		}
@@ -192,10 +171,7 @@ public class FileDownloadController {
 			response.setContentType("application/pdf; name=\"" + fileName+ "\"");
             response.addHeader("Content-Disposition", "inline; filename=\""+ fileName + ".pdf\"");
             Files.copy(Paths.get(pdfGenerator.buildFile(song)), response.getOutputStream());
-            logger.logUserActionWithEmail(fileName + " pdf downloaded. <br>lyricsOnly = " +  
-            		lyricsOnly + "<br>fontSize = " + 
-            		fontSize + "<br>fileName = " + fileName + "<br>" +
-            		controllerHelper.buildHtmlLinkFromUrl(controllerHelper.getFullUrl(), "Download Link") + "<br>");
+			logger.logUserActionWithEmail(fileName + " pdf downloaded." + "\n" + controllerHelper.getFullUrl());
 		} catch (Exception e) {
 			controllerHelper.errorHandler(e);
 		}

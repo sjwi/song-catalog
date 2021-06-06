@@ -91,7 +91,7 @@ public class CustomLogger {
 		
 		SendLogMessageWithEmail(String message){
 			this.message = message;
-			this.subject = properName + " Log Notification";
+			this.subject = MailConstants.LOG_NOTIFICATION_SUBJECT;
 		}
 		SendLogMessageWithEmail(String message, String subject){
 			this.message = message;

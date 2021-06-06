@@ -88,7 +88,7 @@ public class VersionSongController {
 				setListService.changeVersion(setSongId,songId);
 			if (songAudio != null)
 				recordingService.addOrUpdateRecording(songId, songAudio);
-			logger.logMessageWithEmail("New version created by " + auth.getName() + ": " + songId);
+			logger.logMessageWithEmail("New song created by " + auth.getName() + ": " + controllerHelper.getBaseUrl() + "/song/" + songId);
 		} catch (Exception e) {
 			controllerHelper.errorHandler(e);
 		} 

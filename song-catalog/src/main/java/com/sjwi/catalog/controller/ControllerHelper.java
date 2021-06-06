@@ -158,6 +158,14 @@ public class ControllerHelper {
 		return "<a href=\"" + link + "\">" + linkName + "</a>";
 	}
 
+	public String getBaseUrl() {
+		HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
+		String scheme = request.getScheme() + "://";
+		String serverName = request.getServerName();
+		String contextPath = request.getContextPath();
+		return scheme + serverName + contextPath;
+	}
+
 	public String getFullUrl() {
 		HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
 	    StringBuilder requestURL = new StringBuilder(request.getRequestURL().toString());
