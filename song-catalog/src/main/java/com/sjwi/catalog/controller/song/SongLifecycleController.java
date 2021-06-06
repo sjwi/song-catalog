@@ -82,7 +82,9 @@ public class SongLifecycleController {
 	public void deleteSong(HttpServletRequest request, HttpServletResponse response,Authentication auth,
 			@RequestParam(value = "songId", required = true) int songId) {
 		try {
+			Song song = songService.getSongById(songId);
 			songService.deleteSong(songId);
+			logger.logMessageWithEmail("Song deleted by " + auth.getName() + ": " + song.getNormalizedName() + " (ID: " + songId + ")");
 		} catch (Exception e) {
 			controllerHelper.errorHandler(e);
 		}
@@ -130,6 +132,7 @@ public class SongLifecycleController {
 				setListService.changeVersion(setSongId, id);
 			if (songAudio != null)
 				recordingService.addOrUpdateRecording(id, songAudio);
+			logger.logMessageWithEmail("Song edited by " + auth.getName() + ": " + existingSong.getNormalizedName() + " (ID: " + existingSong.getId() + ") \n " + controllerHelper.getBaseUrl() + "/song/" + id);
 		} catch (Exception e){
 			controllerHelper.errorHandler(e);
 		}

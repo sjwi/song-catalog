@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.sjwi.catalog.controller.ControllerHelper;
 import com.sjwi.catalog.log.CustomLogger;
+import com.sjwi.catalog.model.SetList;
 import com.sjwi.catalog.service.OrganizationService;
 import com.sjwi.catalog.service.SetListService;
 
@@ -51,7 +52,8 @@ public class SetListLifecycleController {
 			HttpServletRequest request, HttpServletResponse response) {
 		try {
 			String setListName = controllerHelper.buildSetlistName(unit,subUnit,otherUnit,otherSubUnit,date,homegroupName);
-			setListService.createSet(setListName,principal.getName(), unit,subUnit);
+			int setListId = setListService.createSet(setListName,principal.getName(), unit,subUnit);
+			logger.logMessageWithEmail("New set list created by " + auth.getName() + ": " + setListName + "\n " + controllerHelper.getBaseUrl() + "/setlist/" + setListId);
 		} catch (Exception e) {
 			controllerHelper.errorHandler(e);
 		}
@@ -60,7 +62,9 @@ public class SetListLifecycleController {
 	@ResponseStatus(value = HttpStatus.OK)
 	public void deleteSet(@PathVariable int id, Authentication auth, HttpServletRequest request, HttpServletResponse response) {
 		try {
+			SetList setList = setListService.getSetListById(id);
 			setListService.deleteSet(id);
+			logger.logMessageWithEmail("Set List deleted by " + auth.getName() + ": " + setList.getNormalizedSetListName() + " (ID: " + id + ")");
 		} catch (Exception e) {
 			controllerHelper.errorHandler(e);
 		}

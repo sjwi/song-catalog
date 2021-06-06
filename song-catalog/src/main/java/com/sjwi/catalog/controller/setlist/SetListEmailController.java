@@ -12,6 +12,7 @@ import com.sjwi.catalog.dao.sql.SqlVersionDao;
 import com.sjwi.catalog.file.FileGenerator;
 import com.sjwi.catalog.file.pdf.PdfFileGenerator;
 import com.sjwi.catalog.file.ppt.PptFileGenerator;
+import com.sjwi.catalog.log.CustomLogger;
 import com.sjwi.catalog.mail.Mailer;
 import com.sjwi.catalog.model.SetList;
 import com.sjwi.catalog.model.mail.EmailWithAttachment;
@@ -46,6 +47,9 @@ public class SetListEmailController {
 	
 	@Autowired
 	Mailer mailer;
+	
+	@Autowired
+	CustomLogger logger;
 	
 	@RequestMapping(value = {"setlist/email/{id}"}, method = RequestMethod.GET)
 	public ModelAndView populateEmailModal(HttpServletRequest request, HttpServletResponse response,
@@ -97,6 +101,8 @@ public class SetListEmailController {
 					.setCc(emailToCcStr)
 					.setBody(finalMessageBody)
 					.setSubject(subject));
+			SetList setList = setListService.getSetListById(id);
+			logger.logMessageWithEmail("Set List emailed by " + auth.getName() + ": " + setList.getNormalizedSetListName() + " (ID: " + id + ")");
 		} catch (Exception e) {
 			controllerHelper.errorHandler(e);
 		}

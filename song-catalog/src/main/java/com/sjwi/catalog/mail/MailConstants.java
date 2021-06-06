@@ -12,8 +12,8 @@ public class MailConstants {
 	public static void initializeMailConstants(String defaultFromAddress, String adminDistributionList, String properName) {
 		DEFAULT_FROM_ADDRESS = defaultFromAddress;
 		ADMIN_DISTRIBUTION_LIST = adminDistributionList;
-		LOG_NOTIFICATION_SUBJECT = "Log Notification";
-		ERROR_SUBJECT = "ERROR";
+		LOG_NOTIFICATION_SUBJECT = properName + " Log Notification";
+		ERROR_SUBJECT = properName + " ERROR";
 		INVITATION_SUBJECT = "{{USERNAME}} has invited you to join the " + properName + " Website";
 		PASSWORD_RESET_SUBJECT = "Password Reset Requested - " + properName;
 	}
