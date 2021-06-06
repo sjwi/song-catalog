@@ -52,8 +52,7 @@ public class SetListLifecycleController {
 			HttpServletRequest request, HttpServletResponse response) {
 		try {
 			String setListName = controllerHelper.buildSetlistName(unit,subUnit,otherUnit,otherSubUnit,date,homegroupName);
-			int setListId = setListService.createSet(setListName,principal.getName(), unit,subUnit);
-			logger.logMessageWithEmail("New set list created by " + auth.getName() + ": " + setListName + "\n " + controllerHelper.getBaseUrl() + "/setlist/" + setListId);
+			setListService.createSet(setListName,principal.getName(), unit,subUnit);
 		} catch (Exception e) {
 			controllerHelper.errorHandler(e);
 		}

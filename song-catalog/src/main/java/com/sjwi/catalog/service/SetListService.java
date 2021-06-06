@@ -2,13 +2,14 @@ package com.sjwi.catalog.service;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
+import com.sjwi.catalog.controller.ControllerHelper;
 import com.sjwi.catalog.dao.SetListDao;
 import com.sjwi.catalog.log.CustomLogger;
 import com.sjwi.catalog.model.SetList;
 import com.sjwi.catalog.model.song.Song;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 @Component
 public class SetListService {
@@ -17,7 +18,10 @@ public class SetListService {
 	SetListDao setListDao;
 	
 	@Autowired
-	CustomLogger log;
+	CustomLogger logger;
+	
+	@Autowired
+	ControllerHelper controllerHelper;
 	
 	public SetList getSetListById(int id) {
 		return setListDao.getSetListById(id);
@@ -55,8 +59,9 @@ public class SetListService {
 	}
 	
 	public int createSet(String setListName, String user, int unit, int subUnit) {
-		log.logMessageWithEmail("New setlist created: " + setListName + " | created by: " + user);
-		return setListDao.createSet(setListName,user, unit, subUnit);
+		int setListId = setListDao.createSet(setListName,user, unit, subUnit);
+		logger.logUserActionWithEmail("New set list created: " + setListName + "\n " + controllerHelper.getBaseUrl() + "/setlist/" + setListId);
+		return setListId;
 	}
 	
 	public void deleteSet(int id) {
