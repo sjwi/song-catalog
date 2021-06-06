@@ -12,6 +12,7 @@ import com.sjwi.catalog.mail.MailConstants;
 public class Email {
 
 	protected final static String CONTENT_TYPE = "text/html; charset=UTF-8";
+	protected final static String PLAIN_CONTENT_TYPE = "text/plain; charset=UTF-8";
 
 	private String to;
 	private final String from = MailConstants.DEFAULT_FROM_ADDRESS;
@@ -25,6 +26,13 @@ public class Email {
 		message = new MimeMessage(session);
 		setStaticMessageAttributes();
 		setMessageContent();
+		return message;
+	}
+
+	public Message getPlainEmailMessage(Session session) throws AddressException, MessagingException {
+		message = new MimeMessage(session);
+		setStaticMessageAttributes();
+		message.setContent(body, PLAIN_CONTENT_TYPE);
 		return message;
 	}
 	

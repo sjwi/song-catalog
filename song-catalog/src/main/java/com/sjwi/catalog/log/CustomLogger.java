@@ -100,7 +100,7 @@ public class CustomLogger {
 		@Override
 		public void run() {
 			try {
-				mailer.sendMail(new Email()
+				mailer.sendPlainMail(new Email()
 						.setBody(message)
 						.setTo(MailConstants.ADMIN_DISTRIBUTION_LIST)
 						.setSubject(subject));
