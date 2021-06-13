@@ -33,7 +33,7 @@
 						</td>
 						<th:block sec:authorize="hasAuthority('USER')">
 							<td draggable="true" ondragstart="dragSong(event)" 
-								data-toggle="tooltip" data-placement="bottom" title="Click and drag over a set list to add song."
+								data-toggle="tooltip" data-placement="bottom" th:attr="title=${'Click and drag over a set list to add ' + song.name + ' to the set.'}"
 								class="col-1 no-gutters pt-0 pb-0 d-flex align-items-center justify-content-center song-grip-container grip-container">
 								<div class="song-grip">
 									<svg width="17" height="40" xmlns="http://www.w3.org/2000/svg">

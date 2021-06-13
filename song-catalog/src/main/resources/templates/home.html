@@ -145,7 +145,7 @@
 			var row = $(e.target).closest('.song-metadata');
 			e.dataTransfer.setData("songId",$(row).data('target'));
 			e.dataTransfer.setData("key",$(row).data('defaultkey'));
-			e.dataTransfer.setDragImage($(row)[0],200,30);
+			e.dataTransfer.setDragImage($(row)[0],350,5);
 		}
 		function dropSongToSet(e, setId){
 			dragCtr = 0;
