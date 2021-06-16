@@ -1,4 +1,4 @@
-<div class="modal-dialog modal-xl" role="document">
+<div class="modal-dialog modal-lg" role="document">
 	<div class="modal-content">
 		<div class = "modal-header">
 			<h5 class="modal-title">Version control for <a th:href="@{/song/__${song.id}__}"><b th:text="${song.name}"></b></a></h5>
@@ -12,23 +12,23 @@
 					<table class="table table-default table-striped version-control-table">
 						<tbody>
 							<tr class="version-control-row selected master-version" th:attr="data-target=${song.id}">
-								<td class="col-3 pl-2" th:text="${'Master** [' + song.createdBy + ']'}"></td>
-								<td class="col-3">
+								<td class="col-6 pl-2" th:text="${'Master** [' + song.createdBy + ']'}"></td>
+								<td class="col-2">
 								</td>
-								<td class="col-3">
+								<td class="col-2">
 								</td>
-								<td class="col-3">
+								<td class="col-2">
 								</td>
 							</tr>
 							<tr th:each="version: ${song.versions}" class="version-control-row" th:attr="data-target=${version.id}">
-								<td class="col-3 pl-2" th:text="${version.versionName + ' [' + version.createdBy + ']'}"></td>
-								<td class="col-3">
-									<div class="btn btn-outline-info btn-xs edit-version">Edit</div>
+								<td class="col-6 pl-2" th:text="${version.versionName + ' [' + version.createdBy + ']'}"></td>
+								<td class="col-2 text-center">
+									<div class="btn btn-outline-info btn-xs edit-version"><span class="pr-2 pl-2">Edit</span></div>
 								</td>
-								<td class="col-3" data-toggle="tooltip" data-placement="bottom" title="Click to set this version as the Master version">
+								<td class="col-2" data-toggle="tooltip" data-placement="bottom" title="Click to set this version as the Master version">
 									<div class="btn btn-outline-primary btn-xs swap-master">Master</div>
 								</td>
-								<td class="col-3">
+								<td class="col-2">
 									<div class="btn btn-outline-danger btn-xs delete-version">Delete</div>
 								</td>
 							</tr>
