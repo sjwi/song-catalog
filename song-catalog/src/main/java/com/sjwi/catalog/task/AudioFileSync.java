@@ -1,5 +1,6 @@
 package com.sjwi.catalog.task;
 
+import java.io.File;
 import java.io.FileOutputStream;
 import java.util.List;
 
@@ -16,6 +17,9 @@ public class AudioFileSync extends Thread {
 	}
 
 	public void run() {
+		File baseDirectory = new File(path + "/audio");
+		if (!baseDirectory.exists())
+			baseDirectory.mkdir();
 		recordings.forEach(r -> {
 			try (FileOutputStream output = new FileOutputStream(path + r.getPath())){
 				byte[] buffer = new byte[1024];
