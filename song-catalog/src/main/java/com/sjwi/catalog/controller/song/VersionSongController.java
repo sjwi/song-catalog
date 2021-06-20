@@ -10,6 +10,7 @@ import javax.servlet.http.Part;
 
 import com.sjwi.catalog.controller.ControllerHelper;
 import com.sjwi.catalog.log.CustomLogger;
+import com.sjwi.catalog.mail.MailConstants;
 import com.sjwi.catalog.model.TransposableString;
 import com.sjwi.catalog.model.song.Song;
 import com.sjwi.catalog.service.RecordingService;
@@ -85,14 +86,14 @@ public class VersionSongController {
 			Principal principal,Authentication auth,
 			HttpServletRequest request, HttpServletResponse response) {
 		try {
-			songId = versionService.createNewVersion(songId, principal.getName(), new TransposableString(versionBody, defaultKey).getTransposedString(NUMBER_SYSTEM_KEY_CODE), defaultKey);
+			int versionId = versionService.createNewVersion(songId, principal.getName(), new TransposableString(versionBody, defaultKey).getTransposedString(NUMBER_SYSTEM_KEY_CODE), defaultKey);
 			if (!defaultKey.equals(updatedVersionKey))
-				songService.setDefaultKey(updatedVersionKey, songId, principal.getName());
+				songService.setDefaultKey(updatedVersionKey, versionId, principal.getName());
 			if (setSongId != 0)
-				setListService.changeVersion(setSongId,songId);
+				setListService.changeVersion(setSongId,versionId);
 			if (songAudio != null)
-				recordingService.addOrUpdateRecording(songId, songAudio);
-			logger.logMessageWithEmail("New song created by " + auth.getName() + ": " + baseUrl + "/song/" + songId);
+				recordingService.addOrUpdateRecording(versionId, songAudio);
+			logger.mailRevisionDeltas(songService.getSongById(songId), songService.getSongById(versionId), MailConstants.VERSION_CREATED_ACTION);
 		} catch (Exception e) {
 			controllerHelper.errorHandler(e);
 		} 

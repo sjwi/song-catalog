@@ -9,6 +9,7 @@ import javax.servlet.http.Part;
 
 import com.sjwi.catalog.controller.ControllerHelper;
 import com.sjwi.catalog.log.CustomLogger;
+import com.sjwi.catalog.mail.MailConstants;
 import com.sjwi.catalog.model.ResponseMessage;
 import com.sjwi.catalog.model.TransposableString;
 import com.sjwi.catalog.model.song.MasterSong;
@@ -136,7 +137,7 @@ public class SongLifecycleController {
 				setListService.changeVersion(setSongId, id);
 			if (songAudio != null)
 				recordingService.addOrUpdateRecording(id, songAudio);
-			logger.emailRevisionDeltas(originalSong, revisedSong);
+			logger.mailRevisionDeltas(originalSong, revisedSong, MailConstants.EDIT_ACTION);
 		} catch (Exception e){
 			controllerHelper.errorHandler(e);
 		}

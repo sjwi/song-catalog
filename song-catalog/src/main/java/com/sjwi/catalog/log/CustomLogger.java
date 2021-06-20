@@ -77,11 +77,11 @@ public class CustomLogger {
 		log.info(msg);
 		new Thread(new SendLogMessageWithEmail(msg)).start();
 	}
-	public void emailRevisionDeltas(Song originalSong, Song revisedSong){
+	public void mailRevisionDeltas(Song originalSong, Song revisedSong, String action){
 		String deltaSummary = SongService.generateSongRevisionDiff(originalSong, revisedSong).stream()
 								.map(d -> d.toString())
 								.collect(Collectors.joining("\n\n - "));
-		String message = "Song edited by " + getLoggedInUser() + ": " + revisedSong.getNormalizedName() + " (ID: " + revisedSong.getId() + ") \n\n";
+		String message = action + " by " + getLoggedInUser() + ": " + revisedSong.getNormalizedName() + " (ID: " + revisedSong.getId() + ") \n\n";
 		message += "Deltas:\n - " + deltaSummary + "\n\n";
 		message += baseUrl + "/song/" + revisedSong.getId();
 		logMessageWithEmail(message);
