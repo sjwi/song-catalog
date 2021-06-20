@@ -80,9 +80,9 @@ public class CustomLogger {
 	public void emailRevisionDeltas(Song originalSong, Song revisedSong){
 		String deltaSummary = SongService.generateSongRevisionDiff(originalSong, revisedSong).stream()
 								.map(d -> d.toString())
-								.collect(Collectors.joining("\n -"));
+								.collect(Collectors.joining("\n\n - "));
 		String message = "Song edited by " + getLoggedInUser() + ": " + revisedSong.getNormalizedName() + " (ID: " + revisedSong.getId() + ") \n\n";
-		message += "Deltas:\n" + deltaSummary + "\n";
+		message += "Deltas:\n - " + deltaSummary + "\n\n";
 		message += baseUrl + "/song/" + revisedSong.getId();
 		logMessageWithEmail(message);
 	}
