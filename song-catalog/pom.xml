@@ -172,6 +172,11 @@
 			<artifactId>javase</artifactId>
 			<version>3.3.0</version>
 		</dependency>
+		<dependency>
+		<groupId>io.github.java-diff-utils</groupId>
+		<artifactId>java-diff-utils</artifactId>
+		<version>4.9</version>
+	</dependency>
 	</dependencies>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -201,6 +206,7 @@
                     <SONG_JDBC_PLATFORM>org.hibernate.dialect.H2Dialect</SONG_JDBC_PLATFORM>
                     <SONG_JDBC_USERNAME>sa</SONG_JDBC_USERNAME>
                     <APPLICATION_PROPER_NAME>Song Catalog</APPLICATION_PROPER_NAME>
+					<APPLICATION_BASE_URL>http://localhost:5000</APPLICATION_BASE_URL>
 				  </systemPropertyVariables>
 				</configuration>
 			</plugin>

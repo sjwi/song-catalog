@@ -49,7 +49,7 @@ import eu.bitwalker.useragentutils.UserAgent;
 
 @Component
 public class ControllerHelper {
-	
+
 	@Autowired
 	AddressBookService addressBookService;
 	
@@ -156,14 +156,6 @@ public class ControllerHelper {
 	
 	public String buildHtmlLinkFromUrl(String link, String linkName) {
 		return "<a href=\"" + link + "\">" + linkName + "</a>";
-	}
-
-	public String getBaseUrl() {
-		HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
-		String scheme = request.getScheme() + "://";
-		String serverName = request.getServerName();
-		String contextPath = request.getContextPath();
-		return scheme + serverName + contextPath;
 	}
 
 	public String getFullUrl() {

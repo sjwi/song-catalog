@@ -19,6 +19,7 @@ import com.sjwi.catalog.service.SongService;
 import com.sjwi.catalog.service.VersionService;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
@@ -54,6 +55,9 @@ public class SongLifecycleController {
 	
 	@Autowired
 	CustomLogger logger;
+
+	@Value("${com.sjwi.settings.app.baseUrl}")
+	String baseUrl;
 	
 	@RequestMapping(value = {"song/create"}, method = RequestMethod.POST)
 	@ResponseBody
@@ -69,7 +73,7 @@ public class SongLifecycleController {
 			if (songAudio != null) {
 				recordingService.addOrUpdateRecording(id, songAudio);
 			}
-			logger.logMessageWithEmail("New song created by " + auth.getName() + ": " + songTitle + "\n " + controllerHelper.getBaseUrl() + "/song/" + id);
+			logger.logMessageWithEmail("New song created by " + auth.getName() + ": " + songTitle + "\n " + baseUrl + "/song/" + id);
 			return new ResponseMessage("success",id);
 		} catch (Exception e) {
 			controllerHelper.errorHandler(e);
@@ -119,20 +123,20 @@ public class SongLifecycleController {
 			Principal principal,Authentication auth,
 			HttpServletRequest request, HttpServletResponse response) {
 		try {
-			Song existingSong = songService.getSongById(id);
-			Song updatedSong = new MasterSong(null, existingSong.getId(),songTitle,new TransposableString(songBody,defaultKey),
-					updatedKey,existingSong.getArtist(),existingSong.getNotes(),existingSong.getCreatedBy(),
-					principal.getName(),new Date(), existingSong.getRelated(),existingSong.isPriv(),category,existingSong.getRecording());
+			Song originalSong = songService.getSongById(id);
+			Song revisedSong = new MasterSong(null, originalSong.getId(),songTitle,new TransposableString(songBody,defaultKey),
+					updatedKey,originalSong.getArtist(),originalSong.getNotes(),originalSong.getCreatedBy(),
+					principal.getName(),new Date(), originalSong.getRelated(),originalSong.isPriv(),category,originalSong.getRecording());
 			if (newVersion != null)
-				id = versionService.createNewVersion(updatedSong.getRelated() == 0? id: updatedSong.getRelated(), principal.getName(),
-						updatedSong.getBody(), updatedSong.getDefaultKey());
+				id = versionService.createNewVersion(revisedSong.getRelated() == 0? id: revisedSong.getRelated(), principal.getName(),
+						revisedSong.getBody(), revisedSong.getDefaultKey());
 			else
-				songService.updateSong(updatedSong, principal.getName());
+				songService.updateSong(revisedSong, principal.getName());
 			if (setSongId != 0 && newVersion != null)
 				setListService.changeVersion(setSongId, id);
 			if (songAudio != null)
 				recordingService.addOrUpdateRecording(id, songAudio);
-			logger.logMessageWithEmail("Song edited by " + auth.getName() + ": " + existingSong.getNormalizedName() + " (ID: " + existingSong.getId() + ") \n " + controllerHelper.getBaseUrl() + "/song/" + id);
+			logger.emailRevisionDeltas(originalSong, revisedSong);
 		} catch (Exception e){
 			controllerHelper.errorHandler(e);
 		}

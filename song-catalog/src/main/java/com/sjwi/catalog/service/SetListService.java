@@ -9,6 +9,7 @@ import com.sjwi.catalog.model.SetList;
 import com.sjwi.catalog.model.song.Song;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -22,6 +23,9 @@ public class SetListService {
 	
 	@Autowired
 	ControllerHelper controllerHelper;
+
+	@Value("${com.sjwi.settings.app.baseUrl}")
+	String baseUrl;
 	
 	public SetList getSetListById(int id) {
 		return setListDao.getSetListById(id);
@@ -60,7 +64,7 @@ public class SetListService {
 	
 	public int createSet(String setListName, String user, int unit, int subUnit) {
 		int setListId = setListDao.createSet(setListName,user, unit, subUnit);
-		logger.logUserActionWithEmail("New set list created: " + setListName + "\n " + controllerHelper.getBaseUrl() + "/setlist/" + setListId);
+		logger.logUserActionWithEmail("New set list created: " + setListName + "\n " + baseUrl  + "/setlist/" + setListId);
 		return setListId;
 	}
 	

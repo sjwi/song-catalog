@@ -1,25 +1,28 @@
 package com.sjwi.catalog.service;
 
 import java.sql.ResultSet;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
+import com.github.difflib.DiffUtils;
+import com.github.difflib.patch.AbstractDelta;
 import com.sjwi.catalog.dao.SongDao;
 import com.sjwi.catalog.model.KeySet;
 import com.sjwi.catalog.model.TransposableString;
 import com.sjwi.catalog.model.song.MasterSong;
 import com.sjwi.catalog.model.song.Song;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 @Component
 public class SongService {
 
 	@Autowired 
 	SongDao songDao;
-	
+
 	public Song getSongById(int id) {
 		return songDao.getSongById(id);
 	}
@@ -66,5 +69,13 @@ public class SongService {
 	}
 	public Map<Song, Integer> getServiceFrequencyCount(List<Integer> services) {
 		return services == null? new HashMap<Song, Integer>(): songDao.getServiceFrequencyCount(services);
+	}
+	public static List<AbstractDelta<String>> generateSongRevisionDiff(Song originalSong, Song revisedSong) {
+		List<String> originalSongAsList = Arrays.asList(originalSong.getBody().split("\n"));
+		List<String> revisedSongAsList = Arrays.asList(revisedSong.getBody().split("\n"));
+		originalSongAsList.add(0,originalSong.getName());
+		revisedSongAsList.add(0,revisedSong.getName());
+
+		return DiffUtils.diff(originalSongAsList, revisedSongAsList).getDeltas();
 	}
 }

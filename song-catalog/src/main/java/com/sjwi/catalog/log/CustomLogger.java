@@ -1,5 +1,7 @@
 package com.sjwi.catalog.log;
 
+import java.util.stream.Collectors;
+
 import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
 
@@ -7,9 +9,12 @@ import com.sjwi.catalog.exception.MailException;
 import com.sjwi.catalog.mail.MailConstants;
 import com.sjwi.catalog.mail.Mailer;
 import com.sjwi.catalog.model.mail.Email;
+import com.sjwi.catalog.model.song.Song;
+import com.sjwi.catalog.service.SongService;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
@@ -24,6 +29,9 @@ public class CustomLogger {
 	@Autowired
 	Mailer mailer;
 
+	@Value("${com.sjwi.settings.app.baseUrl}")
+	String baseUrl;
+	
 	private Logger log;
 
 	@PostConstruct
@@ -45,11 +53,7 @@ public class CustomLogger {
 	}
 
 	public void logUserActionWithEmail(String message) {
-		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		if (auth != null)
-			message = message + " by " + auth.getName();
-		else 
-			message = message + " by anonymous user";
+		message += " by " + getLoggedInUser();
 		log.info(message);
 		new Thread(new SendLogMessageWithEmail(message)).start();
 	}
@@ -73,11 +77,27 @@ public class CustomLogger {
 		log.info(msg);
 		new Thread(new SendLogMessageWithEmail(msg)).start();
 	}
+	public void emailRevisionDeltas(Song originalSong, Song revisedSong){
+		String deltaSummary = SongService.generateSongRevisionDiff(originalSong, revisedSong).stream()
+								.map(d -> d.toString())
+								.collect(Collectors.joining("\n"));
+		String message = "Song edited by " + getLoggedInUser() + ": " + revisedSong.getNormalizedName() + " (ID: " + revisedSong.getId() + ") \n\n";
+		message = "Deltas:\n" + deltaSummary + "\n";
+		message += baseUrl + "/song/" + revisedSong.getId();
+		logMessageWithEmail(message);
+	}
 	
 	private String getDeviceType(HttpServletRequest request) {
 		String agent = request.getHeader("User-Agent");	
 		return UserAgent.parseUserAgentString(agent).getOperatingSystem().getDeviceType().toString() + " || "
 				+ UserAgent.parseUserAgentString(agent).getOperatingSystem().toString();
+	}
+
+	private String getLoggedInUser(){
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		if (auth != null)
+			return auth.getName();
+		return "anonymous user";
 	}
 	
 	private class SendLogMessageWithEmail implements Runnable {
