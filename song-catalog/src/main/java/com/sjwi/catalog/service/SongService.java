@@ -1,6 +1,7 @@
 package com.sjwi.catalog.service;
 
 import java.sql.ResultSet;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
@@ -71,8 +72,8 @@ public class SongService {
 		return services == null? new HashMap<Song, Integer>(): songDao.getServiceFrequencyCount(services);
 	}
 	public static List<AbstractDelta<String>> generateSongRevisionDiff(Song originalSong, Song revisedSong) {
-		List<String> originalSongAsList = Arrays.asList(originalSong.getBody().split("\n"));
-		List<String> revisedSongAsList = Arrays.asList(revisedSong.getBody().split("\n"));
+		List<String> originalSongAsList = new ArrayList<String>(Arrays.asList(originalSong.getBody().split("\n")));
+		List<String> revisedSongAsList = new ArrayList<String>(Arrays.asList(revisedSong.getBody().split("\n")));
 		originalSongAsList.add(0,originalSong.getName());
 		revisedSongAsList.add(0,revisedSong.getName());
 
