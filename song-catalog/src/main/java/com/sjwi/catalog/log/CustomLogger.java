@@ -82,7 +82,7 @@ public class CustomLogger {
 								.map(d -> d.toString())
 								.collect(Collectors.joining("\n"));
 		String message = "Song edited by " + getLoggedInUser() + ": " + revisedSong.getNormalizedName() + " (ID: " + revisedSong.getId() + ") \n\n";
-		message = "Deltas:\n" + deltaSummary + "\n";
+		message += "Deltas:\n" + deltaSummary + "\n";
 		message += baseUrl + "/song/" + revisedSong.getId();
 		logMessageWithEmail(message);
 	}
