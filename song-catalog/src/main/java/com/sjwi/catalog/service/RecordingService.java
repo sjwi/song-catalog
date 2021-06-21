@@ -11,11 +11,12 @@ import java.util.List;
 import javax.servlet.ServletContext;
 import javax.servlet.http.Part;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
+import com.sjwi.catalog.config.AudioConfiguration;
 import com.sjwi.catalog.dao.RecordingDao;
 import com.sjwi.catalog.model.Recording;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 @Component
 public class RecordingService {
@@ -27,19 +28,27 @@ public class RecordingService {
 	ServletContext context;
 
 	public void addOrUpdateRecording(int id, Part songAudioPart) throws IOException {
-		if(songAudioPart.getInputStream().available() != 0) {
-			recordingDao.addOrUpdateRecording(writeAudioFileToSystem(id, songAudioPart, context.getRealPath("/")));
-		}
+		if(songAudioPart.getInputStream().available() != 0)
+			recordingDao.addOrUpdateRecording(writeAudioFileToSystem(id, songAudioPart));
 	}
 
 	public void deleteRecording(int id) {
 		recordingDao.deleteRecording(id);
 	}
 
-	private Recording writeAudioFileToSystem(int id, Part filePart, String root) throws IOException {
+	public Recording getRecordingBySongId(int id) {
+		return recordingDao.getRecordingBySongId(id);
+	}
+	public Recording getRecordingWithFileBySongId(int id) {
+		return recordingDao.getRecordingWithFileBySongId(id);
+	}
+	public List<Recording> getAllRecordings(){
+		return recordingDao.getAllRecordingsWithFileStreams();
+	}
+
+	private Recording writeAudioFileToSystem(int id, Part filePart) throws IOException {
 		
-		root = root + "/audio/";
-		System.out.println(root);
+		String root = context.getRealPath("/") + AudioConfiguration.AUDIO_DIRECTORY + "/";
 		String extension = getPartExtension(filePart);
 	    String fileName = "song_" + id + "_" + System.currentTimeMillis() + "." + extension;
 	    
@@ -85,14 +94,4 @@ public class RecordingService {
 		}
 		return extension;
 	}
-
-	public Recording getRecordingBySongId(int id) {
-		return recordingDao.getRecordingBySongId(id);
-	}
-	public Recording getRecordingWithFileBySongId(int id) {
-		return recordingDao.getRecordingWithFileBySongId(id);
-	}
-	public List<Recording> getAllRecordings(){
-		return recordingDao.getAllRecordingsWithFileStreams();
-	};
 }

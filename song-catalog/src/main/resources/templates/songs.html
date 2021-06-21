@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-	<th:block th:replace="partial/head :: head(${@environment.getProperty('com.sjwi.settings.app.properName')})"></th:block>
+	<th:block th:replace="partial/head :: head(${focusedSong[0].name})"></th:block>
 	<th:block th:replace="partial/header"></th:block>
 	<body id="songCatalogBody">
 		<div class="scroll-lock">
@@ -22,7 +22,6 @@
 					</div>
 				</div>
 			</div>
-		<!-- 	<th:block th:replace="partial/footer"></th:block> -->
 			<div class="modal-container">
 				<th:block sec:authorize="hasAuthority('USER')">
 					<th:block th:replace="modal/add-song-to-set"></th:block>
@@ -64,6 +63,7 @@
 			$(document).on('click','.song-row',function(e){
 				if (!$(e.target).is(ignoreSongClickedSelector)){
 					var id = $(e.target).closest('.song-metadata').data('target');
+					var name = $(e.target).closest('.song-metadata').data('name');
 					if ($(".hide-song-details").is(':hidden')){
 						location.href = contextpath + 'song/' + id;
 					} else {
@@ -72,6 +72,7 @@
 							selectFocusedSong(id);
 							focusedSong = id;
 							window.history.replaceState('song', 'Song Catalog', contextpath + 'song/' + id);
+							document.title = name;
 						}
 					}
 				}

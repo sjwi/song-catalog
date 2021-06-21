@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.util.List;
 
+import com.sjwi.catalog.config.AudioConfiguration;
 import com.sjwi.catalog.model.Recording;
 
 public class AudioFileSync extends Thread {
@@ -17,9 +18,7 @@ public class AudioFileSync extends Thread {
 	}
 
 	public void run() {
-		File baseDirectory = new File(path + "/audio");
-		if (!baseDirectory.exists())
-			baseDirectory.mkdir();
+		new File(path + AudioConfiguration.AUDIO_DIRECTORY).mkdir();
 		recordings.forEach(r -> {
 			try (FileOutputStream output = new FileOutputStream(path + r.getPath())){
 				byte[] buffer = new byte[1024];
