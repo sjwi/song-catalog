@@ -14,7 +14,7 @@
 					songRecording == $(this).closest('.song-page-container').find('.song-page').first().data('recording');
 				}
 				if (songRecording != null){
-					$('.audio-box').replaceWith('<audio class="song-page-audio" controls><source src="' + songRecording + '" type="audio/mpeg"></audio>');
+					$('.audio-box').replaceWith('<audio class="song-page-audio" controls><source src="' + contextpath.slice(0, -1) + songRecording + '" type="audio/mpeg"></audio>');
 					$('.song-page-audio')[0].play();
 				}
 			});
