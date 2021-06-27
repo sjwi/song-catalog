@@ -10,6 +10,9 @@ pipeline {
             }
         }
         stage('Backup Existing WAR') {
+            when {
+                expression { env.BRANCH_NAME == "main"}
+            }
             steps {
                 withCredentials([
                     usernamePassword(credentialsId: 'dreamhost_cfsongs', usernameVariable: 'DREAMHOST_UN', passwordVariable: 'DREAMHOST_PW'),
@@ -22,6 +25,9 @@ pipeline {
             }
         }
         stage('Deploy to App Server') {
+            when {
+                expression { env.BRANCH_NAME == "main"}
+            }
             steps {
                 withCredentials([
                     usernamePassword(credentialsId: 'dreamhost_cfsongs', usernameVariable: 'DREAMHOST_UN', passwordVariable: 'DREAMHOST_PW'),
@@ -34,6 +40,9 @@ pipeline {
             }
         }
         stage('Test Availability') {
+            when {
+                expression { env.BRANCH_NAME == "main"}
+            }
             steps {
                 withCredentials([
                     string(credentialsId:'cfsongs_dns', variable: 'DNS')
