@@ -7,10 +7,13 @@ import java.util.List;
 import com.sjwi.catalog.config.AudioConfiguration;
 import com.sjwi.catalog.model.Recording;
 
+import org.apache.log4j.Logger;
+
 public class AudioFileSync extends Thread {
 
 	private final List<Recording> recordings;
 	private final String path;
+	private static final Logger log = Logger.getLogger(AudioFileSync.class.getName());
 
 	public AudioFileSync(List<Recording> recordings, String path){
 		this.recordings = recordings;
@@ -25,6 +28,7 @@ public class AudioFileSync extends Thread {
 				while (r.getFileInputStream().read(buffer) > 0) {
 					output.write(buffer);
 				}
+				log.info(r.getPath() + " writtin to application context.");
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
