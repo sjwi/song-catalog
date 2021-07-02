@@ -3,6 +3,9 @@ pipeline {
     agent any
     stages {
         stage('Build WAR') {
+            when {
+                expression { env.GIT_BRANCH == "main"}
+            }
             steps {
                 dir('song-catalog') {
                     sh 'mvn clean install package'
@@ -11,7 +14,7 @@ pipeline {
         }
         stage('Backup Existing WAR') {
             when {
-                expression { env.BRANCH_NAME == "main"}
+                expression { env.GIT_BRANCH == "main"}
             }
             steps {
                 withCredentials([
@@ -26,7 +29,7 @@ pipeline {
         }
         stage('Deploy to App Server') {
             when {
-                expression { env.BRANCH_NAME == "main"}
+                expression { env.GIT_BRANCH == "main"}
             }
             steps {
                 withCredentials([
@@ -41,7 +44,7 @@ pipeline {
         }
         stage('Test Availability') {
             when {
-                expression { env.BRANCH_NAME == "main"}
+                expression { env.GIT_BRANCH == "main"}
             }
             steps {
                 withCredentials([

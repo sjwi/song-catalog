@@ -8,14 +8,13 @@ import java.io.IOException;
 
 import javax.servlet.ServletContext;
 
+import com.sjwi.catalog.log.CustomLogger;
+import com.sjwi.catalog.service.RecordingService;
+
 import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
-
-import com.sjwi.catalog.exception.MailException;
-import com.sjwi.catalog.log.CustomLogger;
-import com.sjwi.catalog.service.RecordingService;
 
 @Component
 public class FileCleanup {
@@ -30,13 +29,13 @@ public class FileCleanup {
 	RecordingService recordingService;
 
 	@Scheduled(cron = "0 0 0 * * *")
-	public void fileCleanup() throws MailException, IOException {
+	public void fileCleanup() throws IOException {
 		String pptDirectory = servletContext.getRealPath("/") + PPT_SUB_DIRECTORY;
 		String pdfDirectory = servletContext.getRealPath("/") + PDF_SUB_DIRECTORY;
 		logger.info("Removing ppt files");
 		FileUtils.cleanDirectory(new File(pptDirectory));
 		logger.info("Removing pdf files");
 		FileUtils.cleanDirectory(new File(pdfDirectory));
-		logger.logMessageWithEmail("Directories cleaned\n" + pptDirectory + "\n" + pdfDirectory);
+		logger.info("Directories cleaned\n" + pptDirectory + "\n" + pdfDirectory);
 	}
 }
