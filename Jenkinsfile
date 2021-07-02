@@ -3,6 +3,9 @@ pipeline {
     agent any
     stages {
         stage('Build WAR') {
+            when {
+                expression { env.BRANCH_NAME == "main"}
+            }
             steps {
                 dir('song-catalog') {
                     sh 'mvn clean install package'
