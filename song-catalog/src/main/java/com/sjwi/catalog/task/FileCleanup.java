@@ -8,7 +8,6 @@ import java.io.IOException;
 
 import javax.servlet.ServletContext;
 
-import com.sjwi.catalog.exception.MailException;
 import com.sjwi.catalog.log.CustomLogger;
 import com.sjwi.catalog.service.RecordingService;
 
@@ -30,7 +29,7 @@ public class FileCleanup {
 	RecordingService recordingService;
 
 	@Scheduled(cron = "0 0 0 * * *")
-	public void fileCleanup() throws MailException, IOException {
+	public void fileCleanup() throws IOException {
 		String pptDirectory = servletContext.getRealPath("/") + PPT_SUB_DIRECTORY;
 		String pdfDirectory = servletContext.getRealPath("/") + PDF_SUB_DIRECTORY;
 		logger.info("Removing ppt files");
