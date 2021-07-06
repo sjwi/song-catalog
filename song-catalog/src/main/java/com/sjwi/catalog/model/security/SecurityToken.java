@@ -29,6 +29,8 @@ public abstract class SecurityToken {
 		this.user = user;
 		this.token = generateTokenForUser(user);
 	}
+
+	public abstract String getTokenLink();
 	
 	public abstract boolean isTokenValid();
 
