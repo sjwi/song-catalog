@@ -76,7 +76,7 @@
 		</div>
 		<div class="col-6 text-right">
 			<button class="btn btn-sm btn-primary dl-copy-btn" id="copyDownloadLinkBtn" onclick="copyDownloadUrl(event)"
-			th:attr="data-baseContext=${'https://' + #request.getServerName()} + ${!#strings.equals(#request.getServerPort(),'80')? ':' + #request.getServerPort(): ''}">
+			th:attr="data-baseContext=${T(com.sjwi.catalog.config.ServletConstants).FULL_URL}">
 				<img width="20px" type="image/x-icon" th:src="@{/images/copy-inverse.png}"/>
 				<span>Copy Download URL</span>
 			</button>
@@ -166,9 +166,10 @@ function refreshDownloadQrCode(){
 }
 function copyDownloadUrl(e){
 	e.preventDefault();
+	console.log($('#copyDownloadLinkBtn').data('basecontext'))
 	copyTextToClipboard($('#copyDownloadLinkBtn').data('basecontext') + generateDownloadLinkWithFormParams());
 }
-function generateDownloadLinkWithFormParams(form){
+function generateDownloadLinkWithFormParams(){
 	return downloadBaseUri + '/' + encodeURI($('#downloadForm').find('.filename').val()) + '?' + $('#downloadForm').filter('*').find(':visible,.hidden-key').not('.filename').serialize();
 }
 </script>

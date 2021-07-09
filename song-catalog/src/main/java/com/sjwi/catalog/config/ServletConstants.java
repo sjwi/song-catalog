@@ -47,11 +47,13 @@ public class ServletConstants {
         String scheme = mbs.getAttribute(obj, "scheme").toString();
         String port = obj.getKeyProperty("port");
         String host = InetAddress.getAllByName(hostname)[0].getHostAddress();
-        SCHEME = scheme;
-        SERVER_NAME = host;
+        SERVER_NAME = "192.168.1.45".equalsIgnoreCase(host)? "localhost": host;
+        SCHEME = host.contains(".com")? "https" : scheme;
         SERVER_PORT = port;
-        CONTEXT_PATH = context.getContextPath();
-        BASE_URL = scheme + "://" + host + ":" + port;
+        CONTEXT_PATH = context.getContextPath().toString().replaceAll("/","");
+        BASE_URL = scheme + "://" + SERVER_NAME;
+        if (!port.equals("80") && !port.equals("443"))
+            BASE_URL += ":" + port;
         FULL_URL = CONTEXT_PATH.isBlank()? BASE_URL: BASE_URL + "/" + CONTEXT_PATH;
     }
 }
