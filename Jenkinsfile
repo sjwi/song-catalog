@@ -3,9 +3,6 @@ pipeline {
     agent any
     stages {
         stage('Build WAR') {
-            when {
-                expression { env.GIT_BRANCH == "main"}
-            }
             steps {
                 dir('song-catalog') {
                     sh 'mvn clean install package'
@@ -28,16 +25,21 @@ pipeline {
             }
         }
         stage('Deploy to App Server') {
-            when {
-                expression { env.GIT_BRANCH == "main"}
-            }
             steps {
-                withCredentials([
-                    usernamePassword(credentialsId: 'dreamhost_cfsongs', usernameVariable: 'DREAMHOST_UN', passwordVariable: 'DREAMHOST_PW'),
-                    string(credentialsId:'cfsongs_dns', variable: 'DNS')
-                ]) {
-                    dir('song-catalog'){
-                        sh "sshpass -p '$DREAMHOST_PW' scp target/ROOT.war $DREAMHOST_UN@$DNS:/home/$DREAMHOST_UN/$DNS/tomcat/webapps"
+                dir('song-catalog'){
+                    script {
+                        if (env.GIT_BRANCH == "main") {
+                            withCredentials([
+                                usernamePassword(credentialsId: 'dreamhost_cfsongs', usernameVariable: 'DREAMHOST_UN', passwordVariable: 'DREAMHOST_PW'),
+                                string(credentialsId:'cfsongs_dns', variable: 'DNS')
+                            ]) {
+                                sh "sshpass -p '$DREAMHOST_PW' scp target/ROOT.war $DREAMHOST_UN@$DNS:/home/$DREAMHOST_UN/$DNS/tomcat/webapps"
+                            }
+                        } else if (env.GIT_BRANCH == "develop") {
+                            sh "sudo mv target/ROOT.war /opt/tomcat/webapps/song-catalog.war"
+                        } else {
+                            sh "sudo mv target/ROOT.war /opt/tomcat/webapps/song-catalog-$env.GIT_BRANCH.war"
+                        }
                     }
                 }
             }
