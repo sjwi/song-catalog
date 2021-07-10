@@ -19,7 +19,6 @@ import javax.servlet.ServletContext;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -37,6 +36,8 @@ public class ServletConstants {
 
     @Value("${server.port}")
     private int containerPort;
+
+    private static final String DEPLOYMENT_SERVER = "stephenky.com";
 
     @PostConstruct
     public void initializeServletConstants() throws MalformedObjectNameException,
@@ -57,7 +58,12 @@ public class ServletConstants {
             port = obj.getKeyProperty("port");
             host = InetAddress.getAllByName(hostname)[0].getHostAddress();
         } 
-        SERVER_NAME = "192.168.1.45".equalsIgnoreCase(host)? "localhost": host;
+        if ("192.168.1.45".equals(host))
+            SERVER_NAME = "localhost";
+        else if ("127.0.1.1".equals(host))
+            SERVER_NAME = DEPLOYMENT_SERVER;
+        else
+            SERVER_NAME = host;
         SCHEME = host.contains(".com")? "https" : scheme;
         SERVER_PORT = port;
         CONTEXT_PATH = context.getContextPath().toString().replaceAll("/","");
