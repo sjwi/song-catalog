@@ -10,7 +10,7 @@ pipeline {
       [key: 'x-github-event', regExpFilter: ''],
      ],
 
-     causeString: 'Triggered on $ref by $X-Github-Event',
+     causeString: "Triggered on $ref by $x_github_event",
 
      token: 'delete-branch-environment',
      tokenCredentialId: '',
