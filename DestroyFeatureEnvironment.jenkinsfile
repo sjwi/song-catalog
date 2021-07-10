@@ -27,7 +27,6 @@ pipeline {
             allOf {
                 expression { env.X_Github_Event == "delete" }
                 expression { env.ref != "main" && env.ref != "develop" }
-
             }
         }
         steps {
