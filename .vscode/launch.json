@@ -23,8 +23,7 @@
                 "SONG_JDBC_PASSWORD": "sa",
                 "SONG_JDBC_USERNAME": "sa",
                 "SONG_JDBC_PLATFORM": "org.hibernate.dialect.H2Dialect",
-                "APPLICATION_PROPER_NAME": "CF Song Catalog",
-                "APPLICATION_BASE_URL":"http://localhost:5000"
+                "APPLICATION_PROPER_NAME": "CF Song Catalog"
             }
         },
         {

@@ -206,7 +206,6 @@
                     <SONG_JDBC_PLATFORM>org.hibernate.dialect.H2Dialect</SONG_JDBC_PLATFORM>
                     <SONG_JDBC_USERNAME>sa</SONG_JDBC_USERNAME>
                     <APPLICATION_PROPER_NAME>Song Catalog</APPLICATION_PROPER_NAME>
-					<APPLICATION_BASE_URL>http://localhost:5000</APPLICATION_BASE_URL>
 				  </systemPropertyVariables>
 				</configuration>
 			</plugin>
