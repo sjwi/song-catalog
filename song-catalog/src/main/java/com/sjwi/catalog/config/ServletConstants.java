@@ -18,6 +18,8 @@ import javax.management.ReflectionException;
 import javax.servlet.ServletContext;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -33,6 +35,9 @@ public class ServletConstants {
     @Autowired
     public ServletContext context;
 
+    @Value("${server.port}")
+    private int containerPort;
+
     @PostConstruct
     public void initializeServletConstants() throws MalformedObjectNameException,
             NullPointerException, UnknownHostException, AttributeNotFoundException,
@@ -43,10 +48,15 @@ public class ServletConstants {
         QueryExp query = Query.or(subQuery1, subQuery2);
         Set<ObjectName> objs = mbs.queryNames(new ObjectName("*:type=Connector,*"), query);
         String hostname = InetAddress.getLocalHost().getHostName();
-        ObjectName obj = objs.iterator().next();
-        String scheme = mbs.getAttribute(obj, "scheme").toString();
-        String port = obj.getKeyProperty("port");
-        String host = InetAddress.getAllByName(hostname)[0].getHostAddress();
+        String scheme = "http";
+        String port = String.valueOf(containerPort);
+        String host = "localhost";
+        if (objs.iterator().hasNext()) {
+            ObjectName obj = objs.iterator().next();
+            scheme = mbs.getAttribute(obj, "scheme").toString();
+            port = obj.getKeyProperty("port");
+            host = InetAddress.getAllByName(hostname)[0].getHostAddress();
+        } 
         SERVER_NAME = "192.168.1.45".equalsIgnoreCase(host)? "localhost": host;
         SCHEME = host.contains(".com")? "https" : scheme;
         SERVER_PORT = port;
