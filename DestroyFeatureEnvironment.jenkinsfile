@@ -1,7 +1,7 @@
 pipeline {
-  agent any
-  triggers {
-    GenericTrigger(
+    agent any
+    triggers {
+        GenericTrigger(
      genericVariables: [
       [key: 'ref', value: '$.ref'],
       [key: 'last_commit', value: '$.before']
@@ -20,18 +20,20 @@ pipeline {
 
      silentResponse: false,
     )
-  }
-  stages {
-    stage('Delete Feature Environment') {
-        when {
-            allOf {
-                expression { env.X_Github_Event == "delete" }
-                expression { env.ref != "main" && env.ref != "develop" }
+    }
+    stages {
+        stage('Delete Feature Environment') {
+            when {
+                allOf {
+                    expression { env.X_Github_Event == 'delete' }
+                    expression { env.ref != 'main' && env.ref != 'develop' }
+                }
+            }
+            steps {
+                catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
+                    sh "sudo rm -rf /opt/tomcat/webapps/sc-$ref*"
+                }
             }
         }
-        steps {
-            sh "sudo rm -rf /opt/tomcat/webapps/sc-$ref*"
-        }
     }
-  }
 }
