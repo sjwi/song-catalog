@@ -19,7 +19,6 @@ import com.sjwi.catalog.service.SongService;
 import com.sjwi.catalog.service.VersionService;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
@@ -56,9 +55,6 @@ public class VersionSongController {
 	@Autowired
 	CustomLogger logger;
 
-	@Value("${com.sjwi.settings.app.baseUrl}")
-	String baseUrl;
-	
 	@RequestMapping(value = { "/song/version/{id}"}, method = RequestMethod.GET)
 	public ModelAndView getSongDetailsForEdit(@PathVariable int id, @RequestParam(value="view", required = true) String view, HttpServletRequest request, HttpServletResponse response) {
 		try {

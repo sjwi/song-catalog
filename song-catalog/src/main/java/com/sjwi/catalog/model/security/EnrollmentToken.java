@@ -3,8 +3,11 @@ package com.sjwi.catalog.model.security;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
 
+import com.sjwi.catalog.config.ServletConstants;
+
 public class EnrollmentToken extends SecurityToken {
 
+	private static final String VALIDATION_ENDPOINT = "enroll";
 	private final String role;
 	private final String sessionToken;
 
@@ -38,5 +41,10 @@ public class EnrollmentToken extends SecurityToken {
 	public boolean isTokenValid() {
 		return sessionToken == null || token == null ? false : 
 					sessionToken.equals(token);
+	}
+
+	@Override
+	public String getTokenLink() {
+		return ServletConstants.FULL_URL + "/" + VALIDATION_ENDPOINT + "?token=" + token + "&user=" + user;
 	}
 }

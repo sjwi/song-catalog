@@ -1,6 +1,9 @@
 String rollbackWar
 pipeline {
     agent any
+    environment {
+        BRANCH = "${CHANGE_BRANCH ?: GIT_BRANCH}"
+    }
     stages {
         stage('Build WAR') {
             steps {
@@ -11,7 +14,7 @@ pipeline {
         }
         stage('Backup Existing WAR') {
             when {
-                expression { env.GIT_BRANCH == "main"}
+                expression { env.BRANCH == "main"}
             }
             steps {
                 withCredentials([
@@ -28,17 +31,17 @@ pipeline {
             steps {
                 dir('song-catalog'){
                     script {
-                        if (env.GIT_BRANCH == "main") {
+                        if (env.BRANCH == "main") {
                             withCredentials([
                                 usernamePassword(credentialsId: 'dreamhost_cfsongs', usernameVariable: 'DREAMHOST_UN', passwordVariable: 'DREAMHOST_PW'),
                                 string(credentialsId:'cfsongs_dns', variable: 'DNS')
                             ]) {
                                 sh "sshpass -p '$DREAMHOST_PW' scp target/ROOT.war $DREAMHOST_UN@$DNS:/home/$DREAMHOST_UN/$DNS/tomcat/webapps"
                             }
-                        } else if (env.GIT_BRANCH == "develop") {
+                        } else if (env.BRANCH == "develop") {
                             sh "sudo mv target/ROOT.war /opt/tomcat/webapps/song-catalog.war"
                         } else {
-                            def featureContext = "sc-" + env.GIT_BRANCH + ".war"
+                            def featureContext = "sc-" + env.BRANCH + ".war"
                             sh "sudo mv target/ROOT.war /opt/tomcat/webapps/$featureContext"
                         }
                     }
@@ -47,7 +50,7 @@ pipeline {
         }
         stage('Test Availability') {
             when {
-                expression { env.GIT_BRANCH == "main"}
+                expression { env.BRANCH == "main"}
             }
             steps {
                 withCredentials([

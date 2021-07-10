@@ -5,6 +5,8 @@ import java.security.spec.InvalidKeySpecException;
 import java.util.Calendar;
 import java.util.Date;
 
+import com.sjwi.catalog.config.ServletConstants;
+
 public class StoredCookieToken extends SecurityToken {
 	
 	public static final String STORED_COOKIE_TOKEN_KEY = "USESSIONID";
@@ -31,4 +33,10 @@ public class StoredCookieToken extends SecurityToken {
 		cal.add(Calendar.YEAR, -1);
 		return createdOn.compareTo(cal.getTime()) > 0;
 	}
+
+	@Override
+	public String getTokenLink() {
+		return ServletConstants.FULL_URL + "?token=" + token;
+	}
+
 }

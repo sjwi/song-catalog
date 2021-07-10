@@ -47,9 +47,9 @@ public class SongDetailsController {
 		try {
 			List<Song> songs = songService.searchSongs(searchTerm);
 			if (songs.size() == 0)
-				return new ModelAndView("redirect:" + request.getContextPath() + "/?searchTerm=" + searchTerm);
+				return new ModelAndView("redirect:/?searchTerm=" + searchTerm);
 			else if (songs.size() == 1)
-				return new ModelAndView("redirect:" + request.getContextPath() + "/song/" + songs.get(0).getId());
+				return new ModelAndView("redirect:/song/" + songs.get(0).getId());
 			else {
 				ModelAndView mv = searchTerm == null? new ModelAndView("songs"): new ModelAndView("home");
 				mv.addObject("songs",songs);
