@@ -25,9 +25,8 @@ pipeline {
     stage('Delete Feature Environment') {
         when {
             allOf {
-                expression { X_Github_Event == "delete" }
-                expression { ref != "main" && ref != "develop" }
-
+                expression { env.X_Github_Event == "delete" }
+                expression { env.ref != "main" && env.ref != "develop" }
             }
         }
         steps {
