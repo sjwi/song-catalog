@@ -3,6 +3,9 @@ package com.sjwi.catalog.config;
 import java.lang.management.ManagementFactory;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Set;
 
 import javax.annotation.PostConstruct;
@@ -39,6 +42,8 @@ public class ServletConstants {
 
     private static final String DEPLOYMENT_SERVER = "stephenky.com";
 
+    private static final List<String> IGNORE_PORT_LIST = new ArrayList<String>(Arrays.asList("80","443","8080","8443"));
+
     @PostConstruct
     public void initializeServletConstants() throws MalformedObjectNameException,
             NullPointerException, UnknownHostException, AttributeNotFoundException,
@@ -68,7 +73,7 @@ public class ServletConstants {
         SERVER_PORT = port;
         CONTEXT_PATH = context.getContextPath().toString().replaceAll("/","");
         BASE_URL = scheme + "://" + SERVER_NAME;
-        if (!port.equals("80") && !port.equals("443"))
+        if (!IGNORE_PORT_LIST.contains(port))
             BASE_URL += ":" + port;
         FULL_URL = CONTEXT_PATH.isBlank()? BASE_URL: BASE_URL + "/" + CONTEXT_PATH;
     }
