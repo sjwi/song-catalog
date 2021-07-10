@@ -38,7 +38,8 @@ pipeline {
                         } else if (env.GIT_BRANCH == "develop") {
                             sh "sudo mv target/ROOT.war /opt/tomcat/webapps/song-catalog.war"
                         } else {
-                            sh "sudo mv target/ROOT.war /opt/tomcat/webapps/song-catalog-$env.GIT_BRANCH.war"
+                            def featureContext = "sc-" + env.GIT_BRANCH + ".war"
+                            sh "sudo mv target/ROOT.war /opt/tomcat/webapps/song-catalog-$featureContext"
                         }
                     }
                 }
