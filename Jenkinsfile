@@ -39,7 +39,7 @@ pipeline {
                             sh "sudo mv target/ROOT.war /opt/tomcat/webapps/song-catalog.war"
                         } else {
                             def featureContext = "sc-" + env.GIT_BRANCH + ".war"
-                            sh "sudo mv target/ROOT.war /opt/tomcat/webapps/song-catalog-$featureContext"
+                            sh "sudo mv target/ROOT.war /opt/tomcat/webapps/$featureContext"
                         }
                     }
                 }
