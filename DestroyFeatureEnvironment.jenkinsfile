@@ -31,7 +31,7 @@ pipeline {
             }
         }
         steps {
-            sh "rm -rf /opt/tomcat/webapps/sc-$ref*"
+            sh "sudo rm -rf /opt/tomcat/webapps/sc-$ref*"
         }
     }
   }
