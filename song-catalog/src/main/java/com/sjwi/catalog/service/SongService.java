@@ -32,7 +32,9 @@ public class SongService {
 	}
 	
 	public synchronized List<Song> searchSongs(String searchValue){
-		return songDao.searchSongs(searchValue == null? null: "%" + searchValue.toLowerCase() + "%");
+		return searchValue == null || searchValue.isBlank()?  
+			songDao.getSongs() :
+			songDao.searchSongs("%" + searchValue.toLowerCase() + "%");
 	}
 	public void setDefaultKey(String updatedVersionKey, int songId, String user) {
 		songDao.setDefaultKey(updatedVersionKey, songId, user);
