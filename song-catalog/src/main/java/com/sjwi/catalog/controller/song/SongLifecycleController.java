@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
 
+import com.sjwi.catalog.config.ServletConstants;
 import com.sjwi.catalog.controller.ControllerHelper;
 import com.sjwi.catalog.log.CustomLogger;
 import com.sjwi.catalog.mail.MailConstants;
@@ -20,7 +21,6 @@ import com.sjwi.catalog.service.SongService;
 import com.sjwi.catalog.service.VersionService;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
@@ -57,9 +57,6 @@ public class SongLifecycleController {
 	@Autowired
 	CustomLogger logger;
 
-	@Value("${com.sjwi.settings.app.baseUrl}")
-	String baseUrl;
-	
 	@RequestMapping(value = {"song/create"}, method = RequestMethod.POST)
 	@ResponseBody
 	public ResponseMessage createSong(HttpServletRequest request, HttpServletResponse response,
@@ -74,7 +71,7 @@ public class SongLifecycleController {
 			if (songAudio != null) {
 				recordingService.addOrUpdateRecording(id, songAudio);
 			}
-			logger.logMessageWithEmail("New song created by " + auth.getName() + ": " + songTitle + "\n " + baseUrl + "/song/" + id);
+			logger.logMessageWithEmail("New song created by " + auth.getName() + ": " + songTitle + "\n " + ServletConstants.FULL_URL + "/song/" + id);
 			return new ResponseMessage("success",id);
 		} catch (Exception e) {
 			controllerHelper.errorHandler(e);

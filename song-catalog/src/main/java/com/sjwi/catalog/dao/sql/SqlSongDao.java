@@ -10,12 +10,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
-import org.springframework.stereotype.Repository;
-
 import com.sjwi.catalog.controller.ControllerHelper;
 import com.sjwi.catalog.dao.SongDao;
 import com.sjwi.catalog.model.KeySet;
@@ -24,6 +18,12 @@ import com.sjwi.catalog.model.song.MasterSong;
 import com.sjwi.catalog.model.song.Song;
 import com.sjwi.catalog.service.RecordingService;
 import com.sjwi.catalog.service.VersionService;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.stereotype.Repository;
 
 @Repository
 public class SqlSongDao implements SongDao {
@@ -149,15 +149,10 @@ public class SqlSongDao implements SongDao {
 	
 	@Override
 	public List<Song> searchSongs(String searchTerm) {
-		if (searchTerm != null && searchTerm.trim().length() > 0) {
-			Map<String,String> parameterMap = new HashMap<>();
-			parameterMap.put("term", searchTerm);
-			return namedParameterJdbcTemplate.query(queryStore.get("searchSongsByTerm"), parameterMap,r -> {
-				return buildSongsFromResultSet(r);
-			});
-		} else {
-			return getSongs();
-		}
+		Map<String,String> parameterMap = Collections.singletonMap("term",searchTerm);
+		return namedParameterJdbcTemplate.query(queryStore.get("searchSongsByTerm"), parameterMap, r -> {
+			return buildSongsFromResultSet(r);
+		});
 	}
 	
 	@Override

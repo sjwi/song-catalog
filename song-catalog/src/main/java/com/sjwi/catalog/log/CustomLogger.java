@@ -5,6 +5,7 @@ import java.util.stream.Collectors;
 import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
 
+import com.sjwi.catalog.config.ServletConstants;
 import com.sjwi.catalog.exception.MailException;
 import com.sjwi.catalog.mail.MailConstants;
 import com.sjwi.catalog.mail.Mailer;
@@ -14,7 +15,6 @@ import com.sjwi.catalog.service.SongService;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
@@ -29,9 +29,6 @@ public class CustomLogger {
 	@Autowired
 	Mailer mailer;
 
-	@Value("${com.sjwi.settings.app.baseUrl}")
-	String baseUrl;
-	
 	private Logger log;
 
 	@PostConstruct
@@ -83,7 +80,7 @@ public class CustomLogger {
 								.collect(Collectors.joining("\n\n - "));
 		String message = action + " by " + getLoggedInUser() + ": " + revisedSong.getNormalizedName() + " (ID: " + revisedSong.getId() + ") \n\n";
 		message += "Deltas:\n - " + deltaSummary + "\n\n";
-		message += baseUrl + "/song/" + revisedSong.getId();
+		message += ServletConstants.FULL_URL + "/song/" + revisedSong.getId();
 		logMessageWithEmail(message);
 	}
 	

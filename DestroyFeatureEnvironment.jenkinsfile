@@ -1,0 +1,39 @@
+pipeline {
+    agent any
+    triggers {
+        GenericTrigger(
+     genericVariables: [
+      [key: 'ref', value: '$.ref'],
+      [key: 'last_commit', value: '$.before']
+     ],
+     genericHeaderVariables: [
+      [key: 'x-github-event', regExpFilter: ''],
+     ],
+
+     causeString: "Triggered on $ref by $x_github_event",
+
+     token: 'delete-branch-environment',
+     tokenCredentialId: '',
+
+     printContributedVariables: true,
+     printPostContent: true,
+
+     silentResponse: false,
+    )
+    }
+    stages {
+        stage('Delete Feature Environment') {
+            when {
+                allOf {
+                    expression { env.X_Github_Event == 'delete' }
+                    expression { env.ref != 'main' && env.ref != 'develop' }
+                }
+            }
+            steps {
+                catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
+                    sh "sudo rm -rf /opt/tomcat/webapps/sc-$ref*"
+                }
+            }
+        }
+    }
+}

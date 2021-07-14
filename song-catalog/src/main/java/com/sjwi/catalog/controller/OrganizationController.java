@@ -5,7 +5,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
-import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -40,9 +39,6 @@ public class OrganizationController {
 	
 	@Autowired
 	SetListService setListService;
-	
-	@Autowired
-	ServletContext context;
 	
 	@Autowired
 	ControllerHelper controllerHelper;
@@ -139,16 +135,16 @@ public class OrganizationController {
 				case "lyrics-handout": case "latest-handout":
 					log.logUserActionWithEmail(organization.getName() + " lyric handout shortlink visited");
 					String dynamicName = organization.getId() == 0? "CF" : organization.getName();
-					return new ModelAndView("redirect:" + context.getContextPath() + "/org/" + id + "/" + dynamicName + "%20Worship%20Handout");
+					return new ModelAndView("redirect:/org/" + id + "/" + dynamicName + "%20Worship%20Handout");
 				case "deck": case "slides": case "slideshow": case "ppt": case "presentation":
-					return new ModelAndView("forward:/" + context.getContextPath() 
-							+ "/setlist/ppt/" + setList.getId()
+					return new ModelAndView("forward:/" 
+							+ "setlist/ppt/" + setList.getId()
 							+ "/" + UriUtils.encode(organization.getName() + " PowerPoint Deck " + today,"UTF-8"));
 				case "set": case "setlist":
 					return new ModelAndView("forward:/setlist/" + setListService.getLatestSetByOrg(id).getId());
 				default:
-					return new ModelAndView("forward:/" + context.getContextPath() 
-							+ "/setlist/pdf/" + setList.getId()
+					return new ModelAndView("forward:/" 
+							+ "setlist/pdf/" + setList.getId()
 							+ "/" + UriUtils.encode(organization.getName() + " Worship " + today,"UTF-8")
 							+ "?lyricsOnly=true&fontSize=18");
 			}

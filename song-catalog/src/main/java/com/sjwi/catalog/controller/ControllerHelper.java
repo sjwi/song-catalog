@@ -75,6 +75,7 @@ public class ControllerHelper {
 	ServletContext context;
 
 	private static final Pattern IS_INT_PATTERN = Pattern.compile("-?\\d+(\\.\\d+)?");
+	private static final List<String> NO_CAPS_TITLE_WORDS = new ArrayList<String>(Arrays.asList("The","Is","A","And","But","An","At","To","For","Of"));
 
 	public String buildSetlistName(int org, int service, String otherOrgName, String otherServiceName, Date date, String homegroupName) {
 		String setListName = "Untitled";
@@ -96,7 +97,7 @@ public class ControllerHelper {
 			date = new Date();
 		}
 		setListName = setListName + " " + new SimpleDateFormat("MM-dd-yyyy").format(date);
-		return setListName;
+		return setListName.replaceAll(" +", " ");
 	}
 
 	public String getOs() {
@@ -267,25 +268,10 @@ public class ControllerHelper {
 		return cookie;
 	}
 
-	public String buildTokenLink(HttpServletRequest request, SecurityToken token, String endpoint) {
-		return request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() 
-				+ context.getContextPath() + "/" + endpoint 
-				+ "?token=" + token.getTokenString() 
-				+ "&user=" + token.getUser(); 
-	}
-	
 	public String titleCase(String title) {
-		String titleCasedString = WordUtils.capitalizeFully(title)
-		.replace(" The ", " the ")
-		.replace(" A ", " a ")
-		.replace(" And ", " and ")
-		.replace(" But ", " but ")
-		.replace(" An ", " an ")
-		.replace(" At ", " at ")
-		.replace(" To ", " to ")
-		.replace(" Is ", " is ")
-		.replace(" For ", " for ")
-		.replace(" Of ", " of ");
+		String titleCasedString = WordUtils.capitalizeFully(title);
+		for (String w : NO_CAPS_TITLE_WORDS)
+			titleCasedString = titleCasedString.replace(" " + w + " " , " " + w.toLowerCase() + " ");
 		return titleCasedString.substring(0,1).toUpperCase() + titleCasedString.substring(1);
 	}
 }
