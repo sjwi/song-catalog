@@ -142,7 +142,6 @@ public class AccountManagementController {
 				throw new InvalidOperationException("Invalid Secuirty Token");
 			}
 		} catch (NullPointerException | InvalidOperationException e ) {
-			logger.error(e);
 			mv.addObject("ALERT_ON_LOAD", "BAD_RESET_TOKEN");
 			return mv;
 		} catch (Exception e){
