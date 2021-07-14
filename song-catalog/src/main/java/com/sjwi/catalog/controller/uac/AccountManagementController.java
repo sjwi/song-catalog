@@ -109,6 +109,7 @@ public class AccountManagementController {
 				throw new InvalidOperationException("No username associated with this email");
 			SecurityToken token = new PasswordResetToken(user.getUsername());
 			tokenService.storePasswordResetToken(token);
+			System.out.println(token.getTokenLink());
 			mailer.sendMail(new EmailFromTemplate()
 					.setMsgArgs(new String[] {user.getUsername(),token.getTokenLink()})
 					.setMsgTemplate(RESET_PASSWORD_MSG_TEMPLATE)
@@ -134,6 +135,7 @@ public class AccountManagementController {
 		try {
 			CfUser cfUser = (CfUser) userService.loadUserByUsername(user);
 			SecurityToken securityToken = tokenService.getPasswordResetToken(cfUser.getUsername()).setSessionToken(token);
+			System.out.println(securityToken.getTokenString());
 			if (securityToken.isTokenValid()) {
 				mv.addObject("token", token);
 				mv.addObject("user", user);
