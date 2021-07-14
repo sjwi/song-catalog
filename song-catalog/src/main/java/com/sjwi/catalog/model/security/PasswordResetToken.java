@@ -31,7 +31,7 @@ public class PasswordResetToken extends StoredCookieToken {
 	@Override
 	public boolean isTokenValid() {
 		Calendar cal = Calendar.getInstance();
-		cal.add(Calendar.DAY_OF_MONTH, -1);
+		cal.add(Calendar.DAY_OF_MONTH, -2);
 		return sessionToken != null && token != null? createdOn.compareTo(cal.getTime()) > 0 && sessionToken.equals(token): false;
 	}
 
