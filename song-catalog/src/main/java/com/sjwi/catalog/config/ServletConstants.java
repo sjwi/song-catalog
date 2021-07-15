@@ -75,6 +75,6 @@ public class ServletConstants {
         BASE_URL = scheme + "://" + SERVER_NAME;
         if (!IGNORE_PORT_LIST.contains(port))
             BASE_URL += ":" + port;
-        FULL_URL = CONTEXT_PATH.isBlank()? BASE_URL: BASE_URL + "/" + CONTEXT_PATH;
+        FULL_URL = CONTEXT_PATH.trim().isEmpty()? BASE_URL: BASE_URL + "/" + CONTEXT_PATH;
     }
 }
