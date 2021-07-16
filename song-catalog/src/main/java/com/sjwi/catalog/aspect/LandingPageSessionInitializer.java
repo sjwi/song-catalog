@@ -2,6 +2,7 @@ package com.sjwi.catalog.aspect;
 
 import java.io.IOException;
 
+import com.sjwi.catalog.config.ServletConstants;
 import com.sjwi.catalog.controller.ControllerHelper;
 import com.sjwi.catalog.log.CustomLogger;
 
@@ -25,5 +26,7 @@ public class LandingPageSessionInitializer {
 	public void logPageRequest(JoinPoint joinPoint) throws IOException {
 		controllerHelper.setCookiesInSession();
 		controllerHelper.attemptUserLoginViaCookie();
+		if (ServletConstants.SERVER_NAME == null)
+			ServletConstants.initializeServletConstants();
 	}
 }
