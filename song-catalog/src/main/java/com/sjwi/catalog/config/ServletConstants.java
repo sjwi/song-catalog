@@ -10,7 +10,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
-@Component
 public class ServletConstants {
 
     public static String SCHEME;
@@ -23,7 +22,7 @@ public class ServletConstants {
     private static final List<String> IGNORE_PORT_LIST = new ArrayList<String>(Arrays.asList("80","443","8080","8443"));
 
     public static void initializeServletConstants() {
-		HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
+		    HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
         SERVER_NAME = request.getServerName();
         SCHEME = SERVER_NAME.contains(".com")? "https" : request.getScheme();
         SERVER_PORT = String.valueOf(request.getServerPort());
