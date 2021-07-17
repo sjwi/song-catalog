@@ -7,6 +7,7 @@ import com.sjwi.catalog.service.RecordingService;
 import com.sjwi.catalog.task.AudioFileSync;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -20,6 +21,7 @@ public class AudioConfiguration {
 	@Autowired
 	ServletContext context;
 
+	@Scheduled(cron = "*/5 * * * *")
 	@PostConstruct
 	private void synchronizeAudioDirectoryFromDatabase(){
 		new AudioFileSync(recordingService.getAllRecordings(),context.getRealPath("/")).start();
