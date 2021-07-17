@@ -21,7 +21,7 @@ public class AudioConfiguration {
 	@Autowired
 	ServletContext context;
 
-	@Scheduled(cron = "*/5 * * * *")
+	@Scheduled(cron = "*/5 * * * * *")
 	@PostConstruct
 	private void synchronizeAudioDirectoryFromDatabase(){
 		new AudioFileSync(recordingService.getAllRecordings(),context.getRealPath("/")).start();
