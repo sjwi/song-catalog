@@ -37,7 +37,7 @@ pipeline {
                                 string(credentialsId:'cfsongs_dns', variable: 'DNS')
                             ]) {
                                 sh "sshpass -p '$DREAMHOST_PW' scp target/ROOT.war $DREAMHOST_UN@$DNS:/home/$DREAMHOST_UN/$DNS/tomcat/webapps"
-                                sh "sshpass -p '$DREAMHOST_PW' ssh $DREAMHOST_UN@$DNS -o StrictHostKeyChecking=no 'source e && restart.sh'"
+                                sh "sshpass -p '$DREAMHOST_PW' ssh $DREAMHOST_UN@$DNS -o StrictHostKeyChecking=no 'restart.sh'"
                             }
                         } else if (env.BRANCH == "develop") {
                             sh "sudo mv target/ROOT.war /opt/tomcat/webapps/song-catalog.war"
