@@ -73,9 +73,11 @@ public class SongDetailsController {
 		try {
 			ModelAndView mv = new ModelAndView(view);
 			Song song = songService.getSongById(id);
+			List<Song> focusedSong = versionService.getAllRelatedSongs(id);
 			if (key != null)
 				song = song.transpose(key);
 			mv.addObject("song", song);
+			mv.addObject("focusedSong", focusedSong);
 			mv.addObject("sets", setListService.getSetLists(10));
 			return mv;
 		} catch (Exception e) {
@@ -102,9 +104,16 @@ public class SongDetailsController {
 					return s;
 				}).collect(Collectors.toList());
 			}
+			int fsInitialIndex = 0;
+			for (Song s : focusedSong) {
+				if (s.getId() == id) 
+					break;
+				fsInitialIndex++;
+			}
 			mv.addObject("songs",songs);
 			mv.addObject("sets",setListService.getSetLists(10));
 			mv.addObject("focusedSong", focusedSong);
+			mv.addObject("fsInitialIndex",fsInitialIndex);
 			mv.addObject("orgs",organizationService.getOrganizations());
 			return mv;
 		} catch (Exception e) {

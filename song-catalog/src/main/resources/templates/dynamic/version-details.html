@@ -5,7 +5,7 @@
 		</div>
 		<th:block th:each="version, iter:${focusedSong}">
 			<div class="version-container text-center mb-1 pb-2" th:id="${'versionContainer_'+ iter.index}" th:attr="data-target=${iter.index}" 
-			th:classappend="${iter.index == 0}? 'selected': ''">
+			th:classappend="${iter.index == fsInitialIndex}? 'selected': ''">
 				<div class="mt-3">
 					<span class="version-title" th:text="${version.name}"></span>
 				</div>

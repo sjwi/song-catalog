@@ -1,4 +1,6 @@
-var focusedSlickPage = 0;
+if (!focusedSlickPage){
+	var focusedSlickPage = 0;
+}
 function slick(){
 	$('.slick-container').off();
 	$('.slick-container').slick({
