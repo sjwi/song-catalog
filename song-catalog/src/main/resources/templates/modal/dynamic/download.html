@@ -150,7 +150,7 @@ $(document).ready(function(){
 	$('#downloadForm').on('submit',function(e){
 		e.preventDefault();
 		if (isFormFilled(this)){
-			window.open(generateDownloadLinkWithFormParams(),'_blank');
+			window.open($('#copyDownloadLinkBtn').data('basecontext') + generateDownloadLinkWithFormParams(),'_blank');
 		}
 	});
 	$('.left-download-modal').click();
