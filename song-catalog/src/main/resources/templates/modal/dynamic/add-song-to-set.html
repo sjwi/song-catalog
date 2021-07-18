@@ -35,8 +35,7 @@
 		</div>
 		<div class="col-10 no-gutters">
 			<select class="custom-select version-list required" title="Select a version" name="version">
-				<option value="master" th:text="${'** [' + song.createdBy + ']'}"></option>
-				<option th:each="version: ${song.versions}" th:value="${version.id}" th:text="${version.versionName + ' [' + version.createdBy + ']'}"></option>
+				<option th:each="version: ${focusedSong}" th:selected="${song.id == version.id}" th:value="${version.related == null? 'master': version.id}" th:text="${version.versionName + ' [' + version.createdBy + ']'}"></option>
 				<option value="newVersion">Create new version</option>
 			</select>
 		</div>
