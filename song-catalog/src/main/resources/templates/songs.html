@@ -40,6 +40,7 @@
 	<script th:inline="javascript">
 		var ignoreSongClickedSelector = ".action-btn,.song-dropdown-btn,.dropdown-menu, li, .dropdown-item,.grip-container,img";
 		var focusedSong = [[${focusedSong[0].id}]];
+		var focusedSlickPage = [[${fsInitialIndex}]];
 
 		var focusedRow = document.getElementById("songRow_" + focusedSong);
 		var topPos = focusedRow.offsetTop;
