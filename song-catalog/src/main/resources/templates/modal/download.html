@@ -62,9 +62,6 @@
 			window.open($('#copyDownloadLinkBtn').data('basecontext') + generateDownloadLinkWithFormParams(),'_blank');
 		}
 	});
-	$(document).ready(function(){
-		$('.left-download-modal').click();
-	});
 function generateDownloadQRCode(e){
 	e.preventDefault();
 	refreshDownloadQrCode();

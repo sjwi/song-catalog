@@ -94,3 +94,8 @@
 	<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
 	<button type="submit" class="btn btn-info" onclick="$('#downloadForm').submit()"><img width="20px" style="margin-top:-5px;margin-right:.25rem;" type="image/x-icon" th:src="@{/images/download-inverse.png}"/>Download</button>
 </div>
+<script>
+	$(document).ready(function(){
+		$('.left-download-modal').click();
+	});
+</script>
