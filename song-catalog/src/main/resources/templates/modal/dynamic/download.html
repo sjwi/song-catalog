@@ -94,82 +94,8 @@
 	<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
 	<button type="submit" class="btn btn-info" onclick="$('#downloadForm').submit()"><img width="20px" style="margin-top:-5px;margin-right:.25rem;" type="image/x-icon" th:src="@{/images/download-inverse.png}"/>Download</button>
 </div>
-<script th:inline="javascript">
-$(document).ready(function(){
-	$(document).on('change','#downloadForm input, #downloadForm select',function(){
-		refreshDownloadQrCode();
+<script>
+	$(document).ready(function(){
+		$('.left-download-modal').click();
 	});
-	$('.hide-qr').on('click',function(){
-		$('.dl-qr').hide();
-	})
-	$('#lyricsOnly').change(function(){
-		if ($(this).prop('checked')){
-			$('#downloadForm').find('select[name="fontSize"] option[value="18"]').html('18*');
-			$('#downloadForm').find('select[name="fontSize"] option[value="12"]').html('12');
-			$('#downloadForm').find('select[name="fontSize"]').val('18');
-		} else {
-			$('#downloadForm').find('select[name="fontSize"] option[value="18"]').html('18');
-			$('#downloadForm').find('select[name="fontSize"] option[value="12"]').html('12*');
-			$('#downloadForm').find('select[name="fontSize"]').val('12');
-		}
-	});
-	$('.download-tab').on('click',function(){
-		$('.download-tab.selected').removeClass('selected');
-		$(this).addClass('selected');
-		if ($(this).hasClass('right-download-modal')){
-			$('.ppt-options').show();
-			$('.pdf-options').hide();
-			$('.file-suffix').text('.pptx');
-			downloadBaseUri = pptDownloadBaseUri;
-			var pptOptions = '';
-			for (var i = 30; i < 50; i++){
-				if (i == 40){
-					pptOptions = pptOptions + '<option selected value="' + i + '">' + i + '*</option>';
-				} else {
-					pptOptions = pptOptions + '<option value="' + i + '">' + i + '</option>';
-				}
-			}
-			$('#downloadForm').find('select[name="fontSize"]').html(pptOptions);
-		} else {
-			$('.ppt-options').hide();
-			$('.pdf-options').show();
-			$('.file-suffix').text('.pdf');
-			downloadBaseUri = pdfDownloadBaseUri;
-			var pdfOptions = '';
-			for (var i = 6; i < 26; i++){
-				if (i == 12){
-					pdfOptions = pdfOptions + '<option selected value="' + i + '">' + i + '*</option>';
-				} else {
-					pdfOptions = pdfOptions + '<option value="' + i + '">' + i + '</option>';
-				}
-			}
-			$('#downloadForm').find('select[name="fontSize"]').html(pdfOptions);
-		}
-		refreshDownloadQrCode();
-	});
-	$('#downloadForm').on('submit',function(e){
-		e.preventDefault();
-		if (isFormFilled(this)){
-			window.open($('#copyDownloadLinkBtn').data('basecontext') + generateDownloadLinkWithFormParams(),'_blank');
-		}
-	});
-	$('.left-download-modal').click();
-});
-function generateDownloadQRCode(e){
-	e.preventDefault();
-	refreshDownloadQrCode();
-	$('.dl-qr').show();
-}
-function refreshDownloadQrCode(){
-	$('#dlQrCode').html('');
-	new QRCode(document.getElementById("dlQrCode"), $('#copyDownloadLinkBtn').data('basecontext') + generateDownloadLinkWithFormParams());
-}
-function copyDownloadUrl(e){
-	e.preventDefault();
-	console.log($('#copyDownloadLinkBtn').data('basecontext'))
-	copyTextToClipboard($('#copyDownloadLinkBtn').data('basecontext') + generateDownloadLinkWithFormParams());
-}
-function generateDownloadLinkWithFormParams(){
-	return downloadBaseUri + '/' + encodeURI($('#downloadForm').find('.filename').val()) + '?' + $('#downloadForm').filter('*').find(':visible,.hidden-key').not('.filename').serialize();
-}
 </script>

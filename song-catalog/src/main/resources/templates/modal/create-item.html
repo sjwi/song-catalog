@@ -189,7 +189,7 @@
 		$('#createSongForm').on('submit',function(e){
 			e.preventDefault();
 			if (isFormFilled(this)){
-				$('.btn.create-song').attr('disabled',true);
+				$('#submitCreateItemBtn').attr('disabled',true);
 				$.ajax({
 					url: contextpath + 'song/create',
 					method: "POST",
@@ -207,7 +207,7 @@
 						alertWithFade('danger','Something went wrong! Unable to create song.')
 					},
 					complete: function(data){
-						$('.btn.create-song').attr('disabled',false);
+						$('#submitCreateItemBtn').attr('disabled',false);
 					}
 				});
 			}
@@ -255,7 +255,7 @@
 		$('#createSetListForm').on('submit',function(e) {
 			e.preventDefault();
 			if (isFormFilled(this)) {
-				$('.btn.create-setlist').attr('disabled', true);
+				$('#submitCreateItemBtn').attr('disabled', true);
 				$.ajax({
 					url : contextpath+ 'setlist/create',
 					method : "POST",
@@ -267,7 +267,7 @@
 						alertWithFade('danger','Something went wrong! Unable to add song to set')
 					},
 					complete : function() {
-						$('.btn.create-setlist').attr('disabled', false);
+						$('#submitCreateItemBtn').attr('disabled', false);
 					}
 				});
 			}
