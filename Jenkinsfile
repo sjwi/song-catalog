@@ -1,6 +1,9 @@
 String rollbackWar
 pipeline {
     agent any
+    triggers {
+        cron('1 3 * * *')
+    }
     environment {
         BRANCH = "${CHANGE_BRANCH ?: GIT_BRANCH}"
     }
