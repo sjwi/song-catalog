@@ -25,9 +25,6 @@ getSetListVersionById: >
     WHERE sl.ID = ?
 
 getRecordingBySongId: >
-  SELECT ID,SONG_ID,PATH,EXT,FILE FROM Recording WHERE SONG_ID = ?
-  
-getRecordingWithFileBySongId: >
   SELECT ID,SONG_ID,PATH,EXT FROM Recording WHERE SONG_ID = ?
   
 getAllSongsOrderByNameAsc: >
@@ -218,7 +215,7 @@ updateVersionName: >
   update Version set VERSION_NAME = ? where SONG_ID = ?
   
 addRecording: >
-  INSERT INTO Recording (SONG_ID,PATH,EXT,FILE) VALUES (?,?,?,?)
+  INSERT INTO Recording (SONG_ID,PATH,EXT) VALUES (?,?,?)
   
 updateSetlistTitle: >
   update SetListMaster set SETLIST_NAME = ? where ID = ?

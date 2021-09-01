@@ -1,21 +1,18 @@
 package com.sjwi.catalog.service;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.List;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.Part;
 
-import com.sjwi.catalog.config.AudioConfiguration;
 import com.sjwi.catalog.dao.RecordingDao;
 import com.sjwi.catalog.model.Recording;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -26,6 +23,9 @@ public class RecordingService {
 	
 	@Autowired
 	ServletContext context;
+
+	@Value("${com.sjwi.settings.audioDirectory}")
+	String root;
 
 	public void addOrUpdateRecording(int id, Part songAudioPart) throws IOException {
 		if(songAudioPart.getInputStream().available() != 0)
@@ -39,44 +39,16 @@ public class RecordingService {
 	public Recording getRecordingBySongId(int id) {
 		return recordingDao.getRecordingBySongId(id);
 	}
-	public Recording getRecordingWithFileBySongId(int id) {
-		return recordingDao.getRecordingWithFileBySongId(id);
-	}
+
 	public List<Recording> getAllRecordings(){
 		return recordingDao.getAllRecordingsWithFileStreams();
 	}
 
 	private Recording writeAudioFileToSystem(int id, Part filePart) throws IOException {
-		
-		String root = context.getRealPath("/") + AudioConfiguration.AUDIO_DIRECTORY + "/";
 		String extension = getPartExtension(filePart);
-	    String fileName = "song_" + id + "_" + System.currentTimeMillis() + "." + extension;
-	    
-	    OutputStream out = null;
-	    InputStream filecontent = null;
-		try {
-	        new File(root).mkdir();
-	        out = new FileOutputStream(new File(root + fileName));
-	        filecontent = filePart.getInputStream();
-	        if(filecontent.available()==0) {
-	        	throw new IOException();
-	        }
-	
-	        int read = 0;
-	        final byte[] bytes = new byte[1024];
-	
-	        while ((read = filecontent.read(bytes)) != -1) {
-	            out.write(bytes, 0, read);
-	        }
-			return new Recording(id, "/audio/" + fileName, extension, new FileInputStream(new File(root + fileName)));
-	    } finally {
-	        if (out != null) {
-	            out.close();
-	        }
-	        if (filecontent != null) {
-	            filecontent.close();
-	        }
-	    }
+		String fileName = "song_" + id + "_" + System.currentTimeMillis() + "." + extension;
+		Files.copy(filePart.getInputStream(), Paths.get(root).resolve(fileName));
+		return new Recording(id, fileName, extension);
 	}
 
 	private String getPartExtension(Part part) {

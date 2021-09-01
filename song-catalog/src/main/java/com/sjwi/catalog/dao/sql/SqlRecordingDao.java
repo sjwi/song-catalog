@@ -25,7 +25,7 @@ public class SqlRecordingDao implements RecordingDao {
 	@Override
 	public void addOrUpdateRecording(Recording recording) throws DataAccessException, FileNotFoundException  {
 		deleteRecording(recording.getId());
-		jdbcTemplate.update(queryStore.get("addRecording"),new Object[] {recording.getId(), recording.getPath(), recording.getExtension(), recording.getFileInputStream()});
+		jdbcTemplate.update(queryStore.get("addRecording"),new Object[] {recording.getId(), recording.getPath(), recording.getExtension()});
 	}
 	@Override
 	public void deleteRecording(int id)  {
@@ -44,19 +44,6 @@ public class SqlRecordingDao implements RecordingDao {
 		});
 	}
 	@Override
-	public Recording getRecordingWithFileBySongId(int id) {
-		return jdbcTemplate.query(queryStore.get("getRecordingWithFileBySongId"), new Object[] {id}, r -> {
-			if (r.next()) {
-				return new Recording(r.getInt("ID"),
-				r.getString("PATH"),
-				r.getString("EXT"),
-				r.getBinaryStream("FILE"));
-			} else {
-				return null;
-			}
-		});
-	}
-	@Override
 	public List<Recording> getAllRecordingsWithFileStreams() {
 		return jdbcTemplate.query(queryStore.get("getAllRecordings"), r -> {
 			List<Recording> recordings = new ArrayList<>();
@@ -64,8 +51,7 @@ public class SqlRecordingDao implements RecordingDao {
 				recordings.add(new Recording(
 					r.getInt("ID"),
 					r.getString("PATH"),
-					r.getString("EXT"),
-					r.getBinaryStream("FILE")));
+					r.getString("EXT")));
 			}
 			return recordings;
 		});

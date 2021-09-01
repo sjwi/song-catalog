@@ -260,7 +260,6 @@ CREATE TABLE Recording (
   SONG_ID int(11) DEFAULT NULL,
   PATH varchar(255) DEFAULT NULL,
   EXT varchar(20) DEFAULT NULL,
-  FILE LONGBLOB DEFAULT NULL,
   PRIMARY KEY (ID)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
