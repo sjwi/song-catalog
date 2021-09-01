@@ -27,6 +27,9 @@ getSetListVersionById: >
 getRecordingBySongId: >
   SELECT ID,SONG_ID,PATH,EXT,FILE FROM Recording WHERE SONG_ID = ?
   
+getRecordingWithFileBySongId: >
+  SELECT ID,SONG_ID,PATH,EXT FROM Recording WHERE SONG_ID = ?
+  
 getAllSongsOrderByNameAsc: >
   Select * from Song WHERE RELATED IS NULL and PRIVATE IS NULL order by REPLACE(NAME,'''','')
 
