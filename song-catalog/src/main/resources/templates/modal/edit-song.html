@@ -33,9 +33,7 @@
 					},
 					success: function() {
 						alertWithFade('success','Song updated')
-						setTimeout(function(){
-							location.reload()
-						},1000);
+						location.reload()
 					},
 					error: function(data){
 						alertWithFade('danger','Something went wrong! Unable to edit song')
