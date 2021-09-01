@@ -6,7 +6,6 @@ import static com.sjwi.catalog.model.KeySet.NUMBER_SYSTEM_KEY_CODE;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -59,9 +58,7 @@ public class SqlSongDao implements SongDao {
 	
 	@Override
 	public List<Song> getSongs() {
-		System.out.println("before sql: " + new Date());
 		return jdbcTemplate.query(queryStore.get("getAllSongsOrderByNameAsc"), r -> {
-			System.out.println("after sql: " + new Date());
 			return buildSongsFromResultSet(r);
 		});
 	}
@@ -186,7 +183,6 @@ public class SqlSongDao implements SongDao {
 		List<Song> songs = new ArrayList<Song>();
 		try {
 			while (rs.next()) {
-				System.out.println("song " + rs.getInt("ID") +": " + new Date());
 				songs.add(new MasterSong(
 						versionService.getVersionsByRelatedId(rs.getInt("ID")),
 						rs.getInt("ID"),
