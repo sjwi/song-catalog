@@ -188,7 +188,7 @@ public class TransposableString {
 			.replace(defKey.getI(), transKey.getI())
 			.replace(defKey.getV(), transKey.getV());
 		
-		return line;
+		return line.replaceAll("\\.","");
 	}
 
 	private List<String> formatRawString(String transposableString) {
