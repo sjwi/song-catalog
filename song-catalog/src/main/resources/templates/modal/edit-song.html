@@ -11,7 +11,7 @@
 			</form>	
 			<div class="modal-footer">
 				<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-				<button type="submit" class="btn btn-info" onclick="$('#editSongForm').submit();">Edit Song</button>
+				<button id="submitEditSongBtn" type="submit" class="btn btn-info" onclick="$('#editSongForm').submit();">Edit Song</button>
 			</div>
 		</div>
 	</div>
@@ -38,8 +38,10 @@
 						},1000);
 					},
 					error: function(data){
-						$('#submitEditSongBtn').attr('disabled',false);
 						alertWithFade('danger','Something went wrong! Unable to edit song')
+					},
+					complete: function(){
+						$('#submitEditSongBtn').attr('disabled',false);
 					}
 				});
 			}

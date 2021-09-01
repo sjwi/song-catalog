@@ -5,6 +5,84 @@
 	</div>
 </div>
 <script>
+$(document).ready(function(){
+	$(document).on('change','#downloadForm input, #downloadForm select',function(){
+		refreshDownloadQrCode();
+	});
+	$(document).on('click','.hide-qr',function(){
+		$('.dl-qr').hide();
+	})
+	$(document).on('change','#lyricsOnly',(function(){
+		if ($(this).prop('checked')){
+			$('#downloadForm').find('select[name="fontSize"] option[value="18"]').html('18*');
+			$('#downloadForm').find('select[name="fontSize"] option[value="12"]').html('12');
+			$('#downloadForm').find('select[name="fontSize"]').val('18');
+		} else {
+			$('#downloadForm').find('select[name="fontSize"] option[value="18"]').html('18');
+			$('#downloadForm').find('select[name="fontSize"] option[value="12"]').html('12*');
+			$('#downloadForm').find('select[name="fontSize"]').val('12');
+		}
+	});
+	$(document).on('click','.download-tab',function(){
+		$('.download-tab.selected').removeClass('selected');
+		$(this).addClass('selected');
+		if ($(this).hasClass('right-download-modal')){
+			$('.ppt-options').show();
+			$('.pdf-options').hide();
+			$('.file-suffix').text('.pptx');
+			downloadBaseUri = pptDownloadBaseUri;
+			var pptOptions = '';
+			for (var i = 30; i < 50; i++){
+				if (i == 40){
+					pptOptions = pptOptions + '<option selected value="' + i + '">' + i + '*</option>';
+				} else {
+					pptOptions = pptOptions + '<option value="' + i + '">' + i + '</option>';
+				}
+			}
+			$('#downloadForm').find('select[name="fontSize"]').html(pptOptions);
+		} else {
+			$('.ppt-options').hide();
+			$('.pdf-options').show();
+			$('.file-suffix').text('.pdf');
+			downloadBaseUri = pdfDownloadBaseUri;
+			var pdfOptions = '';
+			for (var i = 6; i < 26; i++){
+				if (i == 12){
+					pdfOptions = pdfOptions + '<option selected value="' + i + '">' + i + '*</option>';
+				} else {
+					pdfOptions = pdfOptions + '<option value="' + i + '">' + i + '</option>';
+				}
+			}
+			$('#downloadForm').find('select[name="fontSize"]').html(pdfOptions);
+		}
+		refreshDownloadQrCode();
+	});
+	$(document).on('submit','#downloadForm',function(e){
+		e.preventDefault();
+		if (isFormFilled(this)){
+			window.open($('#copyDownloadLinkBtn').data('basecontext') + generateDownloadLinkWithFormParams(),'_blank');
+		}
+	});
+	$('.left-download-modal').click();
+});
+function generateDownloadQRCode(e){
+	e.preventDefault();
+	refreshDownloadQrCode();
+	$('.dl-qr').show();
+}
+function refreshDownloadQrCode(){
+	$('#dlQrCode').html('');
+	new QRCode(document.getElementById("dlQrCode"), $('#copyDownloadLinkBtn').data('basecontext') + generateDownloadLinkWithFormParams());
+}
+function copyDownloadUrl(e){
+	e.preventDefault();
+	console.log($('#copyDownloadLinkBtn').data('basecontext'))
+	copyTextToClipboard($('#copyDownloadLinkBtn').data('basecontext') + generateDownloadLinkWithFormParams());
+}
+function generateDownloadLinkWithFormParams(){
+	return downloadBaseUri + '/' + encodeURI($('#downloadForm').find('.filename').val()) + '?' + $('#downloadForm').filter('*').find(':visible,.hidden-key').not('.filename').serialize();
+}
+
 var pptDownloadBaseUri;
 var pdfDownloadBaseUri;
 var downloadBaseUri;

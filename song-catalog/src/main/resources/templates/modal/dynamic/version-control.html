@@ -195,7 +195,7 @@ $(document).ready(function(){
 					versionChange = true;
 				},
 				error: function(data){
-					$('#submitEditSongBtn').attr('disabled',false);
+					$('.edit-version-btn').attr('disabled',false);
 					alertWithFade('danger','Something went wrong! Unable to edit song')
 				}
 			});
