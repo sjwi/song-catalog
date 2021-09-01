@@ -1,5 +1,7 @@
 package com.sjwi.catalog.controller;
 
+import java.util.Date;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -36,10 +38,14 @@ public class HomeController {
 			HttpServletResponse response, Authentication auth, @RequestParam (name="searchTerm", required=false) String searchTerm) {
 		try {
 			ModelAndView mv = new ModelAndView("home");
+			System.out.println("get songs: " + new Date());
 			mv.addObject("songs", searchTerm == null? songService.getSongs(): songService.searchSongs(searchTerm));
+			System.out.println("get orgs: " + new Date());
 			mv.addObject("orgs",organizationService.getOrganizations());
+			System.out.println("get sets: " + new Date());
 			mv.addObject("sets",setListService.getSetLists(10));
 			mv.addObject("searchTerm",searchTerm);
+			System.out.println("get cats:" + new Date());
 			mv.addObject("categories",songService.getSongCategories());
 			return mv;
 		} catch (Exception e) {
