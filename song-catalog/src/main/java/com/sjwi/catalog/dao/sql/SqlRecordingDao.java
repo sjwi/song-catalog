@@ -5,13 +5,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import com.sjwi.catalog.dao.RecordingDao;
+import com.sjwi.catalog.model.Recording;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
-
-import com.sjwi.catalog.dao.RecordingDao;
-import com.sjwi.catalog.model.Recording;
 
 @Repository
 public class SqlRecordingDao implements RecordingDao {
@@ -45,7 +45,7 @@ public class SqlRecordingDao implements RecordingDao {
 	}
 	@Override
 	public Recording getRecordingWithFileBySongId(int id) {
-		return jdbcTemplate.query(queryStore.get("getRecordingBySongId"), new Object[] {id}, r -> {
+		return jdbcTemplate.query(queryStore.get("getRecordingWithFileBySongId"), new Object[] {id}, r -> {
 			if (r.next()) {
 				return new Recording(r.getInt("ID"),
 				r.getString("PATH"),
