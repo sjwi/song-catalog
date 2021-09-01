@@ -5,14 +5,13 @@
 	</div>
 </div>
 <script>
-$(document).ready(function(){
 	$(document).on('change','#downloadForm input, #downloadForm select',function(){
 		refreshDownloadQrCode();
 	});
 	$(document).on('click','.hide-qr',function(){
 		$('.dl-qr').hide();
 	})
-	$(document).on('change','#lyricsOnly',(function(){
+	$(document).on('change','#lyricsOnly',function(){
 		if ($(this).prop('checked')){
 			$('#downloadForm').find('select[name="fontSize"] option[value="18"]').html('18*');
 			$('#downloadForm').find('select[name="fontSize"] option[value="12"]').html('12');
@@ -63,8 +62,9 @@ $(document).ready(function(){
 			window.open($('#copyDownloadLinkBtn').data('basecontext') + generateDownloadLinkWithFormParams(),'_blank');
 		}
 	});
-	$('.left-download-modal').click();
-});
+	$(document).ready(function(){
+		$('.left-download-modal').click();
+	});
 function generateDownloadQRCode(e){
 	e.preventDefault();
 	refreshDownloadQrCode();
