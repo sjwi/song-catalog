@@ -31,7 +31,7 @@ public class SongService {
 		return songDao.getSongs();
 	}
 	
-	public synchronized List<Song> searchSongs(String searchValue){
+	public List<Song> searchSongs(String searchValue){
 		return searchValue == null || searchValue.trim().isEmpty()?  
 			songDao.getSongs() :
 			songDao.searchSongs("%" + searchValue.toLowerCase() + "%");
