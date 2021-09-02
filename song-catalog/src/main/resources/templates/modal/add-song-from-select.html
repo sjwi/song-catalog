@@ -21,12 +21,15 @@
 function addSongsFromSelect(setId,setName){
 	$('#addSongFromSelectModal').find('.modal-header').html(setName);
 	$('#addSongFromSelectModal').find('.modal-message').html('Click to select songs to add to ' + setName);
+	$('#addSongFromSelectModal').modal('show');
 	$.ajax({
 		url: contextpath + 'setlist/add-multiple-songs/' + setId,
 		method: "GET",
+		beforeSend: function(data) {
+			$('#addSongFromSelectForm').html($('.loading').clone());
+		},
 		success: function(data) {
 			$('#addSongFromSelectForm').html(data);
-			$('#addSongFromSelectModal').modal('show');
 		},
 		error: function(data){
 			alertWithFade('danger','Something went wrong! Unable to retreive song list')
