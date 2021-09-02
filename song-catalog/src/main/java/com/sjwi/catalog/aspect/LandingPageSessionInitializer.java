@@ -26,7 +26,7 @@ public class LandingPageSessionInitializer {
 	public void logPageRequest(JoinPoint joinPoint) throws IOException {
 		controllerHelper.setCookiesInSession();
 		controllerHelper.attemptUserLoginViaCookie();
-		if (ServletConstants.SERVER_NAME == null)
+		if (!ServletConstants.IS_INITIALIZED)
 			ServletConstants.initializeServletConstants();
 	}
 }
