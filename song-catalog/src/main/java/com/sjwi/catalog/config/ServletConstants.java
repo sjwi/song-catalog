@@ -18,7 +18,7 @@ public class ServletConstants {
     public static String CONTEXT_PATH;
     public static String BASE_URL;
     public static String FULL_URL;
-    public static boolean IS_INITIALIZED;
+    public static boolean IS_INITIALIZED = false;
     
     private static final List<String> IGNORE_PORT_LIST = new ArrayList<String>(Arrays.asList("80","443","8080","8443"));
 
