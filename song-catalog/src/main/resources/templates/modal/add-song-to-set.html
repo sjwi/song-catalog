@@ -46,7 +46,7 @@ $(document).ready(function(){
 					if ($('#addSongToSetListModal').find('.set-list').val() == '0'){
 						location.reload();
 					} else {
-						alertWithFade('success','<b>' + $('#addSongToSetListModal').find('.modal-title').html().replace("Add ", "") + '</b> added to set list <a href="'+ contextpath + 'setlist/' +  $('#addSongToSetListModal').find('.set-list').val()  + '" class="alert-link">'+$('#addSongToSetListModal').find('.set-list option:selected').text() + '</a>');
+						alertWithFade('success','<b>' + $('#addSongToSetListModal').find('.song-name').val() + '</b> added to set list <a href="'+ contextpath + 'setlist/' +  $('#addSongToSetListModal').find('.set-list').val()  + '" class="alert-link">'+$('#addSongToSetListModal').find('.set-list option:selected').text() + '</a>');
 						reloadSetContainerIfPresent($('#addSongToSetListModal').find('.set-list').val());
 						$('#addSongToSetListModal').modal('hide');
 					}
