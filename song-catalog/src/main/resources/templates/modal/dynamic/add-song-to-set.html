@@ -50,7 +50,7 @@
 
 <script th:inline="javascript">
 	$(document).ready(function(){
-		$('#addSongToSetListModal').find('.modal-title').html('Add <a href="' + [[@{/song/__${song.id}__}]] + '"><b>' + [[${song.name}]] + '</b></a> to a Set List');
+		$('#addSongToSetListModal').find('.modal-title').html('Add <a class="song-title-ref" href="' + [[@{/song/__${song.id}__}]] + '"><b>' + [[${song.name}]] + '</b></a> to a Set List');
 		$('.version-list').change(function(){
 			if ($(this).val() == 'newVersion'){
 				$.ajax({

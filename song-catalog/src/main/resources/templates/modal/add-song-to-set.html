@@ -16,12 +16,15 @@
 
 <script>
 function addSongToSet(id){
+	$('#addSongToSetListModal').modal('show');
 	$.ajax({
 		url: contextpath + 'song/details/' + id + '?view=modal/dynamic/add-song-to-set', 
 		method: "GET",
+		beforeSend: function() {
+			$('#addSongToSetForm').html($('.loading').clone());
+		},
 		success: function(data) {
 			$('#addSongToSetForm').html(data);
-			$('#addSongToSetListModal').modal('show');
 		},
 		error: function(data){
 			alertWithFade('danger','Something went wrong! Unable to retreive song metadata.')
@@ -46,7 +49,7 @@ $(document).ready(function(){
 					if ($('#addSongToSetListModal').find('.set-list').val() == '0'){
 						location.reload();
 					} else {
-						alertWithFade('success','<b>' + $('#addSongToSetListModal').find('.modal-title').html() + '</b> added to set list <a href="'+ contextpath + 'setlist/' +  $('#addSongToSetListModal').find('.set-list').val()  + '" class="alert-link">'+$('#addSongToSetListModal').find('.set-list option:selected').text() + '</a>');
+						alertWithFade('success',$('#addSongToSetListModal').find('.song-title-ref').prop('outerHTML') + ' added to set list <a href="'+ contextpath + 'setlist/' +  $('#addSongToSetListModal').find('.set-list').val()  + '" class="alert-link">'+$('#addSongToSetListModal').find('.set-list option:selected').text() + '</a>');
 						reloadSetContainerIfPresent($('#addSongToSetListModal').find('.set-list').val());
 						$('#addSongToSetListModal').modal('hide');
 					}
