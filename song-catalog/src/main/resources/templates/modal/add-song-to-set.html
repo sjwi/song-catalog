@@ -16,12 +16,15 @@
 
 <script>
 function addSongToSet(id){
+	$('#addSongToSetListModal').modal('show');
 	$.ajax({
 		url: contextpath + 'song/details/' + id + '?view=modal/dynamic/add-song-to-set', 
 		method: "GET",
+		beforeSend: function() {
+			$('#addSongToSetForm').html($('.loading').clone());
+		},
 		success: function(data) {
 			$('#addSongToSetForm').html(data);
-			$('#addSongToSetListModal').modal('show');
 		},
 		error: function(data){
 			alertWithFade('danger','Something went wrong! Unable to retreive song metadata.')
