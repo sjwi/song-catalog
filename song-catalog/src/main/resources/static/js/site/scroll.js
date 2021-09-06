@@ -13,7 +13,7 @@ function addScrollListener(id, size, delay){
 		$(window).on('scroll',function(e){
 			var currentScrollPos = window.pageYOffset;
 			var velocity = Math.abs(prevScrollpos - currentScrollPos);
-			if ((prevScrollpos > currentScrollPos && velocity > velocityThreshold) || $(window).scrollTop() <= delay) {
+			if ((prevScrollpos > currentScrollPos && velocity > velocityThreshold) || $(window).scrollTop() <= size) {
 				$(id).css('top','0');
 				$('.sticky-top-nav, .top-nav').css('top','0');
 			} else if (velocity > velocityThreshold && $(window).scrollTop() > delay) {
