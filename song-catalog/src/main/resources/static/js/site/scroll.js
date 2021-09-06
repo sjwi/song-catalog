@@ -1,11 +1,11 @@
 function addScrollListener(id, size, delay){
+	if (!delay){
+		delay = size;
+	}
 	if (!size){
 		size = '-102px';
 	} else {
 		size = size.toString() + 'px';
-	}
-	if (!delay){
-		delay = 0;
 	}
 	var prevScrollpos = window.pageYOffset;
 	var velocityThreshold = 25;
@@ -13,7 +13,7 @@ function addScrollListener(id, size, delay){
 		$(window).on('scroll',function(e){
 			var currentScrollPos = window.pageYOffset;
 			var velocity = Math.abs(prevScrollpos - currentScrollPos);
-			if ((prevScrollpos > currentScrollPos && velocity > velocityThreshold) || $(window).scrollTop() <= size) {
+			if ((prevScrollpos > currentScrollPos && velocity > velocityThreshold) || $(window).scrollTop() <= delay) {
 				$(id).css('top','0');
 				$('.sticky-top-nav, .top-nav').css('top','0');
 			} else if (velocity > velocityThreshold) {
