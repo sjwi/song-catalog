@@ -8,13 +8,15 @@ function addScrollListener(id, size, delay){
 		delay = 0;
 	}
 	var prevScrollpos = window.pageYOffset;
+	var velocityThreshold = 15;
 	$(document).ready(function(){
 		$(window).on('scroll',function(e){
 			var currentScrollPos = window.pageYOffset;
-			if (prevScrollpos > currentScrollPos || $(window).scrollTop() <= delay) {
+			var velocity = Math.abs(prevScrollpos - currentScrollPos);
+			if ((prevScrollpos > currentScrollPos && velocity > velocityThreshold) || $(window).scrollTop() <= delay) {
 				$(id).css('top','0');
 				$('.sticky-top-nav, .top-nav').css('top','0');
-			} else {
+			} else if (velocity > velocityThreshold) {
 				$(id).css('top',size);
 				$('.sticky-top-nav, .top-nav').css('top',size);
 			}
