@@ -1,6 +1,8 @@
 function addScrollListener(id, size, delay){
-	if (!delay){
-		delay = size;
+	if (!delay && size) {
+		delay = Math.abs(size);
+	} else {
+		delay = 0;
 	}
 	if (!size){
 		size = '-102px';
