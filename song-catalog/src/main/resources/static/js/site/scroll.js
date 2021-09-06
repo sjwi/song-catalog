@@ -8,7 +8,7 @@ function addScrollListener(id, size, delay){
 		delay = 0;
 	}
 	var prevScrollpos = window.pageYOffset;
-	var velocityThreshold = 15;
+	var velocityThreshold = 25;
 	$(document).ready(function(){
 		$(window).on('scroll',function(e){
 			var currentScrollPos = window.pageYOffset;
@@ -16,7 +16,7 @@ function addScrollListener(id, size, delay){
 			if ((prevScrollpos > currentScrollPos && velocity > velocityThreshold) || $(window).scrollTop() <= delay) {
 				$(id).css('top','0');
 				$('.sticky-top-nav, .top-nav').css('top','0');
-			} else if (velocity > velocityThreshold) {
+			} else if (velocity > velocityThreshold && $(window).scrollTop() > delay) {
 				$(id).css('top',size);
 				$('.sticky-top-nav, .top-nav').css('top',size);
 			}
