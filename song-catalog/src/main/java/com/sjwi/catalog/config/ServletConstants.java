@@ -20,7 +20,7 @@ public class ServletConstants {
     public static String FULL_URL;
     public static boolean IS_INITIALIZED = false;
     
-    private static final List<String> IGNORE_PORT_LIST = new ArrayList<String>(Arrays.asList("80","443","8080","8443"));
+    private static final List<String> IGNORE_PORT_LIST = new ArrayList<String>(Arrays.asList("80","443","8080","8443","8002"));
 
     public static void initializeServletConstants() {
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
