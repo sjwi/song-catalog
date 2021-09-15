@@ -80,18 +80,18 @@ public class ControllerHelper {
 	public String buildSetlistName(int org, int service, String otherOrgName, String otherServiceName, Date date, String homegroupName) {
 		String setListName = "Untitled";
 		if (org == 0) {
-			setListName = otherOrgName==null || "".equals(otherOrgName)? "Untitled" : otherOrgName;
+			setListName = otherOrgName==null || "".equals(otherOrgName)? "Untitled" : otherOrgName.trim();
 		} else {
-			setListName = organizationService.getOrganizationById(org).getName();
+			setListName = organizationService.getOrganizationById(org).getName().trim();
 		}
 		if (0 == service) {
-			setListName = otherServiceName==null || "".equals(otherServiceName)? setListName : setListName + " " + WordUtils.capitalizeFully(otherServiceName);
+			setListName = otherServiceName==null || "".equals(otherServiceName)? setListName : setListName + " " + WordUtils.capitalize(otherServiceName);
 		} else if (2 == service) {
 			setListName = homegroupName == null || homegroupName.isEmpty()? 
 					setListName + " " + organizationService.getMeetingServiceById(service): 
-						setListName + " " + WordUtils.capitalizeFully(homegroupName) + " HF";
+						setListName + " " + WordUtils.capitalize(homegroupName.trim()) + " HF";
 		} else {
-			setListName = setListName + " " + organizationService.getMeetingServiceById(service);
+			setListName = setListName + " " + organizationService.getMeetingServiceById(service).trim();
 		}
 		if (date == null) {
 			date = new Date();
