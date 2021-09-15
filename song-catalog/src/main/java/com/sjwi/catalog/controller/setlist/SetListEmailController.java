@@ -80,7 +80,7 @@ public class SetListEmailController {
 		try {
 			Map<String, String> attachments = new HashMap<String, String>();
 			if (attachPpt != null) {
-				FileGenerator pptGenerator = new PptFileGenerator(true,0,false,false);
+				FileGenerator pptGenerator = new PptFileGenerator(true,0,false,true);
 				SetList setList = controllerHelper.buildSetFile(id, pptGenerator, true);
 				attachments.put(pptGenerator.getFilePath(), setList.getNormalizedSetListName() + ".pptx");
 			}
