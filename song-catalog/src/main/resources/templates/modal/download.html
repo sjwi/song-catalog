@@ -59,7 +59,11 @@
 	$(document).on('submit','#downloadForm',function(e){
 		e.preventDefault();
 		if (isFormFilled(this)){
-			window.open($('#copyDownloadLinkBtn').data('basecontext') + generateDownloadLinkWithFormParams(),'_blank');
+			if ($('.download-tab.selected').hasClass('right-download-modal')){
+				window.open('https://view.officeapps.live.com/op/view.aspx?src=' + encodeURIComponent($('#copyDownloadLinkBtn').data('basecontext') + generateRandomDownloadLinkWithFormParams()),'_blank');
+			} else {
+				window.open($('#copyDownloadLinkBtn').data('basecontext') + generateDownloadLinkWithFormParams(),'_blank');
+			}
 		}
 	});
 function generateDownloadQRCode(e){
@@ -78,6 +82,9 @@ function copyDownloadUrl(e){
 }
 function generateDownloadLinkWithFormParams(){
 	return downloadBaseUri + '/' + encodeURI($('#downloadForm').find('.filename').val()) + '?' + $('#downloadForm').filter('*').find(':visible,.hidden-key').not('.filename').serialize();
+}
+function generateRandomDownloadLinkWithFormParams(){
+	return downloadBaseUri + '/' + encodeURI($('#downloadForm').find('.filename').val() + '_' + (Math.floor(Math.random() * 100000) + 1).toString()) + '?' + $('#downloadForm').filter('*').find(':visible,.hidden-key').not('.filename').serialize();
 }
 
 var pptDownloadBaseUri;

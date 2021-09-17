@@ -33,6 +33,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 @Controller
 public class FileDownloadController {
+
 	@Autowired
 	ControllerHelper controllerHelper;
 	
@@ -123,8 +124,8 @@ public class FileDownloadController {
 			FileGenerator pptGenerator = new PptFileGenerator(prependBlankSlide,fontSize.orElse(0),alignCenter,blankSlideDelimiter);
 			Song song = songService.getSongById(id).transpose(LYRICS_ONLY_KEY_CODE);
 			fileName = fileName == null? song.getNormalizedName(): controllerHelper.normalizeString(fileName);
-            response.addHeader("Content-Disposition", "attachment; filename=\""+ fileName + ".pptx\"");
-            Files.copy(Paths.get(pptGenerator.buildFile(song)), response.getOutputStream());
+			response.addHeader("Content-Disposition", "attachment; filename=\""+ fileName + ".pptx\"");
+			Files.copy(Paths.get(pptGenerator.buildFile(song)), response.getOutputStream());
 			logger.logUserActionWithEmail(fileName + " ppt downloaded." + "\n" + controllerHelper.getFullUrl());
 		} catch (Exception e) {
 			controllerHelper.errorHandler(e);
@@ -143,8 +144,8 @@ public class FileDownloadController {
 			FileGenerator pptGenerator = new PptFileGenerator(prependBlankSlide, fontSize.orElse(0),alignCenter,blankSlideDelimiter);
 			SetList setList = controllerHelper.buildSetFile(id,pptGenerator,true);
 			fileName = fileName == null? setList.getNormalizedSetListName(): controllerHelper.normalizeString(fileName);
-            response.addHeader("Content-Disposition", "attachment; filename=\"" + fileName + ".pptx\"");
-            Files.copy(Paths.get(pptGenerator.getFilePath()), response.getOutputStream());
+			response.addHeader("Content-Disposition", "attachment; filename=\"" + fileName + ".pptx\"");
+			Files.copy(Paths.get(pptGenerator.getFilePath()), response.getOutputStream());
 			logger.logUserActionWithEmail(fileName + " ppt downloaded." + "\n" + controllerHelper.getFullUrl());
 		} catch (Exception e) {
 			controllerHelper.errorHandler(e);
