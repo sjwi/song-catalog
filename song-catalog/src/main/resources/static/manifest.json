@@ -5,11 +5,11 @@
   "scope": "/",
   "start_url": "/",
   "icons": [{
-    "src": "images/icon_dark.png",
+    "src": "images/icon_dark_192.png",
     "sizes": "192x192",
     "type": "image/png"
   }, {
-    "src": "images/icon_dark.png",
+    "src": "images/icon_dark_512.png",
     "sizes": "512x512",
     "type": "image/png"
   }]
