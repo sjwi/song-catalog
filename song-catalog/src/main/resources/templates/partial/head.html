@@ -24,6 +24,7 @@
 		<link rel="manifest" th:href="@{/manifest.json}">
 		<link rel="search" th:href="@{/search.xml}" type="application/opensearchdescription+xml" th:attr="title=${@environment.getProperty('com.sjwi.settings.app.properName')}">
 		<script th:src="@{/js/lib/jquery-3.3.1.min.js}"></script>
+		<script th:src="@{/js/lib/overflow-color.min.js}"></script>
 		<script th:src="@{/js/lib/jquery-ui.min.js}"></script>
 		<script th:src="@{/js/lib/bootstrap.bundle.js}"></script>
 		<script th:src="@{/js/lib/jquery.ui.touch-punch.min.js}"></script>
@@ -69,6 +70,26 @@
 					});
 				});
 			}
+
+			$(document).ready(function(){
+				// install prompt
+				const isIos = () => {
+					const userAgent = window.navigator.userAgent.toLowerCase();
+					return /iphone|ipad|ipod/.test( userAgent );
+				}
+				const isInStandaloneMode = () => ('standalone' in window.navigator) && (window.navigator.standalone);
+
+				const userDismissedInstall = window.localStorage.hasOwnProperty('dismissInstall');
+				//window.localStorage.removeItem('dismissInstall');
+
+				if (isIos() && !isInStandaloneMode() && !userDismissedInstall) {
+					$('#installPrompt').addClass('showme');
+				}
+				$('#closeInstallPrompt').on('click',function(e){
+					$('#installPrompt').removeClass('showme');
+					window.localStorage.setItem('dismissInstall',true);
+				})
+			})
 		</script>
 
 		<th:block th:replace="modal/download"></th:block>

@@ -2,7 +2,6 @@ var CACHE_NAME = 'song-catalog-cache-v1';
 
 self.addEventListener('install', function(event) {
   var urlsToCache = [
-    'js/site/site.js',
     'js/lib/bootstrap.bundle.js',
     'js/lib/buttons.html5.min.js',
     'js/lib/datatable.js',
@@ -27,13 +26,14 @@ self.addEventListener('install', function(event) {
     'css/font-awesome.all.min.css',
     'css/jquery.datatable.min.css',
     'css/select2.min.css',
-    'css/site.css',
     'css/slick.css'
   ];
   event.waitUntil(
     caches.open(CACHE_NAME)
       .then(function(cache) {
         console.log('Opened cache');
+        cache.delete('css/site.css');
+        cache.delete('js/site/site.js');
         return cache.addAll(urlsToCache);
       })
   );

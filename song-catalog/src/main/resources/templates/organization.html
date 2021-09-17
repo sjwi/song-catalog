@@ -7,7 +7,7 @@
 		var orgId = /*[[${org == null}? 0: ${org.id}]]*/;
 		var orgName = /*[[${org == null}? Other: ${org.name}]]*/;
 	</script>
-	<body id="organizationBody">
+	<body id="organizationBody" data-oc="var(--secondary-bg-color),var(--secondary-bg-color)">
 		<th:block th:replace="partial/off-navbar :: offNavBar('addSong')"></th:block>
 		<div class="row no-gutters flex-nowrap mh-100vh">
 			<div th:with="orgId=${org == null? '0':org.id}" class="col text-center">

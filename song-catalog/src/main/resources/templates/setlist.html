@@ -2,7 +2,7 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 	<th:block th:replace="partial/head :: head(${set.setListName})"></th:block>
 	<th:block th:replace="partial/header"></th:block>
-	<body id="setListBody">
+	<body id="setListBody" data-oc="var(--secondary-bg-color),var(--secondary-bg-color)">
 		<div class="scroll-lock">
 			<th:block th:replace="partial/off-navbar :: offNavBar('addSetList')"></th:block>
 			<div class="wrapper set-list-page text-center">
