@@ -7,6 +7,7 @@
 		<meta name="apple-mobile-web-app-capable" content="yes">
 		<meta name="apple-mobile-web-app-status-bar-style" content="black">
 		<title th:text="${title}"></title>
+		<link rel="apple-touch-startup-image" th:href="@{/images/icon_dark.png}">
 		<link rel="shortcut icon" th:href="@{/favicon.ico}" type="image/x-icon">
 		<link th:if="${#session == null || #session.getAttribute(T(com.sjwi.catalog.config.PreferencesConfiguration).NIGHT_MODE_PREFERENCE_KEY) == null || !#session.getAttribute(T(com.sjwi.catalog.config.PreferencesConfiguration).NIGHT_MODE_PREFERENCE_KEY)}" rel="stylesheet" th:href="@{/css/bootstrap.css}" />
 		<link th:if="${#session == null || #session.getAttribute(T(com.sjwi.catalog.config.PreferencesConfiguration).NIGHT_MODE_PREFERENCE_KEY) == null || !#session.getAttribute(T(com.sjwi.catalog.config.PreferencesConfiguration).NIGHT_MODE_PREFERENCE_KEY)}" rel="stylesheet" th:href="@{/css/colors.css}" />
