@@ -8,7 +8,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
-import java.util.Random;
 import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
@@ -144,7 +143,7 @@ public class FileDownloadController {
 			FileGenerator pptGenerator = new PptFileGenerator(prependBlankSlide, fontSize.orElse(0),alignCenter,blankSlideDelimiter);
 			SetList setList = controllerHelper.buildSetFile(id,pptGenerator,true);
 			fileName = fileName == null? setList.getNormalizedSetListName(): controllerHelper.normalizeString(fileName);
-			response.addHeader("Content-Disposition", "attachment; filename=\"" + fileName + "_" + Integer.toString(new Random().nextInt(1000)) + ".pptx\"");
+			response.addHeader("Content-Disposition", "attachment; filename=\"" + fileName + ".pptx\"");
 			Files.copy(Paths.get(pptGenerator.getFilePath()), response.getOutputStream());
 			logger.logUserActionWithEmail(fileName + " ppt downloaded." + "\n" + controllerHelper.getFullUrl());
 		} catch (Exception e) {
