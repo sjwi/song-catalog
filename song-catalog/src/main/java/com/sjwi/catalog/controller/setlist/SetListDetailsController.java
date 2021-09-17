@@ -27,7 +27,7 @@ import org.springframework.web.servlet.ModelAndView;
 @Controller
 public class SetListDetailsController {
 	
-	public static final int SET_LISTS_PER_PAGE = 10;
+	public static final int SET_LISTS_PER_PAGE = 20;
 	
 	@Autowired
 	ControllerHelper controllerHelper;
