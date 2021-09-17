@@ -1,7 +1,7 @@
 {
   "display": "standalone",
-  "name": "CF Worship Songs",
-  "short_name": "CF Songs",
+  "name": "Song Catalog",
+  "short_name": "Song Catalog",
   "scope": "./",
   "start_url": "./",
   "icons": [{
