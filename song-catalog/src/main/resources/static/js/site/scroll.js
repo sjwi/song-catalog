@@ -10,7 +10,7 @@ function addScrollListener(id, size, delay){
 		size = size.toString() + 'px';
 	}
 	var prevScrollpos = window.pageYOffset;
-	var velocityThreshold = 25;
+	var velocityThreshold = 15;
 	$(document).ready(function(){
 		$(window).on('scroll',function(e){
 			var currentScrollPos = window.pageYOffset;
