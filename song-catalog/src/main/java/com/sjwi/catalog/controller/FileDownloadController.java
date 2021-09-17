@@ -2,6 +2,7 @@ package com.sjwi.catalog.controller;
 
 import static com.sjwi.catalog.model.KeySet.LYRICS_ONLY_KEY_CODE;
 
+import java.net.URLEncoder;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
@@ -13,6 +14,7 @@ import java.util.stream.Collectors;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.sjwi.catalog.config.ServletConstants;
 import com.sjwi.catalog.file.FileGenerator;
 import com.sjwi.catalog.file.pdf.PdfFileGenerator;
 import com.sjwi.catalog.file.ppt.PptFileGenerator;
@@ -33,6 +35,8 @@ import org.springframework.web.servlet.ModelAndView;
 
 @Controller
 public class FileDownloadController {
+
+	private static final String POWERPOINT_DISPLAY_URL = "https://view.officeapps.live.com/op/embed.aspx?src=";
 	@Autowired
 	ControllerHelper controllerHelper;
 	
@@ -122,9 +126,7 @@ public class FileDownloadController {
 		try {
 			FileGenerator pptGenerator = new PptFileGenerator(prependBlankSlide,fontSize.orElse(0),alignCenter,blankSlideDelimiter);
 			Song song = songService.getSongById(id).transpose(LYRICS_ONLY_KEY_CODE);
-			fileName = fileName == null? song.getNormalizedName(): controllerHelper.normalizeString(fileName);
-            response.addHeader("Content-Disposition", "attachment; filename=\""+ fileName + ".pptx\"");
-            Files.copy(Paths.get(pptGenerator.buildFile(song)), response.getOutputStream());
+			response.sendRedirect(POWERPOINT_DISPLAY_URL + URLEncoder.encode(ServletConstants.FULL_URL + "/" + pptGenerator.buildFile(song), "UTF-8"));
 			logger.logUserActionWithEmail(fileName + " ppt downloaded." + "\n" + controllerHelper.getFullUrl());
 		} catch (Exception e) {
 			controllerHelper.errorHandler(e);
@@ -141,10 +143,7 @@ public class FileDownloadController {
 			@PathVariable int id) {
 		try {
 			FileGenerator pptGenerator = new PptFileGenerator(prependBlankSlide, fontSize.orElse(0),alignCenter,blankSlideDelimiter);
-			SetList setList = controllerHelper.buildSetFile(id,pptGenerator,true);
-			fileName = fileName == null? setList.getNormalizedSetListName(): controllerHelper.normalizeString(fileName);
-            response.addHeader("Content-Disposition", "attachment; filename=\"" + fileName + ".pptx\"");
-            Files.copy(Paths.get(pptGenerator.getFilePath()), response.getOutputStream());
+			response.sendRedirect(POWERPOINT_DISPLAY_URL + URLEncoder.encode(ServletConstants.FULL_URL + "/" + pptGenerator.buildFile(setListService.getSetListById(id)), "UTF-8"));
 			logger.logUserActionWithEmail(fileName + " ppt downloaded." + "\n" + controllerHelper.getFullUrl());
 		} catch (Exception e) {
 			controllerHelper.errorHandler(e);

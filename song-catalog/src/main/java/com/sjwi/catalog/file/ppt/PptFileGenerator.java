@@ -51,17 +51,18 @@ public class PptFileGenerator implements FileGenerator {
 	private final boolean blankSlideDelimiter;
 	private final TextAlign textAlign;
 	public final String file;
+	public final String fileContextPath;
 	private XMLSlideShow ppt;
 	private XSLFSlideLayout layout;
 	private XSLFSlide slide; 
 
 	public PptFileGenerator(boolean prependBlankSlide, int fontSize, boolean alignCenter, boolean blankSlideDelimiter) {
 		String root = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest().getServletContext().getRealPath("/");
-		file = root + "/" +
-				PPT_SUB_DIRECTORY + "/" + 
+		fileContextPath = PPT_SUB_DIRECTORY + "/" + 
 				PREFIX + "_" + 
 				System.currentTimeMillis() + 
 				SUFFIX;
+		file = root + "/" + fileContextPath;
 		new File(root + "/" + PPT_SUB_DIRECTORY).mkdir();
 		this.prependBlankSlide = prependBlankSlide;
 		this.blankSlideDelimiter = blankSlideDelimiter;
@@ -101,7 +102,7 @@ public class PptFileGenerator implements FileGenerator {
 			throw new FileUtilityException("Unable to write to Ppt file for song " + song.getName(),e);
 		}
 		
-		return file;
+		return fileContextPath;
 
 	}
 	
@@ -219,6 +220,10 @@ public class PptFileGenerator implements FileGenerator {
 	@Override
 	public String getFilePath() {
 		return file;
+	}
+
+	public String getFileContextPath() {
+		return fileContextPath;
 	}
 	
 	@Override
