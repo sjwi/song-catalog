@@ -76,6 +76,12 @@ hr {
 .install-pwa.showme {
 	bottom: 0px;
 }
+.overflow-bg {
+	background-color: var(--secondary-bg-color)
+}
+.overflow-bg-secondary {
+	background-color: var(--primary-grey)
+}
 .fixed-install-arrow {
 	position:absolute;
 	margin: 0 0 0 0;
