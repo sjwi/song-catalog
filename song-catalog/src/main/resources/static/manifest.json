@@ -1,5 +1,5 @@
 {
-  "display": "standalone",
+  "display": "minimal-ui",
   "name": "Song Catalog",
   "short_name": "Song Catalog",
   "scope": "./",
