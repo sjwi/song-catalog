@@ -84,7 +84,7 @@ function generateDownloadLinkWithFormParams(){
 	return downloadBaseUri + '/' + encodeURI($('#downloadForm').find('.filename').val()) + '?' + $('#downloadForm').filter('*').find(':visible,.hidden-key').not('.filename').serialize();
 }
 function generateRandomDownloadLinkWithFormParams(){
-	return downloadBaseUri + '/' + encodeURI($('#downloadForm').find('.filename').val() + '_' + Math.random(100000).toString()) + '?' + $('#downloadForm').filter('*').find(':visible,.hidden-key').not('.filename').serialize();
+	return downloadBaseUri + '/' + encodeURI($('#downloadForm').find('.filename').val() + '_' + (Math.floor(Math.random() * 100000) + 1).toString()) + '?' + $('#downloadForm').filter('*').find(':visible,.hidden-key').not('.filename').serialize();
 }
 
 var pptDownloadBaseUri;
