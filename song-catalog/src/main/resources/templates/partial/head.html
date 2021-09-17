@@ -79,6 +79,7 @@
 				const isInStandaloneMode = () => ('standalone' in window.navigator) && (window.navigator.standalone);
 
 				const userDismissedInstall = window.localStorage.hasOwnProperty('dismissInstall');
+				//window.localStorage.removeItem('dismissInstall');
 
 				if (isIos() && !isInStandaloneMode() && !userDismissedInstall) {
 					$('#installPrompt').addClass('showme');
