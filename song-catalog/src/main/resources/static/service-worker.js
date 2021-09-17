@@ -19,7 +19,6 @@ self.addEventListener('install', function(event) {
     'js/lib/qrcode.min.js',
     'js/lib/select2.full.min.js',
     'js/lib/slick.min.js',
-    'css/site.css',
     'css/bootstrap.css',
     'css/bootstrap-dark.css',
     'css/colors-dark.css',
