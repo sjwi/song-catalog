@@ -8,7 +8,7 @@ self.addEventListener('install', function(event) {
     'js/lib/datatable.js',
     'js/lib/dataTables.buttons.min.js',
     'js/lib/jquery-3.3.1.min.js',
-    'js/lib/jquery-ui-min.js',
+    'js/lib/jquery-ui.min.js',
     'js/lib/jquery.dataTables.js',
     'js/lib/jquery.ui.touch-punch.min.js',
     'js/lib/jspdf.debug.js',
