@@ -123,6 +123,7 @@ public class FileDownloadController {
 		try {
 			FileGenerator pptGenerator = new PptFileGenerator(prependBlankSlide,fontSize.orElse(0),alignCenter,blankSlideDelimiter);
 			Song song = songService.getSongById(id).transpose(LYRICS_ONLY_KEY_CODE);
+			fileName = fileName == null? song.getNormalizedName(): controllerHelper.normalizeString(fileName);
 			response.addHeader("Content-Disposition", "attachment; filename=\""+ fileName + ".pptx\"");
 			Files.copy(Paths.get(pptGenerator.buildFile(song)), response.getOutputStream());
 			logger.logUserActionWithEmail(fileName + " ppt downloaded." + "\n" + controllerHelper.getFullUrl());
