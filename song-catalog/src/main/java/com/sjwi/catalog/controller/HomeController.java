@@ -1,5 +1,7 @@
 package com.sjwi.catalog.controller;
 
+import static com.sjwi.catalog.controller.setlist.SetListDetailsController.SET_LISTS_PER_PAGE;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -38,7 +40,7 @@ public class HomeController {
 			ModelAndView mv = new ModelAndView("home");
 			mv.addObject("songs", searchTerm == null? songService.getSongs(): songService.searchSongs(searchTerm));
 			mv.addObject("orgs",organizationService.getOrganizations());
-			mv.addObject("sets",setListService.getSetLists(10));
+			mv.addObject("sets",setListService.getSetLists(SET_LISTS_PER_PAGE));
 			mv.addObject("searchTerm",searchTerm);
 			mv.addObject("categories",songService.getSongCategories());
 			return mv;

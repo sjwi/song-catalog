@@ -7,6 +7,7 @@
 		<meta name="apple-mobile-web-app-capable" content="yes">
 		<meta name="apple-mobile-web-app-status-bar-style" content="black">
 		<title th:text="${title}"></title>
+		<link rel="apple-touch-startup-image" th:href="@{/images/icon_dark.png}">
 		<link rel="shortcut icon" th:href="@{/favicon.ico}" type="image/x-icon">
 		<link th:if="${#session == null || #session.getAttribute(T(com.sjwi.catalog.config.PreferencesConfiguration).NIGHT_MODE_PREFERENCE_KEY) == null || !#session.getAttribute(T(com.sjwi.catalog.config.PreferencesConfiguration).NIGHT_MODE_PREFERENCE_KEY)}" rel="stylesheet" th:href="@{/css/bootstrap.css}" />
 		<link th:if="${#session == null || #session.getAttribute(T(com.sjwi.catalog.config.PreferencesConfiguration).NIGHT_MODE_PREFERENCE_KEY) == null || !#session.getAttribute(T(com.sjwi.catalog.config.PreferencesConfiguration).NIGHT_MODE_PREFERENCE_KEY)}" rel="stylesheet" th:href="@{/css/colors.css}" />
@@ -19,6 +20,7 @@
 		<link rel="stylesheet" th:href="@{/css/font-awesome.all.min.css}" />
 		<link rel="stylesheet" th:href="@{/css/datatable.min.css}" />
 		<link rel="stylesheet" th:href="@{/css/jquery.datatable.min.css}" />
+		<link rel="manifest" th:href="@{/manifest.json}">
 		<link rel="search" th:href="@{/search.xml}" type="application/opensearchdescription+xml" th:attr="title=${@environment.getProperty('com.sjwi.settings.app.properName')}">
 		<script th:src="@{/js/lib/jquery-3.3.1.min.js}"></script>
 		<script th:src="@{/js/lib/jquery-ui.min.js}"></script>
@@ -39,6 +41,19 @@
 			var contextpath = /*[[@{/}]]*/;
 			var loggedInUser = /*[[${#authentication?.getPrincipal()}]]*/;
 			var alertOnLoad = /*[[${ALERT_ON_LOAD}]]*/ false;
+
+			var eventHandler = function (event) {
+				// Only run for iOS full screen apps
+				if (('standalone' in window.navigator) && window.navigator.standalone) {
+						// Only run if link is an anchor and points to the current page
+						if ( event.target.tagName.toLowerCase() !== 'a' || event.target.hostname !== window.location.hostname || event.target.pathname !== window.location.pathname || !/#/.test(event.target.href) ) return;
+
+						// Open link in same tab
+						event.preventDefault();
+						window.location = event.target.href;
+				}
+			}
+			window.addEventListener('click', eventHandler, false);
 		</script>
 
 		<th:block th:replace="modal/download"></th:block>
