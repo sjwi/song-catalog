@@ -4,6 +4,7 @@
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no maximum-scale=1.0,user-scalable=0, minimal-ui" />
 		<meta name="apple-mobile-web-app-title" th:attr="content=${@environment.getProperty('com.sjwi.settings.app.properName')}">
+		<meta name="mobile-web-app-capable" content="yes">
 		<meta name="apple-mobile-web-app-capable" content="yes">
 		<meta name="apple-mobile-web-app-status-bar-style" content="black">
 		<title th:text="${title}"></title>
@@ -54,6 +55,20 @@
 				}
 			}
 			window.addEventListener('click', eventHandler, false);
+
+
+			//service worker registration
+			if ('serviceWorker' in navigator) {
+				window.addEventListener('load', function() {
+					navigator.serviceWorker.register(contextpath + 'js/site/service-worker.js').then(function(registration) {
+						// Registration was successful
+						console.log('ServiceWorker registration successful with scope: ', registration.scope);
+					}, function(err) {
+						// registration failed :(
+						console.log('ServiceWorker registration failed: ', err);
+					});
+				});
+			}
 		</script>
 
 		<th:block th:replace="modal/download"></th:block>
