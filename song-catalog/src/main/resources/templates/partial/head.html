@@ -69,6 +69,25 @@
 					});
 				});
 			}
+
+			$(document).ready(function(){
+				// install prompt
+				const isIos = () => {
+					const userAgent = window.navigator.userAgent.toLowerCase();
+					return /iphone|ipad|ipod/.test( userAgent );
+				}
+				const isInStandaloneMode = () => ('standalone' in window.navigator) && (window.navigator.standalone);
+
+				const userDismissedInstall = window.localStorage.hasOwnProperty('dismissInstall');
+
+				if (isIos() && !isInStandaloneMode() && !userDismissedInstall) {
+					$('#installPrompt').addClass('showme');
+				}
+				$('#closeInstallPrompt').on('click',function(e){
+					$('#installPrompt').removeClass('showme');
+					window.localStorage.setItem('dismissInstall',true);
+				})
+			})
 		</script>
 
 		<th:block th:replace="modal/download"></th:block>

@@ -65,6 +65,33 @@ hr {
 	padding-top:.25rem;
 	padding-bottom:.25rem;
 }
+.install-pwa {
+	transition-duration: .5s;
+  position:fixed; 
+  bottom: -150px; 
+  left: 2%; 
+  width: 96%;
+  z-index:9999; 
+}
+.install-pwa.showme {
+	bottom: 0px;
+}
+.fixed-install-arrow {
+	position:absolute;
+	margin: 0 0 0 0;
+	padding: 0 0 0 0;
+	bottom:-15px;
+	width:100%;
+	left:-5px;
+}
+.arrow-down {
+  width: 0; 
+  height: 0; 
+  border-left: 20px solid transparent;
+  border-right: 20px solid transparent;
+  
+  border-top: 20px solid#18BC9C;
+}
 .title-link {
 	text-decoration: none !important;
 	color: var(--main-text-color);
