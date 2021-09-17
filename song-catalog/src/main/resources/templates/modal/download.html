@@ -59,7 +59,7 @@
 	$(document).on('submit','#downloadForm',function(e){
 		e.preventDefault();
 		if (isFormFilled(this)){
-			if ($(this).hasClass('right-download-modal')){
+			if ($('.download-tab.selected').hasClass('right-download-modal')){
 				window.open('https://view.officeapps.live.com/op/embed.aspx?src=' + encodeURIComponent($('#copyDownloadLinkBtn').data('basecontext') + generateDownloadLinkWithFormParams()),'_blank');
 			} else {
 				window.open($('#copyDownloadLinkBtn').data('basecontext') + generateDownloadLinkWithFormParams(),'_blank');
