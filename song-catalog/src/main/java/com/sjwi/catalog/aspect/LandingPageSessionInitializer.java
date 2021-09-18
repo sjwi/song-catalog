@@ -23,9 +23,14 @@ public class LandingPageSessionInitializer {
 	ControllerHelper controllerHelper;
 
 	@Before("@annotation(com.sjwi.catalog.aspect.LandingPageAspect)")
-	public void logPageRequest(JoinPoint joinPoint) throws IOException {
+	public void landingPage(JoinPoint joinPoint) throws IOException {
 		controllerHelper.setCookiesInSession();
 		controllerHelper.attemptUserLoginViaCookie();
+		if (!ServletConstants.IS_INITIALIZED)
+			ServletConstants.initializeServletConstants();
+	}
+	@Before("@annotation(com.sjwi.catalog.aspect.ServletInitializerAspect)")
+	public void servletInitializer(JoinPoint joinPoint) throws IOException {
 		if (!ServletConstants.IS_INITIALIZED)
 			ServletConstants.initializeServletConstants();
 	}
