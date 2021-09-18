@@ -151,9 +151,11 @@ getSetlistById: >
   Select * from SetListMaster where ID = ?
   
 searchSongsByTerm: >
-  Select DISTINCT * from Song where (RELATED IS NULL AND PRIVATE IS NULL) AND LOWER(REPLACE(NAME,',','')) like :term order by REPLACE(NAME,'''','')
-  UNION
-  SELECT DISTINCT * FROM Song a where (RELATED IS NULL AND PRIVATE IS NULL) AND (LOWER(REPLACE(BODY,',','')) like :term or ID like :term or DEFAULT_KEY like :term or LOWER(NOTES) like :term or (SELECT COUNT(*) FROM Song WHERE RELATED = a.ID and LOWER(REPLACE(BODY,',','')) like :term) > 0)  order by REPLACE(NAME,'''','')
+  select * from (
+    Select DISTINCT 1 as rank, * from Song where (RELATED IS NULL AND PRIVATE IS NULL) AND LOWER(REPLACE(NAME,',','')) like :term
+    UNION
+    SELECT DISTINCT 2 as rank, * FROM Song a where (RELATED IS NULL AND PRIVATE IS NULL) AND (LOWER(REPLACE(BODY,',','')) like :term or ID like :term or DEFAULT_KEY like :term or LOWER(NOTES) like :term or (SELECT COUNT(*) FROM Song WHERE RELATED = a.ID and LOWER(REPLACE(BODY,',','')) like :term) > 0) 
+  ) as t order by rank, REPLACE(NAME,'''','')
 
 getSortOrderForSongInSet: >
   select SORT_ORDER from SetList where ID = ?
