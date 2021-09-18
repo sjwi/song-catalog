@@ -37,7 +37,7 @@ function addSongsFromSelect(setId,setName){
 		url: contextpath + 'setlist/add-multiple-songs/' + setId,
 		method: "GET",
 		beforeSend: function(data) {
-			$('#addSongFromSelectForm').html($('.loading').clone());
+			$('#addSongFromSelectForm').html($('.loading-min').clone());
 		},
 		success: function(data) {
 			$('#addSongFromSelectForm').html(data);
