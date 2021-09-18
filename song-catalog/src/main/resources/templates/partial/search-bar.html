@@ -52,7 +52,7 @@
 					searchType: searchType
 				},
 				beforeSend: function() {
-					$(append).css('opacity','.5');
+					$(append).find('div').css('opacity','.5');
 				},
 				success: function(data) {
 					$(append).html(data);
@@ -70,7 +70,7 @@
 					alertWithFade('danger','Unable to search song database at this time.')
 				},
 				complete: function() {
-					$(append).css('opacity','1');
+					$(append).find('div').css('opacity','1');
 				}
 			});
 		}
