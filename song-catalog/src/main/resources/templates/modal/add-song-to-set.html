@@ -7,8 +7,14 @@
 				  <span aria-hidden="true">&times;</span>
 				</button>
 			</div>
-			<form method="POST" th:action="@{/setlist/add-song}" id="addSongToSetForm">
-			</form>	
+			<div class="modal-body">
+				<form method="POST" th:action="@{/setlist/add-song}" id="addSongToSetForm">
+				</form>	
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+				<button type="submit" class="btn btn-info" form="addSongToSetForm" id="submitAddSongToSetFormBtn">Add to set</button>
+			</div>
 		</div>
 	</div>
 </div>
@@ -16,6 +22,7 @@
 
 <script>
 function addSongToSet(id){
+	$('#addSongToSetListModal').find('.modal-title').html('Add song to set...');
 	$('#addSongToSetListModal').modal('show');
 	$.ajax({
 		url: contextpath + 'song/details/' + id + '?view=modal/dynamic/add-song-to-set', 
@@ -32,11 +39,6 @@ function addSongToSet(id){
 	});
 }
 $(document).ready(function(){
-	$('#addSongToSetListModal').on('shown.bs.modal',function(){
-		if (!isMobile){
-			$('#addSongToSetListModal').find('.modal-message').show();
-		}
-	});
 	$('#addSongToSetForm').on('submit',function(e){
 		e.preventDefault();
 		if (isFormFilled(this)){

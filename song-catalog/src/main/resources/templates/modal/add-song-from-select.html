@@ -8,15 +8,26 @@
 				</button>
 			</div>
 			<div class="modal-body text-center">
-				<span class="modal-message"></span>
+				<form id="addSongFromSelectForm">
+				</form>
+				<div class="row no-gutters mb-2 mt-4">
+					<div class="col text-right">
+						<a th:href="@{/}" class="text-info mr-3">
+							<svg class="pb-1 external-link" fill="#000000" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="25px" height="25px">
+								<path d="M 18 5 L 18 7 L 23.5625 7 L 11.28125 19.28125 L 12.71875 20.71875 L 25 8.4375 L 25 14 L 27 14 L 27 5 Z M 5 9 L 5 27 L 23 27 L 23 14 L 21 16 L 21 25 L 7 25 L 7 11 L 16 11 L 18 9 Z"/>
+							</svg>
+							Song Catalog
+						</a>
+					</div>
+				</div>
 			</div>
-			<form id="addSongFromSelectForm">
-			</form>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+				<button type="submit" class="btn btn-info" form="addSongFromSelectForm" id="submitAddSongFromSelectBtn">Add Song(s)</button>
+			</div>
 		</div>
 	</div>
 </div>
-
-
 <script>
 function addSongsFromSelect(setId,setName){
 	$('#addSongFromSelectModal').find('.modal-header').html(setName);
@@ -47,7 +58,10 @@ $(document).ready(function(){
 				method: "POST",
 				data: $('#addSongFromSelectForm').serialize(),
 				success: function() {
-					location.reload();
+					$('#addSongFromSelectModal').modal('hide');
+					reloadSetSongContainerIfPresent($('#addSongFromSelectForm input[name="setId"]').val());
+					reloadSetContainerIfPresent($('#addSongFromSelectForm input[name="setId"]').val());
+					lastUpdatedTime = undefined;
 				},
 				error: function(data){
 					alertWithFade('danger','Something went wrong! Unable to add songs to set')
