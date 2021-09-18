@@ -62,6 +62,9 @@
 						});
 					}
 					refreshCategories();
+				},
+				error: function(data) {
+					alertWithFade('danger','Unable to search song database at this time.')
 				}
 			});
 		}
