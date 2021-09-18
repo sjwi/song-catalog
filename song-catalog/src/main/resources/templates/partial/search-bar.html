@@ -51,6 +51,9 @@
 					view: view,
 					searchType: searchType
 				},
+				beforeSend: function() {
+					$(append).find('div').addClass('loading');
+				},
 				success: function(data) {
 					$(append).html(data);
 					if (id == 'setlistSearch' && loggedInUser != 'anonymousUser'){
@@ -62,6 +65,12 @@
 						});
 					}
 					refreshCategories();
+				},
+				error: function(data) {
+					alertWithFade('danger','Unable to search song database at this time.')
+				},
+				complete: function() {
+					$(append).find('div').removeClass('loading');
 				}
 			});
 		}

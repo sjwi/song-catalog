@@ -761,7 +761,7 @@ p.song-body {
 	height:calc(100vh);
 }
 .loading {
-	opacity: .25;
+	opacity: .75;
 	pointer-events:none;
 }
 .song-section {
