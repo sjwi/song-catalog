@@ -13,6 +13,7 @@ import java.util.stream.Collectors;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.sjwi.catalog.aspect.ServletInitializerAspect;
 import com.sjwi.catalog.file.FileGenerator;
 import com.sjwi.catalog.file.pdf.PdfFileGenerator;
 import com.sjwi.catalog.file.ppt.PptFileGenerator;
@@ -46,6 +47,7 @@ public class FileDownloadController {
 	@Autowired
 	CustomLogger logger;
 	
+	@ServletInitializerAspect
 	@RequestMapping(value = {"{downloadType}/download/{id}"}, method = RequestMethod.GET)
 	public ModelAndView downloadModal(@PathVariable String downloadType, @PathVariable int id,
 			@RequestParam (name="key", required = false) String key) {
@@ -60,6 +62,7 @@ public class FileDownloadController {
 		}
 	}
 	
+	@ServletInitializerAspect
 	@RequestMapping(value = {"/exportDatabase"}, method = RequestMethod.GET)
 	public ModelAndView exportModal() {
 		try {
