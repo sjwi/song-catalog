@@ -154,7 +154,7 @@ searchSongsByTerm: >
   select * from (
     Select '1' as Rank, * from Song where (RELATED IS NULL AND PRIVATE IS NULL) AND LOWER(REPLACE(NAME,',','')) like :term
     UNION DISTINCT
-    SELECT '2' as Rank, * 2 as rank FROM Song a where (RELATED IS NULL AND PRIVATE IS NULL) AND (LOWER(REPLACE(BODY,',','')) like :term or ID like :term or DEFAULT_KEY like :term or LOWER(NOTES) like :term or (SELECT COUNT(*) FROM Song WHERE RELATED = a.ID and LOWER(REPLACE(BODY,',','')) like :term) > 0) 
+    SELECT '2' as Rank, * FROM Song a where (RELATED IS NULL AND PRIVATE IS NULL) AND (LOWER(REPLACE(BODY,',','')) like :term or ID like :term or DEFAULT_KEY like :term or LOWER(NOTES) like :term or (SELECT COUNT(*) FROM Song WHERE RELATED = a.ID and LOWER(REPLACE(BODY,',','')) like :term) > 0) 
   ) t order by Rank, REPLACE(NAME,'''','')
 
 getSortOrderForSongInSet: >
