@@ -152,7 +152,7 @@ getSetlistById: >
   
 searchSongsByTerm: >
   select * from (
-    Select '1' as crank, * from Song where (RELATED IS NULL AND PRIVATE IS NULL) AND LOWER(REPLACE(NAME,',','')) like :term
+    Select '1' as crank, * from Song a where (RELATED IS NULL AND PRIVATE IS NULL) AND LOWER(REPLACE(NAME,',','')) like :term
     UNION DISTINCT
     SELECT '2' as crank, * FROM Song a where (RELATED IS NULL AND PRIVATE IS NULL) AND (LOWER(REPLACE(BODY,',','')) like :term or ID like :term or DEFAULT_KEY like :term or LOWER(NOTES) like :term or (SELECT COUNT(*) FROM Song WHERE RELATED = a.ID and LOWER(REPLACE(BODY,',','')) like :term) > 0) 
   ) t order by crank, REPLACE(NAME,'''','')
