@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.sjwi.catalog.aspect.IgnoreAspect;
 import com.sjwi.catalog.aspect.LandingPageAspect;
+import com.sjwi.catalog.aspect.ServletInitializerAspect;
 import com.sjwi.catalog.model.ResponseMessage;
 import com.sjwi.catalog.model.user.CfUser;
 import com.sjwi.catalog.service.UserService;
@@ -56,6 +57,7 @@ public class ReportController {
 		return "Active users (" + user.size() + ")<br>" +  user.stream().map(u -> u.getUsername()).collect(Collectors.joining("<br>"));
 	}
 
+	@ServletInitializerAspect
 	@RequestMapping(value = {"/server-availability"}, method = RequestMethod.GET)
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
