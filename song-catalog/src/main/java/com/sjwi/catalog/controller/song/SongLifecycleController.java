@@ -18,6 +18,7 @@ import com.sjwi.catalog.model.song.Song;
 import com.sjwi.catalog.service.RecordingService;
 import com.sjwi.catalog.service.SetListService;
 import com.sjwi.catalog.service.SongService;
+import com.sjwi.catalog.service.UserService;
 import com.sjwi.catalog.service.VersionService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,6 +45,9 @@ public class SongLifecycleController {
 	
 	@Autowired
 	VersionService versionService;
+
+	@Autowired
+	UserService userService;
 	
 	@Autowired
 	SetListService setListService;
@@ -67,7 +71,7 @@ public class SongLifecycleController {
 			Principal principal,Authentication auth,
 			@RequestParam(value = "songBody", required = false) String songBody) {
 		try {
-			int id = songService.addSong(controllerHelper.titleCase(songTitle),songBody,chordedIn,principal.getName(),category);
+			int id = songService.addSong(controllerHelper.titleCase(songTitle),songBody,chordedIn,userService.loadCfUserByUsername(principal.getName()),category);
 			if (songAudio != null) {
 				recordingService.addOrUpdateRecording(id, songAudio);
 			}
@@ -124,7 +128,7 @@ public class SongLifecycleController {
 			Song originalSong = songService.getSongById(id);
 			Song revisedSong = new MasterSong(null, originalSong.getId(),songTitle,new TransposableString(songBody,defaultKey),
 					updatedKey,originalSong.getArtist(),originalSong.getNotes(),originalSong.getCreatedBy(),
-					principal.getName(),new Date(), originalSong.getRelated(),originalSong.isPriv(),category,originalSong.getRecording());
+					userService.loadCfUserByUsername(principal.getName()),new Date(), originalSong.getRelated(),originalSong.isPriv(),category,originalSong.getRecording());
 			if (newVersion != null)
 				id = versionService.createNewVersion(revisedSong.getRelated() == 0? id: revisedSong.getRelated(), principal.getName(),
 						revisedSong.getBody(), revisedSong.getDefaultKey());
