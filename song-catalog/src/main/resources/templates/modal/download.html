@@ -63,7 +63,7 @@
 				window.open('https://view.officeapps.live.com/op/view.aspx?src=' + encodeURIComponent($('#copyDownloadLinkBtn').data('basecontext') + generateRandomDownloadLinkWithFormParams()),'_blank');
 			} else {
 				if (isInStandaloneMode())
-					window.open('https://docs.google.com/viewer?embedded=false&url=' + encodeURIComponent($('#copyDownloadLinkBtn').data('basecontext') + generateDownloadLinkWithFormParams()),'_blank');
+					window.open('https://docs.google.com/viewer?embedded=true&url=' + encodeURIComponent($('#copyDownloadLinkBtn').data('basecontext') + generateDownloadLinkWithFormParams()),'_blank');
 				else
 					window.open($('#copyDownloadLinkBtn').data('basecontext') + generateDownloadLinkWithFormParams(),'_blank');
 			}
