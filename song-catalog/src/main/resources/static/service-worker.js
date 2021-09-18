@@ -55,7 +55,6 @@ self.addEventListener('install', function(event) {
     'images/icon_dark.png_old',
     'images/icon_dark_192.png',
     'images/icon_dark_512.png',
-    'images/instructions',
     'images/loading.gif',
     'images/logo.png',
     'images/logo_preview.png',
