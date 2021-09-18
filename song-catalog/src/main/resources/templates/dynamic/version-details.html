@@ -15,7 +15,7 @@
 				</div>
 			</div>
 			<div class="text-center mb-3">
-				<span style="font-size:.8rem;" th:text="${#strings.capitalize(version.versionName) + '&nbsp;&nbsp;&nbsp;[' + version.createdBy.firstName + ']'}"></span>
+				<span style="font-size:.8rem;" th:text="${#strings.capitalize(version.versionName) + '&nbsp;&nbsp;&nbsp;[' + version.createdBy?.firstName + ']'}"></span>
 			</div>
 		</th:block>
 		<th:block sec:authorize="hasAuthority('USER')">

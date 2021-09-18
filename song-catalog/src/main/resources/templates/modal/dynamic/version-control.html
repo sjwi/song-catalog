@@ -12,7 +12,7 @@
 					<table class="table table-default table-striped version-control-table">
 						<tbody>
 							<tr class="version-control-row selected master-version" th:attr="data-target=${song.id}">
-								<td class="col-6 pl-2" th:text="${'Master** [' + song.createdBy.firstName + ']'}"></td>
+								<td class="col-6 pl-2" th:text="${'Master** [' + song.createdBy?.firstName + ']'}"></td>
 								<td class="col-2">
 								</td>
 								<td class="col-2">
@@ -21,7 +21,7 @@
 								</td>
 							</tr>
 							<tr th:each="version: ${song.versions}" class="version-control-row" th:attr="data-target=${version.id}">
-								<td class="col-6 pl-2" th:text="${version.versionName + ' [' + version.createdBy.firstName + ']'}"></td>
+								<td class="col-6 pl-2" th:text="${version.versionName + ' [' + version.createdBy?.firstName + ']'}"></td>
 								<td class="col-2 text-center">
 									<div class="btn btn-outline-info btn-xs edit-version"><span class="pr-2 pl-2">Edit</span></div>
 								</td>
