@@ -56,6 +56,7 @@
 					});
 				});
 			}
+			let isInStandaloneMode;
 
 			$(document).ready(function(){
 				// install prompt
@@ -63,7 +64,7 @@
 					const userAgent = window.navigator.userAgent.toLowerCase();
 					return /iphone|ipad|ipod/.test( userAgent );
 				}
-				const isInStandaloneMode = () => ('standalone' in window.navigator) && (window.navigator.standalone);
+				isInStandaloneMode = () => ('standalone' in window.navigator) && (window.navigator.standalone);
 
 				const userDismissedInstall = window.localStorage.hasOwnProperty('dismissInstall');
 				//window.localStorage.removeItem('dismissInstall');
