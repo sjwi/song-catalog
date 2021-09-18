@@ -1,8 +1,14 @@
 package com.sjwi.catalog.service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import com.sjwi.catalog.dao.UserDao;
+import com.sjwi.catalog.exception.PasswordException;
+import com.sjwi.catalog.model.addressbook.AddressBookEntry;
+import com.sjwi.catalog.model.user.CfUser;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -11,11 +17,6 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
-import com.sjwi.catalog.dao.UserDao;
-import com.sjwi.catalog.exception.PasswordException;
-import com.sjwi.catalog.model.addressbook.AddressBookEntry;
-import com.sjwi.catalog.model.user.CfUser;
 
 @Service("userDetailsService")
 public class UserService implements UserDetailsService {
@@ -28,6 +29,8 @@ public class UserService implements UserDetailsService {
 
 	@Autowired
 	UserDao userDao;
+
+	private static Map<String,CfUser> cachedUsers = new HashMap<>();
 
 	public CfUser createUser(String username, String firstName, String lastName, String email, String password, List<String> authorityNames, Map<String, String> preferences) {
 		password = passwordEncoder.encode(password);
@@ -68,7 +71,18 @@ public class UserService implements UserDetailsService {
 
 	@Override
 	public UserDetails loadUserByUsername(final String username) throws UsernameNotFoundException {
-	    return userDao.getUser(username.trim().toLowerCase());
+		return userDao.getUser(username.trim().toLowerCase());
+	}
+
+	public synchronized CfUser loadCfUserByUsername(String username) throws UsernameNotFoundException {
+		username = username.trim().toLowerCase();
+		if (cachedUsers.containsKey(username)){
+			return cachedUsers.get(username);
+		} else {
+			CfUser user = (CfUser) userDao.getUser(username);
+			cachedUsers.put(username,user);
+			return user;
+		}
 	}
 	
 	public List<CfUser> getAllActiveUsers() {

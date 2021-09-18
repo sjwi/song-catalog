@@ -17,6 +17,7 @@ import com.sjwi.catalog.model.TransposableString;
 import com.sjwi.catalog.model.song.MasterSong;
 import com.sjwi.catalog.model.song.Song;
 import com.sjwi.catalog.service.RecordingService;
+import com.sjwi.catalog.service.UserService;
 import com.sjwi.catalog.service.VersionService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,6 +46,9 @@ public class SqlSongDao implements SongDao {
 
 	@Autowired
 	ControllerHelper controllerHelper;
+
+	@Autowired
+	UserService userService;
 	
 	@Value("{server.servlet.contextPath}")
 	private String contextPath;
@@ -191,8 +195,8 @@ public class SqlSongDao implements SongDao {
 						rs.getString("DEFAULT_KEY"),
 						rs.getString("ARTIST"),
 						rs.getString("NOTES"),
-						rs.getString("CREATED_BY"),
-						rs.getString("MODIFIED_BY"),
+						userService.loadCfUserByUsername(rs.getString("CREATED_BY")),
+						userService.loadCfUserByUsername(rs.getString("MODIFIED_BY")),
 						rs.getTimestamp("CHANGED_ON"),
 						rs.getInt("RELATED"),
 						("Y").equals(rs.getString("PRIVATE"))? true: false,
@@ -217,8 +221,8 @@ public class SqlSongDao implements SongDao {
 					rs.getString("DEFAULT_KEY"),
 					rs.getString("ARTIST"),
 					rs.getString("NOTES"),
-					rs.getString("CREATED_BY"),
-					rs.getString("MODIFIED_BY"),
+					userService.loadCfUserByUsername(rs.getString("CREATED_BY")),
+					userService.loadCfUserByUsername(rs.getString("MODIFIED_BY")),
 					rs.getTimestamp("CHANGED_ON"),
 					rs.getInt("RELATED"),
 					("Y").equals(rs.getString("PRIVATE"))? true: false,
@@ -239,8 +243,8 @@ public class SqlSongDao implements SongDao {
 					rs.getString("DEFAULT_KEY"),
 					rs.getString("ARTIST"),
 					rs.getString("NOTES"),
-					rs.getString("CREATED_BY"),
-					rs.getString("MODIFIED_BY"),
+					userService.loadCfUserByUsername(rs.getString("CREATED_BY")),
+					userService.loadCfUserByUsername(rs.getString("MODIFIED_BY")),
 					rs.getTimestamp("CHANGED_ON"),
 					rs.getInt("RELATED"),
 					("Y").equals(rs.getString("PRIVATE"))? true: false,

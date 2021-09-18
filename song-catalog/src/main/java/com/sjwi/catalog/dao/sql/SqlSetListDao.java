@@ -17,6 +17,7 @@ import com.sjwi.catalog.model.TransposableString;
 import com.sjwi.catalog.model.song.SetListSong;
 import com.sjwi.catalog.model.song.Song;
 import com.sjwi.catalog.service.RecordingService;
+import com.sjwi.catalog.service.UserService;
 import com.sjwi.catalog.service.VersionService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,6 +42,9 @@ public class SqlSetListDao implements SetListDao {
 	
 	@Autowired
 	ControllerHelper controllerHelper;
+
+	@Autowired
+	UserService userService;
 	
 	@Autowired
 	CustomLogger log;
@@ -277,8 +281,8 @@ public class SqlSetListDao implements SetListDao {
 							r.getString("DEFAULT_KEY"),
 							r.getString("ARTIST"),
 							r.getString("NOTES"),
-							r.getString("CREATED_BY"),
-							r.getString("MODIFIED_BY"),
+							userService.loadCfUserByUsername(r.getString("CREATED_BY")),
+							userService.loadCfUserByUsername(r.getString("MODIFIED_BY")),
 							r.getTimestamp("CHANGED_ON"),
 							r.getInt("RELATED"),
 							("Y").equals(r.getString("PRIVATE"))? true: false,

@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 
 import com.sjwi.catalog.model.Recording;
 import com.sjwi.catalog.model.TransposableString;
+import com.sjwi.catalog.model.user.CfUser;
 
 public abstract class Song {
 	
@@ -16,8 +17,8 @@ public abstract class Song {
 	protected final String defaultKey;
 	protected final String artist;
 	protected final String notes;
-	protected final String createdBy;
-	protected final String modifiedBy;
+	protected final CfUser createdBy;
+	protected final CfUser modifiedBy;
 	protected final Date changedOn;
 	protected final int related;
 	protected final boolean priv;
@@ -25,7 +26,7 @@ public abstract class Song {
 	protected final Recording recording;
 	
 	public Song(int id, String name, TransposableString transposableString, String defaultKey, String artist, String notes,
-			String createdBy, String modifiedBy, Date changedOn, int related, boolean priv, int category,
+			CfUser createdBy, CfUser modifiedBy, Date changedOn, int related, boolean priv, int category,
 			Recording recording) {
 		this.id = id;
 		this.name = name;
@@ -70,10 +71,10 @@ public abstract class Song {
 	public String getNotes() {
 		return notes;
 	}
-	public String getCreatedBy() {
+	public CfUser getCreatedBy() {
 		return createdBy;
 	}
-	public String getModifiedBy() {
+	public CfUser getModifiedBy() {
 		return modifiedBy;
 	}
 	public Date getChangedOn() {

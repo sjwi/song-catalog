@@ -54,6 +54,7 @@ public class SongDetailsController {
 				ModelAndView mv = searchTerm == null? new ModelAndView("songs"): new ModelAndView("home");
 				mv.addObject("songs",songs);
 				mv.addObject("sets",setListService.getSetLists(10));
+				mv.addObject("fsInitialIndex",0);
 				mv.addObject("focusedSong", versionService.getAllRelatedSongs(songs.get(0).getId()));
 				mv.addObject("categories",songService.getSongCategories());
 				mv.addObject("searchTerm",searchTerm);

@@ -4,6 +4,7 @@ import java.util.Date;
 
 import com.sjwi.catalog.model.Recording;
 import com.sjwi.catalog.model.TransposableString;
+import com.sjwi.catalog.model.user.CfUser;
 
 public class VersionSong extends Song {
 
@@ -11,7 +12,7 @@ public class VersionSong extends Song {
 	private final String versionName;
 
 	public VersionSong(int versionId, String versionName, int id, String name, TransposableString transposableString, String defaultKey, String artist, String notes,
-			String createdBy, String modifiedBy, Date changedOn, int related, boolean priv, int category,
+			CfUser createdBy, CfUser modifiedBy, Date changedOn, int related, boolean priv, int category,
 			Recording recording) {
 		super(id, name, transposableString, defaultKey, artist, notes, createdBy, modifiedBy, changedOn, related, priv, category, recording);
 		this.versionId = versionId;

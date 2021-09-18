@@ -6,11 +6,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Lazy;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.stereotype.Repository;
-
 import com.sjwi.catalog.dao.VersionDao;
 import com.sjwi.catalog.model.TransposableString;
 import com.sjwi.catalog.model.song.MasterSong;
@@ -19,6 +14,12 @@ import com.sjwi.catalog.model.song.Song;
 import com.sjwi.catalog.model.song.VersionSong;
 import com.sjwi.catalog.service.RecordingService;
 import com.sjwi.catalog.service.SongService;
+import com.sjwi.catalog.service.UserService;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.stereotype.Repository;
 
 @Repository
 public class SqlVersionDao implements VersionDao {
@@ -32,6 +33,9 @@ public class SqlVersionDao implements VersionDao {
 	@Lazy
 	@Autowired
 	SongService songService;
+
+	@Autowired
+	UserService userService;
 
 	@Autowired
 	JdbcTemplate jdbcTemplate;
@@ -66,8 +70,8 @@ public class SqlVersionDao implements VersionDao {
 						r.getString("DEFAULT_KEY"),
 						r.getString("ARTIST"),
 						r.getString("NOTES"),
-						r.getString("CREATED_BY"),
-						r.getString("MODIFIED_BY"),
+						userService.loadCfUserByUsername(r.getString("CREATED_BY")),
+						userService.loadCfUserByUsername(r.getString("MODIFIED_BY")),
 						r.getTimestamp("CHANGED_ON"),
 						r.getInt("RELATED"),
 						"Y".equals(r.getString("PRIVATE"))? true: false,	
@@ -90,8 +94,8 @@ public class SqlVersionDao implements VersionDao {
 						r.getString("DEFAULT_KEY"),
 						r.getString("ARTIST"),
 						r.getString("NOTES"),
-						r.getString("CREATED_BY"),
-						r.getString("MODIFIED_BY"),
+						userService.loadCfUserByUsername(r.getString("CREATED_BY")),
+						userService.loadCfUserByUsername(r.getString("MODIFIED_BY")),
 						r.getTimestamp("CHANGED_ON"),
 						r.getInt("RELATED"),
 						"Y".equals(r.getString("PRIVATE"))? true: false,	
@@ -116,8 +120,8 @@ public class SqlVersionDao implements VersionDao {
 						r.getString("DEFAULT_KEY"),
 						r.getString("ARTIST"),
 						r.getString("NOTES"),
-						r.getString("CREATED_BY"),
-						r.getString("MODIFIED_BY"),
+						userService.loadCfUserByUsername(r.getString("CREATED_BY")),
+						userService.loadCfUserByUsername(r.getString("MODIFIED_BY")),
 						r.getTimestamp("CHANGED_ON"),
 						r.getInt("RELATED"),
 						"Y".equals(r.getString("PRIVATE"))? true: false,	

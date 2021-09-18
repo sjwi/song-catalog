@@ -15,6 +15,7 @@ import com.sjwi.catalog.model.KeySet;
 import com.sjwi.catalog.model.TransposableString;
 import com.sjwi.catalog.model.song.MasterSong;
 import com.sjwi.catalog.model.song.Song;
+import com.sjwi.catalog.model.user.CfUser;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -39,12 +40,10 @@ public class SongService {
 	public void setDefaultKey(String updatedVersionKey, int songId, String user) {
 		songDao.setDefaultKey(updatedVersionKey, songId, user);
 	}
-	public int addSong(String songTitle, String songBody, String chordedIn, String name, int category) {
-		return songDao.addSong(new MasterSong(null,
-				0,
-				songTitle,
+	public int addSong(String songTitle, String songBody, String chordedIn, CfUser user, int category) {
+		return songDao.addSong(new MasterSong(null,0,songTitle,
 				new TransposableString(songBody,chordedIn),
-				chordedIn,null,null,name,name, new Date(),0,false,category,null));
+				chordedIn,null,null,user,user, new Date(),0,false,category,null));
 	}
 	public void deleteSong(int songId) {
 		songDao.deleteSong(songId);
