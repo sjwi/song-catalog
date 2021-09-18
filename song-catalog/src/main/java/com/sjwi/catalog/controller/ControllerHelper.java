@@ -269,7 +269,7 @@ public class ControllerHelper {
 	}
 
 	public String titleCase(String title) {
-		String titleCasedString = WordUtils.capitalizeFully(title);
+		String titleCasedString = WordUtils.capitalize(title);
 		for (String w : NO_CAPS_TITLE_WORDS)
 			titleCasedString = titleCasedString.replace(" " + w + " " , " " + w.toLowerCase() + " ");
 		return titleCasedString.substring(0,1).toUpperCase() + titleCasedString.substring(1);
