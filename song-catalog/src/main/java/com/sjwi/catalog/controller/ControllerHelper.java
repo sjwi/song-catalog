@@ -37,6 +37,7 @@ import com.sjwi.catalog.service.UserService;
 import org.apache.commons.lang.WordUtils;
 import org.apache.commons.lang.exception.ExceptionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -111,6 +112,7 @@ public class ControllerHelper {
 			httpServletRequestToString() + "\n" + 
 			ExceptionUtils.getStackTrace(e));
 		ModelAndView mv = new ModelAndView("error");
+		mv.setStatus(HttpStatus.INTERNAL_SERVER_ERROR);
 		try {
 			mv.addObject("orgs",organizationService.getOrganizations());
 		} catch (Exception exception){
