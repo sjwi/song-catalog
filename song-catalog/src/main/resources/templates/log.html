@@ -25,10 +25,8 @@
 			success: function(data) {
 				var scrollPos = Math.floor($(window).scrollTop() + $(window).height());
 				var height = Math.floor($(document).height());
-				console.log(scrollPos + " || " + height);
 				let wasScrolledToBottom = scrollPos == height;
 				$('#logOutput').html(data);
-				console.log(wasScrolledToBottom);
 				if(wasScrolledToBottom)
 					window.scrollTo(0,document.body.scrollHeight);
 			},
