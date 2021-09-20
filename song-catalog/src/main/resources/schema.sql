@@ -714,6 +714,7 @@ CREATE TABLE authorities (
 /*!40000 ALTER TABLE authorities DISABLE KEYS */;
 INSERT INTO authorities VALUES 
 ('admin','USER'),
+('admin','SUPERADMIN'),
 ('admin','ADMIN');
 
 /*!40000 ALTER TABLE authorities ENABLE KEYS */;

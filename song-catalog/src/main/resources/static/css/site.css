@@ -240,7 +240,7 @@ a:hover {
 #setListBody .wrapper, #setListsBody .wrapper {
 	background-color: var(--secondary-bg-color) !important;
 }
-#setListBody #offNav > .row, #setListsBody #offNav > .row, #errorBody #offNav > .row{
+#setListBody #offNav > .row, #setListsBody #offNav > .row, #errorBody #offNav > .row, #userFeedBody #offNav > .row{
 	border-bottom:none !important;
 }
 .btn-group-xs > .btn, .btn-xs {
