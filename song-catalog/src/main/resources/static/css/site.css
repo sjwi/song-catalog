@@ -249,7 +249,10 @@ a:hover {
   line-height: .5 !important;
   border-radius: .2rem !important;
 }
-
+pre#logOutput {
+	white-space: pre-wrap;
+	font-size: .75rem;
+}
 .small-font {
 	font-size:.75rem !important;
 }
@@ -1573,6 +1576,9 @@ table > thead > tr > th[class*="sort"]:after {
 	}
 }
 @media screen and (max-width: 900px) {
+	pre#logOutput {
+		font-size: .5rem;
+	}
 	.dataTables_filter {
 		display:none !important;
 	}
