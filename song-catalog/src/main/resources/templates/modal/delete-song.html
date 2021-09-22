@@ -27,13 +27,12 @@
 var songDeleted = false;
 $(document).ready(function(){
 	$('#confirmDeleteSongBtn').click(function(e){
-		songDeleted = false;
+		songDeleted = true;
 		$.ajax({
 			url: contextpath + 'song/delete',
 			method: "DELETE",
 			data: $('#deleteSongForm').serialize(),
 			success: function() {
-				songDeleted = true;
 				$('#songRow_' +$('#deleteSongModal').find('.song-id').val()).hide();
 				alertWithFade('success','<b>' + $('#deleteSongModal').find('.song-name').val() + '</b> has been deleted.');
 			},
