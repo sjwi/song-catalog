@@ -66,10 +66,8 @@ public class LoginController {
 			generateCookieToken(request, response, username);
 			return new ResponseMessage("success");
 		} catch (ServletException e) {
-			controllerHelper.errorHandler(e);
 			return new ResponseMessage("bad_password");
 		} catch (Exception e) {
-			controllerHelper.errorHandler(e);
 			return new ResponseMessage("bad_login_attempt");
 		}
 	}
