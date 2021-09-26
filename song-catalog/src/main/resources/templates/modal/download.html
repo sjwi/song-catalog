@@ -8,9 +8,6 @@
 	$(document).on('change','#downloadForm input, #downloadForm select',function(){
 		refreshDownloadQrCode();
 	});
-	$(document).on('click','.hide-qr',function(){
-		$('.dl-qr').hide();
-	})
 	$(document).on('change','#lyricsOnly',function(){
 		if ($(this).prop('checked')){
 			$('#downloadForm').find('select[name="fontSize"] option[value="18"]').html('18*');
@@ -23,8 +20,8 @@
 		}
 	});
 	$(document).on('click','.download-tab',function(){
-		$('.download-tab.selected').removeClass('selected');
-		$(this).addClass('selected');
+		$('.download-tab.selected').removeClass(['selected','border','border-success']);
+		$(this).addClass(['selected','border','border-success']);
 		if ($(this).hasClass('right-download-modal')){
 			$('.ppt-options').show();
 			$('.pdf-options').hide();
@@ -59,20 +56,29 @@
 	$(document).on('submit','#downloadForm',function(e){
 		e.preventDefault();
 		if (isFormFilled(this)){
-			if ($('.download-tab.selected').hasClass('right-download-modal')){
-				window.open('https://view.officeapps.live.com/op/view.aspx?src=' + encodeURIComponent($('#copyDownloadLinkBtn').data('basecontext') + generateRandomDownloadLinkWithFormParams()),'_blank');
-			} else {
-				if (isInStandaloneMode())
-					window.open('https://docs.google.com/viewer?embedded=true&url=' + encodeURIComponent($('#copyDownloadLinkBtn').data('basecontext') + generateDownloadLinkWithFormParams()),'_blank');
-				else
-					window.open($('#copyDownloadLinkBtn').data('basecontext') + generateDownloadLinkWithFormParams(),'_blank');
-			}
+			saveAs($('#copyDownloadLinkBtn').data('basecontext') + generateDownloadLinkWithFormParams());
 		}
 	});
+	function openDownloadInBrowser(){
+		if ($('.download-tab.selected').hasClass('right-download-modal')){
+			window.open('https://view.officeapps.live.com/op/view.aspx?src=' + encodeURIComponent($('#copyDownloadLinkBtn').data('basecontext') + generateRandomDownloadLinkWithFormParams()),'_blank');
+		} else {
+			if (isInStandaloneMode())
+				window.open('https://docs.google.com/viewer?embedded=true&url=' + encodeURIComponent($('#copyDownloadLinkBtn').data('basecontext') + generateDownloadLinkWithFormParams()),'_blank');
+			else
+				window.open($('#copyDownloadLinkBtn').data('basecontext') + generateDownloadLinkWithFormParams(),'_blank');
+		}
+	}
 function generateDownloadQRCode(e){
-	e.preventDefault();
-	refreshDownloadQrCode();
-	$('.dl-qr').show();
+	if(!$('#dlQrContainer').is(':visible')) {
+		e.preventDefault();
+		refreshDownloadQrCode();
+		$('#dlQrContainer').show();
+		$('#generateDownloadQRCodeBtn').html('Hide QR Code');
+	} else {
+		$('#dlQrContainer').hide();
+		$('#generateDownloadQRCodeBtn').html('Generate QR Code');
+	}
 }
 function refreshDownloadQrCode(){
 	$('#dlQrCode').html('');
@@ -80,7 +86,6 @@ function refreshDownloadQrCode(){
 }
 function copyDownloadUrl(e){
 	e.preventDefault();
-	console.log($('#copyDownloadLinkBtn').data('basecontext'))
 	copyTextToClipboard($('#copyDownloadLinkBtn').data('basecontext') + generateDownloadLinkWithFormParams());
 }
 function generateDownloadLinkWithFormParams(){
@@ -126,5 +131,17 @@ function exportDatabase(){
 			alertWithFade('danger','Something went wrong! Unable to retrieve download details');
 		},
 	});		
+}
+function saveAs(uri) {
+    var link = document.createElement('a');
+    if (typeof link.download === 'string') {
+        link.href = uri;
+        link.setAttribute('download', true);
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    } else {
+        window.open(uri);
+    }
 }
 </script>
