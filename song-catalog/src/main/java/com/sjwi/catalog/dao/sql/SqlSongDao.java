@@ -80,7 +80,7 @@ public class SqlSongDao implements SongDao {
 				song.getTransposableString().getTransposedString(NUMBER_SYSTEM_KEY_CODE),
 				song.getDefaultKey(),
 				song.getCreatedBy().getUsername(),
-				song.getModifiedBy(),
+				song.getModifiedBy().getUsername(),
 				song.isPriv()? "Y":null,
 				song.getCategory()});
 		return jdbcTemplate.query(queryStore.get("getLatestSongId"), r -> {
