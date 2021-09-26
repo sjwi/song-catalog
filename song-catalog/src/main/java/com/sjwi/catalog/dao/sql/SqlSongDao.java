@@ -79,7 +79,7 @@ public class SqlSongDao implements SongDao {
 		jdbcTemplate.update(queryStore.get("insertNewSong"),new Object[] {song.getName(),
 				song.getTransposableString().getTransposedString(NUMBER_SYSTEM_KEY_CODE),
 				song.getDefaultKey(),
-				song.getCreatedBy(),
+				song.getCreatedBy().getUsername(),
 				song.getModifiedBy(),
 				song.isPriv()? "Y":null,
 				song.getCategory()});
