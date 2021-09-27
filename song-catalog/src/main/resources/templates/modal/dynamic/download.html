@@ -32,11 +32,12 @@
 			<div class="col-3">
 				<label for="fontSize" class="col-form-label">Font</label>
 			</div>
-			<div class="col-4">
+			<div class="col-3">
 				<select name="fontSize" class="form-control">
 				</select>
+				<span class="footnotes">*Recommended font</span>
 			</div>
-			<div class="col-5 text-right pdf-options">
+			<div class="col-6 text-right pdf-options">
 				<div class="form-check">
 					<label class="form-check-label small-font mr-4" for="lyricsOnly">Lyrics Only</label>
 					<input name="lyricsOnly" id="lyricsOnly" type="checkbox" class="form-check-input">
@@ -46,7 +47,7 @@
 					<input name="qrCode" type="checkbox" class="form-check-input">
 				</div>
 			</div>
-			<div class="col-5 text-right ppt-options collapse">
+			<div class="col-6 text-right ppt-options collapse">
 				<div class="form-check">
 					<label class="form-check-label small-font mr-4" for="blankSlide">Prepend Blank Slide</label>
 					<input name="blankSlide" id="blankSlide" type="checkbox" class="form-check-input">
@@ -61,41 +62,23 @@
 				</div>
 			</div>
 		</div>
-		<div class="row">
-			<div class="col-4 offset-3">
-				<span class="footnotes">*Recommended font</span>
-			</div>
-		</div>
 	</form>
-	<div class="row mt-4 no-gutters">
-		<div class="col-6 text-left">
-			<button class="btn btn-sm btn-primary dl-copy-btn" id="generateDownloadQRCodeBtn" onclick="generateDownloadQRCode(event)">
-				<img width="20px" type="image/x-icon" th:src="@{/images/qrcode.png}"/>
-				<span>Generate QR Code</span>
-			</button>
-		</div>
-		<div class="col-6 text-right">
-			<button class="btn btn-sm btn-primary dl-copy-btn" id="copyDownloadLinkBtn" onclick="copyDownloadUrl(event)"
-			th:attr="data-baseContext=${T(com.sjwi.catalog.config.ServletConstants).FULL_URL}">
-				<img width="20px" type="image/x-icon" th:src="@{/images/copy-inverse.png}"/>
-				<span>Copy Download URL</span>
-			</button>
-		</div>
-	</div>
-	<div class="row mt-4 no-gutters dl-qr collapse">
+	<div id="dlQrContainer" class="row mt-4 no-gutters dl-qr collapse">
 		<div class="col text-center">
 			<div id="dlQrCode" class="d-inline-block"></div>
-			<br>
-			<button class="btn btn-sm btn-secondary mt-2 float-right hide-qr">Hide</button>
 		</div>
 	</div>
 </div>
 <div class="modal-footer">
-	<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-	<button type="submit" class="btn btn-info" onclick="$('#downloadForm').submit()"><img width="20px" style="margin-top:-5px;margin-right:.25rem;" type="image/x-icon" th:src="@{/images/download-inverse.png}"/>Download</button>
+	<button type="submit" class="btn btn-lg w-100 btn-info" onclick="$('#downloadForm').submit()">Download</button>
+	<button type="submit" class="btn btn-lg w-100 btn-primary-2" onclick="openDownloadInBrowser()">Open in Browser</button>
+	<button type="button" class="btn btn-lg btn-primary w-100" id="copyDownloadLinkBtn" data-dismiss="modal" onclick="copyDownloadUrl(event)"
+		th:attr="data-baseContext=${T(com.sjwi.catalog.config.ServletConstants).FULL_URL}">Copy Download Link</button>
+	<button type="button" class="btn btn-lg btn-secondary w-100" id="generateDownloadQRCodeBtn" onclick="generateDownloadQRCode(event)">Generate QR Code</button>
 </div>
 <script>
 	$(document).ready(function(){
 		$('.left-download-modal').click();
+		$('#lyricsOnly').click();
 	});
 </script>

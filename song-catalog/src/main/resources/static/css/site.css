@@ -46,6 +46,14 @@ hr {
 	font-size: 1rem !important;
 	color: #fff !important;
 }
+.btn-primary-2 {
+	background-color: #295d91;
+	color: white;
+}
+.btn-primary-2:hover {
+	background-color: #214e7a;
+	color: white;
+}
 .navbar-default, .navbar-collapse {
 	white-space:nowrap !important;
 }
@@ -683,8 +691,8 @@ p.song-body {
 	max-width:95%;
 }
 .fade-alert {
-    -webkit-transition-duration: 2s; /* Safari */
-    transition-duration: 2s;
+    -webkit-transition-duration: .5s; /* Safari */
+    transition-duration: .5s;
 }
 .btn-dark {
 	color:white !important;
@@ -1066,6 +1074,7 @@ label.v-center {
 .footnotes{
 	font-size:.65rem;
 	font-style: italic;
+	white-space:nowrap;
 }
 .form-control,.custom-select,.custom-file-label {
 	background-color: var(--form-ctrl-bg) !important;
