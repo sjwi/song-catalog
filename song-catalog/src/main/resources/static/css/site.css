@@ -717,7 +717,7 @@ p.song-body {
 .btn-secondary {
 	background-image: linear-gradient(#c6cacf,#aeb3b8 60%,#a0a4a8);
 }
-.btn-secondary {
+.btn-secondary:hover {
 	background-image: linear-gradient(#bec1c5,#979ca1 60%,#868b8f);
 }
 #pageTitle {
