@@ -63,7 +63,7 @@
 		}
 	});
 	function standAloneBehavior() {
-		if ($('.download-tab.selected').hasClass('right-download-modal')){
+		if ($('.download-tab.selected').hasClass('right-download-modal'))
 			window.open('https://view.officeapps.live.com/op/view.aspx?src=' + encodeURIComponent($('#copyDownloadLinkBtn').data('basecontext') + generateRandomDownloadLinkWithFormParams()),'_blank');
 		else
 			window.open('https://docs.google.com/viewer?embedded=true&url=' + encodeURIComponent($('#copyDownloadLinkBtn').data('basecontext') + generateDownloadLinkWithFormParams()),'_blank');
