@@ -697,16 +697,28 @@ p.song-body {
 	border-color: #2fa4e7;
 	background-image: linear-gradient(#50b3eb,#1b97de 60%,#1c8ac9);
 }
+.btn-info:hover {
+	background-image: linear-gradient(#4cabe2,#1787c9 60%,#197fb9);
+}
 .btn-primary {
 	border-color: #033c73;
 	background-image: linear-gradient(#2b5b89,#033c73 60%,#03386c);
+}
+.btn-primary:hover {
+	background-image: linear-gradient(#26537e,#043666 60%,#043363);
 }
 .btn-dark {
 	background-image: linear-gradient(#545a5f,#343a40 60%,#31373c);
 	border-color: #343a40;
 }
+.btn-dark:hover {
+	background-image: linear-gradient(#4a5055,#2e343a 60%,#2a2f33);
+}
 .btn-secondary {
 	background-image: linear-gradient(#c6cacf,#aeb3b8 60%,#a0a4a8);
+}
+.btn-secondary {
+	background-image: linear-gradient(#bec1c5,#979ca1 60%,#868b8f);
 }
 #pageTitle {
 	margin-top:1rem;
