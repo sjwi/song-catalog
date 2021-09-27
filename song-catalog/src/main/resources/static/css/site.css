@@ -46,14 +46,6 @@ hr {
 	font-size: 1rem !important;
 	color: #fff !important;
 }
-.btn-primary-2 {
-	background-color: #295d91;
-	color: white;
-}
-.btn-primary-2:hover {
-	background-color: #214e7a;
-	color: white;
-}
 .navbar-default, .navbar-collapse {
 	white-space:nowrap !important;
 }
@@ -694,9 +686,27 @@ p.song-body {
     -webkit-transition-duration: .5s; /* Safari */
     transition-duration: .5s;
 }
+.mw-500 {
+	max-width:505px;
+}
 .btn-dark {
 	color:white !important;
 	cursor: pointer;
+}
+.btn-info {
+	border-color: #2fa4e7;
+	background-image: linear-gradient(#50b3eb,#1b97de 60%,#1c8ac9);
+}
+.btn-primary {
+	border-color: #033c73;
+	background-image: linear-gradient(#2b5b89,#033c73 60%,#03386c);
+}
+.btn-dark {
+	background-image: linear-gradient(#545a5f,#343a40 60%,#31373c);
+	border-color: #343a40;
+}
+.btn-secondary {
+	background-image: linear-gradient(#c6cacf,#aeb3b8 60%,#a0a4a8);
 }
 #pageTitle {
 	margin-top:1rem;
