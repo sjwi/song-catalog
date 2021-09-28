@@ -6,17 +6,18 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.sjwi.catalog.dao.UserDao;
+import com.sjwi.catalog.model.user.CfUser;
+import com.sjwi.catalog.service.AddressBookService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Repository;
-
-import com.sjwi.catalog.dao.UserDao;
-import com.sjwi.catalog.model.user.CfUser;
-import com.sjwi.catalog.service.AddressBookService;
 
 @Repository
 public class SqlUserDao implements UserDao {
@@ -162,4 +163,9 @@ public class SqlUserDao implements UserDao {
 		jdbcTemplate.update(queryStore.get("disableUser"), new Object[] {userName});
 		jdbcTemplate.update(queryStore.get("purgeTokensForUser"), new Object[] {userName});
 	}
+	@Override
+	@Async
+  public void log(String username, String os, String signature, String requestUrl, String parameters) {
+    jdbcTemplate.update(queryStore.get("log"), new Object[]{username,os,signature,requestUrl,parameters});
+  }
 }

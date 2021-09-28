@@ -4,10 +4,10 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
+import com.sjwi.catalog.model.user.CfUser;
+
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.User;
-
-import com.sjwi.catalog.model.user.CfUser;
 
 public interface UserDao {
 
@@ -31,5 +31,7 @@ public interface UserDao {
 
 	public void setUserPreference(String preferenceKey, String preferenceValue, String name);
 
-	void disableUser(String userName);
+	public void disableUser(String userName);
+
+  public void log(String username, String os, String signature, String requestUrl, String parameters);
 }

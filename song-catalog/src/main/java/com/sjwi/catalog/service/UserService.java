@@ -96,5 +96,9 @@ public class UserService implements UserDetailsService {
 	public boolean isUsernameTaken(String username) {
 		return userDao.isUsernameTaken(username);
 	}
+
+	public void logUserAction(String username, String os, String signature, String requestUrl, String parameters) {
+		userDao.log(username, os, signature, requestUrl, parameters);
+  }
 }
 	
