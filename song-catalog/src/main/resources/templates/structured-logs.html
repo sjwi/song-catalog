@@ -21,8 +21,8 @@
 			<table id="logTable" class="table table-hover">
 				<thead>
 					<tr>
+						<th>Timestamp</th>
 						<th>User</th>
-						<th>Device</th>
 						<th>URL</th>
 					</tr>
 				</thead>
@@ -37,13 +37,14 @@
 		obj += '<table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px; width:100%">';
 		obj += '<tr><td style="width:30%; min-width:50px">Timestamp</td><td>' + d.timestamp + '</td></tr>';
 		obj += '<tr><td style="width:30%; min-width:50px">Level</td><td>' + d.level + '</td></tr>';
+		obj += '<tr><td style="width:30%; min-width:50px">Device</td><td>' + d.device + '</td></tr>';
 		obj += '<tr><td style="width:30%; min-width:50px">Method</td><td>' + d.method + '</td></tr>';
 		obj += '</table>';
     obj += '<h6 class="mt-3"><b>Request Parameters</b></h6>'
 		if (d.params[0] != ""){
 			obj += '<table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px; width:100%">';
 				d.params.forEach(e => {
-					var key = e.split(':')[0].replaceAll('[','');
+					var key = e.split(':')[0].substring(1);
 					var value = e.split(':')[1].replaceAll(']','');
 					obj += '<tr><td style="width:30%;min-width:50px">' + key + '</td><td><pre>' + value + '</pre></td></tr>';
 				});
@@ -56,14 +57,25 @@
 			"url": contextpath + "structured-logs/json",
 		},
 		"columns": [
+			{
+				"data": "timestamp",
+				"render": function(data,type,row,meta){
+					return data.substring(data.length - 8);
+				}
+			},
 			{ "data": "username" },
-			{ "data": "device" },
-			{ "data": "requestUrl" }
+			{ 
+				"data": "requestUrl",
+				"render": function(data,type,row,meta){
+					data = '<a class="ignore-click" href="'+ data.substring(1) + '" target="_blank">' + data + '</a>';
+					return data;
+				}
+			}
 		],
 		columnDefs: [ 
 			{ defaultContent: "-", "targets": "_all" },
-			{ className: "primary", "targets": "_all" },
-			{ className: "primary2", "targets": "_all" }
+			{ className: "primary", "targets": [0,1]},
+			{ className: "primary2", "targets": [0,1]}
 		],
 		iDisplayLength: 100,
 		"order": [],
