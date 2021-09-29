@@ -66,7 +66,8 @@
 
 	$(document).ready(function(){
 		setInterval(function () {
-      table.ajax.reload();
+			if(!$('#logTable tr.shown').length > 0)
+				table.ajax.reload();
   }, 5000);
 	})
 
