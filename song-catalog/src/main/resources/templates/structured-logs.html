@@ -65,8 +65,16 @@
 			{ className: "primary", "targets": "_all" },
 			{ className: "primary2", "targets": "_all" }
 		],
-		iDisplayLength: 100
+		iDisplayLength: 100,
+		"order": [],
+		language: {
+			search:'',
+			searchPlaceholder: "Search",
+			emptyTable: "No log data could be found"
+		}
 	})
+	$('#logTable').addClass('mb-2')
+	$('#logTable_filter input').addClass('form-control')
 
 	$('#refreshLogs').on('click',function(){
 		if ($(this).hasClass('active')) {
