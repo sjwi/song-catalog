@@ -40,7 +40,7 @@ public class ReportController {
 	@Autowired
 	ControllerHelper controllerHelper;
 
-	@RequestMapping(value = {"log"}, method = RequestMethod.GET)
+	@RequestMapping(value = {"logs"}, method = RequestMethod.GET)
 	@LandingPageAspect
 	public ModelAndView logPage(HttpServletResponse response, HttpServletRequest request) throws IOException {
 		try {
@@ -68,7 +68,7 @@ public class ReportController {
 		}
 	}
 
-	@RequestMapping(value={"structured-logs"}, method= RequestMethod.GET)
+	@RequestMapping(value={"structured-logs, log"}, method= RequestMethod.GET)
 	@LandingPageAspect
 	public ModelAndView structuredLogs(HttpServletResponse response, HttpServletRequest request){
 		try {
