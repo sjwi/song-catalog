@@ -64,6 +64,12 @@
 		]
 	})
 
+	$(document).ready(function(){
+		setInterval(function () {
+      table.ajax.reload();
+  }, 5000);
+	})
+
 	$('#logTable tbody').on('click', 'td.primary', function () {
 			var tr = $(this).closest('tr');
 			var row = table.row( tr );
