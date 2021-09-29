@@ -4,6 +4,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
+import com.sjwi.catalog.model.Log;
 import com.sjwi.catalog.model.user.CfUser;
 
 import org.springframework.security.core.GrantedAuthority;
@@ -34,4 +35,6 @@ public interface UserDao {
 	public void disableUser(String userName);
 
   public void log(String username, String os, String signature, String requestUrl, String parameters);
+
+	public List<Log> getLogData();
 }

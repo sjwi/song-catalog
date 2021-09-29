@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 import com.sjwi.catalog.aspect.IgnoreAspect;
 import com.sjwi.catalog.aspect.LandingPageAspect;
 import com.sjwi.catalog.aspect.ServletInitializerAspect;
+import com.sjwi.catalog.model.Log;
 import com.sjwi.catalog.model.ResponseMessage;
 import com.sjwi.catalog.model.user.CfUser;
 import com.sjwi.catalog.service.UserService;
@@ -61,6 +62,33 @@ public class ReportController {
 			Files.copy(Paths.get(System.getProperty(LOG_FILE_PROPERTY_KEY)), response.getOutputStream());
 		} catch (Exception e){
 			controllerHelper.errorHandler(e);
+		}
+	}
+
+	@RequestMapping(value={"structured-logs"}, method= RequestMethod.GET)
+	@LandingPageAspect
+	public ModelAndView structuredLogs(HttpServletResponse response, HttpServletRequest request, Authentication auth){
+		try {
+			if (request.getUserPrincipal() == null || !auth.getAuthorities().stream().anyMatch(a -> a.getAuthority().equalsIgnoreCase("SUPERADMIN")))
+				response.sendRedirect("/login");
+			return new ModelAndView("structured-logs");
+		} catch (Exception e){
+			return controllerHelper.errorHandler(e);
+		}
+	}
+
+	@RequestMapping(value={"structured-logs/json"}, method= RequestMethod.GET)
+	@LandingPageAspect
+	@ResponseBody
+	public LogData structuredLogData(HttpServletResponse response, HttpServletRequest request, Authentication auth){
+		List<Log> data = userService.getLogData();
+		return new LogData(data);
+	}
+
+	public class LogData {
+		public List<Log> data;
+		public LogData(List<Log> logs){
+			data = logs;
 		}
 	}
 

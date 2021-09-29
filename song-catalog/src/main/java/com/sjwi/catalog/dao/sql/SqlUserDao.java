@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.sjwi.catalog.dao.UserDao;
+import com.sjwi.catalog.model.Log;
 import com.sjwi.catalog.model.user.CfUser;
 import com.sjwi.catalog.service.AddressBookService;
 
@@ -168,4 +169,21 @@ public class SqlUserDao implements UserDao {
   public void log(String username, String os, String signature, String requestUrl, String parameters) {
     jdbcTemplate.update(queryStore.get("log"), new Object[]{username,os,signature,requestUrl,parameters});
   }
+
+	@Override
+	public List<Log> getLogData() {
+		return jdbcTemplate.query(queryStore.get("getLogData"), r -> {
+			List<Log> logs = new ArrayList<>();
+			while (r.next())
+				logs.add(new Log(r.getInt("ID"),
+					r.getTimestamp("ACTION_TIMESTAMP"),
+					r.getString("LEVEL"),
+					r.getString("USERNAME"),
+					r.getString("DEVICE"),
+					r.getString("METHOD"),
+					r.getString("REQ_URL"),
+					r.getString("PARAMS").split(";")));
+			return logs;
+		});
+	}
 }

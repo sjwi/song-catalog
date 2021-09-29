@@ -7,6 +7,7 @@ import java.util.Map;
 
 import com.sjwi.catalog.dao.UserDao;
 import com.sjwi.catalog.exception.PasswordException;
+import com.sjwi.catalog.model.Log;
 import com.sjwi.catalog.model.addressbook.AddressBookEntry;
 import com.sjwi.catalog.model.user.CfUser;
 
@@ -99,6 +100,10 @@ public class UserService implements UserDetailsService {
 
 	public void logUserAction(String username, String os, String signature, String requestUrl, String parameters) {
 		userDao.log(username, os, signature, requestUrl, parameters);
+  }
+
+  public List<Log> getLogData() {
+		return userDao.getLogData();
   }
 }
 	
