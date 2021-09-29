@@ -391,3 +391,9 @@ getOrganizationById: >
 
 getServiceById: >
   Select * from Services where ID = ?
+
+log: >
+  INSERT INTO Log (USERNAME,DEVICE,METHOD,REQ_URL,PARAMS) values (?,?,?,?,?)
+
+getLogData: >
+  SELECT * FROM Log ORDER BY ACTION_TIMESTAMP DESC LIMIT 1000

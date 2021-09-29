@@ -715,10 +715,10 @@ p.song-body {
 	background-image: linear-gradient(#4a5055,#2e343a 60%,#2a2f33);
 }
 .btn-secondary {
-	background-image: linear-gradient(#c6cacf,#aeb3b8 60%,#a0a4a8);
+	background-image: linear-gradient(#bec1c5,#979ca1 60%,#868b8f);
 }
 .btn-secondary:hover {
-	background-image: linear-gradient(#bec1c5,#979ca1 60%,#868b8f);
+	background-image: linear-gradient(#abaeb1,#84888b 60%,#6d7074);
 }
 #pageTitle {
 	margin-top:1rem;

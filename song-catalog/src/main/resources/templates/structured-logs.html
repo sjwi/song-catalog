@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<style>
+	td.details-control {
+    background: url('https://datatables.net/examples/resources/details_open.png') no-repeat center center;
+    cursor: pointer;
+	}
+	tr.shown td.details-control {
+			background: url('https://datatables.net/examples/resources/details_open.png') no-repeat center center;
+	}
+</style>
+<th:block th:replace="partial/head :: head('User Feed')"></th:block>
+<body id="userFeedBody" data-oc="var(--primary-bg-color),var(--primary-grey)">
+	<th:block th:replace="partial/header"></th:block>
+	<th:block th:replace="partial/data-table"></th:block>
+	<th:block th:replace="partial/off-navbar :: offNavBar('addSong')"></th:block>
+	<div class="row no-gutters">
+		<div class="col col-12">
+			<table id="logTable" class="table table-hover">
+				<thead>
+					<tr>
+						<th>User</th>
+						<th>Device</th>
+						<th>URL</th>
+					</tr>
+				</thead>
+			</table>
+		</div>
+	</div>
+</body>
+<script>
+	function format ( d ) {
+    // `d` is the original data object for the row
+    var obj = '<h6>Log Data</h6>'
+		obj += '<table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px; width:100%">';
+		obj += '<tr><td style="width:30%; min-width:50px">Timestamp</td><td>' + d.timestamp + '</td></tr>';
+		obj += '<tr><td style="width:30%; min-width:50px">Level</td><td>' + d.level + '</td></tr>';
+		obj += '<tr><td style="width:30%; min-width:50px">Method</td><td>' + d.method + '</td></tr>';
+		obj += '</table>';
+    obj += '<h6 class="mt-3">Request Parameters</h6>'
+		if (d.params[0] != ""){
+			obj += '<table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px; width:100%">';
+				d.params.forEach(e => {
+					var key = e.split(':')[0].replaceAll('[','');
+					var value = e.split(':')[1].replaceAll(']','');
+					obj += '<tr><td style="width:30%;min-width:50px">' + key + '</td><td><pre>' + value + '</pre></td></tr>';
+				});
+			obj += '</table>';
+		}
+		return obj
+	}
+	var table = $('#logTable').DataTable({
+		"ajax": {
+			"url": contextpath + "structured-logs/json",
+		},
+		"columns": [
+			{ "data": "username" },
+			{ "data": "device" },
+			{ "data": "requestUrl" }
+		],
+		columnDefs: [ 
+			{ defaultContent: "-", "targets": "_all" },
+			{ className: "primary", "targets": "_all" },
+			{ className: "primary2", "targets": "_all" }
+		]
+	})
+
+	$(document).ready(function(){
+		setInterval(function () {
+      table.ajax.reload();
+  }, 5000);
+	})
+
+	$('#logTable tbody').on('click', 'td.primary', function () {
+			var tr = $(this).closest('tr');
+			var row = table.row( tr );
+
+			if ( row.child.isShown() ) {
+					// This row is already open - close it
+					row.child.hide();
+					tr.removeClass('shown');
+			}
+			else {
+					// Open this row
+					row.child( format(row.data()) ).show();
+					tr.addClass('shown');
+			}
+	} );
+</script>
