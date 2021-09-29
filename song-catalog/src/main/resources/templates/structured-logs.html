@@ -14,6 +14,9 @@
 	<th:block th:replace="partial/data-table"></th:block>
 	<th:block th:replace="partial/off-navbar :: offNavBar('addSong')"></th:block>
 	<div class="row no-gutters">
+		<div class="col col-12 text-right my-2">
+			<button class="btn btn-md btn-secondary active" id="refreshLogs">Disable auto-refresh</button>
+		</div>
 		<div class="col col-12">
 			<table id="logTable" class="table table-hover">
 				<thead>
@@ -30,13 +33,13 @@
 <script>
 	function format ( d ) {
     // `d` is the original data object for the row
-    var obj = '<h6>Log Data</h6>'
+    var obj = '<h6><b>Log Data</b></h6>'
 		obj += '<table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px; width:100%">';
 		obj += '<tr><td style="width:30%; min-width:50px">Timestamp</td><td>' + d.timestamp + '</td></tr>';
 		obj += '<tr><td style="width:30%; min-width:50px">Level</td><td>' + d.level + '</td></tr>';
 		obj += '<tr><td style="width:30%; min-width:50px">Method</td><td>' + d.method + '</td></tr>';
 		obj += '</table>';
-    obj += '<h6 class="mt-3">Request Parameters</h6>'
+    obj += '<h6 class="mt-3"><b>Request Parameters</b></h6>'
 		if (d.params[0] != ""){
 			obj += '<table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px; width:100%">';
 				d.params.forEach(e => {
@@ -61,14 +64,27 @@
 			{ defaultContent: "-", "targets": "_all" },
 			{ className: "primary", "targets": "_all" },
 			{ className: "primary2", "targets": "_all" }
-		]
+		],
+		iDisplayLength: 100
+	})
+
+	$('#refreshLogs').on('click',function(){
+		if ($(this).hasClass('active')) {
+			$(this).removeClass(['active','btn-secondary']);
+			$(this).addClass(['btn-primary']);
+			$(this).html('Enable auto-refresh')
+		} else {
+			$(this).removeClass(['btn-primary']);
+			$(this).addClass(['active','btn-secondary']);
+			$(this).html('Disable auto-refresh')
+		}
 	})
 
 	$(document).ready(function(){
 		setInterval(function () {
-			if(!$('#logTable tr.shown').length > 0)
+			if(table.page() == 0 && !$('#logTable tr.shown').length > 0 && $('#refreshLogs').hasClass('active'))
 				table.ajax.reload();
-  }, 5000);
+  }, 10000);
 	})
 
 	$('#logTable tbody').on('click', 'td.primary', function () {
