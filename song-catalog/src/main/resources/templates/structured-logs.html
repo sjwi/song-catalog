@@ -35,6 +35,7 @@
     // `d` is the original data object for the row
     var obj = '<h6><b>Log Data</b></h6>'
 		obj += '<table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px; width:100%">';
+		obj += '<tr><td style="width:30%; min-width:50px">Timestamp</td><td>' + d.timestamp + '</td></tr>';
 		obj += '<tr><td style="width:30%; min-width:50px">Level</td><td>' + d.level + '</td></tr>';
 		obj += '<tr><td style="width:30%; min-width:50px">Device</td><td>' + d.device + '</td></tr>';
 		obj += '<tr><td style="width:30%; min-width:50px">Method</td><td>' + d.method + '</td></tr>';
@@ -56,7 +57,12 @@
 			"url": contextpath + "structured-logs/json",
 		},
 		"columns": [
-			{ "data": "timestamp" },
+			{
+				"data": "timestamp",
+				"render": function(data,type,row,meta){
+					return data.substring(data.length - 8);
+				}
+			},
 			{ "data": "username" },
 			{ 
 				"data": "requestUrl",
