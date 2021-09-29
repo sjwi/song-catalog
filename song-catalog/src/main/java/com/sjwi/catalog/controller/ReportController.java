@@ -68,7 +68,7 @@ public class ReportController {
 		}
 	}
 
-	@RequestMapping(value={"structured-logs, log"}, method= RequestMethod.GET)
+	@RequestMapping(value={"structured-logs", "log"}, method= RequestMethod.GET)
 	@LandingPageAspect
 	public ModelAndView structuredLogs(HttpServletResponse response, HttpServletRequest request){
 		try {
