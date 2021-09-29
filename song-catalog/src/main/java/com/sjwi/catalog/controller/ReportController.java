@@ -22,6 +22,7 @@ import com.sjwi.catalog.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -41,8 +42,9 @@ public class ReportController {
 
 	@RequestMapping(value = {"log"}, method = RequestMethod.GET)
 	@LandingPageAspect
-	public ModelAndView logPage(HttpServletResponse response, HttpServletRequest request, Authentication auth) throws IOException {
+	public ModelAndView logPage(HttpServletResponse response, HttpServletRequest request) throws IOException {
 		try {
+			Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 			if (request.getUserPrincipal() == null || !auth.getAuthorities().stream().anyMatch(a -> a.getAuthority().equalsIgnoreCase("SUPERADMIN")))
 				response.sendRedirect("/login");
 			return new ModelAndView("log");
@@ -53,8 +55,9 @@ public class ReportController {
 
 	@RequestMapping(value = {"logstream"}, method = RequestMethod.GET)
 	@LandingPageAspect
-	public void streamUserFeed(HttpServletResponse response, HttpServletRequest request, Authentication auth) throws IOException {
+	public void streamUserFeed(HttpServletResponse response, HttpServletRequest request) throws IOException {
 		try {
+			Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 			if (request.getUserPrincipal() == null || !auth.getAuthorities().stream().anyMatch(a -> a.getAuthority().equalsIgnoreCase("SUPERADMIN")))
 				response.sendRedirect("/login");
 			response.setContentType("text/plain; name=\"userfeed.txt\"");
@@ -67,8 +70,9 @@ public class ReportController {
 
 	@RequestMapping(value={"structured-logs"}, method= RequestMethod.GET)
 	@LandingPageAspect
-	public ModelAndView structuredLogs(HttpServletResponse response, HttpServletRequest request, Authentication auth){
+	public ModelAndView structuredLogs(HttpServletResponse response, HttpServletRequest request){
 		try {
+			Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 			if (request.getUserPrincipal() == null || !auth.getAuthorities().stream().anyMatch(a -> a.getAuthority().equalsIgnoreCase("SUPERADMIN")))
 				response.sendRedirect("/login");
 			return new ModelAndView("structured-logs");
