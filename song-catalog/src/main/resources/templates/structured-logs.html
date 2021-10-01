@@ -117,6 +117,7 @@
 
 	$('#collapseLogs').on('click',function(){
 		$('tr').removeClass('shown');
+		$('.child-td').hide();
 	});
 	$('#refreshLogs').on('click', function () {
 		if ($(this).hasClass('active')) {
@@ -149,6 +150,7 @@
 		else {
 			// Open this row
 			row.child(format(row.data())).show();
+			row.child().addClass('child-td')
 			tr.addClass('shown');
 		}
 	});
