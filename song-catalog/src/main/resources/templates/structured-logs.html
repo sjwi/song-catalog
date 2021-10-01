@@ -25,9 +25,9 @@
 				<thead>
 					<tr>
 						<th class="pl-1">Timestamp</th>
+						<th class="pl-1">User</th>
 						<th class="pl-1 additional-logging">Level</th>
 						<th class="pl-1 additional-logging">Device</th>
-						<th class="pl-1">User</th>
 						<th class="pl-1 additional-logging">Method</th>
 						<th class="pl-1">URL</th>
 					</tr>
@@ -66,9 +66,9 @@
 		},
 		"columns": [
 			{"data": "time"},
+			{ "data": "username" },
 			{ "data": "level" },
 			{ "data": "device" },
-			{ "data": "username" },
 			{ "data": "method" },
 			{
 				"data": "requestUrl",
@@ -80,8 +80,8 @@
 		],
 		columnDefs: [
 			{ defaultContent: "-", "targets": "_all" },
-			{ className: "additional-logging primary", "targets": [1, 2, 4] },
-			{ className: "primary", "targets": [0,3] }
+			{ className: "additional-logging primary", "targets": [2, 3, 4] },
+			{ className: "primary", "targets": [0,1] }
 		],
 		iDisplayLength: 100,
 		ordering: false,
