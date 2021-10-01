@@ -37,7 +37,7 @@ public class SqlUserDao implements UserDao {
 	@Autowired
 	AddressBookService addressBookService;
 
-	private final Calendar tzCal = Calendar.getInstance(TimeZone.getTimeZone("America/New_York"));
+	private final Calendar tzCal = Calendar.getInstance(TimeZone.getTimeZone("America/Chicago"));
 	
 	@Override
 	public User getUser(String username) {

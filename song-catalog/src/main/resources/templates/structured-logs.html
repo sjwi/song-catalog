@@ -44,14 +44,14 @@
 			d.params.forEach(e => {
 				var key = e.split(':')[0].substring(1);
 				var value = e.split(':')[1].replaceAll(']', '');
-				obj += '<tr><td style="width:30%;min-width:50px">' + key + '</td><td><pre>' + value + '</pre></td></tr>';
+				obj += '<tr><td style="width:30%;min-width:50px">' + key + '</td><td><pre class="mb-0">' + value + '</pre></td></tr>';
 			});
 			obj += '</table>';
 		} else {
-			obj += '<div class="mt-1 mb-4 pl-2">None</div>'
+			obj += '<hr class="mb-1">'
+			obj += '<div class="mt-0 mb-3 pl-2">None</div>'
 		}
-		obj += '<hr>'
-		obj += '<h6><b>Log Data</b></h6>'
+		obj += '<h6 class="mt-3"><b>Log Data</b></h6>'
 		obj += '<table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px; width:100%">';
 		obj += '<tr><td style="width:30%; min-width:50px">Timestamp</td><td>' + d.date + 'T' + d.time + '</td></tr>';
 		obj += '<tr><td style="width:30%; min-width:50px">Level</td><td>' + d.level + '</td></tr>';
