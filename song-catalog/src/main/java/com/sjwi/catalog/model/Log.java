@@ -8,8 +8,10 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 
 public class Log {
   private int id;
-  @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
-  private Date timestamp;
+  @JsonFormat(pattern = "MM-dd-yyyy")
+  private Date date;
+  @JsonFormat(pattern = "HH:mm:ss")
+  private Date time;
   private String level;
   private String username;
   private String device;
@@ -19,7 +21,8 @@ public class Log {
   public Log(int id, Date timestamp, String level, String username, String device, String method, String requestUrl,
       String[] params) {
     this.id = id;
-    this.timestamp = timestamp;
+    this.date = timestamp;
+    this.time = timestamp;
     this.level = level;
     this.username = username;
     this.device = device;
@@ -33,11 +36,14 @@ public class Log {
   public void setId(int id) {
     this.id = id;
   }
-  public Date getTimestamp() {
-    return timestamp;
+  public Date getDate() {
+    return date;
+  }
+  public Date getTime() {
+    return time;
   }
   public void setTimestamp(Date timestamp) {
-    this.timestamp = timestamp;
+    this.date = timestamp;
   }
   public String getLevel() {
     return level;

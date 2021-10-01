@@ -1,29 +1,35 @@
 <!DOCTYPE html>
 <style>
 	td.details-control {
-    background: url('https://datatables.net/examples/resources/details_open.png') no-repeat center center;
-    cursor: pointer;
+		background: url('https://datatables.net/examples/resources/details_open.png') no-repeat center center;
+		cursor: pointer;
 	}
+
 	tr.shown td.details-control {
-			background: url('https://datatables.net/examples/resources/details_open.png') no-repeat center center;
+		background: url('https://datatables.net/examples/resources/details_open.png') no-repeat center center;
 	}
 </style>
 <th:block th:replace="partial/head :: head('User Feed')"></th:block>
-<body id="userFeedBody" data-oc="var(--primary-bg-color),var(--primary-grey)">
+
+<body id="userFeedBody" class="bg-white">
 	<th:block th:replace="partial/header"></th:block>
 	<th:block th:replace="partial/data-table"></th:block>
 	<th:block th:replace="partial/off-navbar :: offNavBar('addSong')"></th:block>
 	<div class="row no-gutters">
 		<div class="col col-12 text-right my-2">
-			<button class="btn btn-md btn-secondary active" id="refreshLogs">Disable auto-refresh</button>
+			<button class="btn btn btn-secondary active" id="refreshLogs">Disable auto-refresh</button>
+			<button class="btn btn btn-dark" id="collapseLogs">Collapse all rows</button>
 		</div>
 		<div class="col col-12">
 			<table id="logTable" class="table table-hover">
 				<thead>
 					<tr>
-						<th>Timestamp</th>
-						<th>User</th>
-						<th>URL</th>
+						<th class="pl-1">Timestamp</th>
+						<th class="pl-1 additional-logging">Level</th>
+						<th class="pl-1 additional-logging">Device</th>
+						<th class="pl-1">User</th>
+						<th class="pl-1 additional-logging">Method</th>
+						<th class="pl-1">URL</th>
 					</tr>
 				</thead>
 			</table>
@@ -31,25 +37,27 @@
 	</div>
 </body>
 <script>
-	function format ( d ) {
-    // `d` is the original data object for the row
-    var obj = '<h6><b>Log Data</b></h6>'
+	function format(d) {
+		var obj = '<h6 class="mt-3"><b>Request Parameters</b></h6>'
+		if (d.params[0] != "") {
+			obj += '<table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px; width:100%">';
+			d.params.forEach(e => {
+				var key = e.split(':')[0].substring(1);
+				var value = e.split(':')[1].replaceAll(']', '');
+				obj += '<tr><td style="width:30%;min-width:50px">' + key + '</td><td><pre>' + value + '</pre></td></tr>';
+			});
+			obj += '</table>';
+		} else {
+			obj += '<div class="mt-1 mb-4 pl-2">None</div>'
+		}
+		obj += '<hr>'
+		obj += '<h6><b>Log Data</b></h6>'
 		obj += '<table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px; width:100%">';
-		obj += '<tr><td style="width:30%; min-width:50px">Timestamp</td><td>' + d.timestamp + '</td></tr>';
+		obj += '<tr><td style="width:30%; min-width:50px">Timestamp</td><td>' + d.date + 'T' + d.time + '</td></tr>';
 		obj += '<tr><td style="width:30%; min-width:50px">Level</td><td>' + d.level + '</td></tr>';
 		obj += '<tr><td style="width:30%; min-width:50px">Device</td><td>' + d.device + '</td></tr>';
 		obj += '<tr><td style="width:30%; min-width:50px">Method</td><td>' + d.method + '</td></tr>';
 		obj += '</table>';
-    obj += '<h6 class="mt-3"><b>Request Parameters</b></h6>'
-		if (d.params[0] != ""){
-			obj += '<table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px; width:100%">';
-				d.params.forEach(e => {
-					var key = e.split(':')[0].substring(1);
-					var value = e.split(':')[1].replaceAll(']','');
-					obj += '<tr><td style="width:30%;min-width:50px">' + key + '</td><td><pre>' + value + '</pre></td></tr>';
-				});
-			obj += '</table>';
-		}
 		return obj
 	}
 	var table = $('#logTable').DataTable({
@@ -57,69 +65,91 @@
 			"url": contextpath + "structured-logs/json",
 		},
 		"columns": [
-			{
-				"data": "timestamp",
-				"render": function(data,type,row,meta){
-					return data.substring(data.length - 8);
-				}
-			},
+			{"data": "time"},
+			{ "data": "level" },
+			{ "data": "device" },
 			{ "data": "username" },
-			{ 
+			{ "data": "method" },
+			{
 				"data": "requestUrl",
-				"render": function(data,type,row,meta){
-					data = '<a class="ignore-click" href="'+ data.substring(1) + '" target="_blank">' + data + '</a>';
+				"render": function (data, type, row, meta) {
+					data = '<a class="ignore-click" href="' + data.substring(1) + '" target="_blank">' + data + '</a>';
 					return data;
 				}
 			}
 		],
-		columnDefs: [ 
+		columnDefs: [
 			{ defaultContent: "-", "targets": "_all" },
-			{ className: "primary", "targets": [0,1]},
-			{ className: "primary2", "targets": [0,1]}
+			{ className: "additional-logging primary", "targets": [1, 2, 4] },
+			{ className: "primary", "targets": [0,3] }
 		],
 		iDisplayLength: 100,
+		ordering: false,
 		"order": [],
 		language: {
-			search:'',
+			search: '',
 			searchPlaceholder: "Search",
 			emptyTable: "No log data could be found"
+		},
+		initComplete: function () {
+			this.api().columns().every(function () {
+				var column = this;
+				var select = $('<select class="d-block"><option value=""></option></select>')
+					.appendTo( $(column.header()) )
+					.on('change', function () {
+						var val = $.fn.dataTable.util.escapeRegex(
+							$(this).val()
+						);
+
+						column
+							.search(val ? '^' + val + '$' : '', true, false)
+							.draw();
+					});
+
+				column.data().unique().sort().each(function (d, j) {
+					select.append('<option value="' + d + '">' + d + '</option>')
+				});
+			});
 		}
 	})
 	$('#logTable').addClass('mb-2')
 	$('#logTable_filter input').addClass('form-control')
 
-	$('#refreshLogs').on('click',function(){
+	$('#collapseLogs').on('click',function(){
+		$('tr').removeClass('shown');
+	});
+	$('#refreshLogs').on('click', function () {
 		if ($(this).hasClass('active')) {
-			$(this).removeClass(['active','btn-secondary']);
+			$(this).removeClass(['active', 'btn-secondary']);
 			$(this).addClass(['btn-primary']);
 			$(this).html('Enable auto-refresh')
 		} else {
 			$(this).removeClass(['btn-primary']);
-			$(this).addClass(['active','btn-secondary']);
+			$(this).addClass(['active', 'btn-secondary']);
 			$(this).html('Disable auto-refresh')
 		}
 	})
 
-	$(document).ready(function(){
+	$(document).ready(function () {
 		setInterval(function () {
-			if(table.page() == 0 && !$('#logTable tr.shown').length > 0 && $('#refreshLogs').hasClass('active'))
+			if (table.page() == 0 && !$('#logTable tr.shown').length > 0 && $('#refreshLogs').hasClass('active') && !$('#logTable').val())
 				table.ajax.reload();
-  }, 10000);
+		}, 10000);
 	})
 
 	$('#logTable tbody').on('click', 'td.primary', function () {
-			var tr = $(this).closest('tr');
-			var row = table.row( tr );
+		var tr = $(this).closest('tr');
+		var row = table.row(tr);
 
-			if ( row.child.isShown() ) {
-					// This row is already open - close it
-					row.child.hide();
-					tr.removeClass('shown');
-			}
-			else {
-					// Open this row
-					row.child( format(row.data()) ).show();
-					tr.addClass('shown');
-			}
-	} );
+		if (row.child.isShown()) {
+			// This row is already open - close it
+			row.child.hide();
+			tr.removeClass('shown');
+		}
+		else {
+			// Open this row
+			row.child(format(row.data())).show();
+			tr.addClass('shown');
+		}
+	});
 </script>

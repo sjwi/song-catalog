@@ -1769,6 +1769,9 @@ table > thead > tr > th[class*="sort"]:after {
 	}
 }
 @media screen and (max-width: 550px){
+	.additional-logging {
+		display:none;
+	}
 	.org-dl-link.mr-3 {
 		margin-right:.25rem !important;
 	}
