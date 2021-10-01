@@ -73,7 +73,8 @@
 			{
 				"data": "requestUrl",
 				"render": function (data, type, row, meta) {
-					data = '<a class="ignore-click" href="' + data.substring(1) + '" target="_blank">' + data + '</a>';
+					var link = data.length == 1? data: data.substring(1);
+					data = '<a class="ignore-click" href="' + link + '" target="_blank">' + data + '</a>';
 					return data;
 				}
 			}
