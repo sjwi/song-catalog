@@ -96,7 +96,6 @@ public class SongDetailsController {
 
 		try {
 			ModelAndView mv = new ModelAndView(view==null?"songs":view);
-			List<Song> songs = songService.getSongs();
 			List<Song> focusedSong = versionService.getAllRelatedSongs(id);
 			if (key != null) {
 				focusedSong = focusedSong.stream().map(s -> {
@@ -111,7 +110,6 @@ public class SongDetailsController {
 					break;
 				fsInitialIndex++;
 			}
-			mv.addObject("songs",songs);
 			mv.addObject("sets",setListService.getSetLists(10));
 			mv.addObject("focusedSong", focusedSong);
 			mv.addObject("fsInitialIndex",fsInitialIndex);
