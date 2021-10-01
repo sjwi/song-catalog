@@ -8,7 +8,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 
 public class Log {
   private int id;
-  @JsonFormat(pattern = "MM-dd-yyyy")
+  @JsonFormat(pattern = "yyyy-MM-dd")
   private Date date;
   @JsonFormat(pattern = "HH:mm:ss")
   private Date time;
