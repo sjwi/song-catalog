@@ -1,10 +1,12 @@
 package com.sjwi.catalog.dao.sql;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TimeZone;
 
 import com.sjwi.catalog.dao.UserDao;
 import com.sjwi.catalog.model.Log;
@@ -34,6 +36,8 @@ public class SqlUserDao implements UserDao {
 	
 	@Autowired
 	AddressBookService addressBookService;
+
+	private final Calendar tzCal = Calendar.getInstance(TimeZone.getTimeZone("America/New_York"));
 	
 	@Override
 	public User getUser(String username) {
@@ -176,7 +180,7 @@ public class SqlUserDao implements UserDao {
 			List<Log> logs = new ArrayList<>();
 			while (r.next())
 				logs.add(new Log(r.getInt("ID"),
-					r.getTimestamp("ACTION_TIMESTAMP"),
+					r.getTimestamp("ACTION_TIMESTAMP", tzCal),
 					r.getString("LEVEL"),
 					r.getString("USERNAME"),
 					r.getString("DEVICE"),
