@@ -670,17 +670,30 @@ p.song-body {
 }
 .alert-container{
 	z-index: 2147483645;
+	transition-duration: .5s;
 	position: fixed;
-	top: 10px;
-	left: 0;
-	right: 0;
-	margin-left: auto;
-	margin-right: auto;
-	width: 600px;
+	top: -200px;
+	width:100%;
 }
-#custom-alert > span {
+.hide-alert:hover {
+	cursor: pointer;
+}
+.alert-container.display {
+	top:0;
+}
+.custom-alert {
+	opacity: .98;
+	border-top-left-radius: 0px !important;
+	border-top-right-radius: 0px !important;
+	border-bottom-right-radius: 5px !important;
+	border-bottom-left-radius: 5px !important;
+}
+.custom-alert-container {
+	width:95%;
+	max-width:600px;
+}
+.custom-alert span {
 	word-wrap: break-word;
-	max-width:95%;
 }
 .fade-alert {
     -webkit-transition-duration: .5s; /* Safari */
@@ -1687,9 +1700,6 @@ table > thead > tr > th[class*="sort"]:after {
 	#setListDetailsHeader .sticky-top, #offNav {
 		position: relative !important;
 	}
-	.alert-container{
-		width:65%;
-	}
 	.off-nav-title {
 /* 		padding-top:50px; */
 	}
@@ -1794,9 +1804,6 @@ table > thead > tr > th[class*="sort"]:after {
 	}
 	.song-page {
 		padding: 10px 20px 2px 20px;
-	}
-	.alert-container{
-		width:90% !important;
 	}
 	.song-title {
 		font-size: calc(1.15rem) !important;

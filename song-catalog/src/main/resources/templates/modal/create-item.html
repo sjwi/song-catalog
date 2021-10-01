@@ -197,10 +197,8 @@
 					contentType: false,
 					dataType: 'JSON',
 					success: function(data) {
-						alertWithFade('success','New song <b>' +$('#createSongForm').find('.title').val() + '</b> created.');
-						setTimeout(function(){
-							location.href = contextpath + 'song/' + data.action; 
-						},1000);
+						setAlertOnLoad('success','New song <b>' +$('#createSongForm').find('.title').val() + '</b> created.');
+						location.href = contextpath + 'song/' + data.action; 
 					},
 					error: function(data){
 						alertWithFade('danger','Something went wrong! Unable to create song.')
