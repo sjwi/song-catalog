@@ -63,10 +63,8 @@
 						$(this).find('input[type="submit"]').attr('disabled',true);
 					},
 					success: function() {
-						alertWithFade('success','Contact created')
-						setTimeout(function(){
-							location.reload()
-						},1000);
+						setAlertOnLoad('success','Contact created')
+						location.reload()
 					},
 					error: function(data){
 						$(this).find('input[type="submit"]').attr('disabled',false);

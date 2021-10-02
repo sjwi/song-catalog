@@ -43,10 +43,8 @@
 						$(this).find('input[type="submit"]').attr('disabled',true);
 					},
 					success: function() {
-						alertWithFade('success','Group created')
-						setTimeout(function(){
-							location.reload()
-						},1000);
+						setAlertOnLoad('success','Group created')
+						location.reload()
 					},
 					error: function(data){
 						$(this).find('input[type="submit"]').attr('disabled',false);
