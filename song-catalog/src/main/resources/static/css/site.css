@@ -983,8 +983,7 @@ p.song-body {
 	pointer-events:none;
 }
 .notification-message {
-	color: var(--secondary-bg-color);
-	font-size:.85rem;
+	font-size:.75rem;
 }
 input[type=checkbox]{
 	width:20px !important;
