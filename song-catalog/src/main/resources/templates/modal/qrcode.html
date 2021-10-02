@@ -32,10 +32,13 @@
 	</div>
 </div>
 <script>
-	function displayQrCode(link,element){
-		$('#qrCodeModel').find('.set-list-placeholder').html($(element).closest('.set-list-container').data('setname'));
-		$('#qrCodeModel').find('.set-list-link').attr("href",link);
+	function copySetLink(link,element) {
 		copyTextToClipboard(link,false);
+		alertWithFade('success','<a href="' + link + '">The link to the set list</a> has been copied to your cliboard. <br><a class="hide-alert" onclick="displayQrCode(\''+link + '\',\'' + $(element).closest('.set-list-container').data('setname') + '\')" href="javascript:void(0)"><b>Click here</b></a> to display a QR code to the set.')
+	}
+	function displayQrCode(link,name){
+		$('#qrCodeModel').find('.set-list-placeholder').html(name);
+		$('#qrCodeModel').find('.set-list-link').attr("href",link);
 		$('#qrCode').html('');
 		new QRCode(document.getElementById("qrCode"), link);
 		$('#qrCodeModel').modal('show');

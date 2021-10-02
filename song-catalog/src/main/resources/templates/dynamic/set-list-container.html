@@ -70,7 +70,7 @@
 					<a href="javascript:void(0)"><img width="30px" type="image/x-icon" th:src="@{/images/email-inverse.png}"/></a>
 				</div>
 			</th:block>
-			<div class="col text-center" data-toggle="tooltip" data-placement="bottom" title="Distribute link" th:classappend="${#authorization.expression('hasAuthority(''USER'')')}?'col-3':''" th:attr="onclick=${'displayQrCode('''} + ${T(com.sjwi.catalog.config.ServletConstants).BASE_URL} + @{/setlist/__${set.id}__} +  ${''',this)'}">
+			<div class="col text-center" data-toggle="tooltip" data-placement="bottom" title="Distribute link" th:classappend="${#authorization.expression('hasAuthority(''USER'')')}?'col-3':''" th:attr="onclick=${'copySetLink('''} + ${T(com.sjwi.catalog.config.ServletConstants).BASE_URL} + @{/setlist/__${set.id}__} +  ${''',this)'}">
 				<a href="javascript:void(0)"><img width="30px" type="image/x-icon" th:src="@{/images/qrcode.png}"/></a>
 			</div>
 		</div>
