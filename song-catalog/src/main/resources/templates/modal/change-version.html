@@ -51,10 +51,29 @@ $(document).ready(function(){
 					processData: false,
 					contentType: false,
 					success: function(data) {
-						alertWithFade('success','Version updated');
-						$('#changeVersionModal').modal('hide');
-						reloadSetContainerIfPresent($('#changeVersionModal').find('.set-id').val());
-						reloadSetSongContainerIfPresent($('#changeVersionModal').find('.set-id').val());
+						console.log($('#changeVersionForm').find('input[name="currentVersion"]').val());
+						$.ajax({
+							url: contextpath + 'setlist/change-version',
+							method: "POST",
+							data: {
+								setId: $('#changeVersionForm').find('.set-id').val(),
+								currentVersion: $('#changeVersionForm').find('input[name="currentVersion"]').val(),
+								version: data,
+							},
+							success: function(data) {
+								alertWithFade('success','Song changed in set list to new version');
+								$('#appendSetList_' + $('#changeVersionModal').find('.set-id').val()).html(data);
+								$('#changeVersionModal').modal('hide');
+								reloadSetSongContainerIfPresent($('#changeVersionModal').find('.set-id').val());
+								reloadSetContainerIfPresent($('#changeVersionModal').find('.set-id').val());
+							},
+							error: function(data){
+								alertWithFade('danger','Something went wrong! Unable to add song to set')
+							},
+							complete: function(){
+								$('#submitChangeVersionBtn').find('.btn').attr('disabled',false);
+							}
+						});
 					},
 					error: function(data){
 						alertWithFade('danger','Something went wrong! Unable to add song to set')

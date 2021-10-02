@@ -28,6 +28,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -70,9 +71,9 @@ public class VersionSongController {
 		}
 	}
 
-	@ResponseStatus(value = HttpStatus.OK)
 	@RequestMapping(value = { "/song/version/{id}"}, method = RequestMethod.POST)
-	public void createNewVersion(@PathVariable int id, 
+	@ResponseBody
+	public Integer createNewVersion(@PathVariable int id, 
 			@RequestParam(value = "songId", required = true) int songId,
 			@RequestParam(value = "defaultVersionKey", required = true) String defaultKey,
 			@RequestParam(value = "updatedVersionKey", required = true) String updatedVersionKey,
@@ -80,7 +81,7 @@ public class VersionSongController {
 			@RequestPart(value = "songAudio", required = false) Part songAudio,
 			@RequestParam(value = "setSongId", required = false) int setSongId,
 			Principal principal,Authentication auth,
-			HttpServletRequest request, HttpServletResponse response) {
+			HttpServletRequest request, HttpServletResponse response) throws Exception {
 		try {
 			int versionId = versionService.createNewVersion(songId, principal.getName(), new TransposableString(versionBody, defaultKey).getTransposedString(NUMBER_SYSTEM_KEY_CODE), defaultKey);
 			if (!defaultKey.equals(updatedVersionKey))
@@ -90,8 +91,10 @@ public class VersionSongController {
 			if (songAudio != null)
 				recordingService.addOrUpdateRecording(versionId, songAudio);
 			logger.mailRevisionDeltas(songService.getSongById(songId), songService.getSongById(versionId), MailConstants.VERSION_CREATED_ACTION);
+			return versionId;
 		} catch (Exception e) {
 			controllerHelper.errorHandler(e);
+			throw e;
 		} 
 	}
 	
