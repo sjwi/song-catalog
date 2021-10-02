@@ -673,7 +673,8 @@ p.song-body {
 	transition-duration: .5s;
 	position: fixed;
 	top: -200px;
-	width:100%;
+	width:400px;
+	right:0;
 }
 .hide-alert:hover {
 	cursor: pointer;
@@ -681,12 +682,12 @@ p.song-body {
 .alert-container.display {
 	top:0;
 }
-.custom-alert {
-	opacity: .98;
+.rounded-bottom-lg {
 	border-top-left-radius: 0px !important;
 	border-top-right-radius: 0px !important;
 	border-bottom-right-radius: 5px !important;
 	border-bottom-left-radius: 5px !important;
+	opacity: .98;
 }
 .custom-alert-container {
 	width:95%;
@@ -1756,6 +1757,9 @@ table > thead > tr > th[class*="sort"]:after {
 	}
 }
 @media (max-width: 576px){
+	.alert-container{
+		width:100%;
+	}
 	ul.ks-cboxtags li label{
 		font-size: .65rem !important;
 	}
