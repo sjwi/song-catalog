@@ -34,11 +34,17 @@
 			alertWithFade(window.localStorage.getItem(alertOnLoadType), window.localStorage.getItem(alertOnLoadKey))
 			window.localStorage.removeItem(alertOnLoadKey);
 		}
-		$(document).on('click swipeup','.hide-alert',function(e){
+		$(document).on('click','.hide-alert',function(e){
 			if (!$(e.target).is('a'))
 				$(".alert-container").removeClass('display');
 		})
 	})
+	document.addEventListener('swiped-up', function(e) {
+		if($(e.target).closest('.hide-alert').length > 0) {
+			e.preventDefault();
+			$(".alert-container").removeClass('display');
+		}
+	});
 	function setAlertOnLoad(alertType, msg) {
 		window.localStorage.setItem(alertOnLoadKey, msg);
 		window.localStorage.setItem(alertOnLoadType, alertType);
