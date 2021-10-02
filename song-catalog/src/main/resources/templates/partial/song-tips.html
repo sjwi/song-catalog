@@ -43,8 +43,9 @@
 		$('.song-tips-btn').off();
 		$('.song-tips-btn').tooltip({
 			title: $('.song-tips-container').html(),
+			animation: false,
+			trigger: "click",
 			html: true,
-			trigger: 'click',
 			offset: 225
 		});
 	});
