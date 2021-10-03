@@ -101,6 +101,7 @@
 		var resized = false;
 		$(document).ready(function(){
 			$(document).on('click','.song-row',function(e){
+				$(this).addClass('selected');
 				if (!$(e.target).is(ignoreSongClickedSelector)){
 					location.href= contextpath + "song/" + $(e.target).closest('.song-metadata').data('target');
 				}
