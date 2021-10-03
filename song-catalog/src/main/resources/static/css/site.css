@@ -1744,6 +1744,10 @@ table > thead > tr > th[class*="sort"]:after {
 	}
 }
 @media screen and (max-width: 767px) {
+	:hover {
+		background: inherit;
+		background-color: inherit;
+	}
 	span.long-word {
 		display:none;
 	}
