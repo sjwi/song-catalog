@@ -2,7 +2,7 @@
 	<div id="home-song-search">
 		<form th:id="${id + '_form'}">
 			<div class="input-group">
-				<input class="form-control search-input" th:value="${searchTerm != null && #strings.equals(type, 'song catalog')}? ${searchTerm}:''" type="text" name="searchTerm" th:placeholder="${'Search ' + type + '...'}" /> 
+				<input class="form-control search-input" th:value="${searchTerm != null && #strings.equals(type, 'song catalog')}? ${searchTerm}:''" type="search" name="searchTerm" th:placeholder="${'Search ' + type + '...'}" /> 
 			</div>
 		</form>
 	</div>
@@ -28,8 +28,15 @@
 			});
 			$(form).find('input').on('keydown',function(e){
 				clearTimeout(typingTimer);
+				if (e.keyCode == '13'){
+					$('.search-input').blur();
+					searchItem(form,endpoint,view,append,id)
+				}
 			});
-
+			$(form).find('input').on('search', function () {
+				clearTimeout(typingTimer);
+				searchItem(form,endpoint,view,append,id)
+			});
 			$(form).submit(function(e){
 				e.preventDefault();
 			});
