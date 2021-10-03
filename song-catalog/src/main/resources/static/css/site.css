@@ -729,11 +729,17 @@ p.song-body {
 .btn-info:hover {
 	background-image: linear-gradient(#4cabe2,#1787c9 60%,#197fb9);
 }
+.btn-info:active {
+	background-image: linear-gradient(#4cabe2,#1787c9 60%,#197fb9);
+}
 .btn-primary {
 	border-color: #033c73;
 	background-image: linear-gradient(#2b5b89,#033c73 60%,#03386c);
 }
 .btn-primary:hover {
+	background-image: linear-gradient(#26537e,#043666 60%,#043363);
+}
+.btn-primary:active {
 	background-image: linear-gradient(#26537e,#043666 60%,#043363);
 }
 .btn-dark {
@@ -743,10 +749,16 @@ p.song-body {
 .btn-dark:hover {
 	background-image: linear-gradient(#4a5055,#2e343a 60%,#2a2f33);
 }
+.btn-dark:active {
+	background-image: linear-gradient(#4a5055,#2e343a 60%,#2a2f33);
+}
 .btn-secondary {
 	background-image: linear-gradient(#bec1c5,#979ca1 60%,#868b8f);
 }
 .btn-secondary:hover {
+	background-image: linear-gradient(#abaeb1,#84888b 60%,#6d7074);
+}
+.btn-secondary:active {
 	background-image: linear-gradient(#abaeb1,#84888b 60%,#6d7074);
 }
 #pageTitle {
