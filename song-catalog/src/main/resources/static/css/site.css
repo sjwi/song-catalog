@@ -51,6 +51,7 @@ hr {
 }
 #offNav {
 	background: var(--offnav-bg-color);
+	background-clip: padding-box;
 	-webkit-background-clip: padding-box;
 }
 .off-navline {
@@ -504,7 +505,9 @@ body {
 	z-index: 2147483644;
 }
 .zoom-box {
+  transition: all 1s ease;
   -webkit-transition: all 1s ease;
+	user-select: none;
 	-webkit-user-select: none;
 	padding:0 0 0 0;
 	z-index:4;
@@ -549,6 +552,8 @@ body {
 }
 .audio-box {
 	background: var(--action-container-bg);
+	transition: all 1s ease;
+	user-select: none;
 	-webkit-transition: all 1s ease;
 	-webkit-user-select: none;
 	padding:0 0 0 0;
@@ -568,6 +573,8 @@ body {
 }
 .song-page-audio:focus{ outline: none; }
 .song-page-audio{
+	transition: all 1s ease;
+	user-select: none;
 	-webkit-transition: all 1s ease;
 	-webkit-user-select: none;
 	padding:0 0 0 0;
@@ -808,7 +815,11 @@ p.song-body {
 	height:calc(100vh);
 }
 .loading {
-	opacity: .75;
+	opacity: .95;
+	pointer-events:none;
+}
+.loading-st {
+	opacity: .25;
 	pointer-events:none;
 }
 .song-section {
@@ -953,7 +964,7 @@ p.song-body {
 }
 .btn-light {
 	background-color: var(--main-bg-color) !important;
-	win-width:80px !important;
+	min-width:80px !important;
 }
 .btn-light:hover {
 	background-color: var(--deep-grey) !important;
@@ -1699,9 +1710,6 @@ table > thead > tr > th[class*="sort"]:after {
 	}
 	#setListDetailsHeader .sticky-top, #offNav {
 		position: relative !important;
-	}
-	.off-nav-title {
-/* 		padding-top:50px; */
 	}
 	.input-group-prepend {
 		font-size: .7rem;
