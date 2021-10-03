@@ -345,6 +345,10 @@ pre#logOutput {
 	background: var(--action-container-hover);
 	opacity:.9;
 }
+.set-list-container > .action-container  .col:active {
+	background: var(--action-container-hover);
+	opacity:.9;
+}
 .edit-song-form {
 	border: 1px solid;
 	border-color: var(--primary-grey);
@@ -366,6 +370,10 @@ pre#logOutput {
 	cursor:pointer;
 }
 .song-action-container .d-table-cell:hover {
+	background: var(--dark-grey);
+	opacity:.9;
+}
+.song-action-container .d-table-cell:active {
 	background: var(--dark-grey);
 	opacity:.9;
 }
@@ -1744,10 +1752,6 @@ table > thead > tr > th[class*="sort"]:after {
 	}
 }
 @media screen and (max-width: 767px) {
-	:hover {
-		background: inherit;
-		background-color: inherit;
-	}
 	span.long-word {
 		display:none;
 	}
