@@ -40,6 +40,7 @@ pipeline {
                                 string(credentialsId:'cfsongs_dns', variable: 'DNS')
                             ]) {
                                 sh "sshpass -p '$DREAMHOST_PW' scp target/ROOT.war $DREAMHOST_UN@$DNS:/home/$DREAMHOST_UN/$DNS/tomcat/webapps"
+                                sh "sleep 3"
                                 sh "sshpass -p '$DREAMHOST_PW' ssh $DREAMHOST_UN@$DNS -o StrictHostKeyChecking=no '/home/swilly/worship.cfchurches.com/tomcat/bin/restart.sh'"
                             }
                         } else if (env.BRANCH == "develop") {
