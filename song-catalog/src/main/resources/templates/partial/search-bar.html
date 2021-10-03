@@ -59,7 +59,10 @@
 					searchType: searchType
 				},
 				beforeSend: function() {
-					$(append).find('div').addClass('loading');
+					if (id == "songSearch")
+						$(append).find('div').addClass('loading-st');
+					else
+						$(append).find('div').addClass('loading');
 				},
 				success: function(data) {
 					$(append).html(data);
