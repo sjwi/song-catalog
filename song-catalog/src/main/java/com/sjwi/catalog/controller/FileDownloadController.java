@@ -2,6 +2,7 @@ package com.sjwi.catalog.controller;
 
 import static com.sjwi.catalog.model.KeySet.LYRICS_ONLY_KEY_CODE;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -42,10 +43,14 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.servlet.ModelAndView;
 
 @Controller
 public class FileDownloadController {
+
+	private static final String LOCAL_FILE_SUB_DIRECTORY = "downloads";
 
 	@Autowired
 	ControllerHelper controllerHelper;
@@ -122,7 +127,10 @@ public class FileDownloadController {
 		HttpEntity<byte[]> response = new RestTemplate().exchange(apiEndpoint, HttpMethod.GET, new HttpEntity<>(new HttpHeaders()), byte[].class);
 		HttpHeaders headers = response.getHeaders();
 		String fileName = headers.getContentDisposition().getFilename();
-		String localFileName = "downloaded_content_" + System.currentTimeMillis() + headers.getContentDisposition().getFilename();
+		String root = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest().getServletContext().getRealPath("/");
+		String localFileDir = root + "/" + LOCAL_FILE_SUB_DIRECTORY;
+		new File(localFileDir).mkdir();
+		String localFileName = localFileDir + "/downloaded_content_" + System.currentTimeMillis() + headers.getContentDisposition().getFilename();
 		Path path = Paths.get(localFileName);
 		Files.write(path,response.getBody());
 		return new AbstractMap.SimpleEntry<String,String>(fileName, localFileName);
