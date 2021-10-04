@@ -804,6 +804,16 @@ p.song-body {
 .btn-secondary:active {
 	background-image: linear-gradient(#abaeb1,#84888b 60%,#6d7074);
 }
+.btn-success {
+	border-color:#129177;
+	background-image: linear-gradient(#18BC9C,#14a185 60%,#129177);
+}
+.btn-success:hover {
+	background-image: linear-gradient(#17ac8e,#149178 60%,#0f7c66);
+}
+.btn-success:active {
+	background-image: linear-gradient(#17ac8e,#149178 60%,#0f7c66);
+}
 #pageTitle {
 	margin-top:1rem;
 	margin-bottom:1rem;

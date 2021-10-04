@@ -36,4 +36,8 @@ public interface AddressBookDao {
 	public void removeMemberFromGroup(int entryId, int groupId);
 
 	public AddressBookEntry getAddressBookEntryByEmail(String email);
+
+  public List<AddressBookEntry> getAddressBookEntriesWithPopulatedEmails();
+
+  public List<AddressBookEntry> getAddressBookEntriesWithPopulatedPhoneNumbers();
 }

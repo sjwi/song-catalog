@@ -2,11 +2,15 @@ package com.sjwi.catalog.controller;
 
 import static com.sjwi.catalog.model.KeySet.LYRICS_ONLY_KEY_CODE;
 
+import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
+import java.util.AbstractMap;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -18,18 +22,26 @@ import com.sjwi.catalog.file.FileGenerator;
 import com.sjwi.catalog.file.pdf.PdfFileGenerator;
 import com.sjwi.catalog.file.ppt.PptFileGenerator;
 import com.sjwi.catalog.log.CustomLogger;
+import com.sjwi.catalog.mail.Mailer;
+import com.sjwi.catalog.model.ResponseMessage;
 import com.sjwi.catalog.model.SetList;
+import com.sjwi.catalog.model.mail.EmailWithAttachment;
 import com.sjwi.catalog.model.song.Song;
 import com.sjwi.catalog.service.SetListService;
 import com.sjwi.catalog.service.SongService;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.ModelAndView;
 
 @Controller
@@ -46,7 +58,7 @@ public class FileDownloadController {
 	
 	@Autowired
 	CustomLogger logger;
-	
+
 	@ServletInitializerAspect
 	@RequestMapping(value = {"{downloadType}/download/{id}"}, method = RequestMethod.GET)
 	public ModelAndView downloadModal(@PathVariable String downloadType, @PathVariable int id,
@@ -72,6 +84,48 @@ public class FileDownloadController {
 		} catch (Exception e){
 			return controllerHelper.errorHandler(e);
 		}
+	}
+
+	@RequestMapping(value = {"/file/send"}, method = RequestMethod.POST)
+	@ResponseBody
+	public ResponseMessage sendFile(
+		@RequestParam(value="fileUrl", required=true) String fileUrl,
+		@RequestParam(value="emailTo", required=false, defaultValue = "") List<String> emailTo,
+		@RequestParam(value="textTo", required=false, defaultValue = "") List<String> textTo) {
+		try {
+			if (emailTo.size() == 0 && textTo.size() == 0)
+				throw new Exception("Bad request");
+			Map.Entry<String,String> fileAttachment = getFileAsPathFromRestAPI(fileUrl);
+			emailTo.stream()
+				.map(e -> 
+					new EmailWithAttachment()
+						.setAttachment(fileAttachment)
+						.setTo(e)
+						.setBody("Attached file sent from worship.cfchurches.com. \n\n You can download the file directly with this link: " + fileUrl)
+						.setSubject("File sent from the CF Song Catalog"))
+				.forEach(e -> {
+					try {
+						new Mailer().sendMail(e);
+					} catch (Exception ex) {ex.printStackTrace();}
+				});
+			return new ResponseMessage("success");
+		} catch (IllegalArgumentException e){
+			controllerHelper.errorHandler(e);
+			return new ResponseMessage("bad_recipient");
+		} catch (Exception e){
+			controllerHelper.errorHandler(e);
+			return new ResponseMessage("bad_request");
+		}
+	}
+
+	public Map.Entry<String, String> getFileAsPathFromRestAPI(String apiEndpoint) throws IOException{
+		HttpEntity<byte[]> response = new RestTemplate().exchange(apiEndpoint, HttpMethod.GET, new HttpEntity<>(new HttpHeaders()), byte[].class);
+		HttpHeaders headers = response.getHeaders();
+		String fileName = headers.getContentDisposition().getFilename();
+		String localFileName = "downloaded_content_" + System.currentTimeMillis() + headers.getContentDisposition().getFilename();
+		Path path = Paths.get(localFileName);
+		Files.write(path,response.getBody());
+		return new AbstractMap.SimpleEntry<String,String>(fileName, localFileName);
 	}
 
 	@RequestMapping(value = {"/exportDatabase/ppt/{fileName}"}, method = RequestMethod.GET)

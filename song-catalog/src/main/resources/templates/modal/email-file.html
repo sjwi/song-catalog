@@ -1,0 +1,130 @@
+<div class="modal fade" id="emailFileModal">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-body text-center">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+				<h5 class="modal-title">Email/SMS File</h5>
+        <hr class="mb-2">
+        <h6>(Use a comma separated string for batch distribution lists)</h6>
+				<form id="emailFileForm">
+          <input type="hidden" name="fileUrl" id="fileUrl">
+          <div class="form-group row text-center my-3" >
+            <div class="col col-12 text-left">
+              <label for="fileEmailTo">Email distribution list</label>
+            </div>
+            <div class="col col-12">
+              <select id="fileEmailTo" class="form-control" data-width="100%" type="text" name="emailTo" title="Enter an email address or a list of emails separated by commas" multiple="multiple">
+              </select>
+            </div>
+          </div>
+          <div class="form-group row text-center my-3" >
+            <div class="col col-12 text-left">
+              <label for="fileTextTo">SMS distribution list</label>
+            </div>
+            <div class="col col-12">
+              <select id="fileTextTo" class="form-control" data-width="100%" type="text" name="textTo" title="Enter a phone number or a list of phone numbers separated by commas" multiple="multiple">
+              </select>
+            </div>
+          </div>
+				</form>
+			</div>
+			<div class="modal-footer">
+				<button type="submit" class="btn btn-success btn-lg w-100" form="emailFileForm" id="submitEmailFileForm">Send</button>
+			</div>
+		</div>
+	</div>
+</div>
+<script>
+  $(document).ready(function(){
+    $('#emailFileForm').on('submit',function(e){
+      e.preventDefault();
+      $('#submitEmailFileForm').attr('disabled',true);
+      $.ajax({
+        url: contextpath + 'file/send',
+        method: "POST",
+        data: $(this).serialize(),
+        success: function() {
+          $('#emailFileForm').modal('hide');
+        },
+        error: function(data){
+          if (data.status == "bad_recipient")
+            alertWithFade('danger','Either a bad email or bad phone number was listed as a recipient')
+          else
+            alertWithFade('danger','Something went wrong! We were unable to send your file at this time.')
+        },
+        complete: function(data){
+          $('#submitEmailFileForm').attr('disabled',false);
+        }
+      });
+    })
+  })
+</script>
+<script sec:authorize="!hasAuthority('USER')">
+  $('#fileEmailTo').select2({tags:true});
+  $('#fileTextTo').select2({tags:true});
+  $('#fileTextTo, #fileEmailTo').on('select2:selecting',function(e){
+    if (!$(e.params.args.data.element).hasClass('from-ab')) {
+      e.preventDefault();
+      e.params.args.data.id.split(',').forEach(e => {
+        var $newOption = $("<option selected='selected'></option>").val(e).text(e)
+        $newOption.addClass('from-ab')
+        $(this).append($newOption).trigger('change');
+      })
+      $('.select2-search__field').val('');
+      $(this).select2('close');
+    }
+  })
+</script>
+<script sec:authorize="hasAuthority('USER')">
+  function emailFile(event){
+    var file = $('#copyDownloadLinkBtn').data('basecontext') + generateDownloadLinkWithFormParams();
+    $('#fileUrl').val(encodeURI(file));
+    $('#downloadModal').modal('hide');
+    $('#emailFileModal').modal('show');
+  }
+  $('#emailFileModal').on('hide.bs.modal', function () {
+    $('#downloadModal').modal('show');
+  });
+  $(document).ready(function(){
+    $.ajax({
+      url: contextpath + 'addressbook/emails.json',
+      success: function(data){
+        data.forEach(e => {
+          jQuery('<option/>', {
+            class: 'from-ab',
+            value: e.email,
+            html: e.name + ' - ' + e.email
+          }).appendTo('#fileEmailTo');  
+        });
+        $('#fileEmailTo').select2({tags:true});
+      }
+    })
+    $.ajax({
+      url: contextpath + 'addressbook/phones.json',
+      success: function(data){
+        data.forEach(e => {
+          jQuery('<option/>', {
+            class: 'from-ab',
+            value: e.phone,
+            html: e.name + ' - ' + e.phone + ''
+          }).appendTo('#fileTextTo');  
+        });
+        $('#fileTextTo').select2({tags:true});
+        $('#fileTextTo, #fileEmailTo').on('select2:selecting',function(e){
+          if (!$(e.params.args.data.element).hasClass('from-ab')) {
+            e.preventDefault();
+            e.params.args.data.id.split(',').forEach(e => {
+              var $newOption = $("<option selected='selected'></option>").val(e).text(e)
+              $newOption.addClass('from-ab')
+              $(this).append($newOption).trigger('change');
+            })
+            $('.select2-search__field').val('');
+            $(this).select2('close');
+          }
+        })
+      }
+    });
+  })
+</script>

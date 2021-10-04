@@ -4,13 +4,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.stereotype.Repository;
-
 import com.sjwi.catalog.dao.AddressBookDao;
 import com.sjwi.catalog.model.addressbook.AddressBookEntry;
 import com.sjwi.catalog.model.addressbook.AddressBookGroup;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.stereotype.Repository;
 
 @Repository
 public class SqlAddressBookDao implements AddressBookDao {
@@ -209,5 +209,25 @@ public class SqlAddressBookDao implements AddressBookDao {
 		} else {
 			return rawInput;
 		}
+	}
+
+	@Override
+	public List<AddressBookEntry> getAddressBookEntriesWithPopulatedEmails() {
+		return jdbcTemplate.query(queryStore.get("getAddressBookEntriesWithPopulatedEmails"), r -> {
+			List<AddressBookEntry> entries = new ArrayList<>();
+			while (r.next())
+				entries.add(new AddressBookEntry(r.getInt("ID"),r.getString("FirstName") , r.getString("LastName"),r.getString("username"),r.getString("Email"),r.getString("Phone")));
+			return entries;
+		});
+	}
+
+	@Override
+	public List<AddressBookEntry> getAddressBookEntriesWithPopulatedPhoneNumbers() {
+		return jdbcTemplate.query(queryStore.get("getAddressBookEntriesWithPopulatedPhoneNumbers"), r -> {
+			List<AddressBookEntry> entries = new ArrayList<>();
+			while (r.next())
+				entries.add(new AddressBookEntry(r.getInt("ID"),r.getString("FirstName") , r.getString("LastName"),r.getString("username"),r.getString("Email"),r.getString("Phone")));
+			return entries;
+		});
 	}
 }

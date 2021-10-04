@@ -401,3 +401,9 @@ log: >
 
 getLogData: >
   SELECT * FROM Log ORDER BY ACTION_TIMESTAMP DESC LIMIT 1000
+
+getAddressBookEntriesWithPopulatedEmails: >
+  select * from AddressBook where Email is not null AND Trim(Email) <> ''
+
+getAddressBookEntriesWithPopulatedPhoneNumbers: >
+  select * from AddressBook where Phone is not null AND Trim(Phone) <> ''
