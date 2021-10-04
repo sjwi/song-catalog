@@ -4,6 +4,8 @@ import static com.sjwi.catalog.model.KeySet.LYRICS_ONLY_KEY_CODE;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -111,7 +113,7 @@ public class FileDownloadController {
 					new EmailWithAttachment()
 						.setAttachment(fileAttachment)
 						.setTo(e)
-						.setBody("Attached file sent from worship.cfchurches.com. \n\n You can download the file directly with this link: " + fileUrl)
+						.setBody("Attached file sent from worship.cfchurches.com. <br><br> You can download the file directly with this link: " + controllerHelper.buildHtmlLinkFromUrl(fileUrl, fileUrl))
 						.setSubject("File sent from the CF Song Catalog"))
 				.forEach(e -> {
 					try {
@@ -138,7 +140,7 @@ public class FileDownloadController {
 		String localFileName = localFileDir + "/downloaded_content_" + System.currentTimeMillis() + headers.getContentDisposition().getFilename();
 		Path path = Paths.get(localFileName);
 		Files.write(path,response.getBody());
-		return new AbstractMap.SimpleEntry<String,String>(localFileName,fileName);
+		return new AbstractMap.SimpleEntry<String,String>(localFileName, URLDecoder.decode(fileName, StandardCharsets.UTF_8.name()));
 	}
 
 	@RequestMapping(value = {"/exportDatabase/ppt/{fileName}"}, method = RequestMethod.GET)

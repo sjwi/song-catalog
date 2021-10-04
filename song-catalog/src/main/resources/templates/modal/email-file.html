@@ -37,6 +37,15 @@
 	</div>
 </div>
 <script>
+  function emailFile(event){
+    var file = $('#copyDownloadLinkBtn').data('basecontext') + generateDownloadLinkWithFormParams();
+    $('#fileUrl').val(encodeURI(file));
+    $('#downloadModal').modal('hide');
+    $('#emailFileModal').modal('show');
+  }
+  $('#emailFileModal').on('hide.bs.modal', function () {
+    $('#downloadModal').modal('show');
+  });
   $(document).ready(function(){
     $('#emailFileForm').on('submit',function(e){
       e.preventDefault();
@@ -78,15 +87,6 @@
   })
 </script>
 <script sec:authorize="hasAuthority('USER')">
-  function emailFile(event){
-    var file = $('#copyDownloadLinkBtn').data('basecontext') + generateDownloadLinkWithFormParams();
-    $('#fileUrl').val(encodeURI(file));
-    $('#downloadModal').modal('hide');
-    $('#emailFileModal').modal('show');
-  }
-  $('#emailFileModal').on('hide.bs.modal', function () {
-    $('#downloadModal').modal('show');
-  });
   $(document).ready(function(){
     $.ajax({
       url: contextpath + 'addressbook/emails.json',
