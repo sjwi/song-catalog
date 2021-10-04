@@ -64,6 +64,9 @@ public class FileDownloadController {
 	@Autowired
 	CustomLogger logger;
 
+	@Autowired
+	Mailer mailer;
+
 	@ServletInitializerAspect
 	@RequestMapping(value = {"{downloadType}/download/{id}"}, method = RequestMethod.GET)
 	public ModelAndView downloadModal(@PathVariable String downloadType, @PathVariable int id,
@@ -110,7 +113,7 @@ public class FileDownloadController {
 						.setSubject("File sent from the CF Song Catalog"))
 				.forEach(e -> {
 					try {
-						new Mailer().sendMail(e);
+						mailer.sendMail(e);
 					} catch (Exception ex) {ex.printStackTrace();}
 				});
 			return new ResponseMessage("success");
