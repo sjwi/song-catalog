@@ -35,6 +35,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -96,7 +98,7 @@ public class FileDownloadController {
 
 	@RequestMapping(value = {"/file/send"}, method = RequestMethod.POST)
 	@ResponseBody
-	public ResponseMessage sendFile(
+	public ResponseEntity<ResponseMessage> sendFile(
 		@RequestParam(value="fileUrl", required=true) String fileUrl,
 		@RequestParam(value="emailTo", required=false, defaultValue = "") List<String> emailTo,
 		@RequestParam(value="textTo", required=false, defaultValue = "") List<String> textTo) {
@@ -116,13 +118,13 @@ public class FileDownloadController {
 						mailer.sendMail(e);
 					} catch (Exception ex) {ex.printStackTrace();}
 				});
-			return new ResponseMessage("success");
+			return new ResponseEntity<ResponseMessage>(new ResponseMessage("success"), HttpStatus.OK);
 		} catch (IllegalArgumentException e){
 			controllerHelper.errorHandler(e);
-			return new ResponseMessage("bad_recipient");
+			return new ResponseEntity<ResponseMessage>(new ResponseMessage("bad_recipient"), HttpStatus.BAD_REQUEST);
 		} catch (Exception e){
 			controllerHelper.errorHandler(e);
-			return new ResponseMessage("bad_request");
+			return new ResponseEntity<ResponseMessage>(new ResponseMessage("bad_request"), HttpStatus.BAD_REQUEST);
 		}
 	}
 
@@ -136,7 +138,7 @@ public class FileDownloadController {
 		String localFileName = localFileDir + "/downloaded_content_" + System.currentTimeMillis() + headers.getContentDisposition().getFilename();
 		Path path = Paths.get(localFileName);
 		Files.write(path,response.getBody());
-		return new AbstractMap.SimpleEntry<String,String>(fileName, localFileName);
+		return new AbstractMap.SimpleEntry<String,String>(localFileName,fileName);
 	}
 
 	@RequestMapping(value = {"/exportDatabase/ppt/{fileName}"}, method = RequestMethod.GET)
