@@ -39,7 +39,7 @@
 <script>
   function emailFile(event){
     var file = $('#copyDownloadLinkBtn').data('basecontext') + generateDownloadLinkWithFormParams();
-    $('#fileUrl').val(encodeURI(file));
+    $('#fileUrl').val(file);
     $('#downloadModal').modal('hide');
     $('#emailFileModal').modal('show');
   }

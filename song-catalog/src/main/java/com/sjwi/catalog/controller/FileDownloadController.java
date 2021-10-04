@@ -140,11 +140,7 @@ public class FileDownloadController {
 		String localFileName = localFileDir + "/downloaded_content_" + System.currentTimeMillis() + headers.getContentDisposition().getFilename();
 		Path path = Paths.get(localFileName);
 		Files.write(path,response.getBody());
-		return new AbstractMap.SimpleEntry<String,String>(localFileName, unwrapEncodedHeader(fileName));
-	}
-
-	private String unwrapEncodedHeader(String headerValue){
-		return URLDecoder.decode(URLDecoder.decode(headerValue, StandardCharsets.UTF_8), StandardCharsets.UTF_8);
+		return new AbstractMap.SimpleEntry<String,String>(localFileName, URLDecoder.decode(fileName, StandardCharsets.UTF_8));
 	}
 
 	@RequestMapping(value = {"/exportDatabase/ppt/{fileName}"}, method = RequestMethod.GET)
