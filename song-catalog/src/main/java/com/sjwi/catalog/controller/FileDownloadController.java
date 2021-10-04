@@ -113,8 +113,8 @@ public class FileDownloadController {
 					new EmailWithAttachment()
 						.setAttachment(fileAttachment)
 						.setTo(e)
-						.setBody("Attached file sent from worship.cfchurches.com. <br><br> You can download the file directly with this link: " + controllerHelper.buildHtmlLinkFromUrl(fileUrl, fileUrl))
-						.setSubject("File sent from the CF Song Catalog"))
+						.setBody("The attached file was sent from worship.cfchurches.com. <br><br> You can download the file directly with this link: " + controllerHelper.buildHtmlLinkFromUrl(fileUrl, fileUrl))
+						.setSubject("CF Song Catalog"))
 				.forEach(e -> {
 					try {
 						mailer.sendMail(e);
@@ -140,7 +140,7 @@ public class FileDownloadController {
 		String localFileName = localFileDir + "/downloaded_content_" + System.currentTimeMillis() + headers.getContentDisposition().getFilename();
 		Path path = Paths.get(localFileName);
 		Files.write(path,response.getBody());
-		return new AbstractMap.SimpleEntry<String,String>(localFileName, URLDecoder.decode(fileName, StandardCharsets.UTF_8.name()));
+		return new AbstractMap.SimpleEntry<String,String>(localFileName, URLDecoder.decode(fileName, StandardCharsets.UTF_8));
 	}
 
 	@RequestMapping(value = {"/exportDatabase/ppt/{fileName}"}, method = RequestMethod.GET)
