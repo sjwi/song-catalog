@@ -230,4 +230,43 @@ public class SqlAddressBookDao implements AddressBookDao {
 			return entries;
 		});
 	}
+
+	@Override
+	public List<AddressBookGroup> getAddressBookGroupsWithPopulatedEmails() {
+		return getAddressBookGroups();
+	}
+
+	@Override
+	public List<AddressBookGroup> getAddressBookGroupsWithPopulatedPhoneNumbers() {
+		return jdbcTemplate.query(queryStore.get("getAddressBookGroupEntries"), r1 -> {
+			List<AddressBookGroup> groups = new ArrayList<AddressBookGroup>();
+			while (r1.next()) {
+				groups.add(getAddressBookGroupWithPhonesById(r1.getInt("ID")));
+			}
+			return groups;
+		});
+	}
+
+	private AddressBookGroup getAddressBookGroupWithPhonesById(int id) {
+		List<AddressBookEntry> groupEntries = new ArrayList<AddressBookEntry>();
+		List<Integer> entryIds = jdbcTemplate.query(queryStore.get("getEntryIdFromABRelated"), new Object[] {id}, r -> {
+			List<Integer> rids = new ArrayList<Integer>();
+			while (r.next()) {
+				rids.add(r.getInt("ENTRY_ID"));
+			}
+			return rids;
+		});
+		for (Integer entryId: entryIds) {
+			AddressBookEntry entry = getAddressBookEntryById(entryId);
+			if (entry.getEmail() != null && !entry.getEmail().trim().isEmpty())
+				groupEntries.add(entry);
+		}
+		return jdbcTemplate.query(queryStore.get("getAddressBookGroupById"), new Object[] {id}, r ->{
+			if (r.next()) {
+				return new AddressBookGroup(id,r.getString("NAME"),groupEntries);
+			} else {
+				return null;
+			}
+		});
+	}
 }

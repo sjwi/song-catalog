@@ -15,6 +15,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
@@ -29,6 +30,7 @@ import com.sjwi.catalog.mail.Mailer;
 import com.sjwi.catalog.model.ResponseMessage;
 import com.sjwi.catalog.model.SetList;
 import com.sjwi.catalog.model.mail.EmailWithAttachment;
+import com.sjwi.catalog.model.mail.Text;
 import com.sjwi.catalog.model.song.Song;
 import com.sjwi.catalog.service.SetListService;
 import com.sjwi.catalog.service.SongService;
@@ -70,6 +72,9 @@ public class FileDownloadController {
 
 	@Autowired
 	Mailer mailer;
+
+	@Autowired
+	Text text;
 
 	@ServletInitializerAspect
 	@RequestMapping(value = {"{downloadType}/download/{id}"}, method = RequestMethod.GET)
@@ -120,6 +125,12 @@ public class FileDownloadController {
 						mailer.sendMail(e);
 					} catch (Exception ex) {ex.printStackTrace();}
 				});
+			textTo.stream().forEach(t -> {
+				text.sendText(t, "File sent from worship.cfchurches.com. \n\n You can download the file directly with this link: " + fileUrl, fileUrl);
+				try {
+					TimeUnit.SECONDS.sleep(1);
+				} catch (InterruptedException e) { e.printStackTrace();}
+			});
 			return new ResponseEntity<ResponseMessage>(new ResponseMessage("success"), HttpStatus.OK);
 		} catch (IllegalArgumentException e){
 			controllerHelper.errorHandler(e);
@@ -130,7 +141,7 @@ public class FileDownloadController {
 		}
 	}
 
-	public Map.Entry<String, String> getFileAsPathFromRestAPI(String apiEndpoint) throws IOException{
+	private Map.Entry<String, String> getFileAsPathFromRestAPI(String apiEndpoint) throws IOException{
 		HttpEntity<byte[]> response = new RestTemplate().exchange(apiEndpoint, HttpMethod.GET, new HttpEntity<>(new HttpHeaders()), byte[].class);
 		HttpHeaders headers = response.getHeaders();
 		String fileName = headers.getContentDisposition().getFilename();

@@ -407,3 +407,7 @@ getAddressBookEntriesWithPopulatedEmails: >
 
 getAddressBookEntriesWithPopulatedPhoneNumbers: >
   select * from AddressBook where Phone is not null AND Trim(Phone) <> ''
+
+getAddressBookGroupsWithPopulatedPhoneNumbers: >
+  select * from AddressBookGroup abg JOIN AddressBookRelated abr on abg.ID = abr.GROUP_ID JOIN AddressBook ab on ab.ID = abr.ENTRY_ID where ab.PHONE is not null and ab.PHONE <> ''
+

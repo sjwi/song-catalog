@@ -1,5 +1,8 @@
 package com.sjwi.catalog.model.mail;
 
+import java.net.URI;
+import java.util.Arrays;
+
 import javax.annotation.PostConstruct;
 
 import com.sjwi.catalog.log.CustomLogger;
@@ -37,7 +40,17 @@ public class Text {
 
   public void sendText(String number, String msg) throws IllegalArgumentException {
     String formattedToNumber = stripPhoneNumber(number);
-    Message.creator(new PhoneNumber(formattedToNumber),new PhoneNumber(twilioPhoneNumber), msg).create();
+    Message
+      .creator(new PhoneNumber(formattedToNumber),new PhoneNumber(twilioPhoneNumber), msg)
+      .create();
+  }
+
+  public void sendText(String number, String msg, String mediaUrl) throws IllegalArgumentException {
+    String formattedToNumber = stripPhoneNumber(number);
+    Message
+      .creator(new PhoneNumber(formattedToNumber),new PhoneNumber(twilioPhoneNumber), msg)
+      .setMediaUrl(Arrays.asList(URI.create(mediaUrl)))
+      .create();
   }
 
   private String stripPhoneNumber(String number) {

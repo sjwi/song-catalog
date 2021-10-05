@@ -254,6 +254,16 @@ public class AddressBookController {
 			return new ArrayList<AddressBookEntry>();
 		}
 	}
+	@RequestMapping(value= {"/addressbook/group-emails.json"}, method = RequestMethod.GET)
+	@ResponseBody
+	public List<AddressBookGroup> groupEmailsJson() {
+		try {
+			return addressBookService.getAddressBookGroupsWithPopulatedEmails();
+		} catch (Exception e) {
+			controllerHelper.errorHandler(e);
+			return new ArrayList<AddressBookGroup>();
+		}
+	}
 	@RequestMapping(value= {"/addressbook/phones.json"}, method = RequestMethod.GET)
 	@ResponseBody
 	public List<AddressBookEntry> phonesJson() {
@@ -262,6 +272,16 @@ public class AddressBookController {
 		} catch (Exception e) {
 			controllerHelper.errorHandler(e);
 			return new ArrayList<AddressBookEntry>();
+		}
+	}
+	@RequestMapping(value= {"/addressbook/group-phones.json"}, method = RequestMethod.GET)
+	@ResponseBody
+	public List<AddressBookGroup> groupPhonesJson() {
+		try {
+			return addressBookService.getAddressBookGroupsWithPopulatedPhoneNumbers();
+		} catch (Exception e) {
+			controllerHelper.errorHandler(e);
+			return new ArrayList<AddressBookGroup>();
 		}
 	}
 }

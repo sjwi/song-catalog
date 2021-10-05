@@ -82,4 +82,12 @@ public class AddressBookService {
   public List<AddressBookEntry> getAddressBookEntriesWithPopulatedPhoneNumbers() {
 		return addressBookDao.getAddressBookEntriesWithPopulatedPhoneNumbers();
   }
+
+	public List<AddressBookGroup> getAddressBookGroupsWithPopulatedEmails() {
+		return addressBookDao.getAddressBookGroupsWithPopulatedEmails();
+	}
+
+	public List<AddressBookGroup> getAddressBookGroupsWithPopulatedPhoneNumbers() {
+		return addressBookDao.getAddressBookGroupsWithPopulatedPhoneNumbers();
+	}
 }

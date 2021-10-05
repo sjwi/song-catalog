@@ -1,4 +1,4 @@
-<div class="modal fade" id="emailFileModal">
+<div class="modal fade" id="emailFileModal" style="overflow-y:scroll">
 	<div class="modal-dialog" role="document">
 		<div class="modal-content">
 			<div class="modal-body text-center">
@@ -89,20 +89,51 @@
   })
 </script>
 <script sec:authorize="hasAuthority('USER')">
-  $(document).ready(function(){
-    $.ajax({
-      url: contextpath + 'addressbook/emails.json',
-      success: function(data){
-        data.forEach(e => {
-          jQuery('<option/>', {
-            class: 'from-ab',
-            value: e.email,
-            html: e.name + ' - ' + e.email
-          }).appendTo('#fileEmailTo');  
-        });
-        $('#fileEmailTo').select2({tags:true});
+  function initializeSelect2() {
+    $('#fileTextTo').select2({tags:true});
+    $('#fileEmailTo').select2({tags:true});
+    $('#fileTextTo, #fileEmailTo').on('select2:selecting',function(e){
+      if (!$(e.params.args.data.element).hasClass('from-ab')) {
+        e.preventDefault();
+        e.params.args.data.id.split(',').forEach(e => {
+          var $newOption = $("<option selected='selected'></option>").val(e).text(e)
+          $newOption.addClass('from-ab')
+          $(this).append($newOption).trigger('change');
+        })
+        $('.select2-search__field').val('');
+        $(this).select2('close');
+      } else if ($(e.params.args.data.element).val() == 'phone' || $(e.params.args.data.element).val() == 'email') {
+        e.preventDefault();
+        var selected = e.params.args.data.element;
+				var entries = [];
+				$.each($(selected).data("entries"),function() {
+					entries.push(this[$(selected).val()]);
+				});	
+				entries = entries.concat($(this).val());
+				$(this).val(entries).change();
+        $('.select2-search__field').val('');
+				$(this).select2('close');
       }
     })
+  }
+  function addGroupsWithPhones(callback) {
+    $.ajax({
+      url: contextpath + 'addressbook/group-phones.json',
+      success: function(data){
+        data.forEach(e => {
+          var option = jQuery('<option/>', {
+            class: 'from-ab',
+            value: 'phone',
+            html: e.name
+          })
+          option.attr('data-entries',JSON.stringify(e.entries))
+          option.appendTo('#fileTextTo');  
+        });
+        callback();
+      }
+    });
+  }
+  function addUsersWithPhones(callback) {
     $.ajax({
       url: contextpath + 'addressbook/phones.json',
       success: function(data){
@@ -113,19 +144,39 @@
             html: e.name + ' - ' + e.phone + ''
           }).appendTo('#fileTextTo');  
         });
-        $('#fileTextTo').select2({tags:true});
-        $('#fileTextTo, #fileEmailTo').on('select2:selecting',function(e){
-          if (!$(e.params.args.data.element).hasClass('from-ab')) {
-            e.preventDefault();
-            e.params.args.data.id.split(',').forEach(e => {
-              var $newOption = $("<option selected='selected'></option>").val(e).text(e)
-              $newOption.addClass('from-ab')
-              $(this).append($newOption).trigger('change');
-            })
-            $('.select2-search__field').val('');
-            $(this).select2('close');
-          }
-        })
+        callback();
+      }
+    });
+  }
+  function addUsersWithEmail(callback) {
+    $.ajax({
+      url: contextpath + 'addressbook/emails.json',
+      success: function(data){
+        data.forEach(e => {
+          jQuery('<option/>', {
+            class: 'from-ab',
+            value: e.email,
+            html: e.name + ' - ' + e.email
+          }).appendTo('#fileEmailTo');  
+        });
+        callback();
+      }
+    })
+  }
+  $(document).ready(function(){
+    $.ajax({
+      url: contextpath + 'addressbook/group-emails.json',
+      success: function(data){
+        data.forEach(e => {
+          var option = jQuery('<option/>', {
+            class: 'from-ab',
+            value: 'email',
+            html: e.name
+          })
+          option.attr('data-entries',JSON.stringify(e.entries))
+          option.appendTo('#fileEmailTo');  
+        });
+        addUsersWithEmail(() => addGroupsWithPhones(() => addUsersWithPhones(() => initializeSelect2())));
       }
     });
   })

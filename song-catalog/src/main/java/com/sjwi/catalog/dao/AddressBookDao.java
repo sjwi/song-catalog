@@ -40,4 +40,8 @@ public interface AddressBookDao {
   public List<AddressBookEntry> getAddressBookEntriesWithPopulatedEmails();
 
   public List<AddressBookEntry> getAddressBookEntriesWithPopulatedPhoneNumbers();
+
+	public List<AddressBookGroup> getAddressBookGroupsWithPopulatedEmails();
+
+  public List<AddressBookGroup> getAddressBookGroupsWithPopulatedPhoneNumbers();
 }
