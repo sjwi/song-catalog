@@ -128,7 +128,7 @@ public class FileDownloadController {
 				try {
 					text.sendText(t, "The attached file was sent from worship.cfchurches.com\n\nYou can download the file directly with this link: " + fileUrl, URLDecoder.decode(fileUrl, "UTF-8").replaceAll(" ",""));
 					TimeUnit.SECONDS.sleep(1);
-				} catch (InterruptedException e) { e.printStackTrace();}
+				} catch (Exception e) { e.printStackTrace();}
 			});
 			return new ResponseEntity<ResponseMessage>(new ResponseMessage("success"), HttpStatus.OK);
 		} catch (IllegalArgumentException e){
