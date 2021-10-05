@@ -55,8 +55,7 @@ public class FileDownloadController {
 	CustomLogger logger;
 
 	@Autowired
-	FileDispatcherService
-	fileDispatcherService;
+	FileDispatcherService fileDispatcherService;
 
 	@ServletInitializerAspect
 	@RequestMapping(value = {"{downloadType}/download/{id}"}, method = RequestMethod.GET)
