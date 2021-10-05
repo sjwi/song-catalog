@@ -10,6 +10,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.util.AbstractMap;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -130,6 +131,9 @@ public class FileDownloadController {
 					TimeUnit.SECONDS.sleep(1);
 				} catch (Exception e) { e.printStackTrace();}
 			});
+			logger.logUserActionWithEmail(fileUrl+ " sent to:" + "\n" + 
+				"Emails: " + Arrays.toString(emailTo.toArray()) + "\n" +
+				"Numbers: " + Arrays.toString(textTo.toArray()));
 			return new ResponseEntity<ResponseMessage>(new ResponseMessage("success"), HttpStatus.OK);
 		} catch (IllegalArgumentException e){
 			controllerHelper.errorHandler(e);
