@@ -6,7 +6,7 @@
 					<tr class="song-row align-middle row no-gutters ab-metadata" th:id="${'entryRow' + abEntry.id}" th:attr="data-target=${abEntry.id}" th:if="${abEntry.username != 'sysadmin'}">
 						<td class="pl-2 no-gutters title col">
 							<div class="row no-gutters">
-								<span th:text="${abEntry.lastName + ', ' + abEntry.firstName}"></span>
+								<span th:text="${abEntry.firstName + ' ' + abEntry.lastName}"></span>
 								<div class="ml-3 align-baseline">
 									<span class="small-font" th:if="${abEntry.username != null && abEntry.username != ''}" 
 										th:text="${'[' + abEntry.username + ']'}">
