@@ -43,6 +43,10 @@ public class CustomLogger {
 	public void error(Object message) {
 		log.error(message);
 	}
+
+  public void error(String string, Exception e) {
+		log.error(string,e);
+  }
 	
 	public void logMessageWithEmail(String message) {
 		log.info(message);

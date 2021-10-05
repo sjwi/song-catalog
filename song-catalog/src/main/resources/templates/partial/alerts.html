@@ -51,8 +51,6 @@
 	}
 	function alertWithoutFade(alertType,msg){
 		$(".alert-container").removeClass('display');
-		if (alertType == 'success')
-			alertType = 'info';
 		var dynamicAlert = $('#alert-container').clone();
 		dynamicAlert.find('.alert-message').html(msg);
 		dynamicAlert.addClass('alert-' + alertType);
@@ -63,8 +61,6 @@
 	}
 	function alertWithFade(alertType, msg){
 		$(".alert-container").removeClass('display');
-		if (alertType == 'success')
-			alertType = 'warning';
 		var dynamicAlert = $('#alert-container').clone();
 		$('body')
 			.append(dynamicAlert)

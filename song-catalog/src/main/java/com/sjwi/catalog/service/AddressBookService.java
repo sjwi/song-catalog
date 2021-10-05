@@ -2,12 +2,12 @@ package com.sjwi.catalog.service;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
 import com.sjwi.catalog.dao.AddressBookDao;
 import com.sjwi.catalog.model.addressbook.AddressBookEntry;
 import com.sjwi.catalog.model.addressbook.AddressBookGroup;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 @Component
 public class AddressBookService {
@@ -73,5 +73,21 @@ public class AddressBookService {
 
 	public void editEntryByEmail(AddressBookEntry addressBookEntry) {
 		addressBookDao.editEntryByEmail(addressBookEntry);
+	}
+
+  public List<AddressBookEntry> getAddressBookEntriesWithPopulatedEmails() {
+		return addressBookDao.getAddressBookEntriesWithPopulatedEmails();
+  }
+
+  public List<AddressBookEntry> getAddressBookEntriesWithPopulatedPhoneNumbers() {
+		return addressBookDao.getAddressBookEntriesWithPopulatedPhoneNumbers();
+  }
+
+	public List<AddressBookGroup> getAddressBookGroupsWithPopulatedEmails() {
+		return addressBookDao.getAddressBookGroupsWithPopulatedEmails();
+	}
+
+	public List<AddressBookGroup> getAddressBookGroupsWithPopulatedPhoneNumbers() {
+		return addressBookDao.getAddressBookGroupsWithPopulatedPhoneNumbers();
 	}
 }

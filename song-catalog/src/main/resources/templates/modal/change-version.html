@@ -61,7 +61,7 @@ $(document).ready(function(){
 								version: data,
 							},
 							success: function(data) {
-								alertWithFade('success','Song changed in set list to new version');
+								alertWithFade('warning','Song changed in set list to new version');
 								$('#appendSetList_' + $('#changeVersionModal').find('.set-id').val()).html(data);
 								$('#changeVersionModal').modal('hide');
 								reloadSetSongContainerIfPresent($('#changeVersionModal').find('.set-id').val());
@@ -88,7 +88,7 @@ $(document).ready(function(){
 					method: "POST",
 					data: $('#changeVersionForm').serialize(),
 					success: function(data) {
-						alertWithFade('success','Version updated');
+						alertWithFade('warning','Version updated');
 						$('#appendSetList_' + $('#changeVersionModal').find('.set-id').val()).html(data);
 						$('#changeVersionModal').modal('hide');
 						reloadSetSongContainerIfPresent($('#changeVersionModal').find('.set-id').val());

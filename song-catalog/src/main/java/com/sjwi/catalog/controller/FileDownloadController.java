@@ -2,12 +2,20 @@ package com.sjwi.catalog.controller;
 
 import static com.sjwi.catalog.model.KeySet.LYRICS_ONLY_KEY_CODE;
 
+import java.io.File;
+import java.io.IOException;
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
+import java.util.AbstractMap;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
@@ -18,22 +26,37 @@ import com.sjwi.catalog.file.FileGenerator;
 import com.sjwi.catalog.file.pdf.PdfFileGenerator;
 import com.sjwi.catalog.file.ppt.PptFileGenerator;
 import com.sjwi.catalog.log.CustomLogger;
+import com.sjwi.catalog.mail.Mailer;
+import com.sjwi.catalog.model.ResponseMessage;
 import com.sjwi.catalog.model.SetList;
+import com.sjwi.catalog.model.mail.EmailWithAttachment;
+import com.sjwi.catalog.model.mail.Text;
 import com.sjwi.catalog.model.song.Song;
 import com.sjwi.catalog.service.SetListService;
 import com.sjwi.catalog.service.SongService;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.client.RestTemplate;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.servlet.ModelAndView;
 
 @Controller
 public class FileDownloadController {
+
+	private static final String LOCAL_FILE_SUB_DIRECTORY = "downloads";
 
 	@Autowired
 	ControllerHelper controllerHelper;
@@ -46,7 +69,13 @@ public class FileDownloadController {
 	
 	@Autowired
 	CustomLogger logger;
-	
+
+	@Autowired
+	Mailer mailer;
+
+	@Autowired
+	Text text;
+
 	@ServletInitializerAspect
 	@RequestMapping(value = {"{downloadType}/download/{id}"}, method = RequestMethod.GET)
 	public ModelAndView downloadModal(@PathVariable String downloadType, @PathVariable int id,
@@ -72,6 +101,57 @@ public class FileDownloadController {
 		} catch (Exception e){
 			return controllerHelper.errorHandler(e);
 		}
+	}
+
+	@RequestMapping(value = {"/file/send"}, method = RequestMethod.POST)
+	@ResponseBody
+	public ResponseEntity<ResponseMessage> sendFile(
+		@RequestParam(value="fileUrl", required=true) String fileUrl,
+		@RequestParam(value="emailTo", required=false, defaultValue = "") List<String> emailTo,
+		@RequestParam(value="textTo", required=false, defaultValue = "") List<String> textTo) {
+		try {
+			if (emailTo.size() == 0 && textTo.size() == 0)
+				throw new Exception("Bad request");
+			Map.Entry<String,String> fileAttachment = getFileAsPathFromRestAPI(fileUrl);
+			emailTo.stream()
+				.map(e -> 
+					new EmailWithAttachment()
+						.setAttachment(fileAttachment)
+						.setTo(e)
+						.setBody("The attached file was sent from <a href=\"https://worship.cfchurches.com\">worship.cfchurches.com</a> <br><br>You can download the file directly with this link: " + controllerHelper.buildHtmlLinkFromUrl(fileUrl, fileUrl))
+						.setSubject("CF Song Catalog"))
+				.forEach(e -> {
+					try {
+						mailer.sendMail(e);
+					} catch (Exception ex) {ex.printStackTrace();}
+				});
+			textTo.stream().forEach(t -> {
+				text.sendText(t, "The attached file was sent from worship.cfchurches.com\n\nYou can download the file directly with this link: " + fileUrl, URLDecoder.decode(fileUrl,StandardCharsets.UTF_8).replaceAll(" ",""));
+				try {
+					TimeUnit.SECONDS.sleep(1);
+				} catch (InterruptedException e) { e.printStackTrace();}
+			});
+			return new ResponseEntity<ResponseMessage>(new ResponseMessage("success"), HttpStatus.OK);
+		} catch (IllegalArgumentException e){
+			controllerHelper.errorHandler(e);
+			return new ResponseEntity<ResponseMessage>(new ResponseMessage("bad_recipient"), HttpStatus.BAD_REQUEST);
+		} catch (Exception e){
+			controllerHelper.errorHandler(e);
+			return new ResponseEntity<ResponseMessage>(new ResponseMessage("bad_request"), HttpStatus.BAD_REQUEST);
+		}
+	}
+
+	private Map.Entry<String, String> getFileAsPathFromRestAPI(String apiEndpoint) throws IOException{
+		HttpEntity<byte[]> response = new RestTemplate().exchange(apiEndpoint, HttpMethod.GET, new HttpEntity<>(new HttpHeaders()), byte[].class);
+		HttpHeaders headers = response.getHeaders();
+		String fileName = headers.getContentDisposition().getFilename();
+		String root = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest().getServletContext().getRealPath("/");
+		String localFileDir = root + "/" + LOCAL_FILE_SUB_DIRECTORY;
+		new File(localFileDir).mkdir();
+		String localFileName = localFileDir + "/downloaded_content_" + System.currentTimeMillis() + headers.getContentDisposition().getFilename();
+		Path path = Paths.get(localFileName);
+		Files.write(path,response.getBody());
+		return new AbstractMap.SimpleEntry<String,String>(localFileName, URLDecoder.decode(fileName, StandardCharsets.UTF_8));
 	}
 
 	@RequestMapping(value = {"/exportDatabase/ppt/{fileName}"}, method = RequestMethod.GET)

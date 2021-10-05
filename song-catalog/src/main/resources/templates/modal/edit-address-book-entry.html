@@ -20,7 +20,7 @@
 						$(this).find('button[type="submit"]').attr('disabled',true);
 					},
 					success: function() {
-						setAlertOnLoad('success','Contact updated')
+						setAlertOnLoad('warning','Contact updated')
 						location.reload();
 					},
 					error: function(data){

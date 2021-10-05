@@ -49,7 +49,7 @@
 					success: function() {
 						if (groupId != 0){
 							reloadGroupContainer(groupId);
-							alertWithFade('success', 'Contact added to group');
+							alertWithFade('warning', 'Contact added to group');
 							$('#addAddressBookEntryToGroup').modal('hide');
 						} else {
 							location.reload();

@@ -1,15 +1,16 @@
 package com.sjwi.catalog.model.mail;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import javax.activation.DataHandler;
+import javax.activation.DataSource;
 import javax.activation.FileDataSource;
 import javax.mail.BodyPart;
 import javax.mail.MessagingException;
 import javax.mail.Multipart;
 import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMultipart;
-import javax.activation.DataSource;
 
 public class EmailWithAttachment extends Email {
 	
@@ -47,6 +48,13 @@ public class EmailWithAttachment extends Email {
 	
 	public EmailWithAttachment setAttachments(Map<String, String> attachments) {
 		this.attachments = attachments;
+		return this;
+	}
+
+	public EmailWithAttachment setAttachment(Map.Entry<String, String> attachment) {
+		Map<String,String> map = new HashMap<>();
+		map.put(attachment.getKey(),attachment.getValue());
+		this.attachments = map;
 		return this;
 	}
 }

@@ -197,7 +197,7 @@
 					contentType: false,
 					dataType: 'JSON',
 					success: function(data) {
-						setAlertOnLoad('success','New song <b>' +$('#createSongForm').find('.title').val() + '</b> created.');
+						setAlertOnLoad('warning','New song <b>' +$('#createSongForm').find('.title').val() + '</b> created.');
 						location.href = contextpath + 'song/' + data.action; 
 					},
 					error: function(data){

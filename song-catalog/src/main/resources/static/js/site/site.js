@@ -24,7 +24,7 @@ $(document).ready(function(e){
 		isMobile = true;
 	}
 	if (alertOnLoad){
-		alertWithFade('success',window[alertOnLoad]);
+		alertWithFade('warning',window[alertOnLoad]);
 	}
 	$(document).on('keydown','textarea',function(e){
 		if(e.keyCode===9){var v=this.value,s=this.selectionStart,e=this.selectionEnd;this.value=v.substring(0, s)+'\t'+v.substring(e);this.selectionStart=this.selectionEnd=s+1;return false;}
@@ -95,7 +95,7 @@ function copyTextToClipboard(text, displayAlert = true){
         currentFocus.focus();
     }
 	if (displayAlert){
-		alertWithFade('success',text + ' copied to clipboard.');
+		alertWithFade('warning',text + ' copied to clipboard.');
 	}
 }
 Date.prototype.toDateInputValue = (function() {

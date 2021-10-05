@@ -1,5 +1,6 @@
 package com.sjwi.catalog.controller;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -24,6 +25,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -240,6 +242,46 @@ public class AddressBookController {
 			addressBookService.removeMemberFromGroup(entryId,groupId);
 		} catch (Exception e) {
 			controllerHelper.errorHandler(e);
+		}
+	}
+	@RequestMapping(value= {"/addressbook/emails.json"}, method = RequestMethod.GET)
+	@ResponseBody
+	public List<AddressBookEntry> emailsJson() {
+		try {
+			return addressBookService.getAddressBookEntriesWithPopulatedEmails();
+		} catch (Exception e) {
+			controllerHelper.errorHandler(e);
+			return new ArrayList<AddressBookEntry>();
+		}
+	}
+	@RequestMapping(value= {"/addressbook/group-emails.json"}, method = RequestMethod.GET)
+	@ResponseBody
+	public List<AddressBookGroup> groupEmailsJson() {
+		try {
+			return addressBookService.getAddressBookGroupsWithPopulatedEmails();
+		} catch (Exception e) {
+			controllerHelper.errorHandler(e);
+			return new ArrayList<AddressBookGroup>();
+		}
+	}
+	@RequestMapping(value= {"/addressbook/phones.json"}, method = RequestMethod.GET)
+	@ResponseBody
+	public List<AddressBookEntry> phonesJson() {
+		try {
+			return addressBookService.getAddressBookEntriesWithPopulatedPhoneNumbers();
+		} catch (Exception e) {
+			controllerHelper.errorHandler(e);
+			return new ArrayList<AddressBookEntry>();
+		}
+	}
+	@RequestMapping(value= {"/addressbook/group-phones.json"}, method = RequestMethod.GET)
+	@ResponseBody
+	public List<AddressBookGroup> groupPhonesJson() {
+		try {
+			return addressBookService.getAddressBookGroupsWithPopulatedPhoneNumbers();
+		} catch (Exception e) {
+			controllerHelper.errorHandler(e);
+			return new ArrayList<AddressBookGroup>();
 		}
 	}
 }

@@ -182,6 +182,11 @@
 			<artifactId>commons-validator</artifactId>
 			<version>1.4.0</version>
 	</dependency>
+	<dependency>
+		<groupId>com.twilio.sdk</groupId>
+		<artifactId>twilio</artifactId>
+		<version>7.55.2</version>
+	</dependency>
 	</dependencies>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -211,6 +216,9 @@
                     <SONG_JDBC_PLATFORM>org.hibernate.dialect.H2Dialect</SONG_JDBC_PLATFORM>
                     <SONG_JDBC_USERNAME>sa</SONG_JDBC_USERNAME>
                     <SONG_AUDIO_DIRECTORY>/Users/stephenwilliams/static/audio</SONG_AUDIO_DIRECTORY>
+										<SONG_TWILIO_ACCOUNT>dummy_val</SONG_TWILIO_ACCOUNT>,
+										<SONG_TWILIO_AUTH_CODE>dummy_val</SONG_TWILIO_AUTH_CODE>,
+										<SONG_TWILIO_PHONE_NUMBER>dummy_val</SONG_TWILIO_PHONE_NUMBER>,
                     <APPLICATION_PROPER_NAME>Song Catalog</APPLICATION_PROPER_NAME>
 				  </systemPropertyVariables>
 				</configuration>

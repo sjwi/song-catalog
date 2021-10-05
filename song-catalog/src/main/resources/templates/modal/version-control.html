@@ -27,7 +27,7 @@ function deleteVersion(id, name){
 		url: contextpath + 'song/delete/' + id, 
 		method: "POST",
 		success: function(data) {
-			alertWithFade('success','Successfull deleted ' + name);
+			alertWithFade('warning','Successfull deleted ' + name);
 		},
 		error: function(data){
 			alertWithFade('danger','Something went wrong! Unable to delete version')

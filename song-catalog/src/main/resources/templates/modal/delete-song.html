@@ -33,7 +33,7 @@ $(document).ready(function(){
 			data: $('#deleteSongForm').serialize(),
 			success: function() {
 				$('#songRow_' +$('#deleteSongModal').find('.song-id').val()).hide();
-				alertWithFade('success','<b>' + $('#deleteSongModal').find('.song-name').val() + '</b> has been deleted.');
+				alertWithFade('warning','<b>' + $('#deleteSongModal').find('.song-name').val() + '</b> has been deleted.');
 			},
 			error: function(data){
 				alertWithFade('danger','Something went wrong! Unable to remove song')

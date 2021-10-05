@@ -401,3 +401,13 @@ log: >
 
 getLogData: >
   SELECT * FROM Log ORDER BY ACTION_TIMESTAMP DESC LIMIT 1000
+
+getAddressBookEntriesWithPopulatedEmails: >
+  select * from AddressBook where Email is not null AND Trim(Email) <> ''
+
+getAddressBookEntriesWithPopulatedPhoneNumbers: >
+  select * from AddressBook where Phone is not null AND Trim(Phone) <> ''
+
+getAddressBookGroupsWithPopulatedPhoneNumbers: >
+  select * from AddressBookGroup abg JOIN AddressBookRelated abr on abg.ID = abr.GROUP_ID JOIN AddressBook ab on ab.ID = abr.ENTRY_ID where ab.PHONE is not null and ab.PHONE <> ''
+

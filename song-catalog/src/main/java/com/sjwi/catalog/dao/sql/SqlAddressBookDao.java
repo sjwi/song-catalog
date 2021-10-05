@@ -4,13 +4,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.stereotype.Repository;
-
 import com.sjwi.catalog.dao.AddressBookDao;
 import com.sjwi.catalog.model.addressbook.AddressBookEntry;
 import com.sjwi.catalog.model.addressbook.AddressBookGroup;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.stereotype.Repository;
 
 @Repository
 public class SqlAddressBookDao implements AddressBookDao {
@@ -209,5 +209,64 @@ public class SqlAddressBookDao implements AddressBookDao {
 		} else {
 			return rawInput;
 		}
+	}
+
+	@Override
+	public List<AddressBookEntry> getAddressBookEntriesWithPopulatedEmails() {
+		return jdbcTemplate.query(queryStore.get("getAddressBookEntriesWithPopulatedEmails"), r -> {
+			List<AddressBookEntry> entries = new ArrayList<>();
+			while (r.next())
+				entries.add(new AddressBookEntry(r.getInt("ID"),r.getString("FirstName") , r.getString("LastName"),r.getString("username"),r.getString("Email"),r.getString("Phone")));
+			return entries;
+		});
+	}
+
+	@Override
+	public List<AddressBookEntry> getAddressBookEntriesWithPopulatedPhoneNumbers() {
+		return jdbcTemplate.query(queryStore.get("getAddressBookEntriesWithPopulatedPhoneNumbers"), r -> {
+			List<AddressBookEntry> entries = new ArrayList<>();
+			while (r.next())
+				entries.add(new AddressBookEntry(r.getInt("ID"),r.getString("FirstName") , r.getString("LastName"),r.getString("username"),r.getString("Email"),r.getString("Phone")));
+			return entries;
+		});
+	}
+
+	@Override
+	public List<AddressBookGroup> getAddressBookGroupsWithPopulatedEmails() {
+		return getAddressBookGroups();
+	}
+
+	@Override
+	public List<AddressBookGroup> getAddressBookGroupsWithPopulatedPhoneNumbers() {
+		return jdbcTemplate.query(queryStore.get("getAddressBookGroupEntries"), r1 -> {
+			List<AddressBookGroup> groups = new ArrayList<AddressBookGroup>();
+			while (r1.next()) {
+				groups.add(getAddressBookGroupWithPhonesById(r1.getInt("ID")));
+			}
+			return groups;
+		});
+	}
+
+	private AddressBookGroup getAddressBookGroupWithPhonesById(int id) {
+		List<AddressBookEntry> groupEntries = new ArrayList<AddressBookEntry>();
+		List<Integer> entryIds = jdbcTemplate.query(queryStore.get("getEntryIdFromABRelated"), new Object[] {id}, r -> {
+			List<Integer> rids = new ArrayList<Integer>();
+			while (r.next()) {
+				rids.add(r.getInt("ENTRY_ID"));
+			}
+			return rids;
+		});
+		for (Integer entryId: entryIds) {
+			AddressBookEntry entry = getAddressBookEntryById(entryId);
+			if (entry.getEmail() != null && !entry.getEmail().trim().isEmpty())
+				groupEntries.add(entry);
+		}
+		return jdbcTemplate.query(queryStore.get("getAddressBookGroupById"), new Object[] {id}, r ->{
+			if (r.next()) {
+				return new AddressBookGroup(id,r.getString("NAME"),groupEntries);
+			} else {
+				return null;
+			}
+		});
 	}
 }
