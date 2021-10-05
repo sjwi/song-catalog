@@ -39,28 +39,15 @@ public class Text {
   }
 
   public void sendText(String number, String msg) throws IllegalArgumentException {
-    String formattedToNumber = stripPhoneNumber(number);
     Message
-      .creator(new PhoneNumber(formattedToNumber),new PhoneNumber(twilioPhoneNumber), msg)
+      .creator(new PhoneNumber(number),new PhoneNumber(twilioPhoneNumber), msg)
       .create();
   }
 
   public void sendText(String number, String msg, String mediaUrl) throws IllegalArgumentException {
-    String formattedToNumber = stripPhoneNumber(number);
     Message
-      .creator(new PhoneNumber(formattedToNumber),new PhoneNumber(twilioPhoneNumber), msg)
+      .creator(new PhoneNumber(number),new PhoneNumber(twilioPhoneNumber), msg)
       .setMediaUrl(Arrays.asList(URI.create(mediaUrl)))
       .create();
-  }
-
-  private String stripPhoneNumber(String number) {
-    String rawNumber = number.replaceAll("\\D", "");
-    if (rawNumber.length() == 10)
-      return "+1" + rawNumber;
-    else if (rawNumber.length() == 11 && rawNumber.substring(0,1).equals("1"))
-      return "+" + rawNumber;
-    else if (rawNumber.length() == 12 && rawNumber.substring(0,1).equals("+"))
-      return rawNumber;
-    throw new IllegalArgumentException(number + " is not a valid US phone number number");
   }
 }
