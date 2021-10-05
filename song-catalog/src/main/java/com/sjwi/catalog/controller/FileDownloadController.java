@@ -118,7 +118,7 @@ public class FileDownloadController {
 					new EmailWithAttachment()
 						.setAttachment(fileAttachment)
 						.setTo(e)
-						.setBody("The attached file was sent from worship.cfchurches.com. <br><br> You can download the file directly with this link: " + controllerHelper.buildHtmlLinkFromUrl(fileUrl, fileUrl))
+						.setBody("The attached file was sent from <a href=\"https://worship.cfchurches.com\">worship.cfchurches.com</a> <br><br>You can download the file directly with this link: " + controllerHelper.buildHtmlLinkFromUrl(fileUrl, fileUrl))
 						.setSubject("CF Song Catalog"))
 				.forEach(e -> {
 					try {
@@ -126,7 +126,7 @@ public class FileDownloadController {
 					} catch (Exception ex) {ex.printStackTrace();}
 				});
 			textTo.stream().forEach(t -> {
-				text.sendText(t, "File sent from worship.cfchurches.com. \n\n You can download the file directly with this link: " + fileUrl, URLDecoder.decode(fileUrl,StandardCharsets.UTF_8).replaceAll(" ",""));
+				text.sendText(t, "The attached file was sent from worship.cfchurches.com\n\nYou can download the file directly with this link: " + fileUrl, URLDecoder.decode(fileUrl,StandardCharsets.UTF_8).replaceAll(" ",""));
 				try {
 					TimeUnit.SECONDS.sleep(1);
 				} catch (InterruptedException e) { e.printStackTrace();}
