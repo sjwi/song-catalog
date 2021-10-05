@@ -20,10 +20,8 @@ import com.sjwi.catalog.file.FileGenerator;
 import com.sjwi.catalog.file.pdf.PdfFileGenerator;
 import com.sjwi.catalog.file.ppt.PptFileGenerator;
 import com.sjwi.catalog.log.CustomLogger;
-import com.sjwi.catalog.mail.Mailer;
 import com.sjwi.catalog.model.ResponseMessage;
 import com.sjwi.catalog.model.SetList;
-import com.sjwi.catalog.model.mail.Text;
 import com.sjwi.catalog.model.song.Song;
 import com.sjwi.catalog.service.FileDispatcherService;
 import com.sjwi.catalog.service.SetListService;
@@ -55,12 +53,6 @@ public class FileDownloadController {
 	
 	@Autowired
 	CustomLogger logger;
-
-	@Autowired
-	Mailer mailer;
-
-	@Autowired
-	Text text;
 
 	@Autowired
 	FileDispatcherService
@@ -104,11 +96,13 @@ public class FileDownloadController {
 				throw new Exception("Bad request");
 
 			Map.Entry<String,String> fileAttachment = fileDispatcherService.getFileAsPathFromRestAPI(fileUrl);
+			System.out.println("Calling Async");
 			fileDispatcherService.emailFileToRecipients(emailTo, fileAttachment, fileUrl);
 			fileDispatcherService.smsFileToRecipients(textTo, fileAttachment, fileUrl);
 			logger.logUserActionWithEmail(fileUrl+ " sent to:" + "\n" + 
 				"Emails: " + Arrays.toString(emailTo.toArray()) + "\n" +
 				"Numbers: " + Arrays.toString(textTo.toArray()));
+			System.out.println("Returning method");
 			return new ResponseEntity<ResponseMessage>(new ResponseMessage("success"), HttpStatus.OK);
 		} catch (IllegalArgumentException e){
 			controllerHelper.errorHandler(e);

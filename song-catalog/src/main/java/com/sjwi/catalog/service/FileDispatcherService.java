@@ -61,19 +61,6 @@ public class FileDispatcherService {
 	}
 
   @Async
-  public void smsFileToRecipients(List<String> textTo, Entry<String, String> fileAttachment, String fileUrl) throws InterruptedException, IllegalArgumentException, UnsupportedEncodingException {
-    for (int i = 0; i < textTo.size(); i++) {
-      String number = normalizePhoneNumber(textTo.get(i));
-      if (i != 0)
-        TimeUnit.SECONDS.sleep(1);
-      if (isFilePpt(fileAttachment.getValue()))
-        text.sendText(number, String.format(SMS_LINK_BODY,ServletConstants.SERVER_NAME, fileUrl));
-      else
-        text.sendText(number, String.format(SMS_ATTACHMENT_BODY, ServletConstants.SERVER_NAME, fileUrl), URLDecoder.decode(fileUrl, "UTF-8").replaceAll(" ",""));
-    }
-  }
-
-  @Async
   public void emailFileToRecipients(List<String> emailTo, Entry<String, String> fileAttachment, String fileUrl) {
     emailTo.stream()
       .map(e -> 
@@ -87,6 +74,20 @@ public class FileDispatcherService {
           mailer.sendMail(e);
         } catch (Exception ex) {ex.printStackTrace();}
       });
+    System.out.println("Async ended");
+  }
+
+  @Async
+  public void smsFileToRecipients(List<String> textTo, Entry<String, String> fileAttachment, String fileUrl) throws InterruptedException, IllegalArgumentException, UnsupportedEncodingException {
+    for (int i = 0; i < textTo.size(); i++) {
+      String number = normalizePhoneNumber(textTo.get(i));
+      if (i != 0)
+        TimeUnit.SECONDS.sleep(1);
+      if (isFilePpt(fileAttachment.getValue()))
+        text.sendText(number, String.format(SMS_LINK_BODY,ServletConstants.SERVER_NAME, fileUrl));
+      else
+        text.sendText(number, String.format(SMS_ATTACHMENT_BODY, ServletConstants.SERVER_NAME, fileUrl), URLDecoder.decode(fileUrl, "UTF-8").replaceAll(" ",""));
+    }
   }
 
   private boolean isFilePpt(String filename){
