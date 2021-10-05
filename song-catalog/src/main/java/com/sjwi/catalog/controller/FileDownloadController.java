@@ -132,7 +132,10 @@ public class FileDownloadController {
 			}
 			textTo.stream().forEach(t -> {
 				try {
-					text.sendText(t, "The attached file was sent from worship.cfchurches.com\n\nYou can download the file directly with this link: " + fileUrl, URLDecoder.decode(fileUrl, "UTF-8").replaceAll(" ",""));
+					if (fileAttachment.getValue().substring(fileAttachment.getValue().length() - 4).equalsIgnoreCase("pptx"))
+						text.sendText(t, "The linked file was sent from worship.cfchurches.com\n\n " + fileUrl);
+					else
+						text.sendText(t, "The attached file was sent from worship.cfchurches.com\n\nYou can download the file directly with this link: " + fileUrl, URLDecoder.decode(fileUrl, "UTF-8").replaceAll(" ",""));
 					TimeUnit.SECONDS.sleep(1);
 				} catch (Exception e) { e.printStackTrace();}
 			});
