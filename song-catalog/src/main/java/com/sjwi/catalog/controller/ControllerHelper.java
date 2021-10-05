@@ -101,6 +101,19 @@ public class ControllerHelper {
 		return setListName.replaceAll(" +", " ");
 	}
 
+	public void logPageRequest(String signature) {
+		HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
+		
+		String requestUrl = request.getServletPath().toString();
+		String parameters = request.getParameterMap().entrySet().stream()
+				.map(p -> "[" + p.getKey() + ": " + String.join(",", request.getParameterMap().get(p.getKey())) + "]").collect(Collectors.joining(";"));
+		String username = getSessionUsername();
+		String os =  getOs();
+
+		logger.info("'" + requestUrl + "' :: " + signature + "\n\t\t" + parameters + "\n\tcalled by " + username + " on a " + os + " device.\n\n");
+		userService.logUserAction(username, os, signature, requestUrl, parameters);
+	}
+
 	public String getOs() {
 		HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
 		String agent = request.getHeader("User-Agent");

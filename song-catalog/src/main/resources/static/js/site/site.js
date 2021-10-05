@@ -98,6 +98,15 @@ function copyTextToClipboard(text, displayAlert = true){
 		alertWithFade('warning',text + ' copied to clipboard.');
 	}
 }
+function logAction(action) {
+	$.ajax({
+		url: contextpath +  'log-user-action',
+		type: 'POST',
+		data: {
+			action: action
+		}
+	});	
+}
 Date.prototype.toDateInputValue = (function() {
     var local = new Date(this);
     local.setMinutes(this.getMinutes() - this.getTimezoneOffset());
