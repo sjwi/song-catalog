@@ -5,7 +5,6 @@ import static com.sjwi.catalog.model.KeySet.LYRICS_ONLY_KEY_CODE;
 import java.io.File;
 import java.io.IOException;
 import java.net.URLDecoder;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -126,8 +125,8 @@ public class FileDownloadController {
 					} catch (Exception ex) {ex.printStackTrace();}
 				});
 			textTo.stream().forEach(t -> {
-				text.sendText(t, "The attached file was sent from worship.cfchurches.com\n\nYou can download the file directly with this link: " + fileUrl, URLDecoder.decode(fileUrl,StandardCharsets.UTF_8).replaceAll(" ",""));
 				try {
+					text.sendText(t, "The attached file was sent from worship.cfchurches.com\n\nYou can download the file directly with this link: " + fileUrl, URLDecoder.decode(fileUrl, "UTF-8").replaceAll(" ",""));
 					TimeUnit.SECONDS.sleep(1);
 				} catch (InterruptedException e) { e.printStackTrace();}
 			});
@@ -151,7 +150,7 @@ public class FileDownloadController {
 		String localFileName = localFileDir + "/downloaded_content_" + System.currentTimeMillis() + headers.getContentDisposition().getFilename();
 		Path path = Paths.get(localFileName);
 		Files.write(path,response.getBody());
-		return new AbstractMap.SimpleEntry<String,String>(localFileName, URLDecoder.decode(fileName, StandardCharsets.UTF_8));
+		return new AbstractMap.SimpleEntry<String,String>(localFileName, URLDecoder.decode(fileName, "UTF-8"));
 	}
 
 	@RequestMapping(value = {"/exportDatabase/ppt/{fileName}"}, method = RequestMethod.GET)
