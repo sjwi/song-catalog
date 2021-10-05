@@ -126,7 +126,7 @@ public class FileDownloadController {
 					} catch (Exception ex) {ex.printStackTrace();}
 				});
 			textTo.stream().forEach(t -> {
-				text.sendText(t, "File sent from worship.cfchurches.com. \n\n You can download the file directly with this link: " + fileUrl, fileUrl);
+				text.sendText(t, "File sent from worship.cfchurches.com. \n\n You can download the file directly with this link: " + fileUrl, URLDecoder.decode(fileUrl,StandardCharsets.UTF_8).replaceAll(" ",""));
 				try {
 					TimeUnit.SECONDS.sleep(1);
 				} catch (InterruptedException e) { e.printStackTrace();}

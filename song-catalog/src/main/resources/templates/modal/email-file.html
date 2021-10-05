@@ -45,6 +45,8 @@
   }
   $('#emailFileModal').on('hide.bs.modal', function () {
     $('#downloadModal').modal('show');
+    $('#fileEmailTo').val(null).trigger('change');
+    $('#fileTextTo').val(null).trigger('change');
   });
   $(document).ready(function(){
     $('#emailFileForm').on('submit',function(e){
@@ -56,8 +58,6 @@
         data: $(this).serialize(),
         success: function() {
           $('#emailFileModal').modal('hide');
-          $('#fileEmailTo').val(null).trigger('change');
-          $('#fileTextTo').val(null).trigger('change');
         },
         error: function(data){
           if (data.status == "bad_recipient")
