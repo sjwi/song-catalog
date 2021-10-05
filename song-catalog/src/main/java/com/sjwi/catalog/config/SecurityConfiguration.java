@@ -56,6 +56,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         	.antMatchers("/password-reset").permitAll()
         	.antMatchers("/reset-password").permitAll()
         	.antMatchers("/file/send").permitAll()
+        	.antMatchers("/log-user-action").permitAll()
         	.antMatchers("/enroll").permitAll()
         	.antMatchers("/favicon.ico").permitAll()
         	.antMatchers(HttpMethod.GET, "/addressbook*").access("hasAuthority('USER')")
