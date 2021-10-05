@@ -23,6 +23,9 @@
                 "SONG_JDBC_PASSWORD": "sa",
                 "SONG_JDBC_USERNAME": "sa",
                 "SONG_JDBC_PLATFORM": "org.hibernate.dialect.H2Dialect",
+                "SONG_TWILIO_ACCOUNT": "dummy_val",
+                "SONG_TWILIO_AUTH_CODE": "dummy_val",
+                "SONG_TWILIO_PHONE_NUMBER": "dummy_val",
                 "APPLICATION_PROPER_NAME": "CF Song Catalog",
                 "SONG_AUDIO_DIRECTORY" : "/Users/stephenwilliams/static/audio"
             }
