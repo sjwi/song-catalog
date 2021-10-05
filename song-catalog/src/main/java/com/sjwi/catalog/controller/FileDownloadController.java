@@ -96,13 +96,11 @@ public class FileDownloadController {
 				throw new Exception("Bad request");
 
 			Map.Entry<String,String> fileAttachment = fileDispatcherService.getFileAsPathFromRestAPI(fileUrl);
-			System.out.println("Calling Async");
 			fileDispatcherService.emailFileToRecipients(emailTo, fileAttachment, fileUrl);
 			fileDispatcherService.smsFileToRecipients(textTo, fileAttachment, fileUrl);
 			logger.logUserActionWithEmail(fileUrl+ " sent to:" + "\n" + 
 				"Emails: " + Arrays.toString(emailTo.toArray()) + "\n" +
 				"Numbers: " + Arrays.toString(textTo.toArray()));
-			System.out.println("Returning method");
 			return new ResponseEntity<ResponseMessage>(new ResponseMessage("success"), HttpStatus.OK);
 		} catch (IllegalArgumentException e){
 			controllerHelper.errorHandler(e);

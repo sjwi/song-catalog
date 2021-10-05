@@ -74,7 +74,6 @@ public class FileDispatcherService {
           mailer.sendMail(e);
         } catch (Exception ex) {ex.printStackTrace();}
       });
-    System.out.println("Async ended");
   }
 
   @Async
