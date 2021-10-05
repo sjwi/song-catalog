@@ -31,7 +31,7 @@
 						$('#submitEditSongBtn').attr('disabled',true);
 					},
 					success: function() {
-						setAlertOnLoad('success',$('.stored-song-name').val() + ' updated.')
+						setAlertOnLoad('warning',$('.stored-song-name').val() + ' updated.')
 						location.reload()
 					},
 					error: function(data){

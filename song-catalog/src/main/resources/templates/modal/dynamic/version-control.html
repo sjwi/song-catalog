@@ -76,7 +76,7 @@ $(document).ready(function(){
 					processData: false,
 					contentType: false,
 					success: function() {
-						alertWithFade('success','New version created for <b>' + $('#createVersionForm').find('.song-name').val() + '</b>');
+						alertWithFade('warning','New version created for <b>' + $('#createVersionForm').find('.song-name').val() + '</b>');
 						refreshVersionControl($('#versionControlModal').find('.song-id').val());
 						versionChange = true;
 					},
@@ -137,7 +137,7 @@ $(document).ready(function(){
 			data: {songId:$(e.target).closest('.version-control-row').data('target')},
 			success: function(data) {
 				refreshVersionControl($('#versionControlModal').find('.song-id').val());
-				alertWithFade('success','Version deleted.');
+				alertWithFade('warning','Version deleted.');
 				versionChange = true;
 			},
 			error: function(data){
@@ -152,7 +152,7 @@ $(document).ready(function(){
 			data: {newId:$(e.target).closest('.version-control-row').data('target')},
 			success: function(data) {
 				refreshVersionControl($(e.target).closest('.version-control-row').data('target'));
-				alertWithFade('success','Master has been updated.');
+				alertWithFade('warning','Master has been updated.');
 				versionChange = true;
 			},
 			error: function(data){
@@ -187,7 +187,7 @@ $(document).ready(function(){
 					$('.edit-version-btn').attr('disabled',true);
 				},
 				success: function() {
-					alertWithFade('success','Song updated')
+					alertWithFade('warning','Song updated')
 					refreshVersionControl($('#versionControlModal').find('.song-id').val());
 					versionChange = true;
 				},

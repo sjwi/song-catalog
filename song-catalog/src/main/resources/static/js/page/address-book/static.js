@@ -65,7 +65,7 @@ function removeEntryFromGroup(entryId, groupId){
 		data: {entryId:entryId,groupId:groupId},
 		success: function() {
 			reloadGroupContainer(groupId);
-			alertWithFade('success','Member removed from group. <a href="javascript:void(0)" onclick="addAbEntryToGroup(' + entryId + ',' + groupId + ')"> undo </a>');
+			alertWithFade('warning','Member removed from group. <a href="javascript:void(0)" onclick="addAbEntryToGroup(' + entryId + ',' + groupId + ')"> undo </a>');
 		},
 		error: function(data){
 			alertWithFade('danger','Unable to remove member');

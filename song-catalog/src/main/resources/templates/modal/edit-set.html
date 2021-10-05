@@ -42,7 +42,7 @@
 					},
 					success: function() {
 						$('#setListContainer_' + $('#editSetListModal').find('.set-list-id').val()).find('.set-list-title > span').html($('#editSetListModal').find('.set-list-name').val());
-						alertWithFade('success','Set list title updated')
+						alertWithFade('warning','Set list title updated')
 						$('#editSetListModal').modal('hide');
 					},
 					error: function(data){

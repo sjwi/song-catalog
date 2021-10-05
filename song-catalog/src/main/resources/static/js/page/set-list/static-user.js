@@ -92,7 +92,7 @@ function deleteSongFromSet(songId, setSongId, setId, key, songName, sort){
 		},
 		success: function(data) {
 			$('#appendSetList_' + setId).html(data);
-			alertWithFade('success',songName + ' removed from set. <a href="#" data-dismiss="alert" onclick="quickAddSongToSet(' + songId +','+ setId+ ',\'' + key + '\',' + sort + ')"> Undo</a>');
+			alertWithFade('warning',songName + ' removed from set. <a href="#" data-dismiss="alert" onclick="quickAddSongToSet(' + songId +','+ setId+ ',\'' + key + '\',' + sort + ')"> Undo</a>');
 			initializeSortableSetListTable('#appendSetList_' + setId + ' .set-table');
 			reloadSetSongContainerIfPresent(setId);
 		},

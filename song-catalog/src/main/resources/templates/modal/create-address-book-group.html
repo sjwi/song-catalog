@@ -43,7 +43,7 @@
 						$(this).find('input[type="submit"]').attr('disabled',true);
 					},
 					success: function() {
-						setAlertOnLoad('success','Group created')
+						setAlertOnLoad('warning','Group created')
 						location.reload()
 					},
 					error: function(data){

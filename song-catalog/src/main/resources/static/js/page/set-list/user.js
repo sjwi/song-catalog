@@ -54,7 +54,7 @@ $(document).ready(function(){
 			url: contextpath + 'setlist/pin-latest/' + setId,
 			method: "POST",
 			success: function(data, textStatus, jqXHR) {
-				alertWithFade('success','Updated permalinks to redirect to ' + setName)
+				alertWithFade('warning','Updated permalinks to redirect to ' + setName)
 			}
 		});
 	});

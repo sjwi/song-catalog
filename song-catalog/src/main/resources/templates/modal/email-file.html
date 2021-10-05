@@ -58,6 +58,7 @@
         data: $(this).serialize(),
         success: function() {
           $('#emailFileModal').modal('hide');
+          alertWithFade('success','File successfully sent')
         },
         error: function(data){
           if (data.status == "bad_recipient")
