@@ -67,6 +67,7 @@
 				});
 			}
 			let isInStandaloneMode;
+			let standAloneStorageLoggedKey = 'standAloneLogged';
 
 			$(document).ready(function(){
 				// install prompt
@@ -76,6 +77,10 @@
 				}
 				isInStandaloneMode = () => ('standalone' in window.navigator) && (window.navigator.standalone);
 
+				if (isInStandaloneMode() && !window.localStorage.hasOwnProperty(standAloneStorageLoggedKey)) {
+					logAction("Standalone mode used")
+					window.localStorage.setItem(standAloneStorageLoggedKey,"true");
+				}
 				const userDismissedInstall = window.localStorage.hasOwnProperty('dismissInstall');
 				//window.localStorage.removeItem('dismissInstall');
 
