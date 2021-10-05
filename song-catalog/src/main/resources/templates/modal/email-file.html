@@ -38,6 +38,7 @@
 </div>
 <script>
   function emailFile(event){
+    logAction("Send file modal opened");
     var file = $('#copyDownloadLinkBtn').data('basecontext') + generateDownloadLinkWithFormParams();
     $('#fileUrl').val(file);
     $('#downloadModal').modal('hide');

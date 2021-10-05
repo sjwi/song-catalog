@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 import com.sjwi.catalog.aspect.IgnoreAspect;
 import com.sjwi.catalog.aspect.LandingPageAspect;
 import com.sjwi.catalog.aspect.ServletInitializerAspect;
+import com.sjwi.catalog.log.CustomLogger;
 import com.sjwi.catalog.model.Log;
 import com.sjwi.catalog.model.ResponseMessage;
 import com.sjwi.catalog.model.user.CfUser;
@@ -26,6 +27,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.servlet.ModelAndView;
@@ -39,6 +41,9 @@ public class ReportController {
 
 	@Autowired
 	ControllerHelper controllerHelper;
+
+	@Autowired
+	CustomLogger logger;
 
 	@RequestMapping(value = {"logs"}, method = RequestMethod.GET)
 	@LandingPageAspect
@@ -94,6 +99,13 @@ public class ReportController {
 		public LogData(List<Log> logs){
 			data = logs;
 		}
+	}
+
+	@RequestMapping(value = {"/log-user-action"}, method = RequestMethod.POST)
+	@ResponseStatus(HttpStatus.OK)
+	public void logPageAction(@RequestParam String action) {
+		logger.logUserActionWithEmail(action);
+		controllerHelper.logPageRequest("ReportController.logPageAction()");
 	}
 
 	@RequestMapping(value = {"/user-report"}, method = RequestMethod.GET)
