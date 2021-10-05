@@ -349,7 +349,7 @@ searchAddressBookEntries: >
   select * from AddressBook where LOWER(FirstName) like ? or LOWER(LastName) like ? or LOWER(Email) like ? or LOWER(username) like ? or Phone like ? 
 
 getAddressBookEntries: >
-  select * from AddressBook order by LastName
+  select * from AddressBook order by FirstName
 
 getAddressBookEntryById: >
   select * from AddressBook where ID = ?
@@ -403,11 +403,10 @@ getLogData: >
   SELECT * FROM Log ORDER BY ACTION_TIMESTAMP DESC LIMIT 1000
 
 getAddressBookEntriesWithPopulatedEmails: >
-  select * from AddressBook where Email is not null AND Trim(Email) <> ''
+  select * from AddressBook where Email is not null AND Trim(Email) <> '' order by FirstName
 
 getAddressBookEntriesWithPopulatedPhoneNumbers: >
-  select * from AddressBook where Phone is not null AND Trim(Phone) <> ''
+  select * from AddressBook where Phone is not null AND Trim(Phone) <> '' order by FirstName
 
 getAddressBookGroupsWithPopulatedPhoneNumbers: >
-  select * from AddressBookGroup abg JOIN AddressBookRelated abr on abg.ID = abr.GROUP_ID JOIN AddressBook ab on ab.ID = abr.ENTRY_ID where ab.PHONE is not null and ab.PHONE <> ''
-
+  select * from AddressBookGroup abg JOIN AddressBookRelated abr on abg.ID = abr.GROUP_ID JOIN AddressBook ab on ab.ID = abr.ENTRY_ID where ab.PHONE is not null and ab.PHONE <> '' order by FirstName
