@@ -125,6 +125,11 @@ public class FileDownloadController {
 						mailer.sendMail(e);
 					} catch (Exception ex) {ex.printStackTrace();}
 				});
+			for (int i = 0; i < textTo.size(); i++) {
+				if (i != 0)
+					TimeUnit.SECONDS.sleep(1);
+				text.sendText(textTo.get(i), "The attached file was sent from worship.cfchurches.com\n\nYou can download the file directly with this link: " + fileUrl, URLDecoder.decode(fileUrl, "UTF-8").replaceAll(" ",""));
+			}
 			textTo.stream().forEach(t -> {
 				try {
 					text.sendText(t, "The attached file was sent from worship.cfchurches.com\n\nYou can download the file directly with this link: " + fileUrl, URLDecoder.decode(fileUrl, "UTF-8").replaceAll(" ",""));
