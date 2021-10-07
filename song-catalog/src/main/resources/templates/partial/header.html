@@ -46,6 +46,10 @@
 			$(document).on('hide.bs.modal','.modal', function () {
 				$('.back-btn').addClass('showme');
 			});
+			$(document).on('tapclick', '.btn,.song-row,.set-list-container', function() {
+				$(this).blur(); 
+				$(this).trigger('mouseup'); 
+			});
 			$(document).on('click','#nightModeToggle',function(){
 				if ($('.toggle-btn > input').is(':checked')){
 					toggleNightMode(true);
