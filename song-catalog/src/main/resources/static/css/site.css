@@ -55,6 +55,22 @@ hr {
 	font-size: 1rem !important;
 	color: #fff !important;
 }
+.btn.back {
+  border-radius: 50%;
+  width:45px;
+  height:45px;
+  box-shadow: 0 .5rem 1rem rgba(0,0,0,.35)!important;
+}
+.back-btn {
+  transition-duration: .5s;
+  position:fixed;
+  bottom:-75px;
+  left:15px;
+  z-index:2147483646;
+}
+.back-btn.showme {
+  bottom:25px;
+}
 .navbar-default, .navbar-collapse {
 	white-space:nowrap !important;
 }

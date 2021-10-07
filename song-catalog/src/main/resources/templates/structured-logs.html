@@ -28,6 +28,7 @@
 						<th class="pl-1">User</th>
 						<th class="pl-1 additional-logging">Level</th>
 						<th class="pl-1 additional-logging">Device</th>
+						<th class="pl-1 additional-logging">IP</th>
 						<th class="pl-1 additional-logging">Method</th>
 						<th class="pl-1">URL</th>
 					</tr>
@@ -56,6 +57,7 @@
 		obj += '<tr><td style="width:30%; min-width:50px">Timestamp</td><td>' + d.date + 'T' + d.time + '</td></tr>';
 		obj += '<tr><td style="width:30%; min-width:50px">Level</td><td>' + d.level + '</td></tr>';
 		obj += '<tr><td style="width:30%; min-width:50px">Device</td><td>' + d.device + '</td></tr>';
+		obj += '<tr><td style="width:30%; min-width:50px">IP Address</td><td>' + d.ip + '</td></tr>';
 		obj += '<tr><td style="width:30%; min-width:50px">Method</td><td>' + d.method + '</td></tr>';
 		obj += '</table>';
 		return obj
@@ -69,6 +71,7 @@
 			{ "data": "username" },
 			{ "data": "level" },
 			{ "data": "device" },
+			{ "data": "ip" },
 			{ "data": "method" },
 			{
 				"data": "requestUrl",
@@ -81,7 +84,7 @@
 		],
 		columnDefs: [
 			{ defaultContent: "-", "targets": "_all" },
-			{ className: "additional-logging primary", "targets": [2, 3, 4] },
+			{ className: "additional-logging primary", "targets": [2, 3, 4, 5] },
 			{ className: "primary", "targets": [0,1] }
 		],
 		iDisplayLength: 100,

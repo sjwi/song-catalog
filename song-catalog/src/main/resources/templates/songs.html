@@ -33,6 +33,7 @@
 				</th:block>
 			</div>
 		</div>
+		<th:block th:replace="partial/back-btn"></th:block>
 	</body>
 	<script th:inline="javascript" th:src="@{/js/page/song/page.js}"></script>
 	<script th:inline="javascript" th:src="@{/js/page/set-list/static.js}"></script>
@@ -59,25 +60,27 @@
 		}
 
 		$(document).ready(function(){
-			$.ajax({
-				url: contextpath + 'search/song',
-				method: "GET",
-				data: {
-					searchValue:'',
-					view: '',
-					searchType: 'songSearch2'
-				},
-				success: function(data) {
-					$('#songTableContainer').html(data);
-					var focusedRow = document.getElementById("songRow_" + focusedSong);
-					var topPos = focusedRow.offsetTop;
-					$('.song-column')[0].scrollTo(0,topPos);
-					selectFocusedSong(focusedSong);
-				},
-				error: function(data) {
-					alertWithFade('danger','Unable to populate song list at this time.')
-				}
-			})
+			if ($('.hide-song-catalog').is(':visible')){
+				$.ajax({
+					url: contextpath + 'search/song',
+					method: "GET",
+					data: {
+						searchValue:'',
+						view: '',
+						searchType: 'songSearch2'
+					},
+					success: function(data) {
+						$('#songTableContainer').html(data);
+						var focusedRow = document.getElementById("songRow_" + focusedSong);
+						var topPos = focusedRow.offsetTop;
+						$('.song-column')[0].scrollTo(0,topPos);
+						selectFocusedSong(focusedSong);
+					},
+					error: function(data) {
+						alertWithFade('danger','Unable to populate song list at this time.')
+					}
+				})
+			}
 
 			$(document).on('click','.song-row',function(e){
 				if (!$(e.target).is(ignoreSongClickedSelector)){

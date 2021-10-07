@@ -105,13 +105,14 @@ public class ControllerHelper {
 		HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
 		
 		String requestUrl = request.getServletPath().toString();
+		String ipAddress = request.getRemoteAddr();
 		String parameters = request.getParameterMap().entrySet().stream()
 				.map(p -> "[" + p.getKey() + ": " + String.join(",", request.getParameterMap().get(p.getKey())) + "]").collect(Collectors.joining(";"));
 		String username = getSessionUsername();
 		String os =  getOs();
 
-		logger.info("'" + requestUrl + "' :: " + signature + "\n\t\t" + parameters + "\n\tcalled by " + username + " on a " + os + " device.\n\n");
-		userService.logUserAction(username, os, signature, requestUrl, parameters);
+		logger.info("'" + requestUrl + "' :: " + signature + "\n\t\t" + parameters + "\n\tcalled by " + username + " on a " + os + " device (" + ipAddress + ").\n\n");
+		userService.logUserAction(username, os, ipAddress, signature, requestUrl, parameters);
 	}
 
 	public String getOs() {

@@ -34,7 +34,11 @@ public interface UserDao {
 
 	public void disableUser(String userName);
 
-  public void log(String username, String os, String signature, String requestUrl, String parameters);
+  public void log(String username, String os, String signature, String requestUrl, String parameters, String parameters2);
 
 	public List<Log> getLogData();
+
+  public void storeAccountRequest(String email);
+
+  public List<String> getAccountRequestDetails(String email);
 }

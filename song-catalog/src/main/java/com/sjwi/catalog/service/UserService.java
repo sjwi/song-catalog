@@ -98,12 +98,20 @@ public class UserService implements UserDetailsService {
 		return userDao.isUsernameTaken(username);
 	}
 
-	public void logUserAction(String username, String os, String signature, String requestUrl, String parameters) {
-		userDao.log(username, os, signature, requestUrl, parameters);
+	public void logUserAction(String username, String os, String ipAddress, String signature, String requestUrl, String parameters) {
+		userDao.log(username, os, ipAddress, signature, requestUrl, parameters);
   }
 
   public List<Log> getLogData() {
 		return userDao.getLogData();
+  }
+
+  public boolean userHasRequestedAccount(String email) {
+		return userDao.getAccountRequestDetails(email).size() != 0;
+  }
+
+  public void storeAccountRequest(String email) {
+		userDao.storeAccountRequest(email);
   }
 }
 	

@@ -2,6 +2,7 @@ package com.sjwi.catalog.controller.uac;
 
 import java.security.Principal;
 
+import javax.management.BadAttributeValueExpException;
 import javax.security.auth.login.LoginException;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
@@ -119,6 +120,30 @@ public class AccountManagementController {
 		} catch (MailException | InvalidOperationException e) {
 			controllerHelper.errorHandler(e);
 			return new ResponseMessage("bad_email");
+		} catch (Exception e) {
+			controllerHelper.errorHandler(e);
+			return new ResponseMessage("error");
+		}
+	}
+
+	@RequestMapping(value = "/request-account", method= RequestMethod.POST)
+	@ResponseBody
+	public ResponseMessage requestAccount(@RequestParam (name = "email",required=true) String email,HttpServletRequest request) {
+		try {
+			email = email.toLowerCase();
+			if (userService.userHasRequestedAccount(email))
+				throw new InvalidOperationException("User " + email + " has already request an email.");
+			if ((CfUser) userService.loadUserByUsername(email) != null)
+				throw new BadAttributeValueExpException("No username associated with this email");
+			userService.storeAccountRequest(email);
+			logger.logMessageWithEmail("Account requested for " + email);
+			return new ResponseMessage("success");
+		} catch (InvalidOperationException e) {
+			controllerHelper.errorHandler(e);
+			return new ResponseMessage("already_requested");
+		} catch (BadAttributeValueExpException e) {
+			controllerHelper.errorHandler(e);
+			return new ResponseMessage("account_exists");
 		} catch (Exception e) {
 			controllerHelper.errorHandler(e);
 			return new ResponseMessage("error");
