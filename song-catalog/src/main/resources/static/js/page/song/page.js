@@ -7,7 +7,9 @@ $(document).ready(function(){
 					$('#overlay').removeClass("overlay");
 					$(this).removeClass('focused-page');
 					unlockScroll();
+					$('.back-btn').addClass('showme');
 				} else {
+					$('.back-btn').removeClass('showme');
 					$('#overlay').addClass("overlay");
 					$(this).addClass('focused-page');
 					$('.confirm-keychange').hide();
