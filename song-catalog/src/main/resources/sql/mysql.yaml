@@ -397,7 +397,7 @@ getServiceById: >
   Select * from Services where ID = ?
 
 log: >
-  INSERT INTO Log (USERNAME,DEVICE,METHOD,REQ_URL,PARAMS) values (?,?,?,?,?)
+  INSERT INTO Log (USERNAME,DEVICE,IP,METHOD,REQ_URL,PARAMS) values (?,?,?,?,?,?)
 
 getLogData: >
   SELECT * FROM Log ORDER BY ACTION_TIMESTAMP DESC LIMIT 1000
@@ -410,3 +410,9 @@ getAddressBookEntriesWithPopulatedPhoneNumbers: >
 
 getAddressBookGroupsWithPopulatedPhoneNumbers: >
   select * from AddressBookGroup abg JOIN AddressBookRelated abr on abg.ID = abr.GROUP_ID JOIN AddressBook ab on ab.ID = abr.ENTRY_ID where ab.PHONE is not null and ab.PHONE <> '' order by FirstName
+
+storeAccountRequest: >
+  INSERT INTO AccountRequest (email) values ?
+
+getAccountRequestDetails: >
+  SELECT * FROM AccountRequest where email = ?

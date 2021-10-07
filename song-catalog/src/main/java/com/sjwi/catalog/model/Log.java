@@ -15,10 +15,12 @@ public class Log {
   private String level;
   private String username;
   private String device;
+  private String ip;
   private String method;
   private String requestUrl;
   private List<String> params;
-  public Log(int id, Date timestamp, String level, String username, String device, String method, String requestUrl,
+
+  public Log(int id, Date timestamp, String level, String username, String device, String ip, String method, String requestUrl,
       String[] params) {
     this.id = id;
     this.date = timestamp;
@@ -26,9 +28,13 @@ public class Log {
     this.level = level;
     this.username = username;
     this.device = device;
+    this.ip = ip;
     this.method = method;
     this.requestUrl = requestUrl;
     this.params = Arrays.asList(params);
+  }
+  public String getIp() {
+    return ip;
   }
   public int getId() {
     return id;

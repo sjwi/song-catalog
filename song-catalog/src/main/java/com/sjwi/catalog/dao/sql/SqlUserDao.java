@@ -170,8 +170,8 @@ public class SqlUserDao implements UserDao {
 	}
 	@Override
 	@Async
-  public void log(String username, String os, String signature, String requestUrl, String parameters) {
-    jdbcTemplate.update(queryStore.get("log"), new Object[]{username,os,signature,requestUrl,parameters});
+  public void log(String username, String os, String ipAddress, String signature, String requestUrl, String parameters) {
+    jdbcTemplate.update(queryStore.get("log"), new Object[]{username,os,ipAddress,signature,requestUrl,parameters});
   }
 
 	@Override
@@ -184,10 +184,26 @@ public class SqlUserDao implements UserDao {
 					r.getString("LEVEL"),
 					r.getString("USERNAME"),
 					r.getString("DEVICE"),
+					r.getString("IP"),
 					r.getString("METHOD"),
 					r.getString("REQ_URL"),
 					r.getString("PARAMS").split(";")));
 			return logs;
+		});
+	}
+
+	@Override
+	public void storeAccountRequest(String email) {
+		jdbcTemplate.update(queryStore.get("storeAccountRequest"), new Object[]{email});
+	}
+
+	@Override
+	public List<String> getAccountRequestDetails(String email) {
+		return jdbcTemplate.query(queryStore.get("getAccountRequestDetails"), new Object[]{email}, r -> {
+			List<String> accounts = new ArrayList<>();
+			while (r.next())
+				accounts.add(r.getString("EMAIL"));
+			return accounts;
 		});
 	}
 }
