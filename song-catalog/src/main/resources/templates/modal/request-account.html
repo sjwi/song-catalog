@@ -1,0 +1,65 @@
+<div class="modal fade" id="requestAccountModal">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class = "modal-header">
+				<h5 class="modal-title">Request Account</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+				  <span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<form method="POST" th:action="@{/request-account}" id="requestAccountForm">
+				<div class="modal-body">
+					<h6 class="mb-4">Enter your email address to request an account</h6>
+					<div class="form-group row">
+						<div class="col mx-auto col-md-6">
+							<input placeholder="Email address" title="Enter your email address to request an account" class="form-control autofocus email-address required" type="text" name="email"/>
+						</div>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button id="requestAccountBtn" type="submit" class="btn btn-lg w-100 btn-info">Request Account</button>
+				</div>
+			</form>	
+		</div>
+	</div>
+</div>
+
+<script th:inline="javascript">
+$(document).ready(function(){
+	$('#requestAccountForm').on('submit',function(e){
+		e.preventDefault();
+		if (isFormFilled($(this))){
+			$.ajax({
+				url: contextpath + 'request-account',
+				method: "POST",
+				dataType: 'JSON',
+				data: $('#requestAccountForm').serialize(),
+				beforeSend: function(){
+					$('#requestAccountBtn').attr('disabled',true);
+				},
+				success: function(data) {
+					if (data.status == "already_requested") {
+						alertWithFade('danger','An account has already been request with this email.');
+					} else if (data.status == "account_exists") {
+						alertWithFade('danger','An account associated with this email already exists.');
+					} else {
+						alertWithFade('success','An account has been request for ' + $('#requestAccountForm input').val());
+						$('#requestAccountModal').modal('hide');
+					}
+				},
+				error: function(data){
+					alertWithFade('danger','Unable to request an account at this time.')
+				},
+				complete: function(){
+					$('#requestAccountBtn').attr('disabled',false);
+				}
+			});	
+		}
+	});
+});
+function requestAccount(){
+	$('#loginModal').modal('hide');
+	$('#requestAccountModal input').val('');
+	$('#requestAccountModal').modal('show');
+}
+</script>
