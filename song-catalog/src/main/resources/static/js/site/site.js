@@ -14,8 +14,10 @@ $(document).on('mousedown', function(){
 $(document).on('click touch',function(e){
 	if ($(e.target).is('.open-nav,.open-nav>span,.nav-item .nav-link:not(.export),#sideNav')){
 		$('#sideNav').addClass('slide-in');
+		$('.scroll-lock').css('pointer-events','none');
 	} else {
 		$('#sideNav').removeClass('slide-in');
+		$('.scroll-lock').css('pointer-events','auto');
 	}
 })
 $(document).ready(function(e){
