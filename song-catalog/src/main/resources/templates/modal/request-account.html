@@ -41,7 +41,7 @@ $(document).ready(function(){
 					if (data.status == "already_requested") {
 						alertWithFade('danger','An account has already been request with this email.');
 					} else if (data.status == "account_exists") {
-						alertWithFade('danger','An account associated with this email already exists.');
+						alertWithFade('danger','An account associated with this email already exists. If you forgot your password, select the "Forgot password" link on the login page.');
 					} else {
 						alertWithFade('success','An account has been request for ' + $('#requestAccountForm input').val());
 						$('#requestAccountModal').modal('hide');
