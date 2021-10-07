@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
-import java.util.Enumeration;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -108,11 +107,6 @@ public class ControllerHelper {
 		String requestUrl = request.getServletPath().toString();
 		String ipAddress = request.getHeader("X-FORWARDED-FOR") == null || request.getHeader("X-FORWARDED-FOR").trim().isEmpty()?
 			request.getRemoteAddr() : request.getHeader("X-FORWARDED-FOR");
-		Enumeration headerNames = request.getHeaderNames();
-		while (headerNames.hasMoreElements()) {
-				String key = (String) headerNames.nextElement();
-				System.out.println(key + ": " + request.getHeader(key));
-		}
 		String parameters = request.getParameterMap().entrySet().stream()
 				.map(p -> "[" + p.getKey() + ": " + String.join(",", request.getParameterMap().get(p.getKey())) + "]").collect(Collectors.joining(";"));
 		String username = getSessionUsername();
