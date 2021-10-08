@@ -9,7 +9,7 @@ import java.util.Map;
 import java.util.TimeZone;
 
 import com.sjwi.catalog.dao.UserDao;
-import com.sjwi.catalog.model.Log;
+import com.sjwi.catalog.model.LogEntry;
 import com.sjwi.catalog.model.user.CfUser;
 import com.sjwi.catalog.service.AddressBookService;
 
@@ -170,16 +170,16 @@ public class SqlUserDao implements UserDao {
 	}
 	@Override
 	@Async
-  public void log(String username, String os, String ipAddress, String signature, String requestUrl, String parameters) {
-    jdbcTemplate.update(queryStore.get("log"), new Object[]{username,os,ipAddress,signature,requestUrl,parameters});
+  public void log(String username, String os, String ipAddress, String signature, String requestUrl, boolean standAlone, String protocol, String parameters) {
+    jdbcTemplate.update(queryStore.get("log"), new Object[]{username,os,ipAddress,signature,requestUrl,standAlone,protocol,parameters});
   }
 
 	@Override
-	public List<Log> getLogData() {
+	public List<LogEntry> getLogData() {
 		return jdbcTemplate.query(queryStore.get("getLogData"), r -> {
-			List<Log> logs = new ArrayList<>();
+			List<LogEntry> logs = new ArrayList<>();
 			while (r.next())
-				logs.add(new Log(r.getInt("ID"),
+				logs.add(new LogEntry(r.getInt("ID"),
 					r.getTimestamp("ACTION_TIMESTAMP", tzCal),
 					r.getString("LEVEL"),
 					r.getString("USERNAME"),
@@ -187,6 +187,8 @@ public class SqlUserDao implements UserDao {
 					r.getString("IP"),
 					r.getString("METHOD"),
 					r.getString("REQ_URL"),
+					r.getBoolean("STAND_ALONE_MODE"),
+					r.getString("PROTOCOL"),
 					r.getString("PARAMS").split(";")));
 			return logs;
 		});

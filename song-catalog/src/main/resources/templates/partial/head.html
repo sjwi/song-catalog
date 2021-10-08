@@ -54,30 +54,30 @@
 			var loggedInUser = /*[[${#authentication?.getPrincipal()}]]*/;
 			var alertOnLoad = /*[[${ALERT_ON_LOAD}]]*/ false;
 
+			const standAloneCookieKey = "STAND_ALONE";
 
+			//service worker registration
+			if ('serviceWorker' in navigator) {
+				window.addEventListener('DOMContentLoaded', function() {
+					navigator.serviceWorker.register(contextpath + 'service-worker.js').then(function(registration) {
+						// Registration was successful
+						console.log('ServiceWorker registration successful with scope: ', registration.scope);
+					}, function(err) {
+						// registration failed :(
+						console.log('ServiceWorker registration failed: ', err);
+					});
+				});
+			}
+			let isInStandaloneMode;
 			let standAloneStorageLoggedKey = 'standAloneLogged';
 
-
 			$(document).ready(function(){
-				let isInStandaloneMode = () => ('standalone' in window.navigator) && (window.navigator.standalone);
-
-				//service worker registration
-				if ('serviceWorker' in navigator) {
-					window.addEventListener('DOMContentLoaded', function() {
-						navigator.serviceWorker.register(contextpath + 'service-worker.js' + '?standAloneMode=' + encodeURIComponent(isInStandaloneMode())).then(function(registration) {
-							// Registration was successful
-							console.log('ServiceWorker registration successful with scope: ', registration.scope);
-						}, function(err) {
-							// registration failed :(
-							console.log('ServiceWorker registration failed: ', err);
-						});
-					});
-				}
 				// install prompt
 				const isIos = () => {
 					const userAgent = window.navigator.userAgent.toLowerCase();
 					return /iphone|ipad|ipod/.test( userAgent );
 				}
+				isInStandaloneMode = () => ('standalone' in window.navigator) && (window.navigator.standalone);
 
 				if (isInStandaloneMode() && !window.localStorage.hasOwnProperty(standAloneStorageLoggedKey)) {
 					logAction("Standalone mode used")
@@ -92,8 +92,8 @@
 					$('#installPrompt').removeClass('showme');
 					window.localStorage.setItem('dismissInstall',true);
 				})
-				if (isInStandaloneMode())
-					$('.back-btn').addClass('showme');
+				if (!checkCookie(standAloneCookieKey))
+					setCookie(standAloneCookieKey, isInStandaloneMode(), 10000);
 			})
 		</script>
 

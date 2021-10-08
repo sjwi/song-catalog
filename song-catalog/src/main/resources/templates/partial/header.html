@@ -38,6 +38,8 @@
 	
 	<script th:inline="javascript">
 		$(document).ready(function(){
+			if (isInStandaloneMode())
+				$('.back-btn').addClass('showme');
 			$(document).on('show.bs.modal','.modal', function () {
 				$('.back-btn').removeClass('showme');
 			});

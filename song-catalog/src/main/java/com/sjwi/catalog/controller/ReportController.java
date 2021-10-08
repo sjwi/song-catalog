@@ -15,7 +15,7 @@ import com.sjwi.catalog.aspect.IgnoreAspect;
 import com.sjwi.catalog.aspect.LandingPageAspect;
 import com.sjwi.catalog.aspect.ServletInitializerAspect;
 import com.sjwi.catalog.log.CustomLogger;
-import com.sjwi.catalog.model.Log;
+import com.sjwi.catalog.model.LogEntry;
 import com.sjwi.catalog.model.ResponseMessage;
 import com.sjwi.catalog.model.user.CfUser;
 import com.sjwi.catalog.service.UserService;
@@ -90,13 +90,13 @@ public class ReportController {
 	@LandingPageAspect
 	@ResponseBody
 	public LogData structuredLogData(HttpServletResponse response, HttpServletRequest request, Authentication auth){
-		List<Log> data = userService.getLogData();
+		List<LogEntry> data = userService.getLogData();
 		return new LogData(data);
 	}
 
 	public class LogData {
-		public List<Log> data;
-		public LogData(List<Log> logs){
+		public List<LogEntry> data;
+		public LogData(List<LogEntry> logs){
 			data = logs;
 		}
 	}

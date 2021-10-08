@@ -45,6 +45,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.util.WebUtils;
 
 import eu.bitwalker.useragentutils.UserAgent;
 
@@ -111,9 +112,12 @@ public class ControllerHelper {
 				.map(p -> "[" + p.getKey() + ": " + String.join(",", request.getParameterMap().get(p.getKey())) + "]").collect(Collectors.joining(";"));
 		String username = getSessionUsername();
 		String os =  getOs();
+		Cookie standAloneModeCookie =  WebUtils.getCookie(request, "STAND_ALONE");
+		boolean standAloneMode = standAloneModeCookie != null && Boolean.valueOf(standAloneModeCookie.getValue());
+		String protocol = request.getMethod();
 
 		logger.info("'" + requestUrl + "' :: " + signature + "\n\t\t" + parameters + "\n\tcalled by " + username + " on a " + os + " device (" + ipAddress + ").\n\n");
-		userService.logUserAction(username, os, ipAddress, signature, requestUrl, parameters);
+		userService.logUserAction(username, os, ipAddress, signature, requestUrl, standAloneMode, protocol, parameters);
 	}
 
 	public String getOs() {
