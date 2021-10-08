@@ -1,6 +1,10 @@
 var CACHE_NAME = 'song-catalog-cache-v1';
 
+var isInStandaloneMode = false;
+
 self.addEventListener('install', function(event) {
+  isInStandaloneMode = new URL(location).searchParams.get('standAloneMode');
+  console.log(isInStandaloneMode);
   var urlsToCache = [
     'js/lib/bootstrap.bundle.js',
     'js/lib/buttons.html5.min.js',
@@ -110,13 +114,29 @@ self.addEventListener('install', function(event) {
 });
 
 self.addEventListener('fetch', function(event) {
+  var currentUrl = new URL(event.request.url);
+  var newRequest;
+  if (currentUrl.origin === location.origin && !currentUrl.origin.includes('google') && !currentUrl.origin.includes('gstatic'))
+    console.log(currentUrl.origin + " :: " + location.origin)
+    console.log('creating-new-request')
+    newRequest = new Request(event.request, {
+      mode: "cors",
+      credentials: "same-origin",
+      headers: {
+        STANDALONE_MODE: isInStandaloneMode,
+      }
+    });
   event.respondWith(
     caches.match(event.request)
       .then(function(response) {
-        if (response) {
+        if (response)
           return response;
+        else if (newRequest) {
+          console.log('making new request')
+          return fetch(newRequest)
         }
-        return fetch(event.request);
+        else 
+          return fetch(event.request);
       }
     )
   );
