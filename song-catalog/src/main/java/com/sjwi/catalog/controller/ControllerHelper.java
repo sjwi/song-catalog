@@ -112,12 +112,17 @@ public class ControllerHelper {
 				.map(p -> "[" + p.getKey() + ": " + String.join(",", request.getParameterMap().get(p.getKey())) + "]").collect(Collectors.joining(";"));
 		String username = getSessionUsername();
 		String os =  getOs();
-		Cookie standAloneModeCookie =  WebUtils.getCookie(request, "STAND_ALONE");
-		boolean standAloneMode = standAloneModeCookie != null && Boolean.valueOf(standAloneModeCookie.getValue());
 		String protocol = request.getMethod();
+		boolean standAloneMode = isStandAlone();
 
 		logger.info("'" + requestUrl + "' :: " + signature + "\n\t\t" + parameters + "\n\tcalled by " + username + " on a " + os + " device (" + ipAddress + ").\n\n");
 		userService.logUserAction(username, os, ipAddress, signature, requestUrl, standAloneMode, protocol, parameters);
+	}
+
+	private boolean isStandAlone() {
+		HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
+		Cookie standAloneModeCookie =  WebUtils.getCookie(request, "STAND_ALONE");
+		return standAloneModeCookie != null && Boolean.valueOf(standAloneModeCookie.getValue());
 	}
 
 	public String getOs() {
@@ -253,7 +258,7 @@ public class ControllerHelper {
 						CfUser user = (CfUser) userService.loadUserByUsername(token.getUser());
 						SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities()));
 						setSessionPreferences(user);
-						logger.logSignInFromCookie(request, user.getUsername());
+						logger.logSignInFromCookie(request, user.getUsername(), isStandAlone());
 					}
 				}
 			}

@@ -1,9 +1,6 @@
 package com.sjwi.catalog.aspect;
 
 import java.io.IOException;
-import java.util.Enumeration;
-
-import javax.servlet.http.HttpServletRequest;
 
 import com.sjwi.catalog.config.ServletConstants;
 import com.sjwi.catalog.controller.ControllerHelper;
@@ -14,8 +11,6 @@ import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
 
 @Aspect
 @Configuration
@@ -29,13 +24,6 @@ public class LandingPageSessionInitializer {
 
 	@Before("@annotation(com.sjwi.catalog.aspect.LandingPageAspect)")
 	public void landingPage(JoinPoint joinPoint) throws IOException {
-		HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes())
-				.getRequest();
-		Enumeration headerNames = request.getHeaderNames();
-		while (headerNames.hasMoreElements()) {
-			String key = (String) headerNames.nextElement();
-			System.out.println(key + " :: " + request.getHeader(key));
-		}
 		controllerHelper.setCookiesInSession();
 		controllerHelper.attemptUserLoginViaCookie();
 		if (!ServletConstants.IS_INITIALIZED)
