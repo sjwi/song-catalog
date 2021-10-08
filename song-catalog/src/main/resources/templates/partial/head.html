@@ -79,10 +79,6 @@
 				}
 				isInStandaloneMode = () => ('standalone' in window.navigator) && (window.navigator.standalone);
 
-				if (isInStandaloneMode() && !window.localStorage.hasOwnProperty(standAloneStorageLoggedKey)) {
-					logAction("Standalone mode used")
-					window.localStorage.setItem(standAloneStorageLoggedKey,"true");
-				}
 				const userDismissedInstall = window.localStorage.hasOwnProperty('dismissInstall');
 
 				if (isIos() && !isInStandaloneMode() && !userDismissedInstall) {
