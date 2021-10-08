@@ -73,8 +73,8 @@ public class CustomLogger {
 		String msg =  "New session created on device " + getDeviceType(request);
 		log.info(msg);
 	}
-	public void logSignInFromCookie(HttpServletRequest request, String user) {
-		String msg = user + " logged in on device " + getDeviceType(request) + " by a stored token";
+	public void logSignInFromCookie(HttpServletRequest request, String user, boolean isStandAlone) {
+		String msg = user + " logged in on device " + getDeviceType(request) + " (stand-alone: " + isStandAlone + ") by a stored token";
 		log.info(msg);
 		new Thread(new SendLogMessageWithEmail(msg)).start();
 	}

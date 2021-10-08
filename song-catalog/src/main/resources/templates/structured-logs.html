@@ -30,6 +30,8 @@
 						<th class="pl-1 additional-logging">Device</th>
 						<th class="pl-1 additional-logging">IP</th>
 						<th class="pl-1 additional-logging">Method</th>
+						<th class="pl-1 additional-logging">StandAlone</th>
+						<th class="pl-1 additional-logging">Protocol</th>
 						<th class="pl-1">URL</th>
 					</tr>
 				</thead>
@@ -59,6 +61,8 @@
 		obj += '<tr><td style="width:30%; min-width:50px">Device</td><td>' + d.device + '</td></tr>';
 		obj += '<tr><td style="width:30%; min-width:50px">IP Address</td><td>' + d.ip + '</td></tr>';
 		obj += '<tr><td style="width:30%; min-width:50px">Method</td><td>' + d.method + '</td></tr>';
+		obj += '<tr><td style="width:30%; min-width:50px">Stand Alone</td><td>' + JSON.stringify(d.standAlone).toUpperCase() + '</td></tr>';
+		obj += '<tr><td style="width:30%; min-width:50px">Protocol</td><td>' + d.protocol + '</td></tr>';
 		obj += '</table>';
 		return obj
 	}
@@ -74,6 +78,13 @@
 			{ "data": "ip" },
 			{ "data": "method" },
 			{
+				"data": "standAlone",
+				"render": function(data, type, row, meta){
+					return JSON.stringify(data).toUpperCase();
+				}
+			},
+			{ "data": "protocol" },
+			{
 				"data": "requestUrl",
 				"render": function (data, type, row, meta) {
 					var link = data.length == 1? data: data.substring(1);
@@ -84,7 +95,7 @@
 		],
 		columnDefs: [
 			{ defaultContent: "-", "targets": "_all" },
-			{ className: "additional-logging primary", "targets": [2, 3, 4, 5] },
+			{ className: "additional-logging primary", "targets": [2, 3, 4, 5, 6, 7] },
 			{ className: "primary", "targets": [0,1] }
 		],
 		iDisplayLength: 100,

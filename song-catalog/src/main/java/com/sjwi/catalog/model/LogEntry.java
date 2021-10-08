@@ -6,7 +6,7 @@ import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
-public class Log {
+public class LogEntry {
   private int id;
   @JsonFormat(pattern = "yyyy-MM-dd")
   private Date date;
@@ -18,10 +18,12 @@ public class Log {
   private String ip;
   private String method;
   private String requestUrl;
+  private boolean standAlone;
+  private String protocol;
   private List<String> params;
 
-  public Log(int id, Date timestamp, String level, String username, String device, String ip, String method, String requestUrl,
-      String[] params) {
+  public LogEntry(int id, Date timestamp, String level, String username, String device, String ip, String method, String requestUrl,
+    boolean standAlone, String protocol, String[] params) {
     this.id = id;
     this.date = timestamp;
     this.time = timestamp;
@@ -31,7 +33,15 @@ public class Log {
     this.ip = ip;
     this.method = method;
     this.requestUrl = requestUrl;
+    this.standAlone = standAlone;
+    this.protocol = protocol;
     this.params = Arrays.asList(params);
+  }
+  public boolean isStandAlone() {
+    return standAlone;
+  }
+  public String getProtocol() {
+    return protocol;
   }
   public String getIp() {
     return ip;

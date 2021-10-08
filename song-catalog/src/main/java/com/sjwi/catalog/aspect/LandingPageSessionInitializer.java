@@ -18,7 +18,7 @@ public class LandingPageSessionInitializer {
 
 	@Autowired
 	CustomLogger log;
-	
+
 	@Autowired
 	ControllerHelper controllerHelper;
 
@@ -29,6 +29,7 @@ public class LandingPageSessionInitializer {
 		if (!ServletConstants.IS_INITIALIZED)
 			ServletConstants.initializeServletConstants();
 	}
+
 	@Before("@annotation(com.sjwi.catalog.aspect.ServletInitializerAspect)")
 	public void servletInitializer(JoinPoint joinPoint) throws IOException {
 		if (!ServletConstants.IS_INITIALIZED)
