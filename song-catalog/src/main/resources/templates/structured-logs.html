@@ -61,7 +61,7 @@
 		obj += '<tr><td style="width:30%; min-width:50px">Device</td><td>' + d.device + '</td></tr>';
 		obj += '<tr><td style="width:30%; min-width:50px">IP Address</td><td>' + d.ip + '</td></tr>';
 		obj += '<tr><td style="width:30%; min-width:50px">Method</td><td>' + d.method + '</td></tr>';
-		obj += '<tr><td style="width:30%; min-width:50px">Stand Alone</td><td>' + d.standAlone + '</td></tr>';
+		obj += '<tr><td style="width:30%; min-width:50px">Stand Alone</td><td>' + JSON.stringify(d.standAlone).toUpperCase() + '</td></tr>';
 		obj += '<tr><td style="width:30%; min-width:50px">Protocol</td><td>' + d.protocol + '</td></tr>';
 		obj += '</table>';
 		return obj
@@ -77,7 +77,12 @@
 			{ "data": "device" },
 			{ "data": "ip" },
 			{ "data": "method" },
-			{ "data": "standAlone" },
+			{
+				"data": "standAlone",
+				"render": function(data, type, row, meta){
+					return JSON.stringify(data).toUpperCase();
+				}
+			},
 			{ "data": "protocol" },
 			{
 				"data": "requestUrl",
