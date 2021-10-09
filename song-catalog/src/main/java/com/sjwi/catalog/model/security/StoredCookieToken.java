@@ -10,6 +10,7 @@ import com.sjwi.catalog.config.ServletConstants;
 public class StoredCookieToken extends SecurityToken {
 	
 	public static final String STORED_COOKIE_TOKEN_KEY = "USESSIONID";
+	public static final String ANONYMOUS_COOKIE_TOKEN_KEY = "ASESSION";
 	
 	protected final Date createdOn;
 

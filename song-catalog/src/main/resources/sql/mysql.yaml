@@ -416,3 +416,9 @@ storeAccountRequest: >
 
 getAccountRequestDetails: >
   SELECT * FROM AccountRequest where email = ?
+
+insertAnonymousUser: >
+  INSERT INTO AnonymousUser (HASH) values (?)
+
+getAnonymousUser: >
+  SELECT * FROM AnonymousUser where HASH = ?

@@ -41,4 +41,8 @@ public interface UserDao {
   public void storeAccountRequest(String email);
 
   public List<String> getAccountRequestDetails(String email);
+
+  public void createAnonymousUser(String token);
+
+  public String getAnonymousUser(String tokenLink);
 }

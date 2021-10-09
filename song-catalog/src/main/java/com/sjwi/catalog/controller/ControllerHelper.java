@@ -1,6 +1,7 @@
 package com.sjwi.catalog.controller;
 
 import static com.sjwi.catalog.config.PreferencesConfiguration.NIGHT_MODE_PREFERENCE_KEY;
+import static com.sjwi.catalog.model.security.StoredCookieToken.ANONYMOUS_COOKIE_TOKEN_KEY;
 import static com.sjwi.catalog.model.security.StoredCookieToken.STORED_COOKIE_TOKEN_KEY;
 
 import java.text.SimpleDateFormat;
@@ -46,6 +47,7 @@ import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.util.WebUtils;
+import org.thymeleaf.util.StringUtils;
 
 import eu.bitwalker.useragentutils.UserAgent;
 
@@ -149,7 +151,20 @@ public class ControllerHelper {
 		try {
 			return ((CfUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername();
 		} catch (Exception e) {
-			return "anonymousUser";
+			HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
+			try {
+				if (request.getSession().getAttribute(ANONYMOUS_COOKIE_TOKEN_KEY) == null) {
+					if (request.getCookies() != null && Arrays.stream(request.getCookies()).filter(c -> ANONYMOUS_COOKIE_TOKEN_KEY.equals(c.getName())).findFirst().isPresent()) {
+						request.getSession().setAttribute(ANONYMOUS_COOKIE_TOKEN_KEY, userService.getAnonymousUser(Arrays.stream(request.getCookies()).filter(c -> ANONYMOUS_COOKIE_TOKEN_KEY.equals(c.getName())).findFirst().get().getValue()));
+					} else {
+						String cookieToken = StringUtils.randomAlphanumeric(200);
+						userService.createAnonymousUser(cookieToken);
+						buildStaticCookie(request.getServerName(),ANONYMOUS_COOKIE_TOKEN_KEY, cookieToken, request.getCookies());
+						request.getSession().setAttribute(ANONYMOUS_COOKIE_TOKEN_KEY, userService.getAnonymousUser(cookieToken));
+					}
+				}
+			} catch (Exception ex ) {ex.printStackTrace();}
+			return request.getSession().getAttribute(ANONYMOUS_COOKIE_TOKEN_KEY).toString();
 		}
 	}
 
@@ -251,9 +266,9 @@ public class ControllerHelper {
 				return;
 			}
 			if (request.getCookies() != null) {
-				Optional<Cookie> cookie = Arrays.stream(request.getCookies()).filter(c -> STORED_COOKIE_TOKEN_KEY.equals(c.getName())).findFirst();
-				if (cookie.isPresent()) {
-					SecurityToken token = tokenService.getStoredCookieToken(cookie.get().getValue());
+				Optional<Cookie> userCookie = Arrays.stream(request.getCookies()).filter(c -> STORED_COOKIE_TOKEN_KEY.equals(c.getName())).findFirst();
+				if (userCookie.isPresent()) {
+					SecurityToken token = tokenService.getStoredCookieToken(userCookie.get().getValue());
 					if (token != null && token.isTokenValid()) {
 						CfUser user = (CfUser) userService.loadUserByUsername(token.getUser());
 						SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities()));
