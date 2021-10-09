@@ -113,5 +113,13 @@ public class UserService implements UserDetailsService {
   public void storeAccountRequest(String email) {
 		userDao.storeAccountRequest(email);
   }
+
+  public void createAnonymousUser(String token) {
+		userDao.createAnonymousUser(token);
+  }
+
+	public String getAnonymousUser(String tokenLink) {
+		return userDao.getAnonymousUser(tokenLink);
+	}
 }
 	

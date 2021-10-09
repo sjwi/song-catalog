@@ -208,4 +208,19 @@ public class SqlUserDao implements UserDao {
 			return accounts;
 		});
 	}
+
+	@Override
+	public void createAnonymousUser(String token) {
+		jdbcTemplate.update(queryStore.get("insertAnonymousUser"), new Object[] {token});
+	}
+
+	@Override
+	public String getAnonymousUser(String tokenString) {
+		return jdbcTemplate.query(queryStore.get("getAnonymousUser"), new Object[] {tokenString}, r -> {
+			if (r.next())
+				return "anonymousUser_" + r.getInt("ID");
+			createAnonymousUser(tokenString);
+			return getAnonymousUser(tokenString);
+		});
+	}
 }
