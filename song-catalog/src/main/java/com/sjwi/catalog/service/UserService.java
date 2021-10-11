@@ -12,6 +12,7 @@ import com.sjwi.catalog.model.addressbook.AddressBookEntry;
 import com.sjwi.catalog.model.user.CfUser;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -98,6 +99,7 @@ public class UserService implements UserDetailsService {
 		return userDao.isUsernameTaken(username);
 	}
 
+	@Async
 	public void logUserAction(String username, String os, String ipAddress, String signature, String requestUrl, boolean standAloneMode, String protocol, String parameters) {
 		userDao.log(username, os, ipAddress, signature, requestUrl, standAloneMode, protocol, parameters);
   }
