@@ -6,6 +6,7 @@ import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
 
 import com.sjwi.catalog.config.ServletConstants;
+import com.sjwi.catalog.controller.ControllerHelper;
 import com.sjwi.catalog.exception.MailException;
 import com.sjwi.catalog.mail.MailConstants;
 import com.sjwi.catalog.mail.Mailer;
@@ -15,8 +16,6 @@ import com.sjwi.catalog.service.SongService;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
 import eu.bitwalker.useragentutils.UserAgent;
@@ -28,6 +27,9 @@ public class CustomLogger {
 
 	@Autowired
 	Mailer mailer;
+
+	@Autowired
+	ControllerHelper controllerHelper;
 
 	private Logger log;
 
@@ -54,7 +56,7 @@ public class CustomLogger {
 	}
 
 	public void logUserActionWithEmail(String message) {
-		message += " by " + getLoggedInUser();
+		message += " by " + controllerHelper.getSessionUsername();
 		log.info(message);
 		new Thread(new SendLogMessageWithEmail(message)).start();
 	}
@@ -82,7 +84,7 @@ public class CustomLogger {
 		String deltaSummary = SongService.generateSongRevisionDiff(originalSong, revisedSong).stream()
 								.map(d -> d.toString())
 								.collect(Collectors.joining("\n\n - "));
-		String message = action + " by " + getLoggedInUser() + ": " + revisedSong.getNormalizedName() + " (ID: " + revisedSong.getId() + ") \n\n";
+		String message = action + " by " + controllerHelper.getSessionUsername() + ": " + revisedSong.getNormalizedName() + " (ID: " + revisedSong.getId() + ") \n\n";
 		message += "Deltas:\n - " + deltaSummary + "\n\n";
 		message += ServletConstants.FULL_URL + "/song/" + revisedSong.getId();
 		logMessageWithEmail(message);
@@ -94,13 +96,6 @@ public class CustomLogger {
 				+ UserAgent.parseUserAgentString(agent).getOperatingSystem().toString();
 	}
 
-	private String getLoggedInUser(){
-		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		if (auth != null)
-			return auth.getName();
-		return "anonymous user";
-	}
-	
 	private class SendLogMessageWithEmail implements Runnable {
 		
 		private final String message;
