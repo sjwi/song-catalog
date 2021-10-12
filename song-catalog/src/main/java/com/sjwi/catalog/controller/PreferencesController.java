@@ -31,7 +31,7 @@ public class PreferencesController {
 			HttpServletResponse response, Authentication auth, @RequestParam (name="setting", required=true) String setting) {
 		try {
 			request.getSession().setAttribute(NIGHT_MODE_PREFERENCE_KEY, setting);
-			response.addCookie(controllerHelper.buildStaticCookie(request.getServerName(),NIGHT_MODE_PREFERENCE_KEY,setting,request.getCookies()));
+			response.addCookie(ControllerHelper.buildStaticCookie(NIGHT_MODE_PREFERENCE_KEY,setting));
 			if (auth != null) 
 				preferencesService.setUserPreference(NIGHT_MODE_PREFERENCE_KEY,setting, auth.getName());
 		} catch (Exception e){
@@ -44,7 +44,7 @@ public class PreferencesController {
 			HttpServletResponse response, Authentication auth) {
 		try {
 			request.getSession().setAttribute(NIGHT_MODE_PREFERENCE_KEY, "true");
-			response.addCookie(controllerHelper.buildStaticCookie(request.getServerName(),NIGHT_MODE_PREFERENCE_KEY,"true",request.getCookies()));
+			response.addCookie(ControllerHelper.buildStaticCookie(NIGHT_MODE_PREFERENCE_KEY,"true"));
 			response.sendRedirect("home");
 		} catch (Exception e) {
 			controllerHelper.errorHandler(e);

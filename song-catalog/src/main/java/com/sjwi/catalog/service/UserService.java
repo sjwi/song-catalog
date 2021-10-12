@@ -1,10 +1,16 @@
 package com.sjwi.catalog.service;
 
+import static com.sjwi.catalog.model.security.StoredCookieToken.ANONYMOUS_COOKIE_TOKEN_KEY;
+
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+
+import com.sjwi.catalog.controller.ControllerHelper;
 import com.sjwi.catalog.dao.UserDao;
 import com.sjwi.catalog.exception.PasswordException;
 import com.sjwi.catalog.model.LogEntry;
@@ -12,13 +18,16 @@ import com.sjwi.catalog.model.addressbook.AddressBookEntry;
 import com.sjwi.catalog.model.user.CfUser;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
+import org.thymeleaf.util.StringUtils;
 
 @Service("userDetailsService")
 public class UserService implements UserDetailsService {
@@ -99,7 +108,6 @@ public class UserService implements UserDetailsService {
 		return userDao.isUsernameTaken(username);
 	}
 
-	@Async
 	public void logUserAction(String username, String os, String ipAddress, String signature, String requestUrl, boolean standAloneMode, String protocol, String parameters) {
 		userDao.log(username, os, ipAddress, signature, requestUrl, standAloneMode, protocol, parameters);
   }
@@ -123,5 +131,27 @@ public class UserService implements UserDetailsService {
 	public String getAnonymousUser(String tokenLink) {
 		return userDao.getAnonymousUser(tokenLink);
 	}
+
+	public String getSessionUsername() {
+		try {
+			return ((CfUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername();
+		} catch (Exception e) {
+			HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
+			try {
+				if (request.getSession().getAttribute(ANONYMOUS_COOKIE_TOKEN_KEY) == null) {
+					if (request.getCookies() != null && Arrays.stream(request.getCookies()).filter(c -> ANONYMOUS_COOKIE_TOKEN_KEY.equals(c.getName())).findFirst().isPresent()) {
+						request.getSession().setAttribute(ANONYMOUS_COOKIE_TOKEN_KEY, getAnonymousUser(Arrays.stream(request.getCookies()).filter(c -> ANONYMOUS_COOKIE_TOKEN_KEY.equals(c.getName())).findFirst().get().getValue()));
+					} else {
+						String cookieToken = StringUtils.randomAlphanumeric(200);
+						createAnonymousUser(cookieToken);
+						ControllerHelper.buildStaticCookie(ANONYMOUS_COOKIE_TOKEN_KEY, cookieToken);
+						request.getSession().setAttribute(ANONYMOUS_COOKIE_TOKEN_KEY, getAnonymousUser(cookieToken));
+					}
+				}
+			} catch (Exception ex ) {return "anonymousUser";}
+			return request.getSession().getAttribute(ANONYMOUS_COOKIE_TOKEN_KEY).toString();
+		}
+	}
+
 }
 	

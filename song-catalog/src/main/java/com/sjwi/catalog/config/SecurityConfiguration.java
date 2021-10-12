@@ -40,8 +40,8 @@ import org.thymeleaf.extras.springsecurity5.dialect.SpringSecurityDialect;
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
 	@Autowired
-    @Qualifier("userDetailsService")
-    private UserDetailsService userDetailsService;
+	@Qualifier("userDetailsService")
+	private UserDetailsService userDetailsService;
 	
 	@Autowired
 	public void configureGlobal(AuthenticationManagerBuilder auth)
