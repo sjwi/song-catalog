@@ -31,7 +31,8 @@ public class PageRequestLogger {
 	" || execution(* com.sjwi.catalog.controller.OrganizationController.organizationDetails(..)) " 
 			)
 	public void logPageRequest(JoinPoint joinPoint) {
-		controllerHelper.logPageRequest(joinPoint.getSignature().toShortString());
+		String signature = joinPoint.getSignature().toShortString();
+		controllerHelper.logPageRequest(signature);
 	}
 	
 }
