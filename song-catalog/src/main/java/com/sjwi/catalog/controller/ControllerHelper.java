@@ -163,7 +163,7 @@ public class ControllerHelper {
 						request.getSession().setAttribute(ANONYMOUS_COOKIE_TOKEN_KEY, userService.getAnonymousUser(cookieToken));
 					}
 				}
-			} catch (Exception ex ) {errorHandler(ex); return "anonymousUser";}
+			} catch (Exception ex ) {ex.printStackTrace();}
 			return request.getSession().getAttribute(ANONYMOUS_COOKIE_TOKEN_KEY).toString();
 		}
 	}
