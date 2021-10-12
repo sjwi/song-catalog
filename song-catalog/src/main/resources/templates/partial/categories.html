@@ -2,32 +2,37 @@
 	<div class="col text-center">
 		<ul class="ks-cboxtags">
 			<li th:each="category: ${categories}">
-				<input checked type="checkbox" th:id="${category.key}" th:value="${category.key}"><label th:for="${category.key}" th:text="${category.value}"></label>
+				<input type="checkbox" th:id="${category.key}" th:value="${category.key}"><label th:for="${category.key}" th:text="${category.value}"></label>
 			</li>
 		</ul>
 	</div>
 </div>
 <script>
-$(document).ready(function(){
-	$(document).on('change','.ks-cboxtags input',function(e){
-		refreshCategories();
-	})
-});
+$(document).on('change','.ks-cboxtags input',function(e){
+	refreshCategories();
+})
 function refreshCategories(){
-	var hiddenCategories = []
+	var selectedCategories = []
 	$('.ks-cboxtags input').each(function(){
-		if (!$(this).is(':checked')){
-			hiddenCategories.push($(this).val());
+		if ($(this).is(':checked')){
+			selectedCategories.push($(this).val());
 		}
 	})
-	$('.song-row').each(function(){
-		var cat = $(this).data('category').toString();
-		if (hiddenCategories.includes(cat)){
-			$(this).hide();
-		} else {
-			$(this).show();
-		}
-	})
+	if (selectedCategories.length != 0) {
+		$('.ks-cboxtags label').removeClass(['bg-info','text-white','faded-obj']);
+		$('.song-row').each(function(){
+			var cat = $(this).data('category').toString();
+			if (!selectedCategories.includes(cat)){
+				$(this).hide();
+			} else {
+				$(this).show();
+			}
+		});
+	}
+	else {
+		$('.ks-cboxtags label').addClass(['bg-info','text-white','faded-obj']);
+		$('.song-row').show();
+	}
 }
 
 </script>
