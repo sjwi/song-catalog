@@ -271,6 +271,9 @@ a:active {
 .grey-bg {
 	background-color: var(--primary-grey) !important;
 }
+.faded-obj {
+	opacity:.8;
+}
 .wrapper {
 	width: 100%;
 	background-color: var(--primary-grey) !important;
