@@ -76,7 +76,7 @@ public class LoginController {
 		try {
 			SecurityToken cookieToken = new StoredCookieToken(user);
 			tokenService.storeCookieToken(cookieToken);
-			response.addCookie(controllerHelper.buildStaticCookie(request.getServerName(), STORED_COOKIE_TOKEN_KEY, cookieToken.getTokenString(),request.getCookies()));
+			response.addCookie(ControllerHelper.buildStaticCookie(STORED_COOKIE_TOKEN_KEY, cookieToken.getTokenString()));
 		} catch (Exception e) {
 			controllerHelper.errorHandler(e);
 		}

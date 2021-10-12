@@ -1,7 +1,6 @@
 package com.sjwi.catalog.controller;
 
 import static com.sjwi.catalog.config.PreferencesConfiguration.NIGHT_MODE_PREFERENCE_KEY;
-import static com.sjwi.catalog.model.security.StoredCookieToken.ANONYMOUS_COOKIE_TOKEN_KEY;
 import static com.sjwi.catalog.model.security.StoredCookieToken.STORED_COOKIE_TOKEN_KEY;
 
 import java.text.SimpleDateFormat;
@@ -47,7 +46,6 @@ import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.util.WebUtils;
-import org.thymeleaf.util.StringUtils;
 
 import eu.bitwalker.useragentutils.UserAgent;
 
@@ -112,7 +110,7 @@ public class ControllerHelper {
 			request.getRemoteAddr() : request.getHeader("X-FORWARDED-FOR");
 		String parameters = request.getParameterMap().entrySet().stream()
 				.map(p -> "[" + p.getKey() + ": " + String.join(",", request.getParameterMap().get(p.getKey())) + "]").collect(Collectors.joining(";"));
-		String username = getSessionUsername();
+		String username = userService.getSessionUsername();
 		String os =  getOs();
 		String protocol = request.getMethod();
 		boolean standAloneMode = isStandAlone();
@@ -134,7 +132,7 @@ public class ControllerHelper {
 	}
 	
 	public ModelAndView errorHandler(Exception e) {
-        logger.logErrorWithEmail("User " + getSessionUsername() + " on a " + getOs() + " device.\n" + 
+        logger.logErrorWithEmail("User " + userService.getSessionUsername() + " on a " + getOs() + " device.\n" + 
 			httpServletRequestToString() + "\n" + 
 			ExceptionUtils.getStackTrace(e));
 		ModelAndView mv = new ModelAndView("error");
@@ -145,27 +143,6 @@ public class ControllerHelper {
 			mv.addObject("orgs", new ArrayList<Organization>());
 		}
 		return mv;
-	}
-
-	public String getSessionUsername() {
-		try {
-			return ((CfUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername();
-		} catch (Exception e) {
-			HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
-			try {
-				if (request.getSession().getAttribute(ANONYMOUS_COOKIE_TOKEN_KEY) == null) {
-					if (request.getCookies() != null && Arrays.stream(request.getCookies()).filter(c -> ANONYMOUS_COOKIE_TOKEN_KEY.equals(c.getName())).findFirst().isPresent()) {
-						request.getSession().setAttribute(ANONYMOUS_COOKIE_TOKEN_KEY, userService.getAnonymousUser(Arrays.stream(request.getCookies()).filter(c -> ANONYMOUS_COOKIE_TOKEN_KEY.equals(c.getName())).findFirst().get().getValue()));
-					} else {
-						String cookieToken = StringUtils.randomAlphanumeric(200);
-						userService.createAnonymousUser(cookieToken);
-						buildStaticCookie(request.getServerName(),ANONYMOUS_COOKIE_TOKEN_KEY, cookieToken, request.getCookies());
-						request.getSession().setAttribute(ANONYMOUS_COOKIE_TOKEN_KEY, userService.getAnonymousUser(cookieToken));
-					}
-				}
-			} catch (Exception ex ) {errorHandler(ex); return "anonymousUser";}
-			return request.getSession().getAttribute(ANONYMOUS_COOKIE_TOKEN_KEY).toString();
-		}
 	}
 
 	public String recipientsToString(List<String> recipients) {
@@ -291,12 +268,14 @@ public class ControllerHelper {
 		cfUser.getPreferences().entrySet().stream().forEach(p -> {
 			request.getSession().setAttribute(p.getKey(), p.getValue());
 			if (NIGHT_MODE_PREFERENCE_KEY.equalsIgnoreCase(p.getKey())) {
-				response.addCookie(buildStaticCookie(request.getServerName(),p.getKey(),p.getValue(),request.getCookies()));
+				response.addCookie(buildStaticCookie(p.getKey(),p.getValue()));
 			}
 		});
 	}
 
-	public Cookie buildStaticCookie(String host, String key, String setting, Cookie[] cookies) {
+	public static Cookie buildStaticCookie(String key, String setting) {
+		String host = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest().getServerName();
+		Cookie[] cookies = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest().getCookies();
 		Cookie cookie = null;
 		if (cookies != null && Arrays.stream(cookies).anyMatch(c -> c.getName().equals(key))) {
 			cookie = Arrays.stream(cookies).filter(c -> c.getName().equals(key)).findFirst().orElse(null);
