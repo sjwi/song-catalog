@@ -74,6 +74,7 @@ public class EnrollmentController {
 			Authentication auth
 			) {
 		try {
+			username = username.toLowerCase();
 			EnrollmentToken token = tokenService.getEnrollmentToken(email).setSessionToken(requestToken);
 			if (token.isTokenValid()) {
 				List<String> authorities = new ArrayList<String>(Arrays.asList("USER"));

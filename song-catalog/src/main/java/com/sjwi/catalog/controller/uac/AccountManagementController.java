@@ -133,7 +133,7 @@ public class AccountManagementController {
 			email = email.toLowerCase();
 			if (userService.userHasRequestedAccount(email))
 				throw new InvalidOperationException("User " + email + " has already request an email.");
-			if ((CfUser) userService.loadUserByUsername(email) != null)
+			if (userService.loadUserByUsername(email) != null)
 				throw new BadAttributeValueExpException("An existing account is already associated with " + email);
 			userService.storeAccountRequest(email);
 			logger.logMessageWithEmail("Account requested for " + email);

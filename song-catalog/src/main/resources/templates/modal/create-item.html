@@ -199,6 +199,7 @@
 					success: function(data) {
 						setAlertOnLoad('warning','New song <b>' +$('#createSongForm').find('.title').val() + '</b> created.');
 						location.href = contextpath + 'song/' + data.action; 
+						$('#createItemModal').modal('hide');
 					},
 					error: function(data){
 						alertWithFade('danger','Something went wrong! Unable to create song.')
@@ -262,8 +263,6 @@
 					},
 					error : function(data) {
 						alertWithFade('danger','Something went wrong! Unable to add song to set')
-					},
-					complete : function() {
 						$('#submitCreateItemBtn').attr('disabled', false);
 					}
 				});
