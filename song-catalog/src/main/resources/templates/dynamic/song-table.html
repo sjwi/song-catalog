@@ -25,6 +25,11 @@
 									<li>
 										<a class="dropdown-item version-control-btn">Version Control</a>
 									</li>
+								</th:block>
+								<li>
+									<a class="dropdown-item" th:attr="onclick=${'copyTextToClipboard(''' + T(com.sjwi.catalog.config.ServletConstants).FULL_URL + '/song/' + song.id + ''')'}">Copy Link</a>
+								</li>
+								<th:block sec:authorize="hasAuthority('USER')">
 									<li>
 										<a class="dropdown-item delete-btn">Delete</a>
 									</li>
