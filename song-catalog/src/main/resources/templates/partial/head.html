@@ -82,7 +82,7 @@
 				const userDismissedInstall = window.localStorage.hasOwnProperty('dismissInstall');
 
 				if (isIos() && !isInStandaloneMode() && !userDismissedInstall) {
-					$('#installPrompt').addClass('showme');
+					// $('#installPrompt').addClass('showme');
 				}
 				$('#closeInstallPrompt').on('click',function(e){
 					$('#installPrompt').removeClass('showme');
