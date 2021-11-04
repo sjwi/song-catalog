@@ -4,6 +4,6 @@
         Search the CF Worship Songs catalog by title or content
     </Description>
     <InputEncoding>UTF-8</InputEncoding>
-    <Image width="16" height="16" type="image/x-icon">https://worship.cfchurches.com/public/favicon.png</Image>
-    <Url type="text/html" method="GET" template="https://worship.cfchurches.com/songs?searchTerm={searchTerms}"/>
+    <Image width="16" height="16" type="image/x-icon">https://cfworship.app/public/favicon.png</Image>
+    <Url type="text/html" method="GET" template="https://cfworship.app/songs?searchTerm={searchTerms}"/>
 </OpenSearchDescription>
