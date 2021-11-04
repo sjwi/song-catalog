@@ -25,7 +25,7 @@ public class ServletConstants {
     public static void initializeServletConstants() {
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
         SERVER_NAME = request.getServerName();
-        SCHEME = SERVER_NAME.contains(".com")? "https" : request.getScheme();
+        SCHEME = SERVER_NAME.contains(".com") || SERVER_NAME.contains(".app")? "https" : request.getScheme();
         SERVER_PORT = String.valueOf(request.getServerPort());
         CONTEXT_PATH = request.getContextPath().replaceAll("/","");
         BASE_URL = SCHEME + "://" + SERVER_NAME;
