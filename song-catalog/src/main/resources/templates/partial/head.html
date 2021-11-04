@@ -47,9 +47,6 @@
 		<script th:src="@{/js/site/scroll.js}"></script>
 		<script th:src="@{/js/site/swipe.js}"></script>
 		<script th:inline="javascript">
-			if (location.protocol !== 'https:' && !location.href.includes('localhost') && !location.href.includes('elasticbeanstalk')) {
-				location.replace('https:' + location.href.substring(location.protocol.length));
-			}
 			var contextpath = /*[[@{/}]]*/;
 			var loggedInUser = /*[[${#authentication?.getPrincipal()}]]*/;
 			var alertOnLoad = /*[[${ALERT_ON_LOAD}]]*/ false;
