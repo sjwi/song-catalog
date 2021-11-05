@@ -2,7 +2,7 @@
 	<div class="col text-center">
 		<ul class="ks-cboxtags">
 			<li th:each="category: ${categories}">
-				<input type="checkbox" th:id="${category.key}" th:value="${category.key}"><label th:for="${category.key}" th:text="${category.value}"></label>
+				<input type="checkbox" th:id="${category.key}" th:value="${category.key}"><label class="faded-obj bg-info text-white" th:for="${category.key}" th:text="${category.value}"></label>
 			</li>
 		</ul>
 	</div>
