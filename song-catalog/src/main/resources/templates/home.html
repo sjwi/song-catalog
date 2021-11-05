@@ -99,8 +99,8 @@
 	<script>
 		var ignoreSongClickedSelector = ".action-btn,.song-dropdown-btn,.dropdown-menu, li, .dropdown-item,.grip-container,img";
 		var resized = false;
-		refreshCategories();
 		$(document).ready(function(){
+			refreshCategories();
 			$(document).on('click','.song-row',function(e){
 				$('.song-row').removeClass('selected')
 				$(this).addClass('selected');
