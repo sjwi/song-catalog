@@ -58,6 +58,7 @@ public abstract class Song {
 	public String[] getBodyAsChunks() {
 		return Arrays.stream(body.split("\n"))
 				.map(s -> s.trim().isEmpty()? s.trim(): s) 
+				.filter(s -> !s.startsWith("CCLI"))
 				.collect(Collectors.joining("\n"))
 				.split("[\n]{2,}");
 	}
