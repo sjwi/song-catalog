@@ -56,11 +56,14 @@ public abstract class Song {
 		return body;
 	}
 	public String[] getBodyAsChunks() {
-		return Arrays.stream(body.split("\n"))
+		String[] chunks = Arrays.stream(body.split("\n"))
 				.map(s -> s.trim().isEmpty()? s.trim(): s) 
-				.filter(s -> !s.startsWith("CCLI"))
 				.collect(Collectors.joining("\n"))
 				.split("[\n]{2,}");
+		//filter CCLI footer
+		return Arrays.stream(chunks)
+			.filter(c -> !c.startsWith("CCLI"))
+			.toArray(String[]::new);
 	}
 
 	public String getDefaultKey() {
