@@ -403,6 +403,12 @@ pre#logOutput {
 	min-width:55px;
 	max-width:60px;
 }
+.slick-track {
+    display: flex !important;
+}
+.slick-slide {
+    height: inherit !important;
+}
 .modal-page-container {
 	border:1px solid; border-color:var(--primary-grey); max-height:700px !important;
 }
