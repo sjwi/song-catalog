@@ -406,6 +406,9 @@ pre#logOutput {
 .modal-page-container {
 	border:1px solid; border-color:var(--primary-grey); max-height:700px !important;
 }
+#changeVersionModal .song-footer, #versionControlModal .song-footer {
+	display: none;
+}
 .song-action-container {
 	height: 3rem;
 	position: relative;
@@ -538,7 +541,7 @@ body {
 }
 .song-page {
 	scrollbar-width:none !important;
-	padding: 5px 20px 20px 20px;
+	padding: 5px 20px 6.5rem 20px;
 	height:100%;
 	overflow:scroll;
 	margin-top:1.25rem;
@@ -722,11 +725,17 @@ body {
   display:block !important;
   opacity:1 !important;
 }
-p.song-body {
+p.song-body, p.song-footer {
 	text-align:left;
 	white-space:pre;
 	overflow:hidden;
-	padding: 0 0 30px 30px;
+	padding: 3rem 0 30px 30px;
+}
+p.song-footer {
+	position: absolute;
+	bottom: 0;
+	font-size: .6rem;
+	line-height: .6rem;
 }
 .container {
 	overflow:hidden;
@@ -1607,6 +1616,9 @@ table > thead > tr > th[class*="sort"]:after {
 		font-size:1rem;
 		padding-left:10px !important;
 	}
+	p.song-footer {
+		padding-left:10px;
+	}
 	.setlists-song-container, .offnav-right-header {
 		display:none !important;
 	}
@@ -1926,7 +1938,7 @@ table > thead > tr > th[class*="sort"]:after {
 		width:98% !important;
 	}
 	.song-page {
-		padding: 10px 20px 2px 20px;
+		padding: 10px 20px 6.5rem 20px;
 	}
 	.song-title {
 		font-size: calc(1.15rem) !important;
@@ -1953,6 +1965,9 @@ table > thead > tr > th[class*="sort"]:after {
 	}
 }
 @media screen and (max-width: 466px){
+	p.song-footer {
+		font-size: .5rem;
+	}
 	.btn.org-dl-link {
 		margin-right: 0 !important;
 		margin-top:.5rem;

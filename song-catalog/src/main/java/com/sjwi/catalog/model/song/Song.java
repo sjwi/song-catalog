@@ -1,5 +1,7 @@
 package com.sjwi.catalog.model.song;
 
+import static com.sjwi.catalog.file.FileGenerator.LICENSE_TEXT;
+
 import java.util.Arrays;
 import java.util.Date;
 import java.util.stream.Collectors;
@@ -56,14 +58,16 @@ public abstract class Song {
 		return body;
 	}
 	public String[] getBodyAsChunks() {
-		String[] chunks = Arrays.stream(body.split("\n"))
-				.map(s -> s.trim().isEmpty()? s.trim(): s) 
-				.collect(Collectors.joining("\n"))
-				.split("[\n]{2,}");
 		//filter CCLI footer
-		return Arrays.stream(chunks)
+		return Arrays.stream(splitBodyIntoChunks())
 			.filter(c -> !c.startsWith("CCLI"))
 			.toArray(String[]::new);
+	}
+
+	public String getFooter() {
+		 return Arrays.stream(splitBodyIntoChunks())
+			.filter(c -> c.startsWith("CCLI"))
+			.findFirst().orElse(LICENSE_TEXT);
 	}
 
 	public String getDefaultKey() {
@@ -102,4 +106,12 @@ public abstract class Song {
 	public TransposableString getTransposableString() {
 		return transposableString;
 	}
+
+	private String[] splitBodyIntoChunks() {
+		return Arrays.stream(body.split("\n"))
+				.map(s -> s.trim().isEmpty()? s.trim(): s) 
+				.collect(Collectors.joining("\n"))
+				.split("[\n]{2,}");
+	}
+
 }
