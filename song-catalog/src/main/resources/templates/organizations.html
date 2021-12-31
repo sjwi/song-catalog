@@ -8,6 +8,21 @@
 		<th:block th:replace="partial/off-navbar :: offNavBar('addSong')"></th:block>
 		<div class="row no-gutters flex-nowrap bg-white mh-100vh">
 			<div class="col text-center">
+				<h4 class="d-block header-text mb-3 mt-4">Permalinks</h5>
+				<div class="row no-gutters mb-1">
+					<div class="col-3"></div>
+					<div class="col-sm-6 text-center">
+						<div class="input-group col org-permalink">
+							<a target="_blank" th:href="${T(com.sjwi.catalog.config.ServletConstants).BASE_URL} + @{/lyrics}" class="input-group-prepend">
+								<span class="input-group-text">Latest lyrics&nbsp;<span class="long-word">handout</span></span>
+							</a>
+						<input class="form-control mono-space" disabled type="text" id="orgLyrics" th:value="${T(com.sjwi.catalog.config.ServletConstants).BASE_URL} + @{/lyrics}">
+							<div class="input-group-append copy-text copy-input" data-target="#orgLyrics" title="Copy permalink to lyrics handout to clip-board">
+								 <div class="input-group-text"><img width="23px" th:src="@{/images/copy.png}"><span class="collapse copy-checkmark">&#10003;</span></div>
+							</div>
+						</div>
+					</div>
+				</div>
 				<h4 class="header-text mt-3">Organizations</h4>
 				<div class="mt-3">
 					<div class="org-btn pt-2 pb-2" th:each="org : ${orgs}">
@@ -76,7 +91,21 @@
 					}
 				});	
 			})
+			$('.copy-input').on('click',function(){
+				copyTextToClipboard($($(this).data('target')).val(),false);
+				checked(this);
+			});	
 			initializeArchiveTable(".archive-table");
 		});
+		function checked(elem){
+			$(elem).find('div').addClass('bg-primary');
+			$(elem).find('div > img').hide('slow');
+			$(elem).find('div > span').show('slow');
+			setTimeout(function(){
+				$(elem).find('div').removeClass('bg-primary');
+				$(elem).find('div > img').show('slow');
+				$(elem).find('div > span').hide('slow');
+			},1000);
+		}
 	</script>
 </html>
