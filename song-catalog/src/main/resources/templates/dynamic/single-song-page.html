@@ -15,6 +15,6 @@
 		</div>
 		<hr class="mt-4">
 		<p class="song-body" th:text="${#strings.listJoin(song.getBodyAsChunks(),T(java.lang.System).getProperty('line.separator') + T(java.lang.System).getProperty('line.separator'))}"></p>
-		<p class="song-footer" th:text="${song.getFooter()}"></p>
+		<!-- <p class="song-footer" th:text="${song.getFooter()}"></p> -->
 	</div>
 </th:block>

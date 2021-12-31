@@ -11,8 +11,8 @@ function slick(){
 		speed: 200,
 		prevArrow: $('.previous-slide'),
 		nextArrow: $('.next-slide')
-	}).on('setPosition', function (event, slick) {
-		slick.$slides.css('height', slick.$slideTrack.height() + 'px');
+	// }).on('setPosition', function (event, slick) {
+	// 	slick.$slides.css('height', slick.$slideTrack.height() + 'px');
 	});
 
 	$(".slick-container").on("beforeChange", function (e, slick, currentSlide, nextSlide){
