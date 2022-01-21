@@ -125,6 +125,16 @@ public class OrganizationController {
 		}
 	}
 
+	@RequestMapping(value = {"/lyrics"}, method = RequestMethod.GET)
+	public ModelAndView siteLatestLyrics() {
+		SetList setList = setListService.getLatestSet();
+		String today = new SimpleDateFormat("MM-dd-yyyy").format(new Date());
+		return new ModelAndView("forward:/" 
+				+ "setlist/pdf/" + setList.getId()
+				+ "/CF Worship " + UriUtils.encode(today,"UTF-8")
+				+ "?lyricsOnly=true&fontSize=18");
+	}
+
 	@RequestMapping(value = {"/org/{id}/{endpoint}"}, method = RequestMethod.GET)
 	public ModelAndView latestOrgResource(@PathVariable int id, @PathVariable String endpoint, HttpServletResponse response) throws IOException {
 		try {

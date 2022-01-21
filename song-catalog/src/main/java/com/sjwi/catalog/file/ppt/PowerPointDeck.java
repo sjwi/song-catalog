@@ -38,11 +38,11 @@ public class PowerPointDeck {
 	private List<List<String>> combineSlidesIntoFinalSubDeck(List<List<String>> chunksInDefaultLinesPerSlide) {
 		List<List<String>> slidesFromChunk = new ArrayList<List<String>>();
 		for (int i = 0; i < chunksInDefaultLinesPerSlide.size(); i = i+2) {
-			if (isFinalSlide(chunksInDefaultLinesPerSlide.size(), i)) {
+			if (chunksInDefaultLinesPerSlide.size() < i + 2) {
 				slidesFromChunk.add(chunksInDefaultLinesPerSlide.get(i));
 			} else {
 				if (canTheNextTwoSlidesBeCombined(chunksInDefaultLinesPerSlide.get(i).size(), chunksInDefaultLinesPerSlide.get(i + 1).size())){
-					slidesFromChunk.add(combineNextTwoSlides(chunksInDefaultLinesPerSlide.get(i), chunksInDefaultLinesPerSlide.get(i + 1)));
+					slidesFromChunk.add(combineTwoSlides(chunksInDefaultLinesPerSlide.get(i), chunksInDefaultLinesPerSlide.get(i + 1)));
 				} else {
 					slidesFromChunk.add(chunksInDefaultLinesPerSlide.get(i));
 					slidesFromChunk.add(chunksInDefaultLinesPerSlide.get(i + 1));
@@ -52,7 +52,7 @@ public class PowerPointDeck {
 		return slidesFromChunk;
 	}
 
-	private List<String> combineNextTwoSlides(List<String> firstSlide, List<String> secondSlide) {
+	private List<String> combineTwoSlides(List<String> firstSlide, List<String> secondSlide) {
 		List<String> combinedSlide = firstSlide;
 		combinedSlide.addAll(secondSlide);
 		return combinedSlide;
@@ -60,10 +60,6 @@ public class PowerPointDeck {
 
 	private boolean canTheNextTwoSlidesBeCombined(int firstSlideSize, int secondSlideSize) {
 		return firstSlideSize + secondSlideSize <= MAX_NUMBER_OF_LINES_PER_PAGE;
-	}
-
-	private boolean isFinalSlide(int size, int i) {
-		return size - 1 < i + 1;
 	}
 
 	private List<List<String>> reduceChunksToLinesLessThanLineSizeMax(List<String> chunkSplitIntoLines, int defaultLinesPerSlide) {

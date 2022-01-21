@@ -14,7 +14,8 @@ import com.sjwi.catalog.model.song.Song;
 import com.sjwi.catalog.service.SongService;
 import com.sjwi.catalog.service.UserService;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -36,7 +37,7 @@ public class CustomLogger {
 	@PostConstruct
 	public void initialize() {
 		System.setProperty(LOG_FILE_PROPERTY_KEY,System.getenv("CATALINA_BASE") + "/logs/songCatalogUserFeed");
-		log = Logger.getLogger(CustomLogger.class.getName());
+		log = LogManager.getLogger(CustomLogger.class.getName());
 	}
 	public void info(Object message) {
 		log.info(message);
