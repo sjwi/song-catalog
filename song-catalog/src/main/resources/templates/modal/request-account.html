@@ -57,6 +57,10 @@ $(document).ready(function(){
 		}
 	});
 });
+$('#requestAccountModal').on('hidden.bs.modal', function () {
+	$('#requestAccountModal .email-address').val('');
+	$('.modal.fade').modal('hide')
+})
 function requestAccount(){
 	$('#loginModal').modal('hide');
 	$('#requestAccountModal input').val('');
