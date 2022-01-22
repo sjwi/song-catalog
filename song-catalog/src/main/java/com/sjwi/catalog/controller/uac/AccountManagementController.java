@@ -87,10 +87,10 @@ public class AccountManagementController {
 			EnrollmentToken token = new EnrollmentToken(invitee.toLowerCase(),role);
 			tokenService.storeEnrollmentToken(token);
 			mailer.sendMail(new EmailFromTemplate()
-					.setMsgArgs(new String[] {token.getTokenLink()})
+					.setMsgArgs(new String[] {MailConstants.INVITATION_SUBJECT.replace("{{USERNAME}}", ((CfUser)auth.getPrincipal()).getFullName()),token.getTokenLink()})
 					.setMsgTemplate(INVITE_MSG_TEMPLATE)
 					.setTo(invitee)
-					.setSubject(MailConstants.INVITATION_SUBJECT.replace("{{USERNAME}}", ((CfUser)auth.getPrincipal()).getFullName())));
+					.setSubject("You're Invited!"));
 			logger.logMessageWithEmail("Invitation sent to " + invitee + " from " + auth.getName());
 			return new ResponseMessage("success");
 		} catch (MailException e) {
