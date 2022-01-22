@@ -14,7 +14,7 @@ public class MailConstants {
 	public static void initializeMailConstants(String defaultFromAddress, String adminDistributionList, String properName) {
 		DEFAULT_FROM_ADDRESS = defaultFromAddress;
 		ADMIN_DISTRIBUTION_LIST = adminDistributionList;
-		INVITATION_SUBJECT = "{{USERNAME}} has invited you to join the " + properName + " Website";
+		INVITATION_SUBJECT = "{{USERNAME}} has invited you to join the " + properName + " website.";
 		PASSWORD_RESET_SUBJECT = "Password Reset Requested - " + properName;
 	}
 }
