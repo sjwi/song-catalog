@@ -11,6 +11,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.sjwi.catalog.aspect.LandingPageAspect;
 import com.sjwi.catalog.controller.ControllerHelper;
+import com.sjwi.catalog.log.CustomLogger;
 import com.sjwi.catalog.model.song.Song;
 import com.sjwi.catalog.service.OrganizationService;
 import com.sjwi.catalog.service.SetListService;
@@ -28,6 +29,10 @@ import org.springframework.web.servlet.ModelAndView;
 
 @Controller
 public class SongDetailsController {
+
+	@Autowired
+	CustomLogger logger;
+
 	@Autowired
 	ControllerHelper controllerHelper;
 	
@@ -95,6 +100,7 @@ public class SongDetailsController {
 			@RequestParam(name="view",required=true) String view,
 			HttpServletRequest request, HttpServletResponse response) {
 		try {
+			logger.logUserActionWithEmail("Multi-select page visited");
 			ModelAndView mv = new ModelAndView(view);
 			List<Integer> songIdsToAdd = new Gson().fromJson(songIds, new TypeToken<ArrayList<Integer>>() {}.getType());
 			List<Song> songs = songIdsToAdd.stream()
