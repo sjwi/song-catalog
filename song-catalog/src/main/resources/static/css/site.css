@@ -41,6 +41,9 @@ hr {
 	transition: all 0.2s;
 	margin-top: 4px
 }
+.mw-400{
+	max-width:400px;
+}
 #offNav .icon-bar {
 	background-color: #fff !important;
 	opacity:.80;
@@ -793,6 +796,63 @@ p.song-footer {
     -webkit-transition-duration: .5s; /* Safari */
     transition-duration: .5s;
 }
+.alert.add-songs-alert {
+  transition-duration: .5s;
+  position: absolute; 
+  bottom: -275px; 
+  left: 2%; 
+  width: 96%;
+  z-index:9999; 
+}
+.alert > .alert-opac {
+	background-color: rgba(0, 179, 255,.2);
+  padding-bottom: 100px;
+}
+.alert.add-songs-alert.display {
+  bottom: -80px;
+}
+.alert.add-songs-alert.slide-down {
+  bottom: -190px;
+}
+/* Checkbox */
+/* Checkbox */
+.round {
+  position: relative;
+}
+.round label {
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 50%;
+  cursor: pointer;
+  height: 22px;
+  left: 0;
+  position: relative;
+  top: 0;
+  width: 22px;
+}
+.round label:after {
+  border: 2px solid #fff;
+  border-top: none;
+  border-right: none;
+  content: "";
+  height: 6px;
+  left: 4px;
+  opacity: 0;
+  position: absolute;
+  top: 6px;
+  transform: rotate(-45deg);
+  width: 12px;
+}
+.round input[type="checkbox"] {
+  visibility: hidden;
+}
+.round input[type="checkbox"]:checked + label {
+  background-color: var(--offnav-bg-color);
+  border-color: var(--offnav-bg-color);
+}
+.round input[type="checkbox"]:checked + label:after {
+  opacity: 1;
+}
 .mw-500 {
 	max-width:505px;
 }
@@ -988,7 +1048,7 @@ p.song-footer {
 	fill:var(--deep-grey);
 	margin-top:-13px;
 }
-#songCatalogBody .song-grip-container {
+#songCatalogBody .song-grip-container, #songCatalogBody .song-select-checkbox-container {
 	display:none !important;
 }
 #songCatalogBody .song-dropdown-btn {
@@ -1765,6 +1825,9 @@ table > thead > tr > th[class*="sort"]:after {
 	}
 }
 @media screen and (max-width: 900px) {
+	.alert.add-songs-alert {
+		position:fixed;
+	}
 	pre#logOutput {
 		font-size: .5rem;
 	}
@@ -1820,7 +1883,7 @@ table > thead > tr > th[class*="sort"]:after {
 		padding-left: 10px !important;
 		padding-right: 5px !important;
 	}
-	.version-control-table,label, input[type="date"],input[type="select"],textarea{
+	.version-control-table,label, input[type="select"],textarea{
 		font-size:.7rem !important;
 	}
 	.col-form-label {

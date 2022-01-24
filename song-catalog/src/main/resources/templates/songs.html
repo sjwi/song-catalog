@@ -27,6 +27,7 @@
 			<div class="modal-container">
 				<th:block sec:authorize="hasAuthority('USER')">
 					<th:block th:replace="modal/add-song-to-set"></th:block>
+					<th:block th:replace="modal/add-songs-to-set"></th:block>
 					<th:block th:replace="modal/delete-song"></th:block>
 					<th:block th:replace="modal/edit-song"></th:block>
 					<th:block th:replace="modal/version-control"></th:block>
@@ -43,7 +44,7 @@
 	<script th:inline="javascript">
 		if ($('.song-table').length == 0)
 			$('#songTableContainer').html($('.loading').clone());
-		var ignoreSongClickedSelector = ".action-btn,.song-dropdown-btn,.dropdown-menu, li, .dropdown-item,.grip-container,img";
+		var ignoreSongClickedSelector = ".action-btn,.song-dropdown-btn,.dropdown-menu, li, .dropdown-item,.grip-container,img,.round,.round>*";
 		var focusedSong = [[${focusedSong[0].id}]];
 		var focusedSlickPage = [[${fsInitialIndex}]];
 		

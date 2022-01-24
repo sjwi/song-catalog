@@ -1,0 +1,35 @@
+<input th:each="song: ${songs}" type="hidden" name="songs" th:value="${song.id}"/> 
+<div class="form-group row no-gutters mb-3 mt-4">
+	<div class="col-3 no-gutters">
+		<label class="col-form-label" for="setList">Set List</label>
+	</div>
+	<div class="col-9 no-gutters">
+		<select title="Select a set list"
+			name="setList" class="custom-select set-list required">
+			<option value="0">Add to New Set</option>
+			<option th:each="list, iter: ${sets}"
+				th:value = "${list.id}" th:text="${list.setListName}" th:selected="${iter.index==0}"></option>
+		</select>
+	</div>
+</div>
+<div class="form-group row add-new-set no-gutters my-3">
+	<div id="addNewSet" data-loaded="false" class="col-12"></div>
+</div>
+<script th:inline="javascript">
+	$(document).ready(function(){
+		$('.set-list').change(function(){
+			if ($(this).val() == "0") {
+				var setListElement = $('#addSongsToSetListModal').find('#addNewSet');
+				if($(setListElement).data('loaded')){
+					$(".add-new-set").show();
+				} else {
+					$(setListElement).html($('#createSetListForm').html());
+					$(setListElement).find('.date-picker').val(new Date().toDateInputValue());
+					$(setListElement).data('loaded','true')
+				}
+			}else{
+				$(".add-new-set").hide();
+			}
+		});
+	});
+</script>

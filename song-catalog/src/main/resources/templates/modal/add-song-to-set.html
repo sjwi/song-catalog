@@ -48,6 +48,7 @@ $(document).ready(function(){
 				data: $('#addSongToSetForm').serialize(),
 				success: function() {
 					if ($('#addSongToSetListModal').find('.set-list').val() == '0'){
+						setAlertOnLoad('warning',$('#addSongToSetListModal').find('.song-title-ref').prop('outerHTML') + ' added to <br> <a href="'+ contextpath + 'latest-set" class="alert-link">New setlist</a>');
 						location.reload();
 					} else {
 						alertWithFade('warning',$('#addSongToSetListModal').find('.song-title-ref').prop('outerHTML') + ' added to set list <br> <a href="'+ contextpath + 'setlist/' +  $('#addSongToSetListModal').find('.set-list').val()  + '" class="alert-link">'+$('#addSongToSetListModal').find('.set-list option:selected').text() + '</a>');
