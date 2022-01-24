@@ -48,11 +48,11 @@ $(document).ready(function(){
 				method: "POST",
 				data: $('#addSongsToSetForm').serialize(),
 				success: function() {
-					resetSelectedSongs();
 					if ($('#addSongsToSetListModal').find('.set-list').val() == '0'){
 						setAlertOnLoad('warning','Songs added to <br> <a href="'+ contextpath + 'latest-set" class="alert-link">New setlist</a>');
 						location.reload();
 					} else {
+						resetSelectedSongs();
 						alertWithFade('warning','Songs added to set list <br> <a href="'+ contextpath + 'setlist/' +  $('#addSongsToSetListModal').find('.set-list').val()  + '" class="alert-link">'+$('#addSongsToSetListModal').find('.set-list option:selected').text() + '</a>');
 						reloadSetContainerIfPresent($('#addSongsToSetListModal').find('.set-list').val());
 						$('#addSongsToSetListModal').modal('hide');
