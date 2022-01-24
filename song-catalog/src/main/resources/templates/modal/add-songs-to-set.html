@@ -37,6 +37,7 @@ function addSelectedSongsToSet(){
 }
 $(document).ready(function(){
 	$('#addSongsToSetListModal').on('hide.bs.modal', function () {
+		$('#submitAddSongsToSetFormBtn').prop("disabled",false);
 		slideAlertUp();
 	})
 	$('#addSongsToSetForm').on('submit',function(e){
@@ -60,8 +61,6 @@ $(document).ready(function(){
 				},
 				error: function(data){
 					alertWithFade('danger','Something went wrong! Unable to add song to set')
-				},
-				complete: function(){
 					$('#submitAddSongsToSetFormBtn').prop("disabled",false);
 				}
 			});
