@@ -802,7 +802,7 @@ p.song-footer {
   bottom: -275px; 
   left: 2%; 
   width: 96%;
-  z-index:9999; 
+  z-index:3000; 
 }
 #songCatalogBody .title {
 	padding-left:0.15rem !important;
@@ -825,6 +825,9 @@ p.song-footer {
 }
 .alert.add-songs-alert.slide-down {
   bottom: -190px;
+}
+ul.multi-select-ul {
+	list-style-type: none;
 }
 /* Checkbox */
 /* Checkbox */
@@ -1646,6 +1649,11 @@ table > thead > tr > th[class*="sort"]:after {
 	}
 }
 @media screen and (max-width: 1245px) {
+	#songCatalogBody .alert.add-songs-alert {
+		position: fixed; 
+		left: 2px; 
+		width: calc(33.33% - 4px);
+	}
 	.version-column{
 		display:none !important
 	}
