@@ -1,7 +1,19 @@
-<input th:each="song: ${songs}" type="hidden" name="songs" th:value="${song.id}"/> 
-<div class="form-group row no-gutters mb-3 mt-4">
+<div class="form-group row no-gutters mb-3 mt-2">
+	<div class="col col-12">
+		<h6><b>Songs to add:</b></h6>
+		<div class="row my-3 flex-nowrap" th:each="song:${songs}">
+			<div class="round form-check col-1">
+				<input th:id="${'multiSelectSong_' + song.id}" class="form-check-input" checked name="songs" th:value="${song.id}" type="checkbox">
+				<label th:for="${'multiSelectSong_' + song.id}" class="form-check-label"></label>
+			</div>
+			<div class="col-11">
+				<span th:text="${song.name}"></span>
+			</div>
+		</div>
+	<hr>
+	</div>
 	<div class="col-3 no-gutters">
-		<label class="col-form-label" for="setList">Set List</label>
+		<h6><b>Set List:</b></h6>
 	</div>
 	<div class="col-9 no-gutters">
 		<select title="Select a set list"
