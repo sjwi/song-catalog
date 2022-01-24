@@ -1,0 +1,71 @@
+<div class="modal fade" id="addSongsToSetListModal">
+	<div class="modal-dialog modal-md" role="document">
+		<div class="modal-content">
+			<div class = "modal-header">
+				<h5 class="modal-title">Add song(s) to set</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+				  <span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body py-0">
+				<form method="POST" th:action="@{/setlist/add-songs}" id="addSongsToSetForm">
+				</form>	
+			</div>
+			<div class="modal-footer">
+				<button type="submit" class="btn btn-info btn-lg w-100" form="addSongsToSetForm" id="submitAddSongsToSetFormBtn">Add to set</button>
+			</div>
+		</div>
+	</div>
+</div>
+<script>
+function addSelectedSongsToSet(){
+	slideAlertDown();
+	$('#addSongsToSetListModal').modal('show');
+	$.ajax({
+		url: contextpath + 'songs/details?view=modal/dynamic/add-songs-to-set&songs=' + encodeURIComponent(JSON.stringify(Array.from(cachedCheckedSongIds))), 
+		method: "GET",
+		beforeSend: function() {
+			$('#addSongsToSetForm').html($('.loading').clone());
+		},
+		success: function(data) {
+			$('#addSongsToSetForm').html(data);
+		},
+		error: function(data){
+			alertWithFade('danger','Something went wrong! Unable to retreive song metadata.')
+		}
+	});
+}
+$(document).ready(function(){
+	$('#addSongsToSetListModal').on('hide.bs.modal', function () {
+		slideAlertUp();
+	})
+	$('#addSongsToSetForm').on('submit',function(e){
+		e.preventDefault();
+		if (isFormFilled(this)){
+			$('#addSongsToSetForm button[type="submit"]').prop("disabled",true);
+			$.ajax({
+				url: contextpath + 'setlist/add-songs',
+				method: "POST",
+				data: $('#addSongsToSetForm').serialize(),
+				success: function() {
+					resetSelectedSongs();
+					if ($('#addSongsToSetListModal').find('.set-list').val() == '0'){
+						setAlertOnLoad('warning','Songs added to <br> <a href="'+ contextpath + 'latest-set" class="alert-link">New setlist</a>');
+						location.reload();
+					} else {
+						alertWithFade('warning','Songs added to set list <br> <a href="'+ contextpath + 'setlist/' +  $('#addSongsToSetListModal').find('.set-list').val()  + '" class="alert-link">'+$('#addSongsToSetListModal').find('.set-list option:selected').text() + '</a>');
+						reloadSetContainerIfPresent($('#addSongsToSetListModal').find('.set-list').val());
+						$('#addSongsToSetListModal').modal('hide');
+					}
+				},
+				error: function(data){
+					alertWithFade('danger','Something went wrong! Unable to add song to set')
+				},
+				complete: function(){
+					$('#addSongsToSetForm button[type="submit"]').prop("disabled",false);
+				}
+			});
+		}
+	});
+});
+</script>
