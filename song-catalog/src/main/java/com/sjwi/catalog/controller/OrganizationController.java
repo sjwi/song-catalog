@@ -125,6 +125,12 @@ public class OrganizationController {
 		}
 	}
 
+	@RequestMapping(value = {"/latest-set"}, method = RequestMethod.GET)
+	public ModelAndView siteLatestSet() {
+		SetList setList = setListService.getLatestSet();
+		return new ModelAndView("redirect:/setlist/" + setList.getId());
+	}
+
 	@RequestMapping(value = {"/lyrics"}, method = RequestMethod.GET)
 	public ModelAndView siteLatestLyrics() {
 		SetList setList = setListService.getLatestSet();

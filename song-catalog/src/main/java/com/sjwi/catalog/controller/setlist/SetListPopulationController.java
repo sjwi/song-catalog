@@ -84,6 +84,30 @@ public class SetListPopulationController {
 		}
 	}
 
+	@RequestMapping(value = {"setlist/add-songs"}, method = RequestMethod.POST)
+	public ModelAndView addSongsToSet(HttpServletRequest request, HttpServletResponse response, Principal principal, Authentication auth,
+			@RequestParam(value = "songs", required = true) List<Integer> songIds,
+			@RequestParam(value = "unit", required = false) Integer unit,
+			@RequestParam(value = "subUnit", required = false) Integer subUnit,
+			@RequestParam(value = "otherUnit", required = false) String otherUnit,
+			@RequestParam(value = "otherSubUnit", required = false) String otherSubUnit,
+			@RequestParam(value = "date", required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") Date date,
+			@RequestParam(value = "homegroupName", required = false) String homegroupName,
+			@RequestParam(value = "setList", required = true) int setListId) {
+		try {
+			if(setListId == 0) {
+				String setListName = controllerHelper.buildSetlistName(unit,subUnit,otherUnit,otherSubUnit,date,homegroupName);
+				setListId = setListService.createSet(setListName,principal.getName(), unit, subUnit);
+			}
+			setListService.addSongsToSet(songIds, setListId);
+			ModelAndView mv = new ModelAndView("dynamic/set-list-container");
+			mv.addObject("set", setListService.getSetListById(setListId));
+			return mv;
+		} catch (Exception e) {
+			return controllerHelper.errorHandler(e);
+		}
+	}
+
 	@RequestMapping(value = {"setlist/remove-song"}, method = RequestMethod.POST)
 	public ModelAndView removeSongFromSet(HttpServletRequest request, HttpServletResponse response,
 			Authentication auth,

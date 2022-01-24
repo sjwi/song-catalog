@@ -1,11 +1,14 @@
 package com.sjwi.catalog.controller.song;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.sjwi.catalog.aspect.LandingPageAspect;
 import com.sjwi.catalog.controller.ControllerHelper;
 import com.sjwi.catalog.model.song.Song;
@@ -79,6 +82,27 @@ public class SongDetailsController {
 				song = song.transpose(key);
 			mv.addObject("song", song);
 			mv.addObject("focusedSong", focusedSong);
+			mv.addObject("sets", setListService.getSetLists(10));
+			return mv;
+		} catch (Exception e) {
+			return controllerHelper.errorHandler(e);
+		}
+	}
+	
+	@RequestMapping(value = { "/songs/details"}, method = RequestMethod.GET)
+	public ModelAndView songsDetails(
+			@RequestParam(name="songs",required=true) String songIds,
+			@RequestParam(name="view",required=true) String view,
+			HttpServletRequest request, HttpServletResponse response) {
+		try {
+			ModelAndView mv = new ModelAndView(view);
+			List<Integer> songIdsToAdd = new Gson().fromJson(songIds, new TypeToken<ArrayList<Integer>>() {}.getType());
+			List<Song> songs = songIdsToAdd.stream()
+				.map(i -> {
+					System.out.println(i);
+					return songService.getSongById(i);})
+				.collect(Collectors.toList());
+			mv.addObject("songs", songs);
 			mv.addObject("sets", setListService.getSetLists(10));
 			return mv;
 		} catch (Exception e) {
