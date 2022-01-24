@@ -102,6 +102,7 @@ public class SetListPopulationController {
 			setListService.addSongsToSet(songIds, setListId);
 			ModelAndView mv = new ModelAndView("dynamic/set-list-container");
 			mv.addObject("set", setListService.getSetListById(setListId));
+			logger.logUserActionWithEmail("Setlist created from multi-select");
 			return mv;
 		} catch (Exception e) {
 			return controllerHelper.errorHandler(e);
