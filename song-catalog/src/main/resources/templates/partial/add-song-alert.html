@@ -25,6 +25,10 @@
       slideAlertDown();
     }
   });
+  $(document).on('click', '.song-select-checkbox-container',function(e){
+    var checkbox = $(this).children('input[type="checkbox"]');
+    checkbox.prop('checked', !checkbox.prop('checked')).change();
+  });
   $(document).on('change', 'input.song-select:checkbox', function (e) {
     if ($(this).is(':checked')) {
       cachedCheckedSongIds.add($(this).data('target'));
