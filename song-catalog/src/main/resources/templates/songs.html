@@ -12,6 +12,7 @@
 							<th:block th:replace="dynamic/song-table"></th:block>
 						</th:block>
 					</div>
+					<th:block th:replace="partial/add-song-alert"></th:block>
 				</div>
 				<div class="no-gutters song-details col col-8" th:classappend="${#strings.contains(#request.requestURI,'/songs')}? 'hide-song-details':''">
 					<div class="template-container" id="catalogSongDetails">
