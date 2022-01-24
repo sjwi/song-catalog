@@ -42,7 +42,7 @@ $(document).ready(function(){
 	$('#addSongsToSetForm').on('submit',function(e){
 		e.preventDefault();
 		if (isFormFilled(this)){
-			$('#addSongsToSetForm button[type="submit"]').prop("disabled",true);
+			$('#submitAddSongsToSetFormBtn').prop("disabled",true);
 			$.ajax({
 				url: contextpath + 'setlist/add-songs',
 				method: "POST",
@@ -62,7 +62,7 @@ $(document).ready(function(){
 					alertWithFade('danger','Something went wrong! Unable to add song to set')
 				},
 				complete: function(){
-					$('#addSongsToSetForm button[type="submit"]').prop("disabled",false);
+					$('#submitAddSongsToSetFormBtn').prop("disabled",false);
 				}
 			});
 		}
