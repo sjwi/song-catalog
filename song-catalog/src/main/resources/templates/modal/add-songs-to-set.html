@@ -22,7 +22,7 @@ function addSelectedSongsToSet(){
 	slideAlertDown();
 	$('#addSongsToSetListModal').modal('show');
 	$.ajax({
-		url: contextpath + 'songs/details?view=modal/dynamic/add-songs-to-set&songs=' + encodeURIComponent(JSON.stringify(Array.from(cachedCheckedSongIds))), 
+		url: contextpath + 'songs/details?view=modal/dynamic/add-songs-to-set&songs=' + encodeURIComponent(localStorage.getItem("cachedMultiSelect")), 
 		method: "GET",
 		beforeSend: function() {
 			$('#addSongsToSetForm').html($('.loading').clone());
@@ -52,6 +52,7 @@ $(document).ready(function(){
 					if ($('#addSongsToSetListModal').find('.set-list').val() == '0'){
 						setAlertOnLoad('warning','Songs added to <br> <a href="'+ contextpath + 'latest-set" class="alert-link">New setlist</a>');
 						location.reload();
+						clearCheckedCache();
 					} else {
 						resetSelectedSongs();
 						alertWithFade('warning','Songs added to set list <br> <a href="'+ contextpath + 'setlist/' +  $('#addSongsToSetListModal').find('.set-list').val()  + '" class="alert-link">'+$('#addSongsToSetListModal').find('.set-list option:selected').text() + '</a>');
