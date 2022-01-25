@@ -77,6 +77,8 @@
 						var topPos = focusedRow.offsetTop;
 						$('.song-column')[0].scrollTo(0,topPos);
 						selectFocusedSong(focusedSong);
+						let tmpSongArray = JSON.parse(localStorage.getItem("cachedMultiSelect"));
+						tmpSongArray.forEach((id) => $('#songCheckbox_' + id).prop('checked',true));
 					},
 					error: function(data) {
 						alertWithFade('danger','Unable to populate song list at this time.')

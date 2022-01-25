@@ -35,6 +35,7 @@
   } else {
     let tmpSongArray = JSON.parse(localStorage.getItem("cachedMultiSelect"));
     tmpSongArray.forEach((id) => $('#songCheckbox_' + id).prop('checked',true).change());
+    showAddSongsAlert();
     slideAlertDown();
   }
   function clearCheckedCache() {
