@@ -17,27 +17,6 @@
   </div>
 </div>
 <script>
-  $(document).on('change', 'input.song-select:checkbox', function (e) {
-    if ($(this).is(':checked')) {
-      addSongToCheckedCache($(this).data('target'));
-      slideAlertUp();
-    } else {
-      removeSongFromCheckedCache($(this).data('target'));
-    }
-    if (checkedCacheSize() > 0) {
-      showAddSongsAlert();
-    } else {
-      hideAddSongsAlert();
-    }
-  });
-  if (localStorage.getItem("cachedMultiSelect") === null) {
-    localStorage.setItem("cachedMultiSelect","[]");
-  } else {
-    let tmpSongArray = JSON.parse(localStorage.getItem("cachedMultiSelect"));
-    tmpSongArray.forEach((id) => $('#songCheckbox_' + id).prop('checked',true).change());
-    showAddSongsAlert();
-    slideAlertDown();
-  }
   function clearCheckedCache() {
     localStorage.setItem("cachedMultiSelect","[]");
   }
@@ -61,6 +40,29 @@
     localStorage.setItem("cachedMultiSelect",JSON.stringify(tmpSongArray));
   }
 
+  $(document).on('change', 'input.song-select:checkbox', function (e) {
+    if ($(this).is(':checked')) {
+      addSongToCheckedCache($(this).data('target'));
+      slideAlertUp();
+    } else {
+      removeSongFromCheckedCache($(this).data('target'));
+    }
+    if (checkedCacheSize() > 0) {
+      showAddSongsAlert();
+    } else {
+      hideAddSongsAlert();
+    }
+  });
+  if (localStorage.getItem("cachedMultiSelect") === null) {
+    localStorage.setItem("cachedMultiSelect","[]");
+  } else {
+    let tmpSongArray = JSON.parse(localStorage.getItem("cachedMultiSelect"));
+    if (tmpSongArray.length > 0) {
+      tmpSongArray.forEach((id) => $('#songCheckbox_' + id).prop('checked',true).change());
+      showAddSongsAlert();
+      slideAlertDown();
+    }
+  }
   $(document).on('click','#hideAddAlert',function(){
     if ($('.alert.add-songs-alert').hasClass('slide-down')) {
       slideAlertUp();
