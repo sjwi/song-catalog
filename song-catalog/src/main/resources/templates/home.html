@@ -38,7 +38,9 @@
 								<th:block th:replace="dynamic/song-table"></th:block>
 							</div>
 						</div>
-						<th:block th:replace="partial/add-song-alert"></th:block>
+						<th:block sec:authorize="hasAuthority('USER')">
+							<th:block th:replace="partial/add-song-alert"></th:block>
+						</th:block>
 					</div>
 				</div>
 				<div class="col-12 col-md-6 no-gutters setlist-home-col border-left" style="background: var(--secondary-bg-color)">
