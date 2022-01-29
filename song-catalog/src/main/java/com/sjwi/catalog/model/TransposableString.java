@@ -213,7 +213,11 @@ public class TransposableString {
 	}
 	private String stripKeywordsFromLine(String line) {
 		String l = StringUtils.stripEnd(line,null);
-		String keywordSubString = l.replaceAll("[^a-zA-Z ]", "").replaceAll("(?i)repeat", "").trim();
+		String keywordSubString = l
+				.replaceAll("[^a-zA-Z ]", "")
+				.replaceAll("(?i)repeat", "")
+				.replaceAll(" ","")
+				.trim();
 		return STRIPPABLE_KEYWORDS.stream()
 			.map(k -> k.equalsIgnoreCase(keywordSubString))
 			.anyMatch(k -> k == true)? null: l;
