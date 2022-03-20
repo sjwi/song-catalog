@@ -80,4 +80,7 @@ public class SongService {
 
 		return DiffUtils.diff(originalSongAsList, revisedSongAsList).getDeltas();
 	}
+  public Song getSongByName(String songTitle) {
+    return songDao.getSongByName(songTitle);
+  }
 }

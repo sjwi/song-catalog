@@ -38,6 +38,9 @@ insertNewSong: >
   
 getSongById: >
   Select * from Song where ID = ?
+
+getSongByName: >
+  Select * from Song where LOWER(NAME) = LOWER(?)
   
 getKeysetByKeyId: >
   Select * from KeyMaster where keyId = ?

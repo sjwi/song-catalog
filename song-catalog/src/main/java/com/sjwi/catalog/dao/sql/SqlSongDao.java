@@ -317,4 +317,9 @@ public class SqlSongDao implements SongDao {
 				}
 			);
 	}
+
+	@Override
+	public Song getSongByName(String name) {
+		return jdbcTemplate.query(queryStore.get("getSongByName"), new Object[]{name.trim()}, r-> (Song) buildSongFromResultSet(r));
+	}
 }

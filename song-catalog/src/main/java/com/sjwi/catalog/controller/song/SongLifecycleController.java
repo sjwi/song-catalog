@@ -2,6 +2,7 @@ package com.sjwi.catalog.controller.song;
 
 import java.security.Principal;
 import java.util.Date;
+import java.util.Objects;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -71,6 +72,10 @@ public class SongLifecycleController {
 			Principal principal,Authentication auth,
 			@RequestParam(value = "songBody", required = false) String songBody) {
 		try {
+			Song existingSong = songService.getSongByName(songTitle);
+			if (!Objects.isNull(existingSong)){
+				return new ResponseMessage("conflict",existingSong.getId());
+			}
 			int id = songService.addSong(controllerHelper.titleCase(songTitle),songBody,chordedIn,userService.loadCfUserByUsername(principal.getName()),category);
 			if (songAudio != null) {
 				recordingService.addOrUpdateRecording(id, songAudio);

@@ -41,6 +41,8 @@
 			$(form).submit(function(e){
 				e.preventDefault();
 			});
+			if ($(form).find('input').val() != '')
+				searchItem(form,endpoint,view,append,id);
 		});
 		function searchItem(form,endpoint,view,append,id){
 			if (id == "abGroupSearch"){
