@@ -1,6 +1,6 @@
 <th:block th:fragment="setListResults(sets)">
 	<th:block th:if="${!sets.empty}">
-		<div th:each="set, iter: ${sets}" class="row mb-2 no-gutters">
+		<div th:each="set, iter: ${sets}" class="row mb-2 no-gutters sl-row">
 			<div class="col text-center my-auto col-12" th:id="${'appendSetList_' + set.id}">
 				<th:block th:include="dynamic/set-list-container.html"></th:block>
 			</div>

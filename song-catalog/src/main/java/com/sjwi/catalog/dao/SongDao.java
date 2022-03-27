@@ -50,4 +50,6 @@ public interface SongDao {
 	public Map<Song, Integer> getFrequencyCount();
 
 	public Map<Song, Integer> getServiceFrequencyCount(List<Integer> services);
+
+  public Song getSongByName(String name);
 }

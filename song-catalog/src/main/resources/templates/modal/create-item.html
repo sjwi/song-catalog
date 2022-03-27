@@ -197,6 +197,10 @@
 					contentType: false,
 					dataType: 'JSON',
 					success: function(data) {
+						if (data.status == 'conflict') {
+							alertWithFade('danger','The song <a href="' + contextpath + 'song/' + data.action + '">' + $('#createItemModal').find('.form-control.title').val() + '</a> already exists.')
+							return
+						}
 						setAlertOnLoad('warning','New song <b>' +$('#createSongForm').find('.title').val() + '</b> created.');
 						location.href = contextpath + 'song/' + data.action; 
 						$('#createItemModal').modal('hide');

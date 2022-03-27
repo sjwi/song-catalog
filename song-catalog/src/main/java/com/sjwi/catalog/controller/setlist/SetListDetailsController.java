@@ -27,7 +27,7 @@ import org.springframework.web.servlet.ModelAndView;
 @Controller
 public class SetListDetailsController {
 	
-	public static final int SET_LISTS_PER_PAGE = 20;
+	public static final int SET_LISTS_PER_PAGE = 25;
 	
 	@Autowired
 	ControllerHelper controllerHelper;
@@ -66,11 +66,11 @@ public class SetListDetailsController {
 	@LandingPageAspect
 	public ModelAndView setListPage(
 			@RequestParam(name = "view",required=false) Optional<String> view,
-			@RequestParam(name = "additionalSets",required=false) boolean page,
+			@RequestParam(name = "cursor",required=false) Integer cursor,
 			HttpServletRequest request, Authentication auth, HttpServletResponse response) {
 		ModelAndView mv = new ModelAndView(view.filter(v -> !v.trim().isEmpty()).orElse("setlists"));
 		try {
-			mv.addObject("sets", page? setListService.getSetListPage(SET_LISTS_PER_PAGE): setListService.getSetLists(SET_LISTS_PER_PAGE));
+			mv.addObject("sets", setListService.getSetListPage(SET_LISTS_PER_PAGE, cursor == null? 0: cursor));
 			mv.addObject("orgs",organizationService.getOrganizations());
 			return mv;
 		} catch (Exception e) {
