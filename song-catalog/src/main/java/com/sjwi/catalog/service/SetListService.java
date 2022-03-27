@@ -51,8 +51,8 @@ public class SetListService {
 	public List<SetList> searchSetLists(String searchTerm){
 		return setListDao.searchSetLists(searchTerm == null? null :"%" + searchTerm.toLowerCase() + "%");
 	}
-	public List<SetList> getSetListPage(int pageSize){
-		return setListDao.getSetListPage(pageSize);
+	public List<SetList> getSetListPage(int pageSize, int cursor){
+		return setListDao.getSetListPage(pageSize, cursor);
 	}
 	
 	public List<Song> getSetSongs(int id){

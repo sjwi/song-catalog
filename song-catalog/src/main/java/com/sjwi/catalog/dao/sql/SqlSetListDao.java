@@ -112,8 +112,8 @@ public class SqlSetListDao implements SetListDao {
 	}
 
 	@Override
-	public List<SetList> getSetListPage(int page) {
-		return jdbcTemplate.query(queryStore.get("getSetListsAfterX"),new Object[] {page}, r -> {
+	public List<SetList> getSetListPage(int page, int cursor) {
+		return jdbcTemplate.query(queryStore.get("getSetListsAfterX"),new Object[] {page * cursor, page}, r -> {
 			List<SetList> setLists = new ArrayList<>();
 			while(r.next()) {
 					setLists.add(new SetList(

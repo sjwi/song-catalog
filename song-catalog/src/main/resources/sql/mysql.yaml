@@ -100,7 +100,7 @@ getXNumberOfSetlistsOrderByCreatedOnDescWithPagination: >
   Select * from SetListMaster order by CREATED_ON DESC LIMIT ?,?
   
 getSetListsAfterX: >
-  Select * from SetListMaster order by CREATED_ON DESC LIMIT ?,100000
+  Select * from SetListMaster order by CREATED_ON DESC LIMIT ?,?
   
 getMaxSortValInSetlist: >
   SELECT SORT_ORDER FROM SetList WHERE SETLIST_ID = ? ORDER BY SORT_ORDER DESC LIMIT 1

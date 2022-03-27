@@ -13,7 +13,7 @@ public interface SetListDao {
 	
 	public List<SetList> getSetLists(int qty);
 
-	public List<SetList> getSetListPage(int page);
+	public List<SetList> getSetListPage(int page, int cursor);
 
 	public void addSongToSet(int songId, int setListId, String setDefaultKey, int sort);
 
