@@ -10,7 +10,11 @@ function addScrollListener(id, size, delay){
 		size = size.toString() + 'px';
 	}
 	var prevScrollpos = window.pageYOffset;
-	var velocityThreshold = 10;
+	var velocityThreshold = 5;
+	if ($(window).scrollTop() != 0) {
+		$(id).css('top',size);
+		$('.sticky-top-nav, .top-nav').css('top',size);
+	}
 	$(document).ready(function(){
 		$(window).on('scroll',function(e){
 			var currentScrollPos = window.pageYOffset;
