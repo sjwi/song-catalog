@@ -18,6 +18,7 @@ import com.sjwi.catalog.model.addressbook.AddressBookEntry;
 import com.sjwi.catalog.model.user.CfUser;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -36,6 +37,7 @@ public class UserService implements UserDetailsService {
 	AddressBookService addressBookService;
 
 	@Autowired
+	@Lazy
 	private PasswordEncoder passwordEncoder;
 
 	@Autowired

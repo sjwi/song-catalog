@@ -73,7 +73,8 @@
 	<button type="submit" class="btn btn-lg w-100 btn-info" onclick="$('#downloadForm').submit()">Download</button>
 	<button type="submit" class="btn btn-lg w-100 btn-primary" onclick="openDownloadInBrowser()">Open in Browser</button>
 	<button type="button" class="btn btn-lg btn-dark w-100" id="copyDownloadLinkBtn" onclick="copyDownloadUrl(event)"
-		th:attr="data-baseContext=${T(com.sjwi.catalog.config.ServletConstants).FULL_URL}">Copy Download Link</button>
+	 	th:with="fullUrl=${T(com.sjwi.catalog.config.ServletConstants).FULL_URL}"
+		th:attr="data-baseContext=${fullUrl}">Copy Download Link</button>
 	<button type="submit" class="btn btn-lg w-100 btn-success" onclick="emailFile(event)">Email/SMS</button>
 	<button type="button" class="btn btn-lg btn-secondary w-100" id="generateDownloadQRCodeBtn" onclick="generateDownloadQRCode(event)">Generate QR Code</button>
 </div>

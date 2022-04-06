@@ -27,7 +27,9 @@
 		  </div>
 		  <div class="night-mode-switch float-right">
 		  	<div class="toggle-btn" id="nightModeToggle">
-			  <input type="checkbox" class="night-mode-input" th:checked="${#session != null && #session.getAttribute(T(com.sjwi.catalog.config.PreferencesConfiguration).NIGHT_MODE_PREFERENCE_KEY) != null && #session.getAttribute(T(com.sjwi.catalog.config.PreferencesConfiguration).NIGHT_MODE_PREFERENCE_KEY)}">
+			  <input type="checkbox" class="night-mode-input"
+					th:with="nightModePreference=${T(com.sjwi.catalog.config.PreferencesConfiguration).NIGHT_MODE_PREFERENCE_KEY}"
+					th:checked="${#session != null && #session.getAttribute(nightModePreference) != null && #session.getAttribute(nightModePreference)}">
 			  <span>
 			  </span>
 			</div>

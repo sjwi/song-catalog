@@ -13,6 +13,7 @@ import com.sjwi.catalog.model.mail.Email;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
@@ -29,6 +30,7 @@ public class Mailer {
 	Session session;
 	
 	@Autowired
+	@Lazy
 	CustomLogger logger;
 	
 	public void sendMail(Email email) throws MailException {

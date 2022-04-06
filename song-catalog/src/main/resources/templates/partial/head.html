@@ -19,10 +19,12 @@
 		<link rel="apple-touch-startup-image" th:href="@{/images/splashscreen_1668x2224.png}" media="(min-device-width: 834px) and (max-device-width: 834px) and (-webkit-min-device-pixel-ratio: 2) and (orientation: portrait)">
 		<link rel="apple-touch-startup-image" th:href="@{/images/splashscreen_2048x2732.png}" media="(min-device-width: 1024px) and (max-device-width: 1024px) and (-webkit-min-device-pixel-ratio: 2) and (orientation: portrait)">
 		<link rel="shortcut icon" th:href="@{/favicon.ico}" type="image/x-icon">
-		<link th:if="${#session == null || #session.getAttribute(T(com.sjwi.catalog.config.PreferencesConfiguration).NIGHT_MODE_PREFERENCE_KEY) == null || !#session.getAttribute(T(com.sjwi.catalog.config.PreferencesConfiguration).NIGHT_MODE_PREFERENCE_KEY)}" rel="stylesheet" th:href="@{/css/bootstrap.css}" />
-		<link th:if="${#session == null || #session.getAttribute(T(com.sjwi.catalog.config.PreferencesConfiguration).NIGHT_MODE_PREFERENCE_KEY) == null || !#session.getAttribute(T(com.sjwi.catalog.config.PreferencesConfiguration).NIGHT_MODE_PREFERENCE_KEY)}" rel="stylesheet" th:href="@{/css/colors.css}" />
-		<link th:if="${#session != null && #session.getAttribute(T(com.sjwi.catalog.config.PreferencesConfiguration).NIGHT_MODE_PREFERENCE_KEY) != null && #session.getAttribute(T(com.sjwi.catalog.config.PreferencesConfiguration).NIGHT_MODE_PREFERENCE_KEY)}" rel="stylesheet" th:href="@{/css/bootstrap-dark.css}" />
-		<link th:if="${#session != null && #session.getAttribute(T(com.sjwi.catalog.config.PreferencesConfiguration).NIGHT_MODE_PREFERENCE_KEY) != null && #session.getAttribute(T(com.sjwi.catalog.config.PreferencesConfiguration).NIGHT_MODE_PREFERENCE_KEY)}" rel="stylesheet" th:href="@{/css/colors-dark.css}" />
+		<th:block th:with="nightModePreference=${T(com.sjwi.catalog.config.PreferencesConfiguration).NIGHT_MODE_PREFERENCE_KEY}">
+			<link th:if="${#session == null || #session.getAttribute(nightModePreference) == null || !#session.getAttribute(nightModePreference)}" rel="stylesheet" th:href="@{/css/bootstrap.css}" />
+			<link th:if="${#session == null || #session.getAttribute(nightModePreference) == null || !#session.getAttribute(nightModePreference)}" rel="stylesheet" th:href="@{/css/colors.css}" />
+			<link th:if="${#session != null && #session.getAttribute(nightModePreference) != null && #session.getAttribute(nightModePreference)}" rel="stylesheet" th:href="@{/css/bootstrap-dark.css}" />
+			<link th:if="${#session != null && #session.getAttribute(nightModePreference) != null && #session.getAttribute(nightModePreference)}" rel="stylesheet" th:href="@{/css/colors-dark.css}" />
+		</th:block>
 		<link rel="stylesheet" type="text/css" th:href="@{/css/slick.css}"/>
 		<link rel="stylesheet" type="text/css" th:href="@{/css/select2.min.css}"/>
 		<link rel="apple-touch-icon" th:href="@{/images/icon_dark.png}">
