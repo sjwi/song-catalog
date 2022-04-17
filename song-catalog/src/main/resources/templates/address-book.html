@@ -10,7 +10,8 @@
 					<div class="row song-header no-gutters">
 						<div class="col-2">
 							<a th:href="@{/}"><img border="0"
-						th:src="${#session.getAttribute(T(com.sjwi.catalog.config.PreferencesConfiguration).NIGHT_MODE_PREFERENCE_KEY) == null || !#session.getAttribute(T(com.sjwi.catalog.config.PreferencesConfiguration).NIGHT_MODE_PREFERENCE_KEY)}? @{/images/logo_transparent.png}: @{/images/logo_transparent_dark.png}"  class="logo dark-swap" alt="Logo"></a>
+								th:with="nightModePreference=${T(com.sjwi.catalog.config.PreferencesConfiguration).NIGHT_MODE_PREFERENCE_KEY}"
+						th:src="${#session.getAttribute(nightModePreference) == null || !#session.getAttribute(nightModePreference)}? @{/images/logo_transparent.png}: @{/images/logo_transparent_dark.png}"  class="logo dark-swap" alt="Logo"></a>
 						</div>
 						<div class="col-8 text-center my-auto">
 							<div class="off-nav-title ab-title-full">Address Book Entries</div>

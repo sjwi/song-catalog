@@ -37,6 +37,7 @@ import com.sjwi.catalog.service.UserService;
 import org.apache.commons.lang.WordUtils;
 import org.apache.commons.lang.exception.ExceptionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -56,6 +57,7 @@ public class ControllerHelper {
 	AddressBookService addressBookService;
 	
 	@Autowired
+	@Lazy
 	SetListService setListService;
 	
 	@Autowired

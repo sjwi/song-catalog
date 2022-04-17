@@ -41,7 +41,9 @@
 								<a class="dropdown-item edit-song-btn">Edit Song</a>
 							</li>
 							<li>
-								<a class="dropdown-item" th:attr="onclick=${'copyTextToClipboard(''' + T(com.sjwi.catalog.config.ServletConstants).FULL_URL + '/song/' + setSong.id + ''')'}">Copy Song Link</a>
+								<a
+								th:with="fullUrl=${T(com.sjwi.catalog.config.ServletConstants).FULL_URL }"
+								class="dropdown-item" th:attr="onclick=${'copyTextToClipboard(''' + fullUrl + '/song/' + setSong.id + ''')'}">Copy Song Link</a>
 							</li>
 							<li>
 								<a class="dropdown-item choose-version" th:attr="onclick=${'openChangeVersionModal(' + setSong.id + ',' + set.id + ',''' + #strings.replace(setSong.name,'''','\''') + ''',' + setSong.setListSongId +')'}">Select Version</a>
@@ -73,7 +75,9 @@
 					<a href="javascript:void(0)"><img width="30px" type="image/x-icon" th:src="@{/images/email-inverse.png}"/></a>
 				</div>
 			</th:block>
-			<div class="col text-center" data-toggle="tooltip" data-placement="bottom" title="Distribute link" th:classappend="${#authorization.expression('hasAuthority(''USER'')')}?'col-3':''" th:attr="onclick=${'copySetLink('''} + ${T(com.sjwi.catalog.config.ServletConstants).BASE_URL} + @{/setlist/__${set.id}__} +  ${''',this)'}">
+			<div class="col text-center" data-toggle="tooltip" data-placement="bottom" title="Distribute link" th:classappend="${#authorization.expression('hasAuthority(''USER'')')}?'col-3':''"
+			 	th:with="baseUrl=${T(com.sjwi.catalog.config.ServletConstants).BASE_URL}"
+				th:attr="onclick=${'copySetLink('''} + ${baseUrl} + @{/setlist/__${set.id}__} +  ${''',this)'}">
 				<a href="javascript:void(0)"><img width="30px" type="image/x-icon" th:src="@{/images/qrcode.png}"/></a>
 			</div>
 		</div>

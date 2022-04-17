@@ -24,7 +24,8 @@
 					<div class="col-3"></div>
 					<div class="col-sm-6 text-center">
 						<div class="input-group col org-permalink">
-							<a target="_blank" th:href="${T(com.sjwi.catalog.config.ServletConstants).BASE_URL} + @{/org/__${orgId}__/lyrics-handout}" class="input-group-prepend">
+							<a th:with="baseUrl=${T(com.sjwi.catalog.config.ServletConstants).BASE_URL}"
+								target="_blank" th:href="${baseUrl} + @{/org/__${orgId}__/lyrics-handout}" class="input-group-prepend">
 								<span class="input-group-text">Latest lyrics&nbsp;<span class="long-word">handout</span></span>
 						    </a>
 							<input class="form-control mono-space" disabled type="text" id="orgLyrics" th:value="${T(com.sjwi.catalog.config.ServletConstants).BASE_URL} + @{/org/__${orgId}__/lyrics-handout}">
@@ -38,7 +39,8 @@
 					<div class="col-3"></div>
 					<div class="col-sm-6 text-center">
 						<div class="input-group col org-permalink">
-							<a target="_blank" th:href="${T(com.sjwi.catalog.config.ServletConstants).BASE_URL} + @{/org/__${orgId}__/setlist}" class="input-group-prepend">
+							<a th:with="baseUrl=${T(com.sjwi.catalog.config.ServletConstants).BASE_URL}"
+								target="_blank" th:href="${baseUrl} + @{/org/__${orgId}__/setlist}" class="input-group-prepend">
 								<span class="input-group-text">Latest set list&nbsp;<span class="long-word">page</span></span>
 						    </a>
 							<input class="form-control mono-space" disabled type="text" id="orgPdf" th:value="${T(com.sjwi.catalog.config.ServletConstants).BASE_URL} + @{/org/__${orgId}__/setlist}">
@@ -52,7 +54,9 @@
 					<div class="col-3"></div>
 					<div class="col-sm-6 text-center">
 						<div class="input-group col org-permalink">
-							<a target="_blank" th:href="${T(com.sjwi.catalog.config.ServletConstants).BASE_URL} + @{/org/__${orgId}__/ppt}" class="input-group-prepend">
+							<a target="_blank"
+							 	th:with="baseUrl=${T(com.sjwi.catalog.config.ServletConstants).BASE_URL}"
+								th:href="${baseUrl} + @{/org/__${orgId}__/ppt}" class="input-group-prepend">
 								<span class="input-group-text">Latest&nbsp;<span class="long-word">PowerPoint</span><span class="short-word">.pptx</span></span>
 						    </a>
 							<input class="form-control mono-space" disabled type="text" id="orgSet" th:value="${T(com.sjwi.catalog.config.ServletConstants).BASE_URL} + @{/org/__${orgId}__/ppt}">

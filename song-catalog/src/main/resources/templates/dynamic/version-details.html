@@ -21,7 +21,9 @@
 		<th:block sec:authorize="hasAuthority('USER')">
 			<div class="version-container new-version text-center mb-3 pb-2" title="Click to create a new version" th:attr="data-target=${focusedSong[0].id}">
 				<div class="add-version-img">
-					<img width="50px" th:src="${#session.getAttribute(T(com.sjwi.catalog.config.PreferencesConfiguration).NIGHT_MODE_PREFERENCE_KEY) == null || !#session.getAttribute(T(com.sjwi.catalog.config.PreferencesConfiguration).NIGHT_MODE_PREFERENCE_KEY)}?@{/images/plus-sign-green-md.png} : @{/images/plus-sign-circle-inverse.png}">
+					<img width="50px"
+					 	th:with="nightModePreference=${T(com.sjwi.catalog.config.PreferencesConfiguration).NIGHT_MODE_PREFERENCE_KEY}"
+						th:src="${#session.getAttribute(nightModePreference) == null || !#session.getAttribute(nightModePreference)}?@{/images/plus-sign-green-md.png} : @{/images/plus-sign-circle-inverse.png}">
 				</div>
 			</div>
 		</th:block>
