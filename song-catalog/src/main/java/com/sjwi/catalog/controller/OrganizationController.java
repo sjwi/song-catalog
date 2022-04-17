@@ -162,7 +162,7 @@ public class OrganizationController {
 					return new ModelAndView("forward:/" 
 							+ "setlist/pdf/" + setList.getId()
 							+ "/" + UriUtils.encode(organization.getName() + " Worship " + today,"UTF-8")
-							+ "?lyricsOnly=true&fontSize=18");
+							+ "?lyricsOnly=true&fontSize=18&qrCode=on");
 			}
 		} catch (Exception e) {
 			return controllerHelper.errorHandler(e);
