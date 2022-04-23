@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.sjwi.catalog.model.KeySet;
+import com.sjwi.catalog.model.SearchTerm;
 import com.sjwi.catalog.model.song.Song;
 
 public interface SongDao {
@@ -52,4 +53,6 @@ public interface SongDao {
 	public Map<Song, Integer> getServiceFrequencyCount(List<Integer> services);
 
   public Song getSongByName(String name);
+
+  public List<Song> searchSongsWithTerm(SearchTerm term, String termValue);
 }

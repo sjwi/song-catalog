@@ -13,6 +13,7 @@ import java.util.Map;
 import com.sjwi.catalog.controller.ControllerHelper;
 import com.sjwi.catalog.dao.SongDao;
 import com.sjwi.catalog.model.KeySet;
+import com.sjwi.catalog.model.SearchTerm;
 import com.sjwi.catalog.model.TransposableString;
 import com.sjwi.catalog.model.song.MasterSong;
 import com.sjwi.catalog.model.song.Song;
@@ -321,5 +322,13 @@ public class SqlSongDao implements SongDao {
 	@Override
 	public Song getSongByName(String name) {
 		return jdbcTemplate.query(queryStore.get("getSongByName"), new Object[]{name.trim()}, r-> (Song) buildSongFromResultSet(r));
+	}
+
+	@Override
+	public List<Song> searchSongsWithTerm(SearchTerm term, String termValue) {
+		return jdbcTemplate.query(queryStore.get("searchSongsByKeyedTerm").replace(SearchTerm.QUERY_ATTRIBUTE_STR, term.queryAttr),
+				new Object[] {termValue}, r -> {
+					return buildSongsFromResultSet(r);
+				});
 	}
 }
