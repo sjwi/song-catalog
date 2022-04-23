@@ -12,6 +12,7 @@ import com.github.difflib.DiffUtils;
 import com.github.difflib.patch.AbstractDelta;
 import com.sjwi.catalog.dao.SongDao;
 import com.sjwi.catalog.model.KeySet;
+import com.sjwi.catalog.model.SearchTerm;
 import com.sjwi.catalog.model.TransposableString;
 import com.sjwi.catalog.model.song.MasterSong;
 import com.sjwi.catalog.model.song.Song;
@@ -21,6 +22,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 @Component
 public class SongService {
+
+	private static final String SEARCH_TERM_DELIMITER = ":";
 
 	@Autowired 
 	SongDao songDao;
@@ -33,9 +36,17 @@ public class SongService {
 	}
 	
 	public List<Song> searchSongs(String searchValue){
-		return searchValue == null || searchValue.trim().isEmpty()?  
-			songDao.getSongs() :
-			songDao.searchSongs("%" + searchValue.toLowerCase() + "%");
+		if (searchValue == null || searchValue.trim().isEmpty())
+			return songDao.getSongs();
+		if (searchValue.contains(SEARCH_TERM_DELIMITER)) {
+			String[] searchParts = searchValue.split(SEARCH_TERM_DELIMITER);
+			String termKey = searchParts[0];
+			String termValue = searchParts[1];
+			SearchTerm term = SearchTerm.fromString(termKey);
+			if (term != null)
+				return songDao.searchSongsWithTerm(term, termValue);
+		}
+		return songDao.searchSongs("%" + searchValue.toLowerCase() + "%");
 	}
 	public void setDefaultKey(String updatedVersionKey, int songId, String user) {
 		songDao.setDefaultKey(updatedVersionKey, songId, user);
