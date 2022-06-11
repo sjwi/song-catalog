@@ -35,7 +35,7 @@ self.addEventListener('install', function(event) {
     'images/copy.png',
     'images/delete-transparent.png',
     'images/delete.png',
-    'images/download-inverse.png',
+    'images/export-inverse.png',
     'images/dropdown.png',
     'images/edit-inverse.png',
     'images/ellipse-inverse.png',

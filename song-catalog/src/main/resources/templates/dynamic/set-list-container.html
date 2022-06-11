@@ -65,7 +65,7 @@
 	<div class="action-container">
 		<div class="row no-gutters">
 			<div class="col text-center" data-toggle="tooltip" data-placement="bottom" title="Download" th:classappend="${#authorization.expression('hasAuthority(''USER'')')}?'col-3':''" th:attr="onclick=${'downloadFile(''setlist'', ' + set.id + ')'}">
-				 <img width="27px" class="set-list-dl" type="image/x-icon" th:src="@{/images/download-inverse.png}"/>
+				 <img width="27px" class="set-list-dl" type="image/x-icon" th:src="@{/images/export-inverse.png}"/>
 			</div>
 			<th:block sec:authorize="hasAuthority('USER')">
 				<div class="col col-3 text-center" data-toggle="tooltip" data-placement="bottom" title="Add song to set" th:attr="onclick=${'addSongsFromSelect(' + set.id + ',''' + #strings.replace(set.setListName,'''','') + ''')'}">

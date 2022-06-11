@@ -42,7 +42,7 @@
 					</th:block>
 					<div class="d-table-cell align-middle no-gutters text-center download-focused-song" data-toggle="tooltip" data-placement="bottom" title="Download"
 					th:attr="onclick=${'downloadFile(''song'', ' + focusedSong[fsInitialIndex].id + ')'}">
-						 <a><img width="34px" type="image/x-icon" th:src="@{/images/download-inverse.png}"/></a>
+						 <a><img width="34px" type="image/x-icon" th:src="@{/images/export-inverse.png}"/></a>
 					</div>
 					<th:block sec:authorize="hasAuthority('USER')">
 						<div class="d-table-cell align-middle no-gutters text-center edit-focused-song" th:attr="onclick=${'showEditSongModal(' + focusedSong[fsInitialIndex].id + ')'}" data-toggle="tooltip" data-placement="bottom" title="Edit song" >
