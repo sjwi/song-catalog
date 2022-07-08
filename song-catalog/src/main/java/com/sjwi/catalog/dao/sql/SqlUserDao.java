@@ -8,11 +8,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.TimeZone;
 
-import com.sjwi.catalog.dao.UserDao;
-import com.sjwi.catalog.model.LogEntry;
-import com.sjwi.catalog.model.user.CfUser;
-import com.sjwi.catalog.service.AddressBookService;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
@@ -21,6 +16,11 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Repository;
+
+import com.sjwi.catalog.dao.UserDao;
+import com.sjwi.catalog.model.LogEntry;
+import com.sjwi.catalog.model.user.CfUser;
+import com.sjwi.catalog.service.AddressBookService;
 
 @Repository
 public class SqlUserDao implements UserDao {
@@ -79,7 +79,7 @@ public class SqlUserDao implements UserDao {
 		Map<String, String> parameters = new HashMap<>();
 		parameters.put("email", email);
 		return namedParameterJdbcTemplate.query(queryStore.get("getUserByEmail"),parameters,r -> {
-			if (r.next()){
+			if (r.next() && r.getString("username") != null){
 				return new CfUser(r.getString("username"),
 						r.getString("firstname"),
 						r.getString("lastname"),
