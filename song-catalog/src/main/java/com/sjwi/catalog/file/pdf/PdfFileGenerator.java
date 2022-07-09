@@ -12,6 +12,9 @@ import java.util.Date;
 
 import javax.imageio.ImageIO;
 
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
+
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.client.j2se.MatrixToImageWriter;
 import com.google.zxing.qrcode.QRCodeWriter;
@@ -34,9 +37,6 @@ import com.sjwi.catalog.file.FileGenerator;
 import com.sjwi.catalog.model.SetList;
 import com.sjwi.catalog.model.TransposableString;
 import com.sjwi.catalog.model.song.Song;
-
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
 
 
 
@@ -249,7 +249,7 @@ public class PdfFileGenerator implements FileGenerator {
 		public void onStartPage(PdfWriter writer, Document document) {
 			if (document.getPageNumber() == 1 && includeQrCode) {
 				try {
-					addHeader("(share pdf)",578,753, Element.ALIGN_RIGHT);
+					addHeader("[ share  pdf ]",579,753, Element.ALIGN_RIGHT);
 					addHeader(headerText,55,815, Element.ALIGN_LEFT);
 					document.add(getQrCodeImage());
 				} catch (DocumentException | IOException e) {e.printStackTrace();}
