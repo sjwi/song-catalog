@@ -26,7 +26,9 @@
 	</div>
 </div>
 <div class="form-group row add-new-set no-gutters">
-	<div id="addNewSet" data-loaded="false" class="col-12"></div>
+	<div id="addNewSet" class="col-12 collapse add-new-set">
+		<th:block th:replace="/partial/create-set :: createSet('addSongToSetListModal')"></th:block>
+	</div>
 </div>
 <div class="form-group row no-gutters">
 	<div class="col-2 no-gutters">
@@ -66,16 +68,11 @@
 			}
 		});
 		
-		$('.set-list').change(function(){
+		$('.set-list').change(function() {
 			if ($(this).val() == "0") {
-				var setListElement = $('#addSongToSetListModal').find('#addNewSet');
-				if($(setListElement).data('loaded')){
-					$(".add-new-set").show();
-				} else {
-					$(setListElement).html($('#createSetListForm').html());
-					$(setListElement).find('.date-picker').val(new Date().toDateInputValue());
-					$(setListElement).data('loaded','true')
-				}
+				$(".add-new-set").show();
+				let lastService = localStorage.getItem(LAST_SERVICE_KEY);
+				$('#addSongToSetForm select[name="subUnit"]').val(lastService).trigger('change');
 			}else{
 				$(".add-new-set").hide();
 			}

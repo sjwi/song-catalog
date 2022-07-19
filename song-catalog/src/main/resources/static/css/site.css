@@ -1152,6 +1152,11 @@ ul.multi-select-ul {
 	margin-left: -.2rem;
 	margin-right: -.2rem;
 }
+.fc-date {
+	padding: 0;
+	line-height: 28px;
+	height: auto !important;
+}
 .btn-light {
 	background-color: var(--main-bg-color) !important;
 	min-width:80px !important;
@@ -1327,6 +1332,10 @@ label.v-center {
 }
 .form-control::placeholder,.custom-select::placeholder,.custom-file-label::placeholder {
 	color: var(--form-ctrl-ph) !important;
+}
+
+.homegroup-name + .select2-container {
+	margin-bottom: 1.5rem
 }
 
 .toggle-btn

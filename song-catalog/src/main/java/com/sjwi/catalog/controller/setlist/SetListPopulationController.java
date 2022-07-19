@@ -9,13 +9,6 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.sjwi.catalog.controller.ControllerHelper;
-import com.sjwi.catalog.log.CustomLogger;
-import com.sjwi.catalog.model.TransposableString;
-import com.sjwi.catalog.service.SetListService;
-import com.sjwi.catalog.service.SongService;
-import com.sjwi.catalog.service.VersionService;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
@@ -27,6 +20,13 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.servlet.ModelAndView;
+
+import com.sjwi.catalog.controller.ControllerHelper;
+import com.sjwi.catalog.log.CustomLogger;
+import com.sjwi.catalog.model.TransposableString;
+import com.sjwi.catalog.service.SetListService;
+import com.sjwi.catalog.service.SongService;
+import com.sjwi.catalog.service.VersionService;
 
 @Controller
 public class SetListPopulationController {
@@ -58,11 +58,12 @@ public class SetListPopulationController {
 			@RequestParam(value = "updatedVersionKey", required = false) String updatedVersionKey,
 			@RequestParam(value = "versionBody", required = false) String versionBody,
 			@RequestParam(value = "sort", required = false, defaultValue="0") int sort,
-			@RequestParam(value = "homegroupName", required = false) String homegroupName,
+			@RequestParam(value = "homegroupName", required = false) int homegroupName,
+			@RequestParam(value = "otherGroupName", required = false) String otherGroupName,
 			@RequestParam(value = "setList", required = true) int setListId) {
 		try {
 			if(setListId == 0) {
-				String setListName = controllerHelper.buildSetlistName(unit,subUnit,otherUnit,otherSubUnit,date,homegroupName);
+				String setListName = controllerHelper.buildSetlistName(unit,subUnit,otherUnit,otherSubUnit,date,homegroupName,otherGroupName);
 				setListId = setListService.createSet(setListName,principal.getName(), unit, subUnit);
 			}
 			if (!"master".equals(version) && version != null) {
@@ -92,11 +93,12 @@ public class SetListPopulationController {
 			@RequestParam(value = "otherUnit", required = false) String otherUnit,
 			@RequestParam(value = "otherSubUnit", required = false) String otherSubUnit,
 			@RequestParam(value = "date", required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") Date date,
-			@RequestParam(value = "homegroupName", required = false) String homegroupName,
+			@RequestParam(value = "homegroupName", required = false) int homegroupName,
+			@RequestParam(value = "otherGroupName", required = false) String otherGroupName,
 			@RequestParam(value = "setList", required = true) int setListId) {
 		try {
 			if(setListId == 0) {
-				String setListName = controllerHelper.buildSetlistName(unit,subUnit,otherUnit,otherSubUnit,date,homegroupName);
+				String setListName = controllerHelper.buildSetlistName(unit,subUnit,otherUnit,otherSubUnit,date,homegroupName,otherGroupName);
 				setListId = setListService.createSet(setListName,principal.getName(), unit, subUnit);
 			}
 			setListService.addSongsToSet(songIds, setListId);

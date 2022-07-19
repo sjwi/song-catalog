@@ -393,6 +393,15 @@ getLatestAbGroup: >
 getAllServices: >
   Select * from Services order by NAME
   
+getAllGroups: >
+  Select * from GroupName order by NAME
+
+addGroup: >
+  INSERT INTO GroupName (NAME) values (?)
+
+getGroupById: >
+  SELECT * from GroupName where ID = ?
+  
 getAllOrganizations: >
   Select * from Organizations order by ID
   

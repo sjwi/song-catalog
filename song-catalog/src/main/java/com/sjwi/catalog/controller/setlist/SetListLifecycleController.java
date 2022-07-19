@@ -8,12 +8,6 @@ import java.util.Date;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.sjwi.catalog.controller.ControllerHelper;
-import com.sjwi.catalog.log.CustomLogger;
-import com.sjwi.catalog.model.SetList;
-import com.sjwi.catalog.service.OrganizationService;
-import com.sjwi.catalog.service.SetListService;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
@@ -24,6 +18,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
+
+import com.sjwi.catalog.controller.ControllerHelper;
+import com.sjwi.catalog.log.CustomLogger;
+import com.sjwi.catalog.model.SetList;
+import com.sjwi.catalog.service.OrganizationService;
+import com.sjwi.catalog.service.SetListService;
 
 @Controller
 public class SetListLifecycleController {
@@ -46,12 +46,13 @@ public class SetListLifecycleController {
 			@RequestParam(value = "subUnit", required = false) int subUnit,
 			@RequestParam(value = "otherUnit", required = false) String otherUnit,
 			@RequestParam(value = "otherSubUnit", required = false) String otherSubUnit,
-			@RequestParam(value = "homegroupName", required = false) String homegroupName,
+			@RequestParam(value = "homegroupName", required = false) int homegroupName,
+			@RequestParam(value = "otherGroupName", required = false) String otherGroupName,
 			@RequestParam("date") @DateTimeFormat(pattern = "yyyy-MM-dd") Date date,
 			Principal principal, Authentication auth,
 			HttpServletRequest request, HttpServletResponse response) {
 		try {
-			String setListName = controllerHelper.buildSetlistName(unit,subUnit,otherUnit,otherSubUnit,date,homegroupName);
+			String setListName = controllerHelper.buildSetlistName(unit,subUnit,otherUnit,otherSubUnit,date,homegroupName,otherGroupName);
 			setListService.createSet(setListName,principal.getName(), unit,subUnit);
 		} catch (Exception e) {
 			controllerHelper.errorHandler(e);

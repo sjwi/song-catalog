@@ -15,4 +15,10 @@ public interface OrganizationDao {
 
 	public String getMeetingServiceById(int id);
 
+  public Map<Integer, String> getGroups();
+
+	public void addGroup(String groupName);
+
+  public String getGroupById(int groupId);
+
 }

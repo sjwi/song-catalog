@@ -321,6 +321,16 @@ CREATE TABLE SetList (
 -- Dumping data for table SetList
 --
 
+DROP TABLE IF EXISTS GroupName;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE GroupName (
+  ID int(11) NOT NULL AUTO_INCREMENT,
+  NAME varchar(255) NOT NULL,
+  PRIMARY KEY (ID)
+);
+INSERT INTO GroupName VALUES (1,'Smiths'),(2,'Jones'),(3,'Walters'),(4,'Meyers');
+
 /*!40000 ALTER TABLE SetList DISABLE KEYS */;
 INSERT INTO SetList VALUES 
 (1,1,1,'G',1,NULL,''),

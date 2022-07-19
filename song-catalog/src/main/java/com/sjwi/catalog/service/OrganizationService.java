@@ -3,11 +3,11 @@ package com.sjwi.catalog.service;
 import java.util.List;
 import java.util.Map;
 
-import com.sjwi.catalog.dao.OrganizationDao;
-import com.sjwi.catalog.model.Organization;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import com.sjwi.catalog.dao.OrganizationDao;
+import com.sjwi.catalog.model.Organization;
 
 @Component
 public class OrganizationService {
@@ -29,6 +29,18 @@ public class OrganizationService {
 
 	public Map<Integer, String> getMeetingServices() {
 		return organizationDao.getMeetingServices();
+	}
+
+  public Object getGroups() {
+    return organizationDao.getGroups();
+  }
+
+	public void addGroup(String groupName) {
+		organizationDao.addGroup(groupName);
+	}
+
+	public String getGroupById(int groupId) {
+		return organizationDao.getGroupById(groupId);
 	}
 
 }

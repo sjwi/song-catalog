@@ -19,6 +19,20 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.lang.WordUtils;
+import org.apache.commons.lang.exception.ExceptionUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
+import org.springframework.http.HttpStatus;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.stereotype.Component;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
+import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.util.WebUtils;
+
 import com.sjwi.catalog.exception.DatabaseException;
 import com.sjwi.catalog.exception.FileUtilityException;
 import com.sjwi.catalog.file.FileGenerator;
@@ -33,20 +47,6 @@ import com.sjwi.catalog.service.OrganizationService;
 import com.sjwi.catalog.service.SetListService;
 import com.sjwi.catalog.service.TokenService;
 import com.sjwi.catalog.service.UserService;
-
-import org.apache.commons.lang.WordUtils;
-import org.apache.commons.lang.exception.ExceptionUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Lazy;
-import org.springframework.http.HttpStatus;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.stereotype.Component;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
-import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.util.WebUtils;
 
 import eu.bitwalker.useragentutils.UserAgent;
 
@@ -81,7 +81,7 @@ public class ControllerHelper {
 	private static final Pattern IS_INT_PATTERN = Pattern.compile("-?\\d+(\\.\\d+)?");
 	private static final List<String> NO_CAPS_TITLE_WORDS = new ArrayList<String>(Arrays.asList("The","Is","A","And","But","An","At","To","For","Of"));
 
-	public String buildSetlistName(int org, int service, String otherOrgName, String otherServiceName, Date date, String homegroupName) {
+	public String buildSetlistName(int org, int service, String otherOrgName, String otherServiceName, Date date, int groupId, String otherGroupName) {
 		String setListName = "Untitled";
 		if (org == 0) {
 			setListName = otherOrgName==null || "".equals(otherOrgName)? "Untitled" : otherOrgName.trim();
@@ -91,9 +91,14 @@ public class ControllerHelper {
 		if (0 == service) {
 			setListName = otherServiceName==null || "".equals(otherServiceName)? setListName : setListName + " " + WordUtils.capitalize(otherServiceName);
 		} else if (2 == service) {
-			setListName = homegroupName == null || homegroupName.isEmpty()? 
-					setListName + " " + organizationService.getMeetingServiceById(service): 
-						setListName + " " + WordUtils.capitalize(homegroupName.trim()) + " HF";
+			if (groupId == 0) {
+				String newHomegroupName = WordUtils.capitalize(otherGroupName.trim());
+				setListName = setListName + " " + newHomegroupName + " HF";
+				organizationService.addGroup(newHomegroupName);
+			} else {
+				String homeGroupName = organizationService.getGroupById(groupId);
+				setListName = setListName + " " + homeGroupName + " HF";
+			}
 		} else {
 			setListName = setListName + " " + organizationService.getMeetingServiceById(service).trim();
 		}

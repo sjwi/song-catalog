@@ -64,4 +64,30 @@ public class SqlOrganizationDao implements OrganizationDao {
 			}
 		});
 	}
+
+	@Override
+	public Map<Integer, String> getGroups() {
+		return jdbcTemplate.query(queryStore.get("getAllGroups"), r -> {
+			Map<Integer, String> groups = new HashMap<Integer, String>();
+			while (r.next()) {
+				groups.put(r.getInt("ID"),r.getString("NAME"));
+			}
+			return groups;
+		});
+	}
+
+	@Override
+	public void addGroup(String groupName) {
+		jdbcTemplate.update(queryStore.get("addGroup"), new Object[]{groupName});
+	}
+
+	@Override
+	public String getGroupById(int groupId) {
+		return jdbcTemplate.query(queryStore.get("getGroupById"), new Object[] {groupId}, r -> {
+			if (r.next())
+				return r.getString("NAME");
+			else
+				return null;
+		});
+	}
 }
