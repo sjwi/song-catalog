@@ -31,6 +31,7 @@ function addSongToSet(id){
 		},
 		success: function(data) {
 			$('#addSongToSetForm').html(data);
+			initializeSetForm();
 		},
 		error: function(data){
 			alertWithFade('danger','Something went wrong! Unable to retreive song metadata.')

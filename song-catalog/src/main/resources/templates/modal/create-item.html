@@ -52,84 +52,7 @@
 			
 				<div class="create-setlist-form collapse">
 					<form id="createSetListForm">
-						<div class="form-group row no-gutters d-flex w-100 justify-content-center">
-							<div class="form-max-width">
-								<div class="row no-gutters">
-									<div class="col-4 no-gutters">
-										<label for="unit" class="col-form-label">Organization</label>
-									</div>
-									<div class="col-8 no-gutters">
-										<select name="unit" class="form-control pl-1"
-											id="organizationSelect"></select>
-									</div>
-								</div>
-							</div>
-						</div>
-						<div
-							class="form-group mb-0 row no-gutters d-flex w-100 justify-content-center">
-							<div class="form-max-width">
-								<div class="row no-gutters">
-									<div class="offset-4 col-8">
-										<input type="text" name="otherUnit"
-											class="form-control mb-3 other-unit collapse required pl-2"
-											title="Enter an associated organization for this set list."
-											placeholder="Church name">
-									</div>
-								</div>
-							</div>
-						</div>
-						<div
-							class="form-group row no-gutters d-flex w-100 justify-content-center">
-							<div class="form-max-width">
-								<div class="row no-gutters">
-									<div class="col-4">
-										<label for="subUnit" class="col-form-label">Service</label>
-									</div>
-									<div class="col-8">
-										<select name="subUnit" class="form-control pl-1" id="serviceSelect"></select>
-									</div>
-								</div>
-							</div>
-						</div>
-						<div
-							class="form-group row no-gutters mb-0 d-flex w-100 justify-content-center">
-							<div class="form-max-width">
-								<div class="row no-gutters">
-									<div class="col-8 offset-4">
-										<input type="text" name="otherSubUnit"
-											class="form-control mb-3 other-sub-unit collapse required pl-2"
-											title="Enter a service associated with this set list."
-											placeholder="Service name">
-									</div>
-								</div>
-							</div>
-						</div>
-						<div
-							class="form-group mb-0 row no-gutters d-flex w-100 justify-content-center">
-							<div class="form-max-width">
-								<div class="row no-gutters">
-									<div class="col-8 offset-4">
-										<input type="text" name="homegroupName"
-											class="form-control mb-3 homegroup-name collapse required pl-2"
-											title="Enter the last name of the Home Fellowship leader"
-											placeholder="Home Fellowship name">
-									</div>
-								</div>
-							</div>
-						</div>
-						<div
-							class="form-group row no-gutters d-flex w-100 justify-content-center">
-							<div class="form-max-width">
-								<div class="row no-gutters">
-									<div class="col-4">
-										<label for="date" class="col-form-label">Date</label>
-									</div>
-									<div class="col-8">
-										<input type="date" name="date" class="form-control date-picker pl-2">
-									</div>
-								</div>
-							</div>
-						</div>
+						<th:block th:replace="/partial/create-set :: createSet('createItemModal')"></th:block>
 					</form>
 				</div>
 			</div>
@@ -139,6 +62,8 @@
 		</div>
 	</div>
 </div>
+<style>
+</style>
 
 
 <script>
@@ -215,44 +140,7 @@
 			}
 		});
 		
-		
-		$('#organizationSelect')
-				.load(contextpath + 'organizations?view=partial/select-options/organizations',
-						function() {
-							$('#organizationSelect').append('<option value="0">Other</option>');
-						});
-		$('#serviceSelect')
-				.load(contextpath+ 'services?view=partial/select-options/services',
-						function() {
-							$('#serviceSelect').append('<option value="0">Other</option>');
-						});
-		$('.date-picker').val(new Date().toDateInputValue());
-
 		$('#categorySelect').load(contextpath + 'categories?view=partial/select-options/categories');
-
-		$(document).on('change','select[name="unit"]', function() {
-			if ($(this).val() == "0") {
-				$('.other-unit').show();
-				$('.other-unit').focus();
-			} else {
-				$('.other-unit').hide();
-			}
-		});
-
-		$(document).on('change','select[name="subUnit"]', function() {
-			if ($(this).val() == "0") {
-				$('.other-sub-unit').show();
-				$('.other-sub-unit').focus();
-				$('.homegroup-name').hide();
-			} else if ($(this).val() == "2"){
-				$('.homegroup-name').show();
-				$('.homegroup-name').focus();
-				$('.other-sub-unit').hide();
-			} else {
-				$('.other-sub-unit').hide();
-				$('.homegroup-name').hide();
-			}
-		});
 
 		$('#createSetListForm').on('submit',function(e) {
 			e.preventDefault();
@@ -272,5 +160,6 @@
 				});
 			}
 		});
+
 	});
 </script>

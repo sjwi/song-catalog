@@ -54,6 +54,12 @@
 			var alertOnLoad = /*[[${ALERT_ON_LOAD}]]*/ false;
 
 			const standAloneCookieKey = "STAND_ALONE";
+			const LAST_ORG_KEY = 'last_org'
+			const LAST_SERVICE_KEY = 'last_service'
+			const LAST_HF_KEY = 'last_hf'
+			const orgSelector = 'select[name="unit"]';
+			const serviceSelector = 'select[name="subUnit"]';
+			const hgSelector = 'select[name="homegroupName"]';
 
 			//service worker registration
 			if ('serviceWorker' in navigator) {

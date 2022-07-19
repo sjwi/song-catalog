@@ -1,0 +1,193 @@
+<th:block th:fragment="createSet(modalId)" xmlns:th="http://www.thymeleaf.org">
+  <input type="hidden" name="otherUnit">
+  <input type="hidden" name="otherSubUnit">
+  <input type="hidden" name="otherGroupName">
+  <div class="form-group row no-gutters d-flex w-100 justify-content-center">
+    <div class="form-max-width">
+      <div class="row no-gutters">
+        <div class="col-4 no-gutters">
+          <label for="unit" class="col-form-label">Organization</label>
+        </div>
+        <div class="col-8 no-gutters">
+          <select name="unit" class="form-control form-control-sm pl-1"></select>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div
+    class="form-group row no-gutters d-flex w-100 justify-content-center">
+    <div class="form-max-width">
+      <div class="row no-gutters">
+        <div class="col-4">
+          <label for="subUnit" class="col-form-label">Service</label>
+        </div>
+        <div class="col-8">
+          <select name="subUnit" class="form-control form-control-sm pl-1"></select>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div
+    class="form-group mb-0 row no-gutters d-flex w-100 justify-content-center">
+    <div class="form-max-width">
+      <div class="row no-gutters">
+        <div class="col-8 offset-4">
+          <select name="homegroupName" class="form-control form-control-sm pl-1 collapse homegroup-name"></select>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div
+    class="form-group row no-gutters d-flex w-100 justify-content-center">
+    <div class="form-max-width">
+      <div class="row no-gutters">
+        <div class="col-4">
+          <label for="date" class="col-form-label">Date</label>
+        </div>
+        <div class="col-8">
+          <input type="date" name="date" class="form-control form-control-sm date-picker fc-date pl-2">
+        </div>
+      </div>
+    </div>
+  </div>
+	<script th:inline="javascript">
+    var modalId = [[${modalId}]];
+    async function initializeSetForm(callback) {
+      $('input[name="otherGroupName"]').val('');
+      $('input[name="otherUnit"]').val('');
+      $('input[name="otherSubUnit"]').val('');
+      $('.date-picker').val(new Date().toDateInputValue());
+      $(hgSelector)
+          .load(contextpath + 'groups?view=partial/select-options/groups',
+              async function() {
+                $(hgSelector).each(function(e){
+                  if ($(this).hasClass("select2-hidden-accessible"))
+                    $(this).select2('destroy');
+                });
+                $(hgSelector).select2({
+                  placeholder: 'Home Fellowship Name',
+                  width: '100%',
+                  tags: true,
+                  createTag: function (params) {
+                    var term = $.trim(params.term);
+                    $('input[name="otherGroupName"]').val(term)
+                    return {
+                      id: 0,
+                      text: term,
+                      newTag: true
+                    }
+                  }
+                }).next().hide();
+                loadServices(callback)
+                let lastGroup = localStorage.getItem(LAST_HF_KEY);
+                if (lastGroup != null && $(hgSelector + ' option[value="' + lastGroup + '"]').length)
+                  $(hgSelector).val(lastGroup).trigger('change');
+              });
+    }
+
+    async function loadOrgs(callback) {
+      await $(orgSelector)
+          .load(contextpath + 'organizations?view=partial/select-options/organizations',
+              async function() {
+                $(orgSelector).each(function(e){
+                  if ($(this).hasClass("select2-hidden-accessible"))
+                    $(this).select2('destroy');
+                });
+                $(orgSelector).select2({
+                  width: '100%',
+                  tags: true,
+                  createTag: function (params) {
+                    var term = $.trim(params.term);
+                    $('input[name="otherUnit"]').val(term)
+                    return {
+                      id: 0,
+                      text: term,
+                      newTag: true
+                    }
+                  }
+                });
+                if (typeof callback === 'function')
+                  callback()
+                let lastOrg = localStorage.getItem(LAST_ORG_KEY);
+                if (lastOrg != null)
+                  $(orgSelector).val(lastOrg).trigger('change');
+              });
+
+    }
+    async function loadServices(callback) {
+      await $(serviceSelector)
+          .load(contextpath+ 'services?view=partial/select-options/services',
+              async function() {
+                $(serviceSelector).each(function(e){
+                  if ($(this).hasClass("select2-hidden-accessible"))
+                    $(this).select2('destroy');
+                });
+                $(serviceSelector).select2({
+                  width: '100%',
+                  tags: true,
+                  createTag: function (params) {
+                    var term = $.trim(params.term);
+                    $('input[name="otherSubUnit"]').val(term)
+                    return {
+                      id: 0,
+                      text: term,
+                      newTag: true
+                    }
+                  }
+                });
+                await loadOrgs(callback)
+                let lastService = localStorage.getItem(LAST_SERVICE_KEY);
+                if (lastService != null)
+                  $(serviceSelector).val(lastService).trigger('change');
+              });
+    }
+
+    $(document).ready(function(){
+      $(document).off('change', orgSelector);
+      $(document).on('change', orgSelector, function() {
+        if ($(this).val() != 0 && $(this).val() !== null) {
+          console.log("Setting item " + $(this).val())
+          localStorage.setItem(LAST_ORG_KEY,$(this).val());
+        }
+      });
+
+      $(document).off('change', hgSelector);
+      $(document).on('change', hgSelector, function() {
+        if ($(this).val() == 0) {
+          let max = 0;
+          $(hgSelector + ' option').each(function() {
+            max = Math.max(max,$(this).val())
+          });
+          console.log("Setting item " + max + 1)
+          localStorage.setItem(LAST_HF_KEY, max + 1);
+        } else if ($(this).val() !== null) {
+          console.log("Setting item " + $(this).val())
+          localStorage.setItem(LAST_HF_KEY, $(this).val());
+        }
+      });
+
+      $('#' + modalId).off('show.bs.modal');
+      $('#' + modalId).on('show.bs.modal', function() {
+        initializeSetForm(function() {
+          let lastService = localStorage.getItem(LAST_SERVICE_KEY);
+          $(serviceSelector).val(lastService).trigger('change');
+          console.log("initialized")
+        });
+      })
+
+      $(document).off('change', serviceSelector);
+      $(document).on('change', serviceSelector, function() {
+        if ($(this).val() == "2"){
+          $(hgSelector).next().show();
+        } else {
+          $(hgSelector).next().hide();
+        }
+        if ($(this).val() != 0 && $(this).val() !== null) {
+          console.log("Setting item " + $(this).val())
+          localStorage.setItem(LAST_SERVICE_KEY,$(this).val());
+        }
+      });
+    });
+
+  </script>
+</th:block>
