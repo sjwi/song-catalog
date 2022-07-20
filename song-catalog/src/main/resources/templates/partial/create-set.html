@@ -1,4 +1,4 @@
-<th:block th:fragment="createSet(modalId)" xmlns:th="http://www.thymeleaf.org">
+<th:block th:fragment="createSet(modalId,formId)" xmlns:th="http://www.thymeleaf.org">
   <input type="hidden" name="otherUnit">
   <input type="hidden" name="otherSubUnit">
   <input type="hidden" name="otherGroupName">
@@ -52,6 +52,7 @@
   </div>
 	<script th:inline="javascript">
     var modalId = [[${modalId}]];
+    var formId = [[${formId}]];
     async function initializeSetForm(callback) {
       $('input[name="otherGroupName"]').val('');
       $('input[name="otherUnit"]').val('');
@@ -143,6 +144,18 @@
     }
 
     $(document).ready(function(){
+      $('#' + formId).on('submit', function(){
+        $.ajax({
+					url: contextpath + 'user-state',
+					method: "POST",
+					contentType: 'application/json',
+					data: JSON.stringify({
+						lastOrg: localStorage.getItem(LAST_ORG_KEY),
+						lastService: localStorage.getItem(LAST_SERVICE_KEY),
+						lastGroup: localStorage.getItem(LAST_HF_KEY)
+					})
+				});
+      })
       $(document).off('change', orgSelector);
       $(document).on('change', orgSelector, function() {
         if ($(this).val() != 0 && $(this).val() !== null) {
