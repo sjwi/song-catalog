@@ -32,7 +32,8 @@ public class UserStateController {
 	public UserState getUserState(HttpServletRequest request, HttpServletResponse response,
 			Principal principal) {
 		try {
-      return userService.getUserState(principal);
+			UserState userState = userService.getUserState(principal);
+      return userState == null? new UserState(): userState;
 		} catch (Exception e) {
 			controllerHelper.errorHandler(e);
       throw e;
@@ -46,7 +47,7 @@ public class UserStateController {
       @RequestBody UserState userState,
 			Principal principal) {
 		try {
-			if (userService.getUserState(principal).isDefault())
+			if (userService.getUserState(principal) == null)
 				userService.addUserState(userState, principal);
 			else
 				userService.setUserState(userState, principal);

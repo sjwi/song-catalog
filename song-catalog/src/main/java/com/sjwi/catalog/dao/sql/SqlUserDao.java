@@ -231,7 +231,7 @@ public class SqlUserDao implements UserDao {
 			if (r.next())
 				return new UserState(r.getInt("LAST_SET_ORG"), r.getInt("LAST_SET_SERVICE"), r.getInt("LAST_SET_GROUP"));
 			else
-				return new UserState(1,1,1);
+				return null;
 		}, name);
 	}
 

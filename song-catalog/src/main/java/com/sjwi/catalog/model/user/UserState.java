@@ -6,6 +6,10 @@ public class UserState {
   private Integer lastOrg;
   private Integer lastService;
   private Integer lastGroup;
+  
+  public UserState() {
+    this(1,1,1);
+  }
   public UserState(Integer lastOrg, Integer lastService, Integer lastGroup) {
     this.lastOrg = lastOrg;
     this.lastService = lastService;
