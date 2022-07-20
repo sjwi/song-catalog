@@ -4,11 +4,12 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
-import com.sjwi.catalog.model.LogEntry;
-import com.sjwi.catalog.model.user.CfUser;
-
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.User;
+
+import com.sjwi.catalog.model.LogEntry;
+import com.sjwi.catalog.model.user.CfUser;
+import com.sjwi.catalog.model.user.UserState;
 
 public interface UserDao {
 
@@ -45,4 +46,10 @@ public interface UserDao {
   public void createAnonymousUser(String token);
 
   public String getAnonymousUser(String tokenLink);
+
+  public UserState getUserState(String name);
+
+	public void setUserState(UserState state, String name);
+
+  public void addUserState(UserState userState, String name);
 }

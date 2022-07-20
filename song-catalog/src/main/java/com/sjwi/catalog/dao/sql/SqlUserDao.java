@@ -20,6 +20,7 @@ import org.springframework.stereotype.Repository;
 import com.sjwi.catalog.dao.UserDao;
 import com.sjwi.catalog.model.LogEntry;
 import com.sjwi.catalog.model.user.CfUser;
+import com.sjwi.catalog.model.user.UserState;
 import com.sjwi.catalog.service.AddressBookService;
 
 @Repository
@@ -216,11 +217,39 @@ public class SqlUserDao implements UserDao {
 
 	@Override
 	public String getAnonymousUser(String tokenString) {
-		return jdbcTemplate.query(queryStore.get("getAnonymousUser"), new Object[] {tokenString}, r -> {
+		return jdbcTemplate.query(queryStore.get("getAnonymousUser"), r -> {
 			if (r.next())
 				return "user_" + r.getInt("ID");
 			createAnonymousUser(tokenString);
 			return getAnonymousUser(tokenString);
-		});
+		}, tokenString);
+	}
+
+	@Override
+	public UserState getUserState(String name) {
+		return jdbcTemplate.query(queryStore.get("getUserState"), r -> {
+			if (r.next())
+				return new UserState(r.getInt("LAST_SET_ORG"), r.getInt("LAST_SET_SERVICE"), r.getInt("LAST_SET_GROUP"));
+			else
+				return new UserState(1,1,1);
+		}, name);
+	}
+
+	@Override
+	public void setUserState(UserState state, String username) {
+		Map<String,Object> parameterMap = Map.of("username", username,
+					"lastOrg", state.getLastOrg(),
+					"lastService", state.getLastService(),
+					"lastGroup", state.getLastGroup());
+		namedParameterJdbcTemplate.update(queryStore.get("updateUserState"), parameterMap);
+	}
+
+	@Override
+	public void addUserState(UserState state, String username) {
+		Map<String,Object> parameterMap = Map.of("username", username,
+					"lastOrg", state.getLastOrg(),
+					"lastService", state.getLastService(),
+					"lastGroup", state.getLastGroup());
+		namedParameterJdbcTemplate.update(queryStore.get("addUserState"), parameterMap);
 	}
 }

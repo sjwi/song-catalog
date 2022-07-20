@@ -98,6 +98,33 @@
 			})
 		</script>
 
+		<script sec:authorize="isAuthenticated()">
+			if (localStorage.getItem(LAST_ORG_KEY) !== null) {
+				$.ajax({
+					url: contextpath + 'user-state',
+					method: "POST",
+					contentType: 'application/json',
+					data: JSON.stringify({
+						lastOrg: localStorage.getItem(LAST_ORG_KEY),
+						lastService: localStorage.getItem(LAST_SERVICE_KEY),
+						lastGroup: localStorage.getItem(LAST_HF_KEY)
+					})
+				});
+			} else {
+				$.ajax({
+					url: contextpath + 'user-state',
+					method: "GET",
+					success: function(data) {
+						localStorage.setItem(LAST_ORG_KEY, data.lastOrg);
+						localStorage.setItem(LAST_SERVICE_KEY, data.lastService);
+						localStorage.setItem(LAST_HF_KEY, data.lastGroup);
+						initializeSetForm();
+					}
+				});
+			}
+
+		</script>
+
 		<th:block th:replace="modal/download"></th:block>
 		<th:block th:replace="modal/email-file"></th:block>
 		<th:block sec:authorize="hasAuthority('USER')">
