@@ -98,6 +98,23 @@
 			})
 		</script>
 
+		<script sec:authorize="isAuthenticated()">
+				
+			$(document).ready(function(){
+				$.ajax({
+					url: contextpath + 'user-state',
+					method: "GET",
+					success: function(data) {
+						localStorage.setItem(LAST_ORG_KEY, data.lastOrg);
+						localStorage.setItem(LAST_SERVICE_KEY, data.lastService);
+						localStorage.setItem(LAST_HF_KEY, data.lastGroup);
+						initializeSetForm();
+					}
+				});
+			})
+
+		</script>
+
 		<th:block th:replace="modal/download"></th:block>
 		<th:block th:replace="modal/email-file"></th:block>
 		<th:block sec:authorize="hasAuthority('USER')">

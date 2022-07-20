@@ -50,6 +50,15 @@ CREATE TABLE preferences (
   PreferenceValue varchar(50) NOT NULL
 );
 
+DROP TABLE IF EXISTS UserState;
+CREATE TABLE UserState (
+  username varchar(50) NOT NULL,
+  LAST_SET_ORG int(11) NOT NULL,
+  LAST_SET_SERVICE int(11) NOT NULL,
+  LAST_SET_GROUP int(11) NOT NULL,
+  PRIMARY KEY (username)
+);
+
 --
 -- Table structure for table AddressBook
 --

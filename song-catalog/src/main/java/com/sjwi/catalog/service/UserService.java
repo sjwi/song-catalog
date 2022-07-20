@@ -2,6 +2,7 @@ package com.sjwi.catalog.service;
 
 import static com.sjwi.catalog.model.security.StoredCookieToken.ANONYMOUS_COOKIE_TOKEN_KEY;
 
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -9,13 +10,6 @@ import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
-
-import com.sjwi.catalog.controller.ControllerHelper;
-import com.sjwi.catalog.dao.UserDao;
-import com.sjwi.catalog.exception.PasswordException;
-import com.sjwi.catalog.model.LogEntry;
-import com.sjwi.catalog.model.addressbook.AddressBookEntry;
-import com.sjwi.catalog.model.user.CfUser;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
@@ -29,6 +23,14 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 import org.thymeleaf.util.StringUtils;
+
+import com.sjwi.catalog.controller.ControllerHelper;
+import com.sjwi.catalog.dao.UserDao;
+import com.sjwi.catalog.exception.PasswordException;
+import com.sjwi.catalog.model.LogEntry;
+import com.sjwi.catalog.model.addressbook.AddressBookEntry;
+import com.sjwi.catalog.model.user.CfUser;
+import com.sjwi.catalog.model.user.UserState;
 
 @Service("userDetailsService")
 public class UserService implements UserDetailsService {
@@ -154,6 +156,18 @@ public class UserService implements UserDetailsService {
 			return request.getSession().getAttribute(ANONYMOUS_COOKIE_TOKEN_KEY).toString();
 		}
 	}
+
+  public UserState getUserState(Principal principal) {
+    return userDao.getUserState(principal.getName());
+  }
+
+  public void setUserState(UserState userState, Principal principal) {
+		userDao.setUserState(userState, principal.getName());
+  }
+
+  public void addUserState(UserState userState, Principal principal) {
+		userDao.addUserState(userState, principal.getName());
+  }
 
 }
 	

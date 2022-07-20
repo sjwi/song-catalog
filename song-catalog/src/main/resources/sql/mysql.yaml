@@ -435,5 +435,14 @@ getAccountRequestDetails: >
 insertAnonymousUser: >
   INSERT INTO AnonymousUser (HASH) values (?)
 
+getUserState: >
+  SELECT * FROM UserState where username = ?
+
+updateUserState: >
+  UPDATE UserState SET LAST_SET_ORG = :lastOrg, LAST_SET_SERVICE = :lastService, LAST_SET_GROUP = :lastGroup where username = :username
+
+addUserState: >
+  INSERT INTO UserState VALUES(:username,:lastOrg,:lastService,:lastGroup)
+
 getAnonymousUser: >
   SELECT * FROM AnonymousUser where HASH = ?
