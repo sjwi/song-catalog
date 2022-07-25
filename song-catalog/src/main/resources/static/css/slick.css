@@ -146,3 +146,8 @@
 	outline: none !important;
     display: none;
 }
+.logo.dark-swap {
+    width: 45px;
+    margin-left: 10px;
+    margin-top: 10px;
+}

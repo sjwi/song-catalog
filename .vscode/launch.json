@@ -22,7 +22,11 @@
                 "SONG_DEMO_JDBC_DRIVER_H2": "org.h2.Driver",
                 "SONG_DEMO_JDBC_PASSWORD": "sa",
                 "SONG_DEMO_JDBC_USERNAME": "sa",
+                "SONG_DEMO_AUDIO_DIRECTORY": "/tmp",
                 "SONG_DEMO_JDBC_PLATFORM": "org.hibernate.dialect.H2Dialect",
+                "SONG_DEMO_TWILIO_ACCOUNT": "demo_val",
+                "SONG_DEMO_TWILIO_AUTH_CODE": "demo_val",
+                "SONG_DEMO_TWILIO_PHONE_NUMBER": "demo_val",
                 "APPLICATION_PROPER_NAME": "CF Song Catalog"
             }
         },
