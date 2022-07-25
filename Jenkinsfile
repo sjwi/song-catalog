@@ -88,5 +88,30 @@ pipeline {
                 }
             }
         }
+        stage('Deploy Demo') {
+            when {
+                expression { env.BRANCH == "main"}
+            }
+            steps {
+                withCredentials([
+                    usernamePassword(credentialsId:'github_token', usernameVariable: 'USER', passwordVariable: 'TOKEN')
+                ]) {
+                    dir('song-catalog') {
+                        sh "git remote set-url origin https://$TOKEN@github.com/sjwi/meal-planner.git"
+                        sh '''
+                            git fetch
+                            git checkout origin/demo -- src/main/resources/application.properties
+                            git checkout origin/demo -- pom.xml
+                            git checkout origin/demo -- src/main/java/com/sjwi/catalog/aspect/LandingPageSessionInitializer.java
+                            git checkout origin/demo -- src/main/java/com/sjwi/catalog/mail/Mailer.java
+                            git checkout origin/demo -- src/main/resources/schema.sql
+                            git checkout origin/demo -- src/main/resources/templates/partial/header.html
+                            mvn clean install package
+                            sudo cp target/ROOT.war /opt/tomcat/webapps/song-demo.war
+                        '''
+                    }
+                }
+            }
+        }
     }
 }
