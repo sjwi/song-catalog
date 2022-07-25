@@ -98,14 +98,17 @@ pipeline {
                 withCredentials([
                     usernamePassword(credentialsId:'github_token', usernameVariable: 'USER', passwordVariable: 'TOKEN')
                 ]) {
+                    sh "git remote set-url origin https://$TOKEN@github.com/sjwi/song-catalog.git && git fetch origin demo"
+                    sh '''
+                        git checkout FETCH_HEAD -- song-catalog/src/main/resources/application.properties
+                        git checkout FETCH_HEAD -- song-catalog/pom.xml
+                        git checkout FETCH_HEAD -- song-catalog/src/main/java/com/sjwi/catalog/aspect/LandingPageSessionInitializer.java
+                        git checkout FETCH_HEAD -- song-catalog/src/main/java/com/sjwi/catalog/mail/Mailer.java
+                        git checkout FETCH_HEAD -- song-catalog/src/main/resources/schema.sql
+                        git checkout FETCH_HEAD -- song-catalog/src/main/resources/templates/partial/header.html
+                    '''
                     dir('song-catalog') {
-                        sh "git remote set-url origin https://$TOKEN@github.com/sjwi/song-catalog.git && git fetch origin demo && git checkout FETCH_HEAD -- src/main/resources/application.properties"
                         sh '''
-                            git checkout FETCH_HEAD -- pom.xml
-                            git checkout FETCH_HEAD -- src/main/java/com/sjwi/catalog/aspect/LandingPageSessionInitializer.java
-                            git checkout FETCH_HEAD -- src/main/java/com/sjwi/catalog/mail/Mailer.java
-                            git checkout FETCH_HEAD -- src/main/resources/schema.sql
-                            git checkout FETCH_HEAD -- src/main/resources/templates/partial/header.html
                             mvn clean install package
                             sudo cp target/ROOT.war /opt/tomcat/webapps/song-demo.war
                         '''
