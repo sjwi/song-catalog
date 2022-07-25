@@ -1,5 +1,6 @@
 $(document).ready(function() {
 	$(document).on('click','.delete-btn',function(e){
+		songDeleted = false;
 		$('#deleteSongModal').find('.modal-title').html("Delete " + $(this).closest('.song-metadata').data('name'));
 		$('#deleteSongModal').find('.modal-message').html("Are you sure you want to permanently remove <b>"+ $(this).closest('.song-metadata').data('name') +"</b> from the song catalog?\nThis will also remove it from all setlists and delete any versions.")
 		$('#deleteSongModal').find('.song-id').val($(this).closest('.song-metadata').data('target'));

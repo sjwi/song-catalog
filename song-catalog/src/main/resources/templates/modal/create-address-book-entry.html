@@ -38,13 +38,12 @@
 						<label class="form-group" for="phone">Phone Number</label>
 					</div>
 					<div class="col-8">
-						<input class="form-control phone required" name="phone" title="Phone cannot be blank" type="text">
+						<input class="form-control phone" name="phone" title="Phone cannot be blank" type="text">
 					</div>
 				</div>
 			</div>
 			<div class="modal-footer">
-				<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-				<button type="submit" class="btn btn-info">Create Contact</button>
+				<button type="submit" class="btn btn-info btn-lg w-100">Create Contact</button>
 			</div>
 			</form>	
 		</div>
@@ -64,10 +63,8 @@
 						$(this).find('input[type="submit"]').attr('disabled',true);
 					},
 					success: function() {
-						alertWithFade('success','Contact created')
-						setTimeout(function(){
-							location.reload()
-						},1000);
+						setAlertOnLoad('warning','Contact created')
+						location.reload()
 					},
 					error: function(data){
 						$(this).find('input[type="submit"]').attr('disabled',false);

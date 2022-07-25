@@ -4,14 +4,27 @@
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no maximum-scale=1.0,user-scalable=0, minimal-ui" />
 		<meta name="apple-mobile-web-app-title" th:attr="content=${@environment.getProperty('com.sjwi.settings.app.properName')}">
-		<meta property="og:title"  th:attr="content=${title}">
-		<meta property="og:image" th:attr="content=@{/images/logo_preview.png}" />
+		<meta name="mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
 		<title th:text="${title}"></title>
+		<link rel="apple-touch-startup-image" th:href="@{/images/splashscreen_640x1136.png}" media="(device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)">
+		<link rel="apple-touch-startup-image" th:href="@{/images/splashscreen_750x1294.png}" media="(device-width: 375px) and (device-height: 667px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)">
+		<link rel="apple-touch-startup-image" th:href="@{/images/splashscreen_828x1792.png}" media="(device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)">
+		<link rel="apple-touch-startup-image" th:href="@{/images/splashscreen_1170x2532.png}" media="(device-width: 390px) and (device-height: 844px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)">
+		<link rel="apple-touch-startup-image" th:href="@{/images/splashscreen_1242x2148.png}" media="(device-width: 414px) and (device-height: 736px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)">
+		<link rel="apple-touch-startup-image" th:href="@{/images/splashscreen_1284x2778.png}" media="(device-width: 428px) and (device-height: 926px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)">
+		<link rel="apple-touch-startup-image" th:href="@{/images/splashscreen_1125x2436.png}" media="(device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)">
+		<link rel="apple-touch-startup-image" th:href="@{/images/splashscreen_1536x2048.png}" media="(min-device-width: 768px) and (max-device-width: 1024px) and (-webkit-min-device-pixel-ratio: 2) and (orientation: portrait)">
+		<link rel="apple-touch-startup-image" th:href="@{/images/splashscreen_1668x2224.png}" media="(min-device-width: 834px) and (max-device-width: 834px) and (-webkit-min-device-pixel-ratio: 2) and (orientation: portrait)">
+		<link rel="apple-touch-startup-image" th:href="@{/images/splashscreen_2048x2732.png}" media="(min-device-width: 1024px) and (max-device-width: 1024px) and (-webkit-min-device-pixel-ratio: 2) and (orientation: portrait)">
 		<link rel="shortcut icon" th:href="@{/favicon.ico}" type="image/x-icon">
-		<link th:if="${#session == null || #session.getAttribute(T(com.sjwi.catalog.config.PreferencesConfiguration).NIGHT_MODE_PREFERENCE_KEY) == null || !#session.getAttribute(T(com.sjwi.catalog.config.PreferencesConfiguration).NIGHT_MODE_PREFERENCE_KEY)}" rel="stylesheet" th:href="@{/css/bootstrap.css}" />
-		<link th:if="${#session == null || #session.getAttribute(T(com.sjwi.catalog.config.PreferencesConfiguration).NIGHT_MODE_PREFERENCE_KEY) == null || !#session.getAttribute(T(com.sjwi.catalog.config.PreferencesConfiguration).NIGHT_MODE_PREFERENCE_KEY)}" rel="stylesheet" th:href="@{/css/colors.css}" />
-		<link th:if="${#session != null && #session.getAttribute(T(com.sjwi.catalog.config.PreferencesConfiguration).NIGHT_MODE_PREFERENCE_KEY) != null && #session.getAttribute(T(com.sjwi.catalog.config.PreferencesConfiguration).NIGHT_MODE_PREFERENCE_KEY)}" rel="stylesheet" th:href="@{/css/bootstrap-dark.css}" />
-		<link th:if="${#session != null && #session.getAttribute(T(com.sjwi.catalog.config.PreferencesConfiguration).NIGHT_MODE_PREFERENCE_KEY) != null && #session.getAttribute(T(com.sjwi.catalog.config.PreferencesConfiguration).NIGHT_MODE_PREFERENCE_KEY)}" rel="stylesheet" th:href="@{/css/colors-dark.css}" />
+		<th:block th:with="nightModePreference=${T(com.sjwi.catalog.config.PreferencesConfiguration).NIGHT_MODE_PREFERENCE_KEY}">
+			<link th:if="${#session == null || #session.getAttribute(nightModePreference) == null || !#session.getAttribute(nightModePreference)}" rel="stylesheet" th:href="@{/css/bootstrap.css}" />
+			<link th:if="${#session == null || #session.getAttribute(nightModePreference) == null || !#session.getAttribute(nightModePreference)}" rel="stylesheet" th:href="@{/css/colors.css}" />
+			<link th:if="${#session != null && #session.getAttribute(nightModePreference) != null && #session.getAttribute(nightModePreference)}" rel="stylesheet" th:href="@{/css/bootstrap-dark.css}" />
+			<link th:if="${#session != null && #session.getAttribute(nightModePreference) != null && #session.getAttribute(nightModePreference)}" rel="stylesheet" th:href="@{/css/colors-dark.css}" />
+		</th:block>
 		<link rel="stylesheet" type="text/css" th:href="@{/css/slick.css}"/>
 		<link rel="stylesheet" type="text/css" th:href="@{/css/select2.min.css}"/>
 		<link rel="apple-touch-icon" th:href="@{/images/icon_dark.png}">
@@ -19,8 +32,10 @@
 		<link rel="stylesheet" th:href="@{/css/font-awesome.all.min.css}" />
 		<link rel="stylesheet" th:href="@{/css/datatable.min.css}" />
 		<link rel="stylesheet" th:href="@{/css/jquery.datatable.min.css}" />
+		<link rel="manifest" th:href="@{/manifest.json}">
 		<link rel="search" th:href="@{/search.xml}" type="application/opensearchdescription+xml" th:attr="title=${@environment.getProperty('com.sjwi.settings.app.properName')}">
 		<script th:src="@{/js/lib/jquery-3.3.1.min.js}"></script>
+		<script th:src="@{/js/lib/overflow-color.min.js}"></script>
 		<script th:src="@{/js/lib/jquery-ui.min.js}"></script>
 		<script th:src="@{/js/lib/bootstrap.bundle.js}"></script>
 		<script th:src="@{/js/lib/jquery.ui.touch-punch.min.js}"></script>
@@ -32,16 +47,76 @@
 		<script th:src="@{/js/lib/qrcode.min.js}"></script>
 		<script th:src="@{/js/site/form-validation.js}"></script>
 		<script th:src="@{/js/site/scroll.js}"></script>
+		<script th:src="@{/js/site/swipe.js}"></script>
 		<script th:inline="javascript">
-			if (location.protocol !== 'https:' && !location.href.includes('localhost') && !location.href.includes('elasticbeanstalk')) {
-				location.replace('https:' + location.href.substring(location.protocol.length));
-			}
 			var contextpath = /*[[@{/}]]*/;
 			var loggedInUser = /*[[${#authentication?.getPrincipal()}]]*/;
 			var alertOnLoad = /*[[${ALERT_ON_LOAD}]]*/ false;
+
+			const standAloneCookieKey = "STAND_ALONE";
+			const LAST_ORG_KEY = 'last_org'
+			const LAST_SERVICE_KEY = 'last_service'
+			const LAST_HF_KEY = 'last_hf'
+			const orgSelector = 'select[name="unit"]';
+			const serviceSelector = 'select[name="subUnit"]';
+			const hgSelector = 'select[name="homegroupName"]';
+
+			//service worker registration
+			if ('serviceWorker' in navigator) {
+				window.addEventListener('DOMContentLoaded', function() {
+					navigator.serviceWorker.register(contextpath + 'service-worker.js').then(function(registration) {
+						// Registration was successful
+						console.log('ServiceWorker registration successful with scope: ', registration.scope);
+					}, function(err) {
+						// registration failed :(
+						console.log('ServiceWorker registration failed: ', err);
+					});
+				});
+			}
+			let isInStandaloneMode;
+			let standAloneStorageLoggedKey = 'standAloneLogged';
+
+			$(document).ready(function(){
+				// install prompt
+				const isIos = () => {
+					const userAgent = window.navigator.userAgent.toLowerCase();
+					return /iphone|ipad|ipod/.test( userAgent );
+				}
+				isInStandaloneMode = () => ('standalone' in window.navigator) && (window.navigator.standalone);
+
+				const userDismissedInstall = window.localStorage.hasOwnProperty('dismissInstall');
+
+				if (isIos() && !isInStandaloneMode() && !userDismissedInstall) {
+					// $('#installPrompt').addClass('showme');
+				}
+				$('#closeInstallPrompt').on('click',function(e){
+					$('#installPrompt').removeClass('showme');
+					window.localStorage.setItem('dismissInstall',true);
+				})
+				if (!checkCookie(standAloneCookieKey))
+					setCookie(standAloneCookieKey, isInStandaloneMode(), 10000);
+			})
+		</script>
+
+		<script sec:authorize="isAuthenticated()">
+				
+			$(document).ready(function(){
+				$.ajax({
+					url: contextpath + 'user-state',
+					method: "GET",
+					success: function(data) {
+						localStorage.setItem(LAST_ORG_KEY, data.lastOrg);
+						localStorage.setItem(LAST_SERVICE_KEY, data.lastService);
+						localStorage.setItem(LAST_HF_KEY, data.lastGroup);
+						initializeSetForm();
+					}
+				});
+			})
+
 		</script>
 
 		<th:block th:replace="modal/download"></th:block>
+		<th:block th:replace="modal/email-file"></th:block>
 		<th:block sec:authorize="hasAuthority('USER')">
 			<th:block th:replace="modal/change-password"></th:block>
 			<th:block th:replace="modal/invite"></th:block>
@@ -50,6 +125,7 @@
 		<th:block sec:authorize="!hasAuthority('USER')">
 			<th:block th:replace="modal/login"></th:block>
 			<th:block th:replace="modal/reset-password"></th:block>
+			<th:block th:replace="modal/request-account"></th:block>
 			<th:block th:replace="modal/prompt-for-reset"></th:block>
 			<th:block th:replace="modal/enroll"></th:block>
 		</th:block>

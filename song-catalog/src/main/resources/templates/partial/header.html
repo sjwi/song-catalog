@@ -16,7 +16,8 @@
 <!-- 						<li><a class="dropdown-item" href="javascript:void(0)" onclick="notImplimented()" >Preferences</a></li> -->
 						<li><a class="dropdown-item" href="javascript:void(0)" onclick="inviteUser()">Invite User</a></li>
 						<li><a class="dropdown-item" href="javascript:void(0)" onclick="changePassword()" >Change Password</a></li>
-						<li sec:authorize="hasAuthority('SUPERADMIN')"><a class="dropdown-item" target="_blank" th:href="@{/log}">User Feed</a></li>
+						<li sec:authorize="hasAuthority('SUPERADMIN')"><a class="dropdown-item" th:href="@{/logs}">User Feed</a></li>
+						<li sec:authorize="hasAuthority('SUPERADMIN')"><a class="dropdown-item" th:href="@{/structured-logs}">Structured Logs</a></li>
 						<li sec:authorize="hasAuthority('SUPERADMIN')"><a class="dropdown-item" target="_blank" th:href="@{/user-report}">User Report</a></li>
 						<li sec:authorize="hasAuthority('SUPERADMIN')"><a class="dropdown-item" href="javascript:void(0)" onclick="notImplimented()">User Access Control</a></li>
 						<li><a class="dropdown-item logout" href="javascript:void(0)" >Logout</a></li>
@@ -26,7 +27,9 @@
 		  </div>
 		  <div class="night-mode-switch float-right">
 		  	<div class="toggle-btn" id="nightModeToggle">
-			  <input type="checkbox" class="night-mode-input" th:checked="${#session != null && #session.getAttribute(T(com.sjwi.catalog.config.PreferencesConfiguration).NIGHT_MODE_PREFERENCE_KEY) != null && #session.getAttribute(T(com.sjwi.catalog.config.PreferencesConfiguration).NIGHT_MODE_PREFERENCE_KEY)}">
+			  <input type="checkbox" class="night-mode-input"
+					th:with="nightModePreference=${T(com.sjwi.catalog.config.PreferencesConfiguration).NIGHT_MODE_PREFERENCE_KEY}"
+					th:checked="${#session != null && #session.getAttribute(nightModePreference) != null && #session.getAttribute(nightModePreference)}">
 			  <span>
 			  </span>
 			</div>
@@ -47,6 +50,16 @@
 			sessionStorage.setItem('demoAlert',true)
 		}
 		$(document).ready(function(){
+			if (isInStandaloneMode()) {
+				$('.back-btn').removeClass('collapse');
+				$('.back-btn').addClass('showme');
+			}
+			$(document).on('show.bs.modal','.modal', function () {
+				$('.back-btn').removeClass('showme');
+			});
+			$(document).on('hide.bs.modal','.modal', function () {
+				$('.back-btn').addClass('showme');
+			});
 			$(document).on('click','#nightModeToggle',function(){
 				if ($('.toggle-btn > input').is(':checked')){
 					toggleNightMode(true);
@@ -64,5 +77,27 @@
 				location.reload();
 			});
 		}
+		function hasTouch() {
+  return 'ontouchstart' in document.documentElement
+					|| navigator.maxTouchPoints > 0
+					|| navigator.msMaxTouchPoints > 0;
+	}
+
+	if (hasTouch()) { // remove all the :hover stylesheets
+		try { // prevent exception on browsers not supporting DOM styleSheets properly
+			for (var si in document.styleSheets) {
+				var styleSheet = document.styleSheets[si];
+				if (!styleSheet.rules) continue;
+
+				for (var ri = styleSheet.rules.length - 1; ri >= 0; ri--) {
+					if (!styleSheet.rules[ri].selectorText) continue;
+
+					if (styleSheet.rules[ri].selectorText.match(':hover')) {
+						styleSheet.deleteRule(ri);
+					}
+				}
+			}
+		} catch (ex) {}
+	}
 	</script>
 </header>

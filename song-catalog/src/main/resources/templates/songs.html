@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" data-oc="var(--primary-grey),var(--primary-grey)">
 	<th:block th:replace="partial/head :: head(${focusedSong[0].name})"></th:block>
 	<th:block th:replace="partial/header"></th:block>
 	<body id="songCatalogBody">
@@ -8,8 +8,13 @@
 			<div class="song-catalog-row row no-gutters flex-nowrap">
 				<div class="col song-column no-gutters" th:classappend="${!#strings.contains(#request.requestURI,'/songs')}? 'hide-song-catalog':''">
 					<div class="template-container song-catalog-table" id="songTableContainer">
-						<th:block th:replace="dynamic/song-table"></th:block>
+						<th:block th:if="${songs != null}">
+							<th:block th:replace="dynamic/song-table"></th:block>
+						</th:block>
 					</div>
+					<th:block sec:authorize="hasAuthority('USER')">
+						<th:block th:replace="partial/add-song-alert"></th:block>
+					</th:block>
 				</div>
 				<div class="no-gutters song-details col col-8" th:classappend="${#strings.contains(#request.requestURI,'/songs')}? 'hide-song-details':''">
 					<div class="template-container" id="catalogSongDetails">
@@ -25,12 +30,14 @@
 			<div class="modal-container">
 				<th:block sec:authorize="hasAuthority('USER')">
 					<th:block th:replace="modal/add-song-to-set"></th:block>
+					<th:block th:replace="modal/add-songs-to-set"></th:block>
 					<th:block th:replace="modal/delete-song"></th:block>
 					<th:block th:replace="modal/edit-song"></th:block>
 					<th:block th:replace="modal/version-control"></th:block>
 				</th:block>
 			</div>
 		</div>
+		<th:block th:replace="partial/back-btn"></th:block>
 	</body>
 	<script th:inline="javascript" th:src="@{/js/page/song/page.js}"></script>
 	<script th:inline="javascript" th:src="@{/js/page/set-list/static.js}"></script>
@@ -38,14 +45,11 @@
 	<script th:inline="javascript" sec:authorize="hasAuthority('USER')" th:src="@{/js/page/song/user.js}"></script>
 
 	<script th:inline="javascript">
-		var ignoreSongClickedSelector = ".action-btn,.song-dropdown-btn,.dropdown-menu, li, .dropdown-item,.grip-container,img";
+		if ($('.song-table').length == 0)
+			$('#songTableContainer').html($('.loading').clone());
+		var ignoreSongClickedSelector = ".action-btn,.song-dropdown-btn,.dropdown-menu, li, .dropdown-item,.grip-container,img,.round,.round>*";
 		var focusedSong = [[${focusedSong[0].id}]];
-
-		var focusedRow = document.getElementById("songRow_" + focusedSong);
-		var topPos = focusedRow.offsetTop;
-		$('.song-column')[0].scrollTo(0,topPos);
-
-		selectFocusedSong(focusedSong);
+		var focusedSlickPage = [[${fsInitialIndex}]];
 		
 		function refreshSongContainer(id){
 			$('#catalogSongDetails').load(contextpath + 'song/' + id + '?view=dynamic/song-details',function(){
@@ -60,6 +64,30 @@
 		}
 
 		$(document).ready(function(){
+			if ($('.hide-song-catalog').is(':visible')){
+				$.ajax({
+					url: contextpath + 'search/song',
+					method: "GET",
+					data: {
+						searchValue:'',
+						view: '',
+						searchType: 'songSearch2'
+					},
+					success: function(data) {
+						$('#songTableContainer').html(data);
+						var focusedRow = document.getElementById("songRow_" + focusedSong);
+						var topPos = focusedRow.offsetTop;
+						$('.song-column')[0].scrollTo(0,topPos);
+						selectFocusedSong(focusedSong);
+						let tmpSongArray = JSON.parse(localStorage.getItem("cachedMultiSelect"));
+						tmpSongArray.forEach((id) => $('#songCheckbox_' + id).prop('checked',true));
+					},
+					error: function(data) {
+						alertWithFade('danger','Unable to populate song list at this time.')
+					}
+				})
+			}
+
 			$(document).on('click','.song-row',function(e){
 				if (!$(e.target).is(ignoreSongClickedSelector)){
 					var id = $(e.target).closest('.song-metadata').data('target');

@@ -5,6 +5,105 @@
 	</div>
 </div>
 <script>
+	$(document).on('change','#downloadForm input, #downloadForm select',function(){
+		refreshDownloadQrCode();
+	});
+	$(document).on('change','#lyricsOnly',function(){
+		if ($(this).prop('checked')){
+			$('#downloadForm').find('select[name="fontSize"] option[value="18"]').html('18*');
+			$('#downloadForm').find('select[name="fontSize"] option[value="12"]').html('12');
+			$('#downloadForm').find('select[name="fontSize"]').val('18');
+		} else {
+			$('#downloadForm').find('select[name="fontSize"] option[value="18"]').html('18');
+			$('#downloadForm').find('select[name="fontSize"] option[value="12"]').html('12*');
+			$('#downloadForm').find('select[name="fontSize"]').val('12');
+		}
+	});
+	$(document).on('click','.download-tab',function(){
+		$('.download-tab.selected').removeClass(['selected','border','border-success']);
+		$(this).addClass(['selected','border','border-success']);
+		if ($(this).hasClass('right-download-modal')){
+			$('.ppt-options').show();
+			$('.pdf-options').hide();
+			$('.file-suffix').text('.pptx');
+			downloadBaseUri = pptDownloadBaseUri;
+			var pptOptions = '';
+			for (var i = 30; i < 50; i++){
+				if (i == 40){
+					pptOptions = pptOptions + '<option selected value="' + i + '">' + i + '*</option>';
+				} else {
+					pptOptions = pptOptions + '<option value="' + i + '">' + i + '</option>';
+				}
+			}
+			$('#downloadForm').find('select[name="fontSize"]').html(pptOptions);
+		} else {
+			$('.ppt-options').hide();
+			$('.pdf-options').show();
+			$('.file-suffix').text('.pdf');
+			downloadBaseUri = pdfDownloadBaseUri;
+			var pdfOptions = '';
+			for (var i = 6; i < 26; i++){
+				if (i == 18){
+					pdfOptions = pdfOptions + '<option selected value="' + i + '">' + i + '*</option>';
+				} else {
+					pdfOptions = pdfOptions + '<option value="' + i + '">' + i + '</option>';
+				}
+			}
+			$('#downloadForm').find('select[name="fontSize"]').html(pdfOptions);
+		}
+		refreshDownloadQrCode();
+	});
+	$(document).on('submit','#downloadForm',function(e){
+		e.preventDefault();
+		if (isFormFilled(this)){
+			if (isInStandaloneMode())
+				standAloneBehavior()
+			else
+				saveAs($('#copyDownloadLinkBtn').data('basecontext') + generateDownloadLinkWithFormParams());
+		}
+	});
+	function standAloneBehavior() {
+		if ($('.download-tab.selected').hasClass('right-download-modal'))
+			window.open('https://view.officeapps.live.com/op/view.aspx?src=' + encodeURIComponent($('#copyDownloadLinkBtn').data('basecontext') + generateRandomDownloadLinkWithFormParams()),'_blank');
+		else
+			window.open('https://docs.google.com/viewer?embedded=true&url=' + encodeURIComponent($('#copyDownloadLinkBtn').data('basecontext') + generateDownloadLinkWithFormParams()),'_blank');
+	}
+	function openDownloadInBrowser(){
+		if ($('.download-tab.selected').hasClass('right-download-modal')){
+			window.open('https://view.officeapps.live.com/op/view.aspx?src=' + encodeURIComponent($('#copyDownloadLinkBtn').data('basecontext') + generateRandomDownloadLinkWithFormParams()),'_blank');
+		} else {
+			if (isInStandaloneMode())
+				standAloneBehavior()
+			else
+				window.open($('#copyDownloadLinkBtn').data('basecontext') + generateDownloadLinkWithFormParams(),'_blank');
+		}
+	}
+function generateDownloadQRCode(e){
+	if(!$('#dlQrContainer').is(':visible')) {
+		e.preventDefault();
+		refreshDownloadQrCode();
+		$('#dlQrContainer').show();
+		$('#generateDownloadQRCodeBtn').html('Hide QR Code');
+	} else {
+		$('#dlQrContainer').hide();
+		$('#generateDownloadQRCodeBtn').html('Generate QR Code');
+	}
+}
+function refreshDownloadQrCode(){
+	$('#dlQrCode').html('');
+	new QRCode(document.getElementById("dlQrCode"), $('#copyDownloadLinkBtn').data('basecontext') + generateDownloadLinkWithFormParams());
+}
+function copyDownloadUrl(e){
+	e.preventDefault();
+	copyTextToClipboard($('#copyDownloadLinkBtn').data('basecontext') + generateDownloadLinkWithFormParams());
+}
+function generateDownloadLinkWithFormParams(){
+	return downloadBaseUri + '/' + encodeURI($('#downloadForm').find('.filename').val()) + '?' + $('#downloadForm').filter('*').find(':visible,.hidden-key').not('.filename').serialize();
+}
+function generateRandomDownloadLinkWithFormParams(){
+	return downloadBaseUri + '/' + encodeURI($('#downloadForm').find('.filename').val() + '_' + (Math.floor(Math.random() * 100000) + 1).toString()) + '?' + $('#downloadForm').filter('*').find(':visible,.hidden-key').not('.filename').serialize();
+}
+
 var pptDownloadBaseUri;
 var pdfDownloadBaseUri;
 var downloadBaseUri;
@@ -41,5 +140,17 @@ function exportDatabase(){
 			alertWithFade('danger','Something went wrong! Unable to retrieve download details');
 		},
 	});		
+}
+function saveAs(uri) {
+    var link = document.createElement('a');
+    if (typeof link.download === 'string') {
+        link.href = uri;
+        link.setAttribute('download', true);
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    } else {
+        window.open(uri);
+    }
 }
 </script>

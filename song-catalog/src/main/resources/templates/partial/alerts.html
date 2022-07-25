@@ -1,51 +1,79 @@
-<div class="alert-container">
-	<div class="collapse">
-		<div id="custom-alert" class="alert fade fade-alert show" role="alert" data-mousein="false">
-			<button type="button" class="close alert-close" data-dismiss="alert" aria-label="Close">
-				<span aria-hidden="true">&times;</span>
-			</button>
-		  <span class="alert-message"></span>
+<div id="alert-container" class="alert-container rounded-bottom-lg">
+	<div class="row no-gutters border rounded-bottom-lg">
+		<div class="col text-center rounded-bottom-lg hide-alert">
+			<div id="custom-alert" class="custom-alert alert pt-3 pb-0 mb-0 rounded-bottom-lg" role="alert">
+				<div class="row no-gutters">
+					<div class="col text-center d-flex justify-content-center">
+							<span class="alert-message custom-alert-container"></span>
+					</div>
+				</div>
+				<div class="col my-0 pb-0 pt-0 text-center" id="hideAlert">
+					<i class="fa fa-angle-up" aria-hidden="true"></i>
+				</div>
+			</div>
 		</div>
 	</div>
 </div>
+<div id="installPrompt" class="alert alert-success py-2 px-1 install-pwa text-center" role="alert">
+	<button id="closeInstallPrompt" type="button" class="close">
+		<span aria-hidden="true">&times;</span>
+	</button>
+	<div class="row no-gutters">
+		<div class="col">Standalone application mode now supported!<br>
+			You will need to (re)add the application to your homescreen for these changes to take effect. Tap the <img width="25px" th:src="@{/images/export-ios.png}"> icon and then <b>Add to homescreen</b>.
+		</div>
+	</div>
+	<div class="fixed-install-arrow"><div class="arrow-down mx-auto"></div></div>
+</div>
 
 <script>
+	var alertOnLoadKey = 'alertOnLoad';
+	var alertOnLoadType = 'alertOnLoadType';
 	$(document).ready(function(){
-		$(document).on('click','.alert-close, .alert-close > span',function(){
-			$(this).closest('#custom-alert').css('-webkit-transition-duration','0s');
-			$(this).closest('#custom-alert').css('transition-duration','0s');
+		if (window.localStorage.hasOwnProperty(alertOnLoadKey)){
+			alertWithFade(window.localStorage.getItem(alertOnLoadType), window.localStorage.getItem(alertOnLoadKey))
+			window.localStorage.removeItem(alertOnLoadKey);
+		}
+		$(document).on('click','.hide-alert',function(e){
+			if (!$(e.target).is('a'))
+				$(".alert-container").removeClass('display');
 		})
 	})
-	function alertWithoutFade(alertType,msg){
-		if (alertType == 'success'){
-			alertType = 'info';
+	document.addEventListener('swiped-up', function(e) {
+		if($(e.target).closest('.hide-alert').length > 0) {
+			e.preventDefault();
+			$(".alert-container").removeClass('display');
 		}
-		var dynamicElement = $('#custom-alert').clone();
-		$(dynamicElement).find('.alert-message').html(msg);
-		$(dynamicElement).addClass('alert-' + alertType);
-		$(dynamicElement).appendTo($('.alert-container'));
+	});
+	function setAlertOnLoad(alertType, msg) {
+		window.localStorage.setItem(alertOnLoadKey, msg);
+		window.localStorage.setItem(alertOnLoadType, alertType);
+	}
+	function alertWithoutFade(alertType,msg){
+		$(".alert-container").removeClass('display');
+		var dynamicAlert = $('#alert-container').clone();
+		dynamicAlert.find('.alert-message').html(msg);
+		dynamicAlert.addClass('alert-' + alertType);
+		dynamicAlert.appendTo($('body'))
+		setTimeout(function(){
+			dynamicAlert.addClass('display');
+		},50)
 	}
 	function alertWithFade(alertType, msg){
-		if (alertType == 'success'){
-			alertType = 'warning';
-		}
-		var dynamicElement = $('#custom-alert').clone();
-		$(dynamicElement).find('.alert-message').html(msg);
-		$(dynamicElement).addClass('alert-' + alertType);
-		$(dynamicElement).hover(function(){
-			$(this).data('mousein',true);
-		}, function(){
-			$(this).data('mousein',false);
-			setAlertToFadeOut(this);
-		});
-		$(dynamicElement).appendTo($('.alert-container'));
-		setAlertToFadeOut(dynamicElement);
+		$(".alert-container").removeClass('display');
+		var dynamicAlert = $('#alert-container').clone();
+		$('body')
+			.append(dynamicAlert)
+			.ready(function(){
+				dynamicAlert.find('.alert-message').html(msg);
+				dynamicAlert.addClass('alert-' + alertType);
+				dynamicAlert.addClass('display');
+			})
+		setAlertToFadeOut(dynamicAlert);
 	}
 	function setAlertToFadeOut(alertToFade){
 		setTimeout(function(){
-			if ($(alertToFade).data('mousein') == false){
-				$(alertToFade).alert('close');
-			}
+			$(alertToFade).removeClass('display');
 		}, 3000);
 	}
 </script>

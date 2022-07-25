@@ -21,7 +21,7 @@ CREATE TABLE SongCategories (
   ID int(11) NOT NULL AUTO_INCREMENT,
   NAME varchar(50) NOT NULL,
   PRIMARY KEY (ID)
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
+);
 
 INSERT INTO SongCategories (NAME) values ('CWM'),('CCM'),('Hymns'),('Seasonal');
 
@@ -32,7 +32,7 @@ CREATE TABLE StoredLogins (
   LOGIN_COOKIE varchar(5000) NOT NULL,
   CREATED_ON datetime NOT NULL,
   PRIMARY KEY (ID)
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
+);
 
 DROP TABLE IF EXISTS PasswordReset;
 CREATE TABLE PasswordReset (
@@ -41,13 +41,22 @@ CREATE TABLE PasswordReset (
   RESET_TOKEN varchar(5000) NOT NULL,
   CREATED_ON datetime NOT NULL,
   PRIMARY KEY (ID)
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
+);
 
 DROP TABLE IF EXISTS preferences;
 CREATE TABLE preferences (
   username varchar(50) NOT NULL,
   PreferenceKey varchar(50) NOT NULL,
   PreferenceValue varchar(50) NOT NULL
+);
+
+DROP TABLE IF EXISTS UserState;
+CREATE TABLE UserState (
+  username varchar(50) NOT NULL,
+  LAST_SET_ORG int(11) NOT NULL,
+  LAST_SET_SERVICE int(11) NOT NULL,
+  LAST_SET_GROUP int(11) NOT NULL,
+  PRIMARY KEY (username)
 );
 
 --
@@ -65,7 +74,7 @@ CREATE TABLE AddressBook (
   Email varchar(255) NOT NULL,
   Phone varchar(255) DEFAULT NULL,
   PRIMARY KEY (ID)
-) ENGINE=InnoDB AUTO_INCREMENT=189 DEFAULT CHARSET=utf8;
+);
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -114,7 +123,7 @@ CREATE TABLE AddressBookGroup (
   ID int(11) NOT NULL AUTO_INCREMENT,
   NAME varchar(255) NOT NULL,
   PRIMARY KEY (ID)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+);
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -138,7 +147,7 @@ CREATE TABLE AddressBookRelated (
   GROUP_ID int(11) NOT NULL,
   ENTRY_ID int(11) NOT NULL,
   PRIMARY KEY (ID)
-) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=utf8;
+);
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -189,7 +198,7 @@ CREATE TABLE EnrollmentToken (
   EMAIL varchar(255) DEFAULT NULL,
   PRIVILEGE varchar(50) DEFAULT NULL,
   PRIMARY KEY (ID)
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
+);
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -211,7 +220,7 @@ CREATE TABLE KeyMaster (
   vi varchar(5) DEFAULT NULL,
   visharp varchar(5) DEFAULT NULL,
   vii varchar(5) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+);
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -236,7 +245,7 @@ CREATE TABLE Organizations (
   TITLE varchar(255) NOT NULL,
   LINK varchar(255),
   PRIMARY KEY (ID)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+);
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -260,9 +269,8 @@ CREATE TABLE Recording (
   SONG_ID int(11) DEFAULT NULL,
   PATH varchar(255) DEFAULT NULL,
   EXT varchar(20) DEFAULT NULL,
-  FILE LONGBLOB DEFAULT NULL,
   PRIMARY KEY (ID)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+);
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -287,7 +295,7 @@ CREATE TABLE Services (
   ID int(11) NOT NULL AUTO_INCREMENT,
   NAME varchar(255) NOT NULL,
   PRIMARY KEY (ID)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+);
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -315,12 +323,22 @@ CREATE TABLE SetList (
   ARTIST varchar(50) DEFAULT NULL,
   NOTES longtext,
   PRIMARY KEY (ID)
-) ENGINE=InnoDB AUTO_INCREMENT=389 DEFAULT CHARSET=utf8;
+);
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Dumping data for table SetList
 --
+
+DROP TABLE IF EXISTS GroupName;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE GroupName (
+  ID int(11) NOT NULL AUTO_INCREMENT,
+  NAME varchar(255) NOT NULL,
+  PRIMARY KEY (ID)
+);
+INSERT INTO GroupName VALUES (1,'Smiths'),(2,'Jones'),(3,'Walters'),(4,'Meyers');
 
 /*!40000 ALTER TABLE SetList DISABLE KEYS */;
 INSERT INTO SetList VALUES 
@@ -418,7 +436,7 @@ CREATE TABLE SetListArchive (
   SORT_ORDER int(11) DEFAULT NULL,
   ARTIST varchar(50) DEFAULT NULL,
   NOTES longtext
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+);
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -443,7 +461,7 @@ CREATE TABLE SetListMaster (
   SERVICE int(11) DEFAULT NULL,
   CREATED_BY varchar(255) DEFAULT NULL,
   PRIMARY KEY (ID)
-) ENGINE=InnoDB AUTO_INCREMENT=101 DEFAULT CHARSET=utf8;
+);
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -496,7 +514,7 @@ CREATE TABLE Song (
   PRIVATE varchar(1) DEFAULT NULL,
   CATEGORY int(2) DEFAULT 1,
   PRIMARY KEY (ID)
-) ENGINE=InnoDB AUTO_INCREMENT=178 DEFAULT CHARSET=utf8;
+);
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -580,7 +598,7 @@ CREATE TABLE SongArchive (
   RELATED int(11) DEFAULT NULL,
   PRIVATE varchar(1) DEFAULT NULL,
   CATEGORY varchar(2) DEFAULT 1
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+);
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -603,7 +621,7 @@ CREATE TABLE Version (
   SONG_ID int(11) DEFAULT NULL,
   VERSION_NAME int(11) DEFAULT NULL,
   PRIMARY KEY (ID)
-) ENGINE=InnoDB AUTO_INCREMENT=32 DEFAULT CHARSET=utf8;
+);
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -660,7 +678,7 @@ CREATE TABLE VersionControl (
   ID int(11) NOT NULL,
   VERSION varchar(2) NOT NULL,
   NEXT_ID int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+);
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -683,7 +701,7 @@ CREATE TABLE users (
   password varchar(100) NOT NULL,
   enabled tinyint(4) NOT NULL DEFAULT '1',
   PRIMARY KEY (username)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+);
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -705,7 +723,7 @@ CREATE TABLE authorities (
   authority varchar(50) NOT NULL,
   UNIQUE KEY ix_auth_username (username,authority),
   CONSTRAINT authorities_ibfk_1 FOREIGN KEY (username) REFERENCES users (username)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+);
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -732,3 +750,34 @@ INSERT INTO authorities VALUES
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
 -- Dump completed on 2020-07-15  0:00:01
+
+DROP TABLE IF EXISTS Log;
+CREATE TABLE Log (
+  ID int(11) NOT NULL AUTO_INCREMENT,
+  ACTION_TIMESTAMP TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  LEVEL varchar(50) NOT NULL DEFAULT 'INFO',
+  USERNAME varchar(500) NOT NULL,
+  DEVICE varchar(50),
+  IP varchar(50),
+  METHOD varchar(500),
+  REQ_URL varchar(1000),
+  STAND_ALONE_MODE BOOLEAN DEFAULT 0,
+  PROTOCOL varchar(10),
+  PARAMS varchar(2000),
+  PRIMARY KEY (ID)
+);
+
+DROP TABLE IF EXISTS AccountRequest;
+CREATE TABLE AccountRequest (
+  ID int(11) NOT NULL AUTO_INCREMENT,
+  REQUESTED_ON TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  EMAIL varchar(500) NOT NULL,
+  PRIMARY KEY (ID)
+);
+
+DROP TABLE IF EXISTS AnonymousUser;
+CREATE TABLE AnonymousUser (
+  ID int(11) NOT NULL AUTO_INCREMENT,
+  HASH varchar(1000) NOT NULL,
+  PRIMARY KEY (ID)
+);

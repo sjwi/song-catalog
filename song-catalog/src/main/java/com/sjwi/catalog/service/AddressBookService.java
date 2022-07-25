@@ -1,77 +1,93 @@
+/* (C)2022 https://stephenky.com */
 package com.sjwi.catalog.service;
-
-import java.util.List;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 import com.sjwi.catalog.dao.AddressBookDao;
 import com.sjwi.catalog.model.addressbook.AddressBookEntry;
 import com.sjwi.catalog.model.addressbook.AddressBookGroup;
+import java.util.List;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 @Component
 public class AddressBookService {
-	
-	@Autowired
-	AddressBookDao addressBookDao;
 
-	public List<AddressBookEntry> getAddressBookEntries() {
-		return addressBookDao.getAddressBookEntries();
-	}
+  @Autowired AddressBookDao addressBookDao;
 
-	public List<AddressBookGroup> getAddressBookGroups() {
-		return addressBookDao.getAddressBookGroups();
-	}
+  public List<AddressBookEntry> getAddressBookEntries() {
+    return addressBookDao.getAddressBookEntries();
+  }
 
-	public List<AddressBookGroup> getAddressBookGroupEntries(String searchTerm) {
-		return addressBookDao.getAddressBookGroups(searchTerm == null? null: "%" + searchTerm.toLowerCase() + "%");
-	}
+  public List<AddressBookGroup> getAddressBookGroups() {
+    return addressBookDao.getAddressBookGroups();
+  }
 
-	public List<AddressBookEntry> getAddressBookEntries(String searchTerm) {
-		return addressBookDao.getAddressBookEntries(searchTerm == null? null: "%" + searchTerm.toLowerCase() + "%");
-	}
+  public List<AddressBookGroup> getAddressBookGroupEntries(String searchTerm) {
+    return addressBookDao.getAddressBookGroups(
+        searchTerm == null ? null : "%" + searchTerm.toLowerCase() + "%");
+  }
 
-	public AddressBookEntry getAddressBookEntryById(int id) {
-		return addressBookDao.getAddressBookEntryById(id);
-	}
+  public List<AddressBookEntry> getAddressBookEntries(String searchTerm) {
+    return addressBookDao.getAddressBookEntries(
+        searchTerm == null ? null : "%" + searchTerm.toLowerCase() + "%");
+  }
 
-	public AddressBookEntry getAddressBookEntryByEmail(String email) {
-		return addressBookDao.getAddressBookEntryByEmail(email);
-	}
+  public AddressBookEntry getAddressBookEntryById(int id) {
+    return addressBookDao.getAddressBookEntryById(id);
+  }
 
-	public AddressBookGroup getAddressBookGroupById(int id) {
-		return addressBookDao.getAddressBookGroupById(id);
-	}
+  public AddressBookEntry getAddressBookEntryByEmail(String email) {
+    return addressBookDao.getAddressBookEntryByEmail(email);
+  }
 
-	public void createEntry(AddressBookEntry addressBookEntry) {
-		addressBookDao.createEntry(addressBookEntry);
-	}
+  public AddressBookGroup getAddressBookGroupById(int id) {
+    return addressBookDao.getAddressBookGroupById(id);
+  }
 
-	public int createGroup(String groupName) {
-		return addressBookDao.createGroup(groupName);
-	}
+  public void createEntry(AddressBookEntry addressBookEntry) {
+    addressBookDao.createEntry(addressBookEntry);
+  }
 
-	public void deleteGroup(int id) {
-		addressBookDao.deleteGroup(id);
-	}
+  public int createGroup(String groupName) {
+    return addressBookDao.createGroup(groupName);
+  }
 
-	public void deleteEntry(int id) {
-		addressBookDao.deleteEntry(id);
-	}
+  public void deleteGroup(int id) {
+    addressBookDao.deleteGroup(id);
+  }
 
-	public void addMemberToGroup(int entryId, int groupId) {
-		addressBookDao.addMemberToGroup(entryId, groupId);
-	}
+  public void deleteEntry(int id) {
+    addressBookDao.deleteEntry(id);
+  }
 
-	public void removeMemberFromGroup(int entryId, int groupId) {
-		addressBookDao.removeMemberFromGroup(entryId, groupId);
-	}
+  public void addMemberToGroup(int entryId, int groupId) {
+    addressBookDao.addMemberToGroup(entryId, groupId);
+  }
 
-	public void editEntryById(AddressBookEntry addressBookEntry) {
-		addressBookDao.editEntryById(addressBookEntry);
-	}
+  public void removeMemberFromGroup(int entryId, int groupId) {
+    addressBookDao.removeMemberFromGroup(entryId, groupId);
+  }
 
-	public void editEntryByEmail(AddressBookEntry addressBookEntry) {
-		addressBookDao.editEntryByEmail(addressBookEntry);
-	}
+  public void editEntryById(AddressBookEntry addressBookEntry) {
+    addressBookDao.editEntryById(addressBookEntry);
+  }
+
+  public void editEntryByEmail(AddressBookEntry addressBookEntry) {
+    addressBookDao.editEntryByEmail(addressBookEntry);
+  }
+
+  public List<AddressBookEntry> getAddressBookEntriesWithPopulatedEmails() {
+    return addressBookDao.getAddressBookEntriesWithPopulatedEmails();
+  }
+
+  public List<AddressBookEntry> getAddressBookEntriesWithPopulatedPhoneNumbers() {
+    return addressBookDao.getAddressBookEntriesWithPopulatedPhoneNumbers();
+  }
+
+  public List<AddressBookGroup> getAddressBookGroupsWithPopulatedEmails() {
+    return addressBookDao.getAddressBookGroupsWithPopulatedEmails();
+  }
+
+  public List<AddressBookGroup> getAddressBookGroupsWithPopulatedPhoneNumbers() {
+    return addressBookDao.getAddressBookGroupsWithPopulatedPhoneNumbers();
+  }
 }

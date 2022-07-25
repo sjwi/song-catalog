@@ -32,21 +32,22 @@
 			<div class="col-3">
 				<label for="fontSize" class="col-form-label">Font</label>
 			</div>
-			<div class="col-4">
+			<div class="col-3">
 				<select name="fontSize" class="form-control">
 				</select>
+				<span class="footnotes">*Recommended font</span>
 			</div>
-			<div class="col-5 text-right pdf-options">
+			<div class="col-6 text-right pdf-options">
 				<div class="form-check">
 					<label class="form-check-label small-font mr-4" for="lyricsOnly">Lyrics Only</label>
 					<input name="lyricsOnly" id="lyricsOnly" type="checkbox" class="form-check-input">
 				</div>
 				<div class="form-check">
 					<label class="form-check-label small-font mr-4" for="qrCode">QR Code</label>
-					<input name="qrCode" type="checkbox" class="form-check-input">
+					<input name="qrCode" checked type="checkbox" class="form-check-input">
 				</div>
 			</div>
-			<div class="col-5 text-right ppt-options collapse">
+			<div class="col-6 text-right ppt-options collapse">
 				<div class="form-check">
 					<label class="form-check-label small-font mr-4" for="blankSlide">Prepend Blank Slide</label>
 					<input name="blankSlide" id="blankSlide" type="checkbox" class="form-check-input">
@@ -61,115 +62,25 @@
 				</div>
 			</div>
 		</div>
-		<div class="row">
-			<div class="col-4 text-right">
-				<span class="footnotes">*Recommended font</span>
-			</div>
-		</div>
 	</form>
-	<div class="row mt-4 no-gutters">
-		<div class="col-6 text-left">
-			<button class="btn btn-sm btn-primary dl-copy-btn" id="generateDownloadQRCodeBtn" onclick="generateDownloadQRCode(event)">
-				<img width="20px" type="image/x-icon" th:src="@{/images/qrcode.png}"/>
-				<span>Generate QR Code</span>
-			</button>
-		</div>
-		<div class="col-6 text-right">
-			<button class="btn btn-sm btn-primary dl-copy-btn" id="copyDownloadLinkBtn" onclick="copyDownloadUrl(event)"
-			th:attr="data-baseContext=${T(com.sjwi.catalog.config.ServletConstants).FULL_URL}">
-				<img width="20px" type="image/x-icon" th:src="@{/images/copy-inverse.png}"/>
-				<span>Copy Download URL</span>
-			</button>
-		</div>
-	</div>
-	<div class="row mt-4 no-gutters dl-qr collapse">
+	<div id="dlQrContainer" class="row mt-4 no-gutters dl-qr collapse">
 		<div class="col text-center">
 			<div id="dlQrCode" class="d-inline-block"></div>
-			<br>
-			<button class="btn btn-sm btn-secondary mt-2 float-right hide-qr">Hide</button>
 		</div>
 	</div>
 </div>
 <div class="modal-footer">
-	<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-	<button type="submit" class="btn btn-info" onclick="$('#downloadForm').submit()"><img width="20px" style="margin-top:-5px;margin-right:.25rem;" type="image/x-icon" th:src="@{/images/download-inverse.png}"/>Download</button>
+	<button type="submit" class="btn btn-lg w-100 btn-info" onclick="$('#downloadForm').submit()">Download</button>
+	<button type="submit" class="btn btn-lg w-100 btn-primary" onclick="openDownloadInBrowser()">Open in Browser</button>
+	<button type="button" class="btn btn-lg btn-dark w-100" id="copyDownloadLinkBtn" onclick="copyDownloadUrl(event)"
+	 	th:with="fullUrl=${T(com.sjwi.catalog.config.ServletConstants).FULL_URL}"
+		th:attr="data-baseContext=${fullUrl}">Copy Download Link</button>
+	<button type="submit" class="btn btn-lg w-100 btn-success" onclick="emailFile(event)">Email/SMS</button>
+	<button type="button" class="btn btn-lg btn-secondary w-100" id="generateDownloadQRCodeBtn" onclick="generateDownloadQRCode(event)">Generate QR Code</button>
 </div>
-<script th:inline="javascript">
-$(document).ready(function(){
-	$(document).on('change','#downloadForm input, #downloadForm select',function(){
-		refreshDownloadQrCode();
+<script>
+	$(document).ready(function(){
+		$('.left-download-modal').click();
+		$('#lyricsOnly').click();
 	});
-	$('.hide-qr').on('click',function(){
-		$('.dl-qr').hide();
-	})
-	$('#lyricsOnly').change(function(){
-		if ($(this).prop('checked')){
-			$('#downloadForm').find('select[name="fontSize"] option[value="18"]').html('18*');
-			$('#downloadForm').find('select[name="fontSize"] option[value="12"]').html('12');
-			$('#downloadForm').find('select[name="fontSize"]').val('18');
-		} else {
-			$('#downloadForm').find('select[name="fontSize"] option[value="18"]').html('18');
-			$('#downloadForm').find('select[name="fontSize"] option[value="12"]').html('12*');
-			$('#downloadForm').find('select[name="fontSize"]').val('12');
-		}
-	});
-	$('.download-tab').on('click',function(){
-		$('.download-tab.selected').removeClass('selected');
-		$(this).addClass('selected');
-		if ($(this).hasClass('right-download-modal')){
-			$('.ppt-options').show();
-			$('.pdf-options').hide();
-			$('.file-suffix').text('.pptx');
-			downloadBaseUri = pptDownloadBaseUri;
-			var pptOptions = '';
-			for (var i = 30; i < 50; i++){
-				if (i == 40){
-					pptOptions = pptOptions + '<option selected value="' + i + '">' + i + '*</option>';
-				} else {
-					pptOptions = pptOptions + '<option value="' + i + '">' + i + '</option>';
-				}
-			}
-			$('#downloadForm').find('select[name="fontSize"]').html(pptOptions);
-		} else {
-			$('.ppt-options').hide();
-			$('.pdf-options').show();
-			$('.file-suffix').text('.pdf');
-			downloadBaseUri = pdfDownloadBaseUri;
-			var pdfOptions = '';
-			for (var i = 6; i < 26; i++){
-				if (i == 12){
-					pdfOptions = pdfOptions + '<option selected value="' + i + '">' + i + '*</option>';
-				} else {
-					pdfOptions = pdfOptions + '<option value="' + i + '">' + i + '</option>';
-				}
-			}
-			$('#downloadForm').find('select[name="fontSize"]').html(pdfOptions);
-		}
-		refreshDownloadQrCode();
-	});
-	$('#downloadForm').on('submit',function(e){
-		e.preventDefault();
-		if (isFormFilled(this)){
-			window.open(generateDownloadLinkWithFormParams(),'_blank');
-		}
-	});
-	$('.left-download-modal').click();
-});
-function generateDownloadQRCode(e){
-	e.preventDefault();
-	refreshDownloadQrCode();
-	$('.dl-qr').show();
-}
-function refreshDownloadQrCode(){
-	$('#dlQrCode').html('');
-	new QRCode(document.getElementById("dlQrCode"), $('#copyDownloadLinkBtn').data('basecontext') + generateDownloadLinkWithFormParams());
-}
-function copyDownloadUrl(e){
-	e.preventDefault();
-	console.log($('#copyDownloadLinkBtn').data('basecontext'))
-	copyTextToClipboard($('#copyDownloadLinkBtn').data('basecontext') + generateDownloadLinkWithFormParams());
-}
-function generateDownloadLinkWithFormParams(){
-	return downloadBaseUri + '/' + encodeURI($('#downloadForm').find('.filename').val()) + '?' + $('#downloadForm').filter('*').find(':visible,.hidden-key').not('.filename').serialize();
-}
 </script>

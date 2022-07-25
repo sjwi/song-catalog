@@ -1,6 +1,9 @@
 String rollbackWar
 pipeline {
     agent any
+    triggers {
+        cron('1 3 * * *')
+    }
     environment {
         BRANCH = "${CHANGE_BRANCH ?: GIT_BRANCH}"
     }
@@ -36,7 +39,10 @@ pipeline {
                                 usernamePassword(credentialsId: 'dreamhost_cfsongs', usernameVariable: 'DREAMHOST_UN', passwordVariable: 'DREAMHOST_PW'),
                                 string(credentialsId:'cfsongs_dns', variable: 'DNS')
                             ]) {
+                                sh "sshpass -p '$DREAMHOST_PW' ssh $DREAMHOST_UN@$DNS -o StrictHostKeyChecking=no '/home/$DREAMHOST_UN/$DNS/tomcat/bin/shutdown.sh'"
                                 sh "sshpass -p '$DREAMHOST_PW' scp target/ROOT.war $DREAMHOST_UN@$DNS:/home/$DREAMHOST_UN/$DNS/tomcat/webapps"
+                                sh "sleep 3"
+                                sh "sshpass -p '$DREAMHOST_PW' ssh $DREAMHOST_UN@$DNS -o StrictHostKeyChecking=no '/home/$DREAMHOST_UN/$DNS/tomcat/bin/startup.sh'"
                             }
                         } else if (env.BRANCH == "develop") {
                             sh "sudo mv target/ROOT.war /opt/tomcat/webapps/song-catalog.war"
@@ -78,6 +84,32 @@ pipeline {
                         echo "Reverting app back to war $rollbackWar ..."
                         sh "sshpass -p '$DREAMHOST_PW' ssh $DREAMHOST_UN@$DNS -o StrictHostKeyChecking=no 'cp $rollbackWar /home/$DREAMHOST_UN/$DNS/tomcat/webapps/ROOT.war'"
                         echo "Rollback finished."
+                    }
+                }
+            }
+        }
+        stage('Deploy Demo') {
+            when {
+                expression { env.BRANCH == "main"}
+            }
+            steps {
+                withCredentials([
+                    usernamePassword(credentialsId:'github_token', usernameVariable: 'USER', passwordVariable: 'TOKEN')
+                ]) {
+                    dir('song-catalog') {
+                        sh "git remote set-url origin https://$TOKEN@github.com/sjwi/song-catalog.git"
+                        sh '''
+                            git pull
+                            git fetch
+                            git checkout demo -- src/main/resources/application.properties
+                            git checkout demo -- pom.xml
+                            git checkout demo -- src/main/java/com/sjwi/catalog/aspect/LandingPageSessionInitializer.java
+                            git checkout demo -- src/main/java/com/sjwi/catalog/mail/Mailer.java
+                            git checkout demo -- src/main/resources/schema.sql
+                            git checkout demo -- src/main/resources/templates/partial/header.html
+                            mvn clean install package
+                            sudo cp target/ROOT.war /opt/tomcat/webapps/song-demo.war
+                        '''
                     }
                 }
             }

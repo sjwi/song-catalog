@@ -1,21 +1,19 @@
+/* (C)2022 https://stephenky.com */
 package com.sjwi.catalog.dao;
 
+import com.sjwi.catalog.model.Recording;
 import java.io.FileNotFoundException;
 import java.util.List;
-
 import org.springframework.dao.DataAccessException;
-
-import com.sjwi.catalog.model.Recording;
 
 public interface RecordingDao {
 
-	public void addOrUpdateRecording(Recording recording) throws DataAccessException, FileNotFoundException;
+  public void addOrUpdateRecording(Recording recording)
+      throws DataAccessException, FileNotFoundException;
 
-	public void deleteRecording(int id);
+  public void deleteRecording(int id);
 
-	public Recording getRecordingBySongId(int id);
+  public Recording getRecordingBySongId(int id);
 
-	public Recording getRecordingWithFileBySongId(int id);
-
-	public List<Recording> getAllRecordingsWithFileStreams();
+  public List<Recording> getAllRecordingsWithFileStreams();
 }

@@ -6,13 +6,13 @@
 			  <span aria-hidden="true">&times;</span>
 			</button>
 		</div>
-		<div class="modal-body">
+		<div class="modal-body mb-4">
 			<div class="row no-gutters justify-content-center">
 				<div class="col-auto no-gutters w-100">
 					<table class="table table-default table-striped version-control-table">
 						<tbody>
 							<tr class="version-control-row selected master-version" th:attr="data-target=${song.id}">
-								<td class="col-6 pl-2" th:text="${'Master** [' + song.createdBy + ']'}"></td>
+								<td class="col-6 pl-2" th:text="${'Master** [' + song.createdBy?.firstName + ']'}"></td>
 								<td class="col-2">
 								</td>
 								<td class="col-2">
@@ -21,7 +21,7 @@
 								</td>
 							</tr>
 							<tr th:each="version: ${song.versions}" class="version-control-row" th:attr="data-target=${version.id}">
-								<td class="col-6 pl-2" th:text="${version.versionName + ' [' + version.createdBy + ']'}"></td>
+								<td class="col-6 pl-2" th:text="${version.versionName + ' [' + version.createdBy?.firstName + ']'}"></td>
 								<td class="col-2 text-center">
 									<div class="btn btn-outline-info btn-xs edit-version"><span class="pr-2 pl-2">Edit</span></div>
 								</td>
@@ -57,9 +57,6 @@
 				<th:block th:replace="dynamic/single-song-page :: songPage(${song})"></th:block>
 			</div>
 		</div>
-		<div class="modal-footer">
-			<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-		</div>
 	</div>
 </div>
 
@@ -79,7 +76,7 @@ $(document).ready(function(){
 					processData: false,
 					contentType: false,
 					success: function() {
-						alertWithFade('success','New version created for <b>' + $('#createVersionForm').find('.song-name').val() + '</b>');
+						alertWithFade('warning','New version created for <b>' + $('#createVersionForm').find('.song-name').val() + '</b>');
 						refreshVersionControl($('#versionControlModal').find('.song-id').val());
 						versionChange = true;
 					},
@@ -140,7 +137,7 @@ $(document).ready(function(){
 			data: {songId:$(e.target).closest('.version-control-row').data('target')},
 			success: function(data) {
 				refreshVersionControl($('#versionControlModal').find('.song-id').val());
-				alertWithFade('success','Version deleted.');
+				alertWithFade('warning','Version deleted.');
 				versionChange = true;
 			},
 			error: function(data){
@@ -155,7 +152,7 @@ $(document).ready(function(){
 			data: {newId:$(e.target).closest('.version-control-row').data('target')},
 			success: function(data) {
 				refreshVersionControl($(e.target).closest('.version-control-row').data('target'));
-				alertWithFade('success','Master has been updated.');
+				alertWithFade('warning','Master has been updated.');
 				versionChange = true;
 			},
 			error: function(data){
@@ -190,12 +187,12 @@ $(document).ready(function(){
 					$('.edit-version-btn').attr('disabled',true);
 				},
 				success: function() {
-					alertWithFade('success','Song updated')
+					alertWithFade('warning','Song updated')
 					refreshVersionControl($('#versionControlModal').find('.song-id').val());
 					versionChange = true;
 				},
 				error: function(data){
-					$('#submitEditSongBtn').attr('disabled',false);
+					$('.edit-version-btn').attr('disabled',false);
 					alertWithFade('danger','Something went wrong! Unable to edit song')
 				}
 			});

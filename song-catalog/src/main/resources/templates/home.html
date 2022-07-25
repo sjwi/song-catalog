@@ -3,15 +3,15 @@
 	<th:block th:replace="partial/head :: head(${@environment.getProperty('com.sjwi.settings.app.properName')})"></th:block>
 	<th:block th:replace="partial/header"></th:block>
 	<body id="homePageBody">
-		<div class="scroll-lock">
+		<div class="scroll-lock" style="overflow-y:hidden;">
 			<div class="row no-gutters flex-nowrap home-page">
 				<div class="col no-gutters">
 					<div class="song-section">
 						<nav class="sticky-top song custom-border-bottom" id="songNav">
 							<div class="row song-header no-gutters">
 								<div class="col-2">
-									<a th:href="@{/}"><img border="0"
-							th:src="${#session.getAttribute(T(com.sjwi.catalog.config.PreferencesConfiguration).NIGHT_MODE_PREFERENCE_KEY) == null || !#session.getAttribute(T(com.sjwi.catalog.config.PreferencesConfiguration).NIGHT_MODE_PREFERENCE_KEY)}? @{/images/logo_transparent.png}: @{/images/logo_transparent_dark.png}"  class="logo dark-swap" alt="Logo"></a>
+									<a th:with="nightModePreference=${T(com.sjwi.catalog.config.PreferencesConfiguration).NIGHT_MODE_PREFERENCE_KEY}" th:href="@{/}"><img border="0"
+							th:src="${#session.getAttribute(nightModePreference) == null || !#session.getAttribute(nightModePreference)}? @{/images/logo_transparent.png}: @{/images/logo_transparent_dark.png}"  class="logo dark-swap" alt="Logo"></a>
 								</div>
 								<div class="col-8 text-center my-auto">
 									<div> <a th:href="@{/songs}" class="title-link">Song Catalog</a></div>
@@ -38,9 +38,12 @@
 								<th:block th:replace="dynamic/song-table"></th:block>
 							</div>
 						</div>
+						<th:block sec:authorize="hasAuthority('USER')">
+							<th:block th:replace="partial/add-song-alert"></th:block>
+						</th:block>
 					</div>
 				</div>
-				<div class="col-12 col-md-6 no-gutters setlist-home-col" style="background: var(--secondary-bg-color)">
+				<div class="col-12 col-md-6 no-gutters setlist-home-col border-left" style="background: var(--secondary-bg-color)">
 					<div class="setlist-section">
 						<nav class="sticky-top setlist" id="setListNav">
 							<div class="row setlist-header no-gutters">
@@ -74,6 +77,7 @@
 				<th:block th:replace="modal/qrcode"></th:block>
 				<th:block sec:authorize="hasAuthority('USER')">
 					<th:block th:replace="modal/add-song-to-set"></th:block>
+					<th:block th:replace="modal/add-songs-to-set"></th:block>
 					<th:block th:replace="modal/delete-song"></th:block>
 					<th:block th:replace="modal/edit-song"></th:block>
 					<th:block th:replace="modal/edit-set"></th:block>
@@ -97,10 +101,13 @@
 	<script th:inline="javascript" th:src="@{/js/page/song/page.js}"></script>
 	<script th:inline="javascript" th:src="@{/js/page/song/static.js}"></script>
 	<script>
-		var ignoreSongClickedSelector = ".action-btn,.song-dropdown-btn,.dropdown-menu, li, .dropdown-item,.grip-container,img";
+		var ignoreSongClickedSelector = ".action-btn,.song-dropdown-btn,.dropdown-menu, li, .dropdown-item,.grip-container,img,.round,.round>*";
 		var resized = false;
 		$(document).ready(function(){
+			refreshCategories();
 			$(document).on('click','.song-row',function(e){
+				$('.song-row').removeClass('selected')
+				$(this).addClass('selected');
 				if (!$(e.target).is(ignoreSongClickedSelector)){
 					location.href= contextpath + "song/" + $(e.target).closest('.song-metadata').data('target');
 				}

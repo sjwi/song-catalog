@@ -14,8 +14,10 @@ $(document).on('mousedown', function(){
 $(document).on('click touch',function(e){
 	if ($(e.target).is('.open-nav,.open-nav>span,.nav-item .nav-link:not(.export),#sideNav')){
 		$('#sideNav').addClass('slide-in');
+		$('.scroll-lock').css('pointer-events','none');
 	} else {
 		$('#sideNav').removeClass('slide-in');
+		$('.scroll-lock').css('pointer-events','auto');
 	}
 })
 $(document).ready(function(e){
@@ -24,7 +26,7 @@ $(document).ready(function(e){
 		isMobile = true;
 	}
 	if (alertOnLoad){
-		alertWithFade('success',window[alertOnLoad]);
+		alertWithFade('warning',window[alertOnLoad]);
 	}
 	$(document).on('keydown','textarea',function(e){
 		if(e.keyCode===9){var v=this.value,s=this.selectionStart,e=this.selectionEnd;this.value=v.substring(0, s)+'\t'+v.substring(e);this.selectionStart=this.selectionEnd=s+1;return false;}
@@ -39,6 +41,33 @@ $(document).ready(function(e){
 });
 function notImplimented(){
 	alertWithFade('danger','This feature hasn\'t been implimented yet :(');
+}
+
+function setCookie(cname, cvalue, exdays) {
+  const d = new Date();
+  d.setTime(d.getTime() + (exdays*24*60*60*1000));
+  let expires = "expires="+ d.toUTCString();
+  document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+}
+
+function getCookie(cname) {
+  let name = cname + "=";
+  let decodedCookie = decodeURIComponent(document.cookie);
+  let ca = decodedCookie.split(';');
+  for(let i = 0; i <ca.length; i++) {
+    let c = ca[i];
+    while (c.charAt(0) == ' ') {
+      c = c.substring(1);
+    }
+    if (c.indexOf(name) == 0) {
+      return c.substring(name.length, c.length);
+    }
+  }
+  return "";
+}
+
+function checkCookie(cookieName) {
+	return getCookie(cookieName) != "";
 }
 
 function lockScroll(){
@@ -95,8 +124,17 @@ function copyTextToClipboard(text, displayAlert = true){
         currentFocus.focus();
     }
 	if (displayAlert){
-		alertWithFade('success',text + ' copied to clipboard.');
+		alertWithFade('warning',text + ' copied to clipboard.');
 	}
+}
+function logAction(action) {
+	$.ajax({
+		url: contextpath +  'log-user-action',
+		type: 'POST',
+		data: {
+			action: action
+		}
+	});	
 }
 Date.prototype.toDateInputValue = (function() {
     var local = new Date(this);

@@ -56,13 +56,17 @@
 	</div>
 	<div class="default-message collapse">
 		<p>
-			<span>Link to set: <a th:text="${set.setListName}" th:href="${T(com.sjwi.catalog.config.ServletConstants).BASE_URL} + @{/setlist/__${set.id}__}"></a></span>
+			<span>Link to set: <a th:text="${set.setListName}"
+				th:with="baseUrl=${T(com.sjwi.catalog.config.ServletConstants).BASE_URL}"
+				th:href="${baseUrl} + @{/setlist/__${set.id}__}"></a></span>
 		</p>
 		<p>
 			<span>Song list: </span>
 			<ul>
 				<li th:each="song: ${set.songs}" >
-				<a th:text="${song.name + ' (' + song.defaultKey + ')'}" th:href="${T(com.sjwi.catalog.config.ServletConstants).BASE_URL} + @{/song/__${song.id}__(key=${song.defaultKey})}"></a>
+				<a th:text="${song.name + ' (' + song.defaultKey + ')'}"
+				th:with="baseUrl=${T(com.sjwi.catalog.config.ServletConstants).BASE_URL}"
+				th:href="${baseUrl} + @{/song/__${song.id}__(key=${song.defaultKey})}"></a>
 				</li>
 			</ul>
 		</p>
@@ -75,7 +79,7 @@
 </div>
 <div class="modal-footer">
 	<button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-	<button type="submit" class="btn btn-info" id="submitEmailSetBtn">Send</button>
+	<button type="submit" class="btn btn-success" id="submitEmailSetBtn">Send</button>
 </div>
 <script th:inline="javascript">
 	$(document).ready(function(){

@@ -1,10 +1,17 @@
 <th:block th:if="${!songs.empty}">
-	<div class="table-hover table-responsive song-table">
+	<div id="songListTable" class="table-hover table-responsive song-table">
 		<table class="table" >
 			<tbody>
 				<th:block th:each="song: ${songs}">	
-					<tr class="song-row align-middle row no-gutters song-metadata" th:id="${'songRow_' + song.id}" th:attr="data-target=${song.id},data-name=${song.name},data-defaultkey=${song.defaultKey},data-versions=${song.versionsAsJson},data-author=${song.createdBy},data-related=${song.related},data-category=${song.category}">
-						<td class="pl-2 no-gutters title col" >
+					<tr class="song-row align-middle row no-gutters song-metadata" th:id="${'songRow_' + song.id}" th:attr="data-target=${song.id},data-name=${song.name},data-defaultkey=${song.defaultKey},data-versions=${song.versionsAsJson},data-author=${song.createdBy?.firstName},data-related=${song.related},data-category=${song.category}">
+						<th:block sec:authorize="hasAuthority('USER')">
+							<td class="round form-check col col-1 py-0 d-flex align-items-center justify-content-center song-select-checkbox-container">
+								<input autocomplete="off" type="checkbox" class="form-check-input stop-prop song-select" th:id="${'songCheckbox_' + song.id}"
+									th:value="${song.id}" th:attr="data-target=${song.id}">
+								<label class="form-check-label stop-prop" th:attr="for=${'songCheckbox_' + song.id}"></label>
+							</td>
+						</th:block>
+						<td class="pl-2 pr-1 no-gutters title col" >
 							<span th:text="${song.name}"></span>
 						</td>
 						<td class="col-1 no-gutters d-flex align-items-center justify-content-end song-dropdown-btn" th:classappend="${!#authorization.expression('hasAuthority(''USER'')')}? 'pr-2': ''">
@@ -25,6 +32,11 @@
 									<li>
 										<a class="dropdown-item version-control-btn">Version Control</a>
 									</li>
+								</th:block>
+								<li>
+									<a class="dropdown-item" th:with="fullUrl=${T(com.sjwi.catalog.config.ServletConstants).FULL_URL}" th:attr="onclick=${'copyTextToClipboard(''' + fullUrl + '/song/' + song.id + ''')'}">Copy Link</a>
+								</li>
+								<th:block sec:authorize="hasAuthority('USER')">
 									<li>
 										<a class="dropdown-item delete-btn">Delete</a>
 									</li>

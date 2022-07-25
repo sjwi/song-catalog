@@ -1,3 +1,4 @@
+/* (C)2022 https://stephenky.com */
 package com.sjwi.catalog.aspect;
 
 import java.io.IOException;
@@ -11,6 +12,7 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 
+import com.sjwi.catalog.config.ServletConstants;
 import com.sjwi.catalog.controller.ControllerHelper;
 import com.sjwi.catalog.log.CustomLogger;
 import com.sjwi.catalog.model.user.CfUser;
@@ -20,11 +22,16 @@ import com.sjwi.catalog.service.UserService;
 @Configuration
 public class LandingPageSessionInitializer {
 
-	@Autowired
-	CustomLogger log;
-	
-	@Autowired
-	ControllerHelper controllerHelper;
+  @Autowired CustomLogger log;
+
+  @Autowired ControllerHelper controllerHelper;
+
+  @Before("@annotation(com.sjwi.catalog.aspect.LandingPageAspect)")
+  public void landingPage(JoinPoint joinPoint) throws IOException {
+    controllerHelper.setCookiesInSession();
+    controllerHelper.attemptUserLoginViaCookie();
+    if (!ServletConstants.IS_INITIALIZED) ServletConstants.initializeServletConstants();
+  }
 
 	@Autowired
 	@Lazy

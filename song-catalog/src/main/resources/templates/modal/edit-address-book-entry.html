@@ -20,10 +20,8 @@
 						$(this).find('button[type="submit"]').attr('disabled',true);
 					},
 					success: function() {
-						alertWithFade('success','Contact updated')
-						setTimeout(function(){
-							location.reload()
-						},1000);
+						setAlertOnLoad('warning','Contact updated')
+						location.reload();
 					},
 					error: function(data){
 						$(this).find('button[type="submit"]').attr('disabled',false);

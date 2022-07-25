@@ -4,7 +4,7 @@
 		<div class="row form-group">
 			<label class="col-3 col-form-label" for="title">Versions</label>
 			<select class="col-9 custom-select version-list required" title="Select a version to change to" name="version">
-				<option th:each="version: ${versions}" th:value="${version.id}" th:selected="${currentVersionId == version.id}" th:text="${version.versionName + ' [' + version.createdBy + ']'}"></option>
+				<option th:each="version: ${versions}" th:value="${version.id}" th:selected="${currentVersionId == version.id}" th:text="${version.versionName + ' [' + version.createdBy?.firstName + ']'}"></option>
 				<option value="newVersion">Create New Version</option>
 			</select>
 		</div>
