@@ -101,12 +101,12 @@ pipeline {
                         sh '''
                             git pull
                             git fetch
-                            git checkout origin/demo -- src/main/resources/application.properties
+                            git checkout demo -- src/main/resources/application.properties
                             git checkout demo -- pom.xml
-                            git checkout origin/demo -- src/main/java/com/sjwi/catalog/aspect/LandingPageSessionInitializer.java
-                            git checkout origin/demo -- src/main/java/com/sjwi/catalog/mail/Mailer.java
-                            git checkout origin/demo -- src/main/resources/schema.sql
-                            git checkout origin/demo -- src/main/resources/templates/partial/header.html
+                            git checkout demo -- src/main/java/com/sjwi/catalog/aspect/LandingPageSessionInitializer.java
+                            git checkout demo -- src/main/java/com/sjwi/catalog/mail/Mailer.java
+                            git checkout demo -- src/main/resources/schema.sql
+                            git checkout demo -- src/main/resources/templates/partial/header.html
                             mvn clean install package
                             sudo cp target/ROOT.war /opt/tomcat/webapps/song-demo.war
                         '''
