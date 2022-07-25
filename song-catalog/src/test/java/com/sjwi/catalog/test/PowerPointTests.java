@@ -1,3 +1,4 @@
+/* (C)2022 https://stephenky.com */
 package com.sjwi.catalog.test;
 
 import com.sjwi.catalog.exception.FileUtilityException;
@@ -7,7 +8,6 @@ import com.sjwi.catalog.file.ppt.PptFileGenerator;
 import com.sjwi.catalog.service.SetListService;
 import com.sjwi.catalog.service.SongService;
 import com.sjwi.catalog.test.config.SpringTestConfiguration;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -20,29 +20,27 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 @EnableAutoConfiguration
 @SpringBootTest
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = {SpringTestConfiguration.class})		
+@ContextConfiguration(classes = {SpringTestConfiguration.class})
 public class PowerPointTests {
-	
-	@Autowired
-	SongService songService;
-	
-	@Autowired
-	SetListService setListService;
-	
-	@Before
-	public void setUp() {
-	}
 
-	@Test
-	public void generateMasterPowerPoint() throws FileUtilityException, InterruptedException {
-		int setListId = setListService.createSet("Master SetList", "sjwi", 1,1);
-		songService.getSongs().stream().forEach(s -> setListService.addSongToSet(s.getId(), setListId, s.getDefaultKey(), 0 ));
-		FileGenerator fileGenerator = new PptFileGenerator(false,0,false,false);
-		fileGenerator.buildFile(setListService.getLatestSet().transposeToLyrics());
-		fileGenerator = new PdfFileGenerator(0,null);
-		fileGenerator.buildFile(setListService.getLatestSet().transposeToLyrics());
-		fileGenerator = new PdfFileGenerator(0,null);
-		fileGenerator.buildFile(setListService.getLatestSet());
-		fileGenerator.removeFile();
-	}
+  @Autowired SongService songService;
+
+  @Autowired SetListService setListService;
+
+  @Before
+  public void setUp() {}
+
+  @Test
+  public void generateMasterPowerPoint() throws FileUtilityException, InterruptedException {
+    int setListId = setListService.createSet("Master SetList", "sjwi", 1, 1);
+    songService.getSongs().stream()
+        .forEach(s -> setListService.addSongToSet(s.getId(), setListId, s.getDefaultKey(), 0));
+    FileGenerator fileGenerator = new PptFileGenerator(false, 0, false, false);
+    fileGenerator.buildFile(setListService.getLatestSet().transposeToLyrics());
+    fileGenerator = new PdfFileGenerator(0, null);
+    fileGenerator.buildFile(setListService.getLatestSet().transposeToLyrics());
+    fileGenerator = new PdfFileGenerator(0, null);
+    fileGenerator.buildFile(setListService.getLatestSet());
+    fileGenerator.removeFile();
+  }
 }

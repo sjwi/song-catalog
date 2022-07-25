@@ -1,34 +1,35 @@
+/* (C)2022 https://stephenky.com */
 package com.sjwi.catalog.model;
 
 public class ResponseMessage {
 
-	private String status;
-	private Object action;
+  private String status;
+  private Object action;
 
-	public ResponseMessage(String status) {
-		super();
-		this.status = status;
-	}
+  public ResponseMessage(String status) {
+    super();
+    this.status = status;
+  }
 
-	public ResponseMessage(String status, Object action) {
-		super();
-		this.status = status;
-		this.action = action;
-	}
-	public String getStatus() {
-		return status;
-	}
+  public ResponseMessage(String status, Object action) {
+    super();
+    this.status = status;
+    this.action = action;
+  }
 
-	public void setStatus(String status) {
-		this.status = status;
-	}
+  public String getStatus() {
+    return status;
+  }
 
-	public Object getAction() {
-		return action;
-	}
+  public void setStatus(String status) {
+    this.status = status;
+  }
 
-	public void setAction(String action) {
-		this.action = action;
-	}
-	
+  public Object getAction() {
+    return action;
+  }
+
+  public void setAction(String action) {
+    this.action = action;
+  }
 }

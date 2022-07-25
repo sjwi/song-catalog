@@ -1,47 +1,47 @@
+/* (C)2022 https://stephenky.com */
 package com.sjwi.catalog.dao;
-
-import java.util.List;
 
 import com.sjwi.catalog.model.addressbook.AddressBookEntry;
 import com.sjwi.catalog.model.addressbook.AddressBookGroup;
+import java.util.List;
 
 public interface AddressBookDao {
 
-	public List<AddressBookGroup> getAddressBookGroups();
+  public List<AddressBookGroup> getAddressBookGroups();
 
-	public List<AddressBookGroup> getAddressBookGroups(String searchTerm);
-	
-	public List<AddressBookEntry> getAddressBookEntries();
-	
-	public List<AddressBookEntry> getAddressBookEntries(String searchTerm);
+  public List<AddressBookGroup> getAddressBookGroups(String searchTerm);
 
-	public AddressBookEntry getAddressBookEntryById(int id);
+  public List<AddressBookEntry> getAddressBookEntries();
 
-	public void deleteGroup(int id);
-	
-	public void deleteEntry(int id);
+  public List<AddressBookEntry> getAddressBookEntries(String searchTerm);
 
-	public void editEntryById(AddressBookEntry addressBookEntry);
+  public AddressBookEntry getAddressBookEntryById(int id);
 
-	public void addMemberToGroup(int entryId, int groupId);
+  public void deleteGroup(int id);
 
-	public AddressBookGroup getAddressBookGroupById(int id);
+  public void deleteEntry(int id);
 
-	public void createEntry(AddressBookEntry addressBookEntry);
-	
-	public void editEntryByEmail(AddressBookEntry addressBookEntry);
-	
-	public int createGroup(String groupName);
+  public void editEntryById(AddressBookEntry addressBookEntry);
 
-	public void removeMemberFromGroup(int entryId, int groupId);
+  public void addMemberToGroup(int entryId, int groupId);
 
-	public AddressBookEntry getAddressBookEntryByEmail(String email);
+  public AddressBookGroup getAddressBookGroupById(int id);
+
+  public void createEntry(AddressBookEntry addressBookEntry);
+
+  public void editEntryByEmail(AddressBookEntry addressBookEntry);
+
+  public int createGroup(String groupName);
+
+  public void removeMemberFromGroup(int entryId, int groupId);
+
+  public AddressBookEntry getAddressBookEntryByEmail(String email);
 
   public List<AddressBookEntry> getAddressBookEntriesWithPopulatedEmails();
 
   public List<AddressBookEntry> getAddressBookEntriesWithPopulatedPhoneNumbers();
 
-	public List<AddressBookGroup> getAddressBookGroupsWithPopulatedEmails();
+  public List<AddressBookGroup> getAddressBookGroupsWithPopulatedEmails();
 
   public List<AddressBookGroup> getAddressBookGroupsWithPopulatedPhoneNumbers();
 }
