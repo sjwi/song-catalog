@@ -7,19 +7,19 @@ import javax.mail.MessagingException;
 import javax.mail.Session;
 import javax.mail.Transport;
 
-import com.sjwi.catalog.exception.MailException;
-import com.sjwi.catalog.log.CustomLogger;
-import com.sjwi.catalog.model.mail.Email;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
+import com.sjwi.catalog.exception.MailException;
+import com.sjwi.catalog.log.CustomLogger;
+import com.sjwi.catalog.model.mail.Email;
+
 @Component
 public class Mailer {
 	
-	@Value("${SONG_MAIL_LEVEL}")
+	@Value("${SONG_DEMO_MAIL_LEVEL}")
 	private String mailLevel;
 	
 	@Autowired
