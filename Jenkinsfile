@@ -11,7 +11,8 @@ pipeline {
         stage('Build WAR') {
             steps {
                 dir('song-catalog') {
-                    sh 'mvn clean install package'
+                    // sh 'mvn clean install package'
+                    sh 'echo hi'
                 }
             }
         }
@@ -97,7 +98,7 @@ pipeline {
                     usernamePassword(credentialsId:'github_token', usernameVariable: 'USER', passwordVariable: 'TOKEN')
                 ]) {
                     dir('song-catalog') {
-                        sh "git remote set-url origin https://$TOKEN@github.com/sjwi/song-catalog.git && git fetch origin demo && git checkout origin/demo -- src/main/resources/application.properties"
+                        sh "git remote set-url origin https://$TOKEN@github.com/sjwi/song-catalog.git && git fetch origin demo && git checkout FETCH_HEAD -- src/main/resources/application.properties"
                         sh '''
                             git checkout origin/demo -- src/main/resources/application.properties
                             git checkout origin/demo -- pom.xml
