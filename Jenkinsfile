@@ -101,12 +101,11 @@ pipeline {
                     dir('song-catalog') {
                         sh "git remote set-url origin https://$TOKEN@github.com/sjwi/song-catalog.git && git fetch origin demo && git checkout FETCH_HEAD -- src/main/resources/application.properties"
                         sh '''
-                            git checkout origin/demo -- src/main/resources/application.properties
-                            git checkout origin/demo -- pom.xml
-                            git checkout origin/demo -- src/main/java/com/sjwi/catalog/aspect/LandingPageSessionInitializer.java
-                            git checkout origin/demo -- src/main/java/com/sjwi/catalog/mail/Mailer.java
-                            git checkout origin/demo -- src/main/resources/schema.sql
-                            git checkout origin/demo -- src/main/resources/templates/partial/header.html
+                            git checkout FETCH_HEAD -- pom.xml
+                            git checkout FETCH_HEAD -- src/main/java/com/sjwi/catalog/aspect/LandingPageSessionInitializer.java
+                            git checkout FETCH_HEAD -- src/main/java/com/sjwi/catalog/mail/Mailer.java
+                            git checkout FETCH_HEAD -- src/main/resources/schema.sql
+                            git checkout FETCH_HEAD -- src/main/resources/templates/partial/header.html
                             mvn clean install package
                             sudo cp target/ROOT.war /opt/tomcat/webapps/song-demo.war
                         '''
