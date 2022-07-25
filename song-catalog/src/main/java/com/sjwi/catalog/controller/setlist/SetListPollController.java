@@ -1,9 +1,9 @@
+/* (C)2022 https://stephenky.com */
 package com.sjwi.catalog.controller.setlist;
 
 import com.sjwi.catalog.aspect.IgnoreAspect;
 import com.sjwi.catalog.model.SetList;
 import com.sjwi.catalog.service.SetListService;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -15,12 +15,13 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @IgnoreAspect
 public class SetListPollController {
 
-    @Autowired
-    SetListService setListService;
+  @Autowired SetListService setListService;
 
-	@RequestMapping(value = {"setlist/getSetListObject/{id}"}, method = RequestMethod.GET)
-	@ResponseBody
-	public SetList getSetListObject(@PathVariable int id){
-		return setListService.getSetListById(id);
-	}
+  @RequestMapping(
+      value = {"setlist/getSetListObject/{id}"},
+      method = RequestMethod.GET)
+  @ResponseBody
+  public SetList getSetListObject(@PathVariable int id) {
+    return setListService.getSetListById(id);
+  }
 }
