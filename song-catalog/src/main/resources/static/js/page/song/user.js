@@ -15,7 +15,7 @@ $(document).ready(function() {
 			addSongToSet($(this).closest('.song-metadata').data('related'));
 		}
 	});
-	$(document).on('click','.edit-song-btn',function(e){
+	$(document).on('click','.edit-song-btn:not(.set-dropdown-item)',function(e){
 		showEditSongModal($(this).closest('.song-metadata').data('target'));
 	});
 	$(document).on('click','.version-control-btn',function(e){
