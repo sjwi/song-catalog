@@ -106,6 +106,7 @@ pipeline {
                         git checkout FETCH_HEAD -- song-catalog/src/main/resources/templates/partial/header.html
                         git checkout FETCH_HEAD -- song-catalog/src/main/resources/static/images/logo_transparent.png
                         git checkout FETCH_HEAD -- song-catalog/src/main/resources/static/images/logo_transparent_dark.png
+                        git checkout FETCH_HEAD -- song-catalog/src/main/resources/static/css/slick.css
                     '''
                     dir('song-catalog') {
                         sh '''
