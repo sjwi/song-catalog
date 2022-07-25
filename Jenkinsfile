@@ -99,9 +99,10 @@ pipeline {
                     dir('song-catalog') {
                         sh "git remote set-url origin https://$TOKEN@github.com/sjwi/song-catalog.git"
                         sh '''
+                            git pull
                             git fetch
                             git checkout origin/demo -- src/main/resources/application.properties
-                            git checkout origin/demo -- pom.xml
+                            git checkout demo -- pom.xml
                             git checkout origin/demo -- src/main/java/com/sjwi/catalog/aspect/LandingPageSessionInitializer.java
                             git checkout origin/demo -- src/main/java/com/sjwi/catalog/mail/Mailer.java
                             git checkout origin/demo -- src/main/resources/schema.sql
