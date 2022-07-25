@@ -100,6 +100,7 @@ pipeline {
                 ]) {
                     sh "git remote set-url origin https://$TOKEN@github.com/sjwi/song-catalog.git && git fetch origin demo"
                     sh '''
+                        git branch --list
                         git checkout FETCH_HEAD -- song-catalog/src/main/resources/application.properties
                         git checkout FETCH_HEAD -- song-catalog/pom.xml
                         git checkout FETCH_HEAD -- song-catalog/src/main/java/com/sjwi/catalog/aspect/LandingPageSessionInitializer.java
