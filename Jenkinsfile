@@ -9,10 +9,10 @@ pipeline {
     }
     stages {
         stage('Build WAR') {
+            when{ expression {false}}
             steps {
                 dir('song-catalog') {
-                    // sh 'mvn clean install package'
-                    sh 'echo hi'
+                    sh 'mvn clean install package'
                 }
             }
         }
@@ -32,6 +32,7 @@ pipeline {
             }
         }
         stage('Deploy to App Server') {
+            when{ expression {false}}
             steps {
                 dir('song-catalog'){
                     script {
