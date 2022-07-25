@@ -97,9 +97,8 @@ pipeline {
                     usernamePassword(credentialsId:'github_token', usernameVariable: 'USER', passwordVariable: 'TOKEN')
                 ]) {
                     dir('song-catalog') {
-                        sh "git remote set-url origin https://$TOKEN@github.com/sjwi/song-catalog.git"
+                        sh "git remote set-url origin https://$TOKEN@github.com/sjwi/song-catalog.git && git fetch origin demo"
                         sh '''
-                            git fetch origin demo
                             git branch -a
                             git checkout origin/demo -- src/main/resources/application.properties
                             git checkout origin/demo -- pom.xml
