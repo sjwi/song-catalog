@@ -44,7 +44,7 @@
 	<script th:inline="javascript">
 		if (sessionStorage.getItem('demoAlert') == null) {
 			$('#demoAlert').show()
-			localStorage.setItem('demoAlert',true)
+			sessionStorage.setItem('demoAlert',true)
 		}
 		$(document).ready(function(){
 			$(document).on('click','#nightModeToggle',function(){
