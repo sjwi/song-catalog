@@ -104,6 +104,8 @@ pipeline {
                         git checkout FETCH_HEAD -- song-catalog/src/main/java/com/sjwi/catalog/mail/Mailer.java
                         git checkout FETCH_HEAD -- song-catalog/src/main/resources/schema.sql
                         git checkout FETCH_HEAD -- song-catalog/src/main/resources/templates/partial/header.html
+                        git checkout FETCH_HEAD -- song-catalog/src/main/resources/static/images/logo_transparent.png
+                        git checkout FETCH_HEAD -- song-catalog/src/main/resources/static/images/logo_transparent_dark.png
                     '''
                     dir('song-catalog') {
                         sh '''
