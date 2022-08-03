@@ -21,6 +21,7 @@
 			type: 'application/pdf',
 		});
 	}
+	// TODO: This needs to be used once share API supports files for email
 	async function emailSet(setId, setName){
     var pdfFile = await createFile(baseContext + '/setlist/pdf/' + setId, setName, 'pdf');
     var pptFile = await createFile(baseContext + '/setlist/ppt/' + setId, setName, 'pptx');
@@ -30,7 +31,7 @@
       navigator.share({
         title: setName + ' files',
 				url: baseContext+ '/setlist/' + setId,
-        files: [pdfFile]
+        files: [pdfFile, pptFile]
       }).then(() => {
         logAction("File object sent using native OS share menu.");
 				$('slc-email-set').css('pointer-events','auto')
