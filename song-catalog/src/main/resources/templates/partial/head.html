@@ -52,6 +52,7 @@
 			var contextpath = /*[[@{/}]]*/;
 			var loggedInUser = /*[[${#authentication?.getPrincipal()}]]*/;
 			var alertOnLoad = /*[[${ALERT_ON_LOAD}]]*/ false;
+			var baseContext = /*[[${T(com.sjwi.catalog.config.ServletConstants).FULL_URL}]]*/
 
 			const standAloneCookieKey = "STAND_ALONE";
 			const LAST_ORG_KEY = 'last_org'
