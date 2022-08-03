@@ -39,14 +39,13 @@
 <script>
   function emailFile(event){
     logAction("Send file modal opened");
-    console.log('sharing');
     var file = $('#copyDownloadLinkBtn').data('basecontext') + generateDownloadLinkWithFormParams();
     if (navigator.share) {
       navigator.share({
         title: 'Share Download Link',
         url: file
       }).then(() => {
-        console.log('shared');
+        logAction("File sent using native OS share menu.");
       })
       .catch(console.error);
     } else {
