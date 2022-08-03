@@ -7,12 +7,15 @@
 				<a class="dropdown-item rename-set">Rename</a>
 			</li>
 			<li>
-				<a class="dropdown-item pin-set">Pin as org's latest set</a>
-			</li>
-			<li>
 				<a 
 					th:with="fullUrl=${T(com.sjwi.catalog.config.ServletConstants).FULL_URL }"
-					class="dropdown-item" th:attr="onclick=${'copyTextToClipboard(''' + fullUrl + '/setlist/' + set.id + ''')'}">Copy set list link</a>
+					class="dropdown-item ignore-td-action" th:attr="onclick=${'copySetLink('''} + ${fullUrl} + @{/setlist/__${set.id}__} + ${''',this)'}">Copy set list link</a>
+			</li>
+			<li>
+				<a class="dropdown-item pin-set">Pin as org's latest set</a>
+			</li>
+			<li class="ignore-td-action">
+				<a th:attr="onclick=${'emailSet(' + set.id + ')'}" class="dropdown-item ignore-td-action">Email set from worship@cfchurches.com</a>
 			</li>
 			<li>
 				<a class="dropdown-item delete-set">Delete</a>

@@ -50,7 +50,7 @@
 	<script th:inline="javascript">
 		var lastUpdatedTime;
 		var setListId = /*[[${set.id}]]*/;
-		var ignoreTdAction = '.grip-container,.set-grip,img,.action-btn-container,key-select,button,.close-dark';
+		var ignoreTdAction = '.grip-container,.set-grip,img,.action-btn-container,key-select,button,.close-dark,.ignore-td-action';
 		$(document).ready(function(){
 			$(document).on('click','.set-list-container',function(e){
 				if($(e.target).is('td, td span') && !$(e.target).is(ignoreTdAction)){

@@ -23,21 +23,21 @@
 	}
 	// TODO: This needs to be used once share API supports files for email
 	async function emailSet(setId, setName){
-    var pdfFile = await createFile(baseContext + '/setlist/pdf/' + setId, setName, 'pdf');
-    var pptFile = await createFile(baseContext + '/setlist/ppt/' + setId, setName, 'pptx');
-		if (navigator.share) {
-			$('slc-email-set').css('pointer-events','none')
-			logAction("Email files opened");
-      navigator.share({
-        title: setName + ' files',
-				url: baseContext+ '/setlist/' + setId,
-        files: [pdfFile, pptFile]
-      }).then(() => {
-        logAction("File object sent using native OS share menu.");
-				$('slc-email-set').css('pointer-events','auto')
-      })
-      .catch(() => $('slc-email-set').css('pointer-events','auto'));
-    } else {
+    // var pdfFile = await createFile(baseContext + '/setlist/pdf/' + setId, setName, 'pdf');
+    // var pptFile = await createFile(baseContext + '/setlist/ppt/' + setId, setName, 'pptx');
+		// if (navigator.share) {
+		// 	$('slc-email-set').css('pointer-events','none')
+		// 	logAction("Email files opened");
+    //   navigator.share({
+    //     title: setName + ' files',
+		// 		url: baseContext+ '/setlist/' + setId,
+    //     files: [pdfFile, pptFile]
+    //   }).then(() => {
+    //     logAction("File object sent using native OS share menu.");
+		// 		$('slc-email-set').css('pointer-events','auto')
+    //   })
+    //   .catch(() => $('slc-email-set').css('pointer-events','auto'));
+    // } else {
 			$.ajax({
 				url: contextpath + 'setlist/email/' + setId,
 				method: "GET",
@@ -49,7 +49,7 @@
 					alertWithFade('danger','Something went wrong! Unable to retreive set list to email')
 				}
 			});
-    }
+    // }
 	}
 
 	$(document).ready(function(){
