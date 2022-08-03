@@ -871,6 +871,12 @@ ul.multi-select-ul {
 .mw-500 {
 	max-width:505px;
 }
+.icon-white {
+	color:white;
+}
+.icon-sm-fa {
+	font-size: 1.15rem;
+}
 .btn-dark {
 	color:white !important;
 	cursor: pointer;
