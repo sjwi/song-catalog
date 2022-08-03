@@ -1024,8 +1024,23 @@ ul.multi-select-ul {
 .left-download-modal:hover, .right-download-modal:hover {
 	cursor:pointer;
 }
+.download-tab {
+	background-color: var(--secondary-grey);
+	padding: 10px 10px 10px 10px;
+	opacity: .50
+}
+.download-tab h5 {
+	margin-bottom: 0;
+}
+.download-tab.selected h5 {
+	color:white;
+}
+.border-2 {
+	border-width:2px !important;
+}
 .download-tab.selected {
-	background-color: var(--primary-grey);
+	background-color: var(--dark-grey);
+	opacity: 1
 }
 .download-tab-row {
 	border: .5px solid rgb(128, 128, 128 ,.3);

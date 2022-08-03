@@ -3,17 +3,6 @@ package com.sjwi.catalog.controller;
 
 import static com.sjwi.catalog.model.KeySet.LYRICS_ONLY_KEY_CODE;
 
-import com.sjwi.catalog.aspect.ServletInitializerAspect;
-import com.sjwi.catalog.file.FileGenerator;
-import com.sjwi.catalog.file.pdf.PdfFileGenerator;
-import com.sjwi.catalog.file.ppt.PptFileGenerator;
-import com.sjwi.catalog.log.CustomLogger;
-import com.sjwi.catalog.model.ResponseMessage;
-import com.sjwi.catalog.model.SetList;
-import com.sjwi.catalog.model.song.Song;
-import com.sjwi.catalog.service.FileDispatcherService;
-import com.sjwi.catalog.service.SetListService;
-import com.sjwi.catalog.service.SongService;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
@@ -23,8 +12,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -36,6 +27,18 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
+
+import com.sjwi.catalog.aspect.ServletInitializerAspect;
+import com.sjwi.catalog.file.FileGenerator;
+import com.sjwi.catalog.file.pdf.PdfFileGenerator;
+import com.sjwi.catalog.file.ppt.PptFileGenerator;
+import com.sjwi.catalog.log.CustomLogger;
+import com.sjwi.catalog.model.ResponseMessage;
+import com.sjwi.catalog.model.SetList;
+import com.sjwi.catalog.model.song.Song;
+import com.sjwi.catalog.service.FileDispatcherService;
+import com.sjwi.catalog.service.SetListService;
+import com.sjwi.catalog.service.SongService;
 
 @Controller
 public class FileDownloadController {
@@ -65,6 +68,7 @@ public class FileDownloadController {
           downloadType.equalsIgnoreCase("song")
               ? songService.getSongById(id).getNormalizedName()
               : setListService.getSetListById(id).getNormalizedSetListName());
+      mv.addObject("downloadType", downloadType.equalsIgnoreCase("song")? "Song" : "Set List");
       mv.addObject("key", key);
       return mv;
     } catch (Exception e) {

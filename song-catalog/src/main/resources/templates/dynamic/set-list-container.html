@@ -4,10 +4,15 @@
 		<img width="20px" th:src="@{/images/dropdown.png}" data-toggle="dropdown">
 		<ul class="dropdown-menu dropdown-menu-right">
 			<li>
+				<a class="dropdown-item rename-set">Rename</a>
+			</li>
+			<li>
 				<a class="dropdown-item pin-set">Pin as org's latest set</a>
 			</li>
 			<li>
-				<a class="dropdown-item rename-set">Rename</a>
+				<a 
+					th:with="fullUrl=${T(com.sjwi.catalog.config.ServletConstants).FULL_URL }"
+					class="dropdown-item" th:attr="onclick=${'copyTextToClipboard(''' + fullUrl + '/setlist/' + set.id + ''')'}">Copy set list link</a>
 			</li>
 			<li>
 				<a class="dropdown-item delete-set">Delete</a>
@@ -64,21 +69,13 @@
 	</div>
 	<div class="action-container">
 		<div class="row no-gutters">
-			<div class="col text-center" data-toggle="tooltip" data-placement="bottom" title="Download" th:classappend="${#authorization.expression('hasAuthority(''USER'')')}?'col-3':''" th:attr="onclick=${'downloadFile(''setlist'', ' + set.id + ')'}">
-				 <img width="27px" class="set-list-dl" type="image/x-icon" th:src="@{/images/export-inverse.png}"/>
-			</div>
 			<th:block sec:authorize="hasAuthority('USER')">
-				<div class="col col-3 text-center" data-toggle="tooltip" data-placement="bottom" title="Add song to set" th:attr="onclick=${'addSongsFromSelect(' + set.id + ',''' + #strings.replace(set.setListName,'''','') + ''')'}">
+				<div class="col text-center" data-toggle="tooltip" data-placement="bottom" title="Add song to set" th:attr="onclick=${'addSongsFromSelect(' + set.id + ',''' + #strings.replace(set.setListName,'''','') + ''')'}">
 					<a href="javascript:void(0)"><img width="30px"type="image/x-icon" th:src="@{/images/plus-sign-inverse.png}"/></a>
 				</div>
-				<div class="col col-3 text-center" data-toggle="tooltip" data-placement="bottom" title="Email set list" th:attr="onclick=${'emailSet(' + set.id + ')'}">
-					<a href="javascript:void(0)"><img width="30px" type="image/x-icon" th:src="@{/images/email-inverse.png}"/></a>
-				</div>
 			</th:block>
-			<div class="col text-center" data-toggle="tooltip" data-placement="bottom" title="Distribute link" th:classappend="${#authorization.expression('hasAuthority(''USER'')')}?'col-3':''"
-			 	th:with="baseUrl=${T(com.sjwi.catalog.config.ServletConstants).BASE_URL}"
-				th:attr="onclick=${'copySetLink('''} + ${baseUrl} + @{/setlist/__${set.id}__} +  ${''',this)'}">
-				<a href="javascript:void(0)"><img width="30px" type="image/x-icon" th:src="@{/images/qrcode.png}"/></a>
+			<div class="col col-6 text-center" data-toggle="tooltip" data-placement="bottom" title="Download" th:attr="onclick=${'downloadFile(''setlist'', ' + set.id + ')'}">
+				 <img width="27px" class="set-list-dl" type="image/x-icon" th:src="@{/images/export-inverse.png}"/>
 			</div>
 		</div>
 	</div>

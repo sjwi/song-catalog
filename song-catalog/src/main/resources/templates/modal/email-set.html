@@ -14,18 +14,41 @@
 </div>
 
 <script>
-	function emailSet(setId){
-		$.ajax({
-			url: contextpath + 'setlist/email/' + setId,
-			method: "GET",
-			success: function(data) {
-				$('#emailSetForm').html(data);
-				$('#emailSetModal').modal('show');
-			},
-			error: function(data){
-				alertWithFade('danger','Something went wrong! Unable to retreive set list to email')
-			}
+	async function createFile(url, name, type){
+		let response = await fetch(url);
+		let data = await response.blob();
+		return new File([data], name + "." + type, {
+			type: 'application/pdf',
 		});
+	}
+	async function emailSet(setId, setName){
+    var pdfFile = await createFile(baseContext + '/setlist/pdf/' + setId, setName, 'pdf');
+    var pptFile = await createFile(baseContext + '/setlist/ppt/' + setId, setName, 'pptx');
+		if (navigator.share) {
+			$('slc-email-set').css('pointer-events','none')
+			logAction("Email files opened");
+      navigator.share({
+        title: setName + ' files',
+				url: baseContext+ '/setlist/' + setId,
+        files: [pdfFile]
+      }).then(() => {
+        logAction("File object sent using native OS share menu.");
+				$('slc-email-set').css('pointer-events','auto')
+      })
+      .catch(() => $('slc-email-set').css('pointer-events','auto'));
+    } else {
+			$.ajax({
+				url: contextpath + 'setlist/email/' + setId,
+				method: "GET",
+				success: function(data) {
+					$('#emailSetForm').html(data);
+					$('#emailSetModal').modal('show');
+				},
+				error: function(data){
+					alertWithFade('danger','Something went wrong! Unable to retreive set list to email')
+				}
+			});
+    }
 	}
 
 	$(document).ready(function(){
