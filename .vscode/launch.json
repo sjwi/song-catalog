@@ -27,6 +27,7 @@
                 "SONG_TWILIO_AUTH_CODE": "dummy_val",
                 "SONG_TWILIO_PHONE_NUMBER": "dummy_val",
                 "APPLICATION_PROPER_NAME": "CF Song Catalog",
+                "SONG_SIGNING_KEY": "N5EyUPhBFFJjADDl4X/oGCTAAhNoZ4tcn9CkSw0Fcw6efI2Jm4ZZj4S7golM3Hc3S/R3LruFl2RNgU8ph6RPDsuBr7Tiyy5DcvO8QYWAfUGpeRbH+b0LBfy0Ok/sVRMM1oFzrh7Lel/0MaHRvNc/i7G67iw67EmMY1JSTx6ejIqv6a2cq4FQS4lyGkzWmVDQDeAd8aJW0n0MXJTCorTxJ+8W4wvfJKi9BRI6Sg==",
                 "SONG_AUDIO_DIRECTORY" : "/Users/stephenwilliams/static/audio"
             }
         },
