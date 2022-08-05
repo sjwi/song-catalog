@@ -13,12 +13,15 @@ import com.sjwi.catalog.service.SongService;
 import com.sjwi.catalog.service.VersionService;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -118,6 +121,13 @@ public class SongDetailsController {
     } catch (Exception e) {
       return controllerHelper.errorHandler(e);
     }
+  }
+
+  @GetMapping("/songs/frequency-map")
+  public ResponseEntity<Map<Song, Integer>> getCategories(
+      @RequestParam(required = false) Integer orgId,
+      @RequestParam(required = false) List<Integer> serviceIds) {
+    return ResponseEntity.ok(songService.getSongFrequencyCount(orgId, serviceIds));
   }
 
   @LandingPageAspect

@@ -4,6 +4,7 @@ package com.sjwi.catalog.service;
 import com.sjwi.catalog.dao.AddressBookDao;
 import com.sjwi.catalog.model.addressbook.AddressBookEntry;
 import com.sjwi.catalog.model.addressbook.AddressBookGroup;
+import com.sjwi.catalog.model.addressbook.NewAddressBookEntry;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -43,11 +44,11 @@ public class AddressBookService {
     return addressBookDao.getAddressBookGroupById(id);
   }
 
-  public void createEntry(AddressBookEntry addressBookEntry) {
-    addressBookDao.createEntry(addressBookEntry);
+  public AddressBookEntry createEntry(NewAddressBookEntry addressBookEntry) {
+    return addressBookDao.createEntry(addressBookEntry);
   }
 
-  public int createGroup(String groupName) {
+  public AddressBookGroup createGroup(String groupName) {
     return addressBookDao.createGroup(groupName);
   }
 

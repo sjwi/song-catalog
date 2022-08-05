@@ -3,6 +3,7 @@ package com.sjwi.catalog.dao;
 
 import com.sjwi.catalog.model.addressbook.AddressBookEntry;
 import com.sjwi.catalog.model.addressbook.AddressBookGroup;
+import com.sjwi.catalog.model.addressbook.NewAddressBookEntry;
 import java.util.List;
 
 public interface AddressBookDao {
@@ -27,11 +28,11 @@ public interface AddressBookDao {
 
   public AddressBookGroup getAddressBookGroupById(int id);
 
-  public void createEntry(AddressBookEntry addressBookEntry);
+  public AddressBookEntry createEntry(NewAddressBookEntry addressBookEntry);
 
   public void editEntryByEmail(AddressBookEntry addressBookEntry);
 
-  public int createGroup(String groupName);
+  public AddressBookGroup createGroup(String groupName);
 
   public void removeMemberFromGroup(int entryId, int groupId);
 

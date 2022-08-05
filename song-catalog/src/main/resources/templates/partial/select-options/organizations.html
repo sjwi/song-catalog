@@ -1,4 +1,0 @@
-<th:block th:fragment="organizations(organizations)">
-	<option th:each="org, iter:${organizations}" th:value="${org.id}" th:text="${org.name}"
-		data-toggle="tooltip" th:selected="${iter == 0}" data-placement="bottom" th:title="${org.title}"></option>
-</th:block>

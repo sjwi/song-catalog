@@ -4,11 +4,17 @@ package com.sjwi.catalog.dao.sql;
 import com.sjwi.catalog.dao.AddressBookDao;
 import com.sjwi.catalog.model.addressbook.AddressBookEntry;
 import com.sjwi.catalog.model.addressbook.AddressBookGroup;
+import com.sjwi.catalog.model.addressbook.NewAddressBookEntry;
+import java.sql.Types;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.PreparedStatementCreatorFactory;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
 @Repository
@@ -38,7 +44,6 @@ public class SqlAddressBookDao implements AddressBookDao {
     } else {
       return jdbcTemplate.query(
           queryStore.get("getAddressBookGroupEntriesByName"),
-          new Object[] {searchTerm},
           r1 -> {
             List<AddressBookGroup> groups = new ArrayList<AddressBookGroup>();
             while (r1.next()) {
@@ -46,21 +51,22 @@ public class SqlAddressBookDao implements AddressBookDao {
               List<Integer> entryIds =
                   jdbcTemplate.query(
                       queryStore.get("getEntryIdFromABRelated"),
-                      new Object[] {r1.getInt("ID")},
                       r2 -> {
                         List<Integer> rids = new ArrayList<Integer>();
                         while (r2.next()) {
                           rids.add(r2.getInt("ENTRY_ID"));
                         }
                         return rids;
-                      });
+                      },
+                      r1.getInt("ID"));
               for (Integer entryId : entryIds) {
                 groupEntries.add(getAddressBookEntryById(entryId));
               }
               groups.add(new AddressBookGroup(r1.getInt("ID"), r1.getString("NAME"), groupEntries));
             }
             return groups;
-          });
+          },
+          searchTerm);
     }
   }
 
@@ -91,7 +97,6 @@ public class SqlAddressBookDao implements AddressBookDao {
     } else {
       return jdbcTemplate.query(
           queryStore.get("searchAddressBookEntries"),
-          new Object[] {searchTerm, searchTerm, searchTerm, searchTerm, searchTerm},
           r -> {
             List<AddressBookEntry> addressBookEntries = new ArrayList<AddressBookEntry>();
             while (r.next()) {
@@ -105,7 +110,12 @@ public class SqlAddressBookDao implements AddressBookDao {
                       r.getString("Phone")));
             }
             return addressBookEntries;
-          });
+          },
+          searchTerm,
+          searchTerm,
+          searchTerm,
+          searchTerm,
+          searchTerm);
     }
   }
 
@@ -113,7 +123,6 @@ public class SqlAddressBookDao implements AddressBookDao {
   public AddressBookEntry getAddressBookEntryById(int id) {
     return jdbcTemplate.query(
         queryStore.get("getAddressBookEntryById"),
-        new Object[] {id},
         r -> {
           if (r.next()) {
             return new AddressBookEntry(
@@ -126,14 +135,14 @@ public class SqlAddressBookDao implements AddressBookDao {
           } else {
             return null;
           }
-        });
+        },
+        id);
   }
 
   @Override
   public AddressBookEntry getAddressBookEntryByEmail(String email) {
     return jdbcTemplate.query(
         queryStore.get("getAddressBookEntryByEmail"),
-        new Object[] {email},
         r -> {
           if (r.next()) {
             return new AddressBookEntry(
@@ -144,7 +153,8 @@ public class SqlAddressBookDao implements AddressBookDao {
                 r.getString("Email"),
                 r.getString("Phone"));
           } else return null;
-        });
+        },
+        email);
   }
 
   @Override
@@ -184,40 +194,51 @@ public class SqlAddressBookDao implements AddressBookDao {
     List<Integer> entryIds =
         jdbcTemplate.query(
             queryStore.get("getEntryIdFromABRelated"),
-            new Object[] {id},
             r -> {
               List<Integer> rids = new ArrayList<Integer>();
               while (r.next()) {
                 rids.add(r.getInt("ENTRY_ID"));
               }
               return rids;
-            });
+            },
+            id);
     for (Integer entryId : entryIds) {
       groupEntries.add(getAddressBookEntryById(entryId));
     }
     return jdbcTemplate.query(
         queryStore.get("getAddressBookGroupById"),
-        new Object[] {id},
         r -> {
           if (r.next()) {
             return new AddressBookGroup(id, r.getString("NAME"), groupEntries);
           } else {
             return null;
           }
-        });
+        },
+        id);
   }
 
   @Override
-  public void createEntry(AddressBookEntry addressBookEntry) {
+  public AddressBookEntry createEntry(NewAddressBookEntry addressBookEntry) {
+    KeyHolder keyHolder = new GeneratedKeyHolder();
+    PreparedStatementCreatorFactory preparedStatementCreatorFactory =
+        new PreparedStatementCreatorFactory(
+            queryStore.get("createAddressBookEntry"),
+            Types.VARCHAR,
+            Types.VARCHAR,
+            Types.VARCHAR,
+            Types.VARCHAR,
+            Types.VARCHAR);
+    preparedStatementCreatorFactory.setReturnGeneratedKeys(true);
     jdbcTemplate.update(
-        queryStore.get("createAddressBookEntry"),
-        new Object[] {
-          addressBookEntry.getUsername(),
-          addressBookEntry.getLastName(),
-          addressBookEntry.getFirstName(),
-          addressBookEntry.getEmail(),
-          formatPhone(addressBookEntry.getPhone()),
-        });
+        preparedStatementCreatorFactory.newPreparedStatementCreator(
+            Arrays.asList(
+                addressBookEntry.getUsername(),
+                addressBookEntry.getFirstName(),
+                addressBookEntry.getLastName(),
+                addressBookEntry.getEmail(),
+                formatPhone(addressBookEntry.getPhone()))),
+        keyHolder);
+    return getAddressBookEntryById(keyHolder.getKey().intValue());
   }
 
   @Override
@@ -231,13 +252,13 @@ public class SqlAddressBookDao implements AddressBookDao {
   }
 
   @Override
-  public int createGroup(String groupName) {
+  public AddressBookGroup createGroup(String groupName) {
     jdbcTemplate.update(queryStore.get("createAddressBookGroup"), new Object[] {groupName});
     return jdbcTemplate.query(
         queryStore.get("getLatestAbGroup"),
         r -> {
           r.next();
-          return r.getInt("ID");
+          return getAddressBookGroupById(r.getInt("ID"));
         });
   }
 

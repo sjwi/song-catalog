@@ -20,11 +20,11 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint;
 import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
 import org.springframework.security.web.firewall.HttpFirewall;
 import org.springframework.security.web.firewall.StrictHttpFirewall;
@@ -52,6 +52,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         .authorizeRequests()
         .antMatchers("/images/favicon.png")
         .permitAll()
+        .antMatchers("/actuator/**")
+        .permitAll()
         .antMatchers("/login")
         .permitAll()
         .antMatchers("/password-reset")
@@ -68,21 +70,25 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         .permitAll()
         .antMatchers("/favicon.ico")
         .permitAll()
-        .antMatchers(HttpMethod.GET, "/addressbook*")
+        .antMatchers(HttpMethod.GET, "/address-book/**")
         .access("hasAuthority('USER')")
         .antMatchers(HttpMethod.GET, "/user*")
         .access("hasAuthority('USER')")
-        .antMatchers(HttpMethod.GET, "/setlist/email*")
+        .antMatchers(HttpMethod.GET, "/setlists/email*")
         .access("hasAuthority('USER')")
+        .antMatchers("/log", "/structured-logs")
+        .access("hasAuthority('SUPERADMIN')")
         .antMatchers(HttpMethod.GET, "/**")
         .permitAll()
-        .antMatchers(HttpMethod.POST, "/**")
-        .access("hasAuthority('USER')")
-        .antMatchers(HttpMethod.DELETE, "/**")
-        .access("hasAuthority('USER')")
+        .anyRequest()
+        .authenticated()
+        .and()
+        .addFilter(new AuthenticationFilter(authenticationManager()))
+        .addFilter(new AuthorizationFilter(authenticationManager(), getApplicationContext()))
+        .sessionManagement()
+        .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
         .and()
         .exceptionHandling()
-        .authenticationEntryPoint(new LoginUrlAuthenticationEntryPoint("/login"))
         .and()
         .requestCache()
         .requestCache(requestCache())

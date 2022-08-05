@@ -3,25 +3,31 @@ package com.sjwi.catalog.controller;
 
 import com.sjwi.catalog.aspect.LandingPageAspect;
 import com.sjwi.catalog.log.CustomLogger;
+import com.sjwi.catalog.model.ExceptionResponse;
+import com.sjwi.catalog.model.ExceptionResponse.ExceptionResponseCode;
 import com.sjwi.catalog.service.OrganizationService;
+import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
-import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 @ControllerAdvice
+@Log
 public class ExceptionHandler extends ResponseEntityExceptionHandler {
 
   @Autowired OrganizationService organizationService;
 
-  @Autowired CustomLogger logger;
+  @Autowired CustomLogger customLogger;
 
   @LandingPageAspect
   @org.springframework.web.bind.annotation.ExceptionHandler({Exception.class})
-  public ModelAndView exceptionHanlder(Exception e) {
-    logger.logErrorWithEmail(e.getMessage());
-    ModelAndView mv = new ModelAndView("error");
-    mv.addObject("orgs", organizationService.getOrganizations());
-    return mv;
+  public ResponseEntity<ExceptionResponse> exceptionHandler(Exception e) {
+    customLogger.logErrorWithEmail(e.getMessage());
+    logger.error("An unknown error occured", e);
+    return ResponseEntity.internalServerError()
+        .body(
+            new ExceptionResponse(
+                ExceptionResponseCode.INTERNAL_SERVER_ERROR, "Unable to process your request"));
   }
 }

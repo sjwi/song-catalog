@@ -14,7 +14,6 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -91,24 +90,12 @@ public class SongService {
     return songDao.getSongCategories();
   }
 
-  public Map<Song, Integer> getFrequencyCount() {
-    return songDao.getFrequencyCount();
-  }
-
-  public Map<Song, Integer> getFrequencyCountByOrg(int orgId) {
-    return songDao.getFrequencyCountByOrg(orgId);
-  }
-
-  public Map<Song, Integer> getServiceFrequencyCountByOrg(int id, List<Integer> services) {
-    return services == null
-        ? new HashMap<Song, Integer>()
-        : songDao.getServiceFrequencyCountByOrg(id, services);
-  }
-
-  public Map<Song, Integer> getServiceFrequencyCount(List<Integer> services) {
-    return services == null
-        ? new HashMap<Song, Integer>()
-        : songDao.getServiceFrequencyCount(services);
+  public Map<Song, Integer> getSongFrequencyCount(Integer orgId, List<Integer> serviceIds) {
+    if (orgId == null)
+      if (serviceIds == null) return songDao.getFrequencyCount();
+      else return songDao.getServiceFrequencyCount(serviceIds);
+    else if (serviceIds == null) return songDao.getFrequencyCountByOrg(orgId);
+    return songDao.getServiceFrequencyCountByOrg(orgId, serviceIds);
   }
 
   public static List<AbstractDelta<String>> generateSongRevisionDiff(

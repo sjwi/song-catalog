@@ -31,7 +31,7 @@ public class OrganizationService {
     return organizationDao.getMeetingServices();
   }
 
-  public Object getGroups() {
+  public Map<Integer, String> getGroups() {
     return organizationDao.getGroups();
   }
 

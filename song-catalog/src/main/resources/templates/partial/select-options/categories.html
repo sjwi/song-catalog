@@ -1,3 +1,0 @@
-<th:block th:fragment="categories(categories,song)">
-	<option th:each="category, iter:${categories}" th:selected="${(song == null && iter==0) || (song != null && song.category == category.key)}" th:value="${category.key}" th:text="${category.value}"></option>
-</th:block>

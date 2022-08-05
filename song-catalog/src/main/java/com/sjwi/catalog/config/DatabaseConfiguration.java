@@ -22,7 +22,7 @@ public class DatabaseConfiguration {
 
   @Bean
   public Map<String, String> queryStore() throws FileNotFoundException {
-    return new SqlQueryStore(dbClass).getQueries();
+    return new SqlQueryStore().getQueries();
   }
 
   @Bean
