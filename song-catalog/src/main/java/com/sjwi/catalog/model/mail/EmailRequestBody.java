@@ -2,12 +2,14 @@
 package com.sjwi.catalog.model.mail;
 
 import java.util.List;
+
 import javax.validation.constraints.NotBlank;
+
 import lombok.Data;
 
 @Data
 public class EmailRequestBody {
-  @NotBlank private List<String> emailTo;
+  private List<String> emailTo;
   private List<String> emailToCc;
   @NotBlank private String subject;
   @NotBlank private String finalMessage;

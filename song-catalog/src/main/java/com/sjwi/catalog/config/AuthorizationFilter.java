@@ -18,6 +18,7 @@ import com.sjwi.catalog.model.user.CfUser;
 import com.sjwi.catalog.service.UserService;
 
 import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.security.SignatureException;
 
 public class AuthorizationFilter extends BasicAuthenticationFilter {
   UserService userService;
@@ -45,17 +46,19 @@ public class AuthorizationFilter extends BasicAuthenticationFilter {
   private CfUser getAuthentication(HttpServletRequest request) {
     String token = request.getHeader("Authorization");
     if (token != null) {
-      String user =
-          Jwts.parserBuilder()
-              .setSigningKey(System.getenv().get("SONG_SIGNING_KEY").getBytes())
-              .build()
-              .parseClaimsJws(token.replace("Bearer ", ""))
-              .getBody()
-              .getSubject();
-      if (user != null) {
-        return userService.loadCfUserByUsername(user);
+      try {
+        String user =
+            Jwts.parserBuilder()
+                .setSigningKey(System.getenv().get("SONG_SIGNING_KEY").getBytes())
+                .build()
+                .parseClaimsJws(token.replace("Bearer ", ""))
+                .getBody()
+                .getSubject();
+        if (user != null)
+          return userService.loadCfUserByUsername(user);
+      } catch (SignatureException e) {
+        logger.warn("Unauthorized attempt with token: " + token);
       }
-      return null;
     }
     return null;
   }

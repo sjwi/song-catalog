@@ -3,17 +3,6 @@ package com.sjwi.catalog.controller;
 
 import static com.sjwi.catalog.model.KeySet.LYRICS_ONLY_KEY_CODE;
 
-import com.sjwi.catalog.aspect.ServletInitializerAspect;
-import com.sjwi.catalog.file.FileGenerator;
-import com.sjwi.catalog.file.pdf.PdfFileGenerator;
-import com.sjwi.catalog.file.ppt.PptFileGenerator;
-import com.sjwi.catalog.log.CustomLogger;
-import com.sjwi.catalog.model.ResponseMessage;
-import com.sjwi.catalog.model.SetList;
-import com.sjwi.catalog.model.song.Song;
-import com.sjwi.catalog.service.FileDispatcherService;
-import com.sjwi.catalog.service.SetListService;
-import com.sjwi.catalog.service.SongService;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
@@ -23,8 +12,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -35,7 +26,17 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.servlet.ModelAndView;
+
+import com.sjwi.catalog.file.FileGenerator;
+import com.sjwi.catalog.file.pdf.PdfFileGenerator;
+import com.sjwi.catalog.file.ppt.PptFileGenerator;
+import com.sjwi.catalog.log.CustomLogger;
+import com.sjwi.catalog.model.ResponseMessage;
+import com.sjwi.catalog.model.SetList;
+import com.sjwi.catalog.model.song.Song;
+import com.sjwi.catalog.service.FileDispatcherService;
+import com.sjwi.catalog.service.SetListService;
+import com.sjwi.catalog.service.SongService;
 
 @Controller
 public class FileDownloadController {
@@ -49,43 +50,6 @@ public class FileDownloadController {
   @Autowired CustomLogger logger;
 
   @Autowired FileDispatcherService fileDispatcherService;
-
-  @ServletInitializerAspect
-  @RequestMapping(
-      value = {"{downloadType}/download/{id}"},
-      method = RequestMethod.GET)
-  public ModelAndView downloadModal(
-      @PathVariable String downloadType,
-      @PathVariable int id,
-      @RequestParam(name = "key", required = false) String key) {
-    try {
-      ModelAndView mv = new ModelAndView("modal/dynamic/download");
-      mv.addObject(
-          "defaultFileName",
-          downloadType.equalsIgnoreCase("song")
-              ? songService.getSongById(id).getNormalizedName()
-              : setListService.getSetListById(id).getNormalizedSetListName());
-      mv.addObject("downloadType", downloadType.equalsIgnoreCase("song") ? "Song" : "Set List");
-      mv.addObject("key", key);
-      return mv;
-    } catch (Exception e) {
-      return controllerHelper.errorHandler(e);
-    }
-  }
-
-  @ServletInitializerAspect
-  @RequestMapping(
-      value = {"/exportDatabase"},
-      method = RequestMethod.GET)
-  public ModelAndView exportModal() {
-    try {
-      ModelAndView mv = new ModelAndView("modal/dynamic/download");
-      mv.addObject("defaultFileName", "Song_Catalog_Export");
-      return mv;
-    } catch (Exception e) {
-      return controllerHelper.errorHandler(e);
-    }
-  }
 
   @RequestMapping(
       value = {"/file/send"},
@@ -124,7 +88,7 @@ public class FileDownloadController {
   }
 
   @RequestMapping(
-      value = {"/exportDatabase/ppt/{fileName}"},
+      value = {"/export-database/ppt/{fileName}"},
       method = RequestMethod.GET)
   public void exportSongDatabaseAsPpt(
       HttpServletRequest request,
