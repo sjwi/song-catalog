@@ -16,24 +16,26 @@ import com.sjwi.catalog.model.LogEntry;
 import com.sjwi.catalog.service.UserService;
 
 import lombok.AllArgsConstructor;
+import lombok.Data;
 
 @RestController
 public class ReportController {
 
   @Autowired UserService userService;
 
-  @GetMapping(value = {"structured-logs", "log"})
+  @GetMapping("/log")
   public ResponseEntity<LogData> structuredLogs(
       HttpServletResponse response, HttpServletRequest request) {
     return ResponseEntity.ok(new LogData(userService.getLogData()));
   }
 
   @AllArgsConstructor
+  @Data
   public class LogData {
     List<LogEntry> data;
   }
 
-  @GetMapping("user-report")
+  @GetMapping("/user-report")
   public ResponseEntity<List<String>> displayUserReport() {
     return ResponseEntity.ok(
         userService.getAllActiveUsers().stream()

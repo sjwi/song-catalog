@@ -37,9 +37,10 @@ public class AuthorizationFilter extends BasicAuthenticationFilter {
       return;
     }
     CfUser cfUser = getAuthentication(request);
-    SecurityContextHolder.getContext()
-        .setAuthentication(
-            new UsernamePasswordAuthenticationToken(cfUser, null, cfUser.getAuthorities()));
+    if (cfUser != null)
+      SecurityContextHolder.getContext()
+          .setAuthentication(
+              new UsernamePasswordAuthenticationToken(cfUser, null, cfUser.getAuthorities()));
     filterChain.doFilter(request, response);
   }
 

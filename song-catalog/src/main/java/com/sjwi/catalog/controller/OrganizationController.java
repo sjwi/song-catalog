@@ -60,7 +60,7 @@ public class OrganizationController {
     return ResponseEntity.ok(songService.getSongCategories());
   }
 
-  @GetMapping("/organization/{id}")
+  @GetMapping("/organizations/{id}")
   public ResponseEntity<Organization> getOrganization(@PathVariable Integer id) {
     return ResponseEntity.ok(organizationService.getOrganizationById(id));
   }
