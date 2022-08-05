@@ -2,9 +2,9 @@
 package com.sjwi.catalog.service;
 
 import com.sjwi.catalog.dao.AddressBookDao;
-import com.sjwi.catalog.model.addressbook.AddressBookEntry;
-import com.sjwi.catalog.model.addressbook.AddressBookGroup;
-import com.sjwi.catalog.model.addressbook.NewAddressBookEntry;
+import com.sjwi.catalog.model.api.addressbook.AddressBookEntry;
+import com.sjwi.catalog.model.api.addressbook.AddressBookGroup;
+import com.sjwi.catalog.model.api.addressbook.NewAddressBookEntry;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

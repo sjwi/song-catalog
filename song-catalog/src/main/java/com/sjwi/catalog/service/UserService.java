@@ -7,7 +7,7 @@ import com.sjwi.catalog.controller.ControllerHelper;
 import com.sjwi.catalog.dao.UserDao;
 import com.sjwi.catalog.exception.PasswordException;
 import com.sjwi.catalog.model.LogEntry;
-import com.sjwi.catalog.model.addressbook.AddressBookEntry;
+import com.sjwi.catalog.model.api.addressbook.AddressBookEntry;
 import com.sjwi.catalog.model.user.CfUser;
 import com.sjwi.catalog.model.user.UserState;
 import java.security.Principal;

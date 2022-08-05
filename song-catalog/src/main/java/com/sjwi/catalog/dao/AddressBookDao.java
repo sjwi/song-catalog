@@ -1,9 +1,9 @@
 /* (C)2022 https://stephenky.com */
 package com.sjwi.catalog.dao;
 
-import com.sjwi.catalog.model.addressbook.AddressBookEntry;
-import com.sjwi.catalog.model.addressbook.AddressBookGroup;
-import com.sjwi.catalog.model.addressbook.NewAddressBookEntry;
+import com.sjwi.catalog.model.api.addressbook.AddressBookEntry;
+import com.sjwi.catalog.model.api.addressbook.AddressBookGroup;
+import com.sjwi.catalog.model.api.addressbook.NewAddressBookEntry;
 import java.util.List;
 
 public interface AddressBookDao {

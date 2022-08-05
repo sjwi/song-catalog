@@ -5,6 +5,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
 import com.sjwi.catalog.model.SetList;
+import com.sjwi.catalog.model.api.setlist.NewSetList;
 import com.sjwi.catalog.model.song.SetListSong;
 import com.sjwi.catalog.model.song.Song;
 import com.sjwi.catalog.service.SetListService;
@@ -39,19 +40,25 @@ public class SetListTests {
   @Test
   public void whenNoKeyDefined_DefaultKeyIsSelected() {
     Song song = songService.getSongById(13);
-    int setListId = setListService.createSet("TEST_0", "demo_user", 1, 1);
-    setListService.addSongToSet(song.getId(), setListId, null, 0);
-    SetList setList = setListService.getSetListById(setListId);
-    assertEquals(song.getDefaultKey(), setList.getSongs().get(0).getDefaultKey());
+    NewSetList newSet = new NewSetList();
+    newSet.setUnit(1);
+    newSet.setSubUnit(1);
+    SetList setList = setListService.createSet("TEST_0", newSet, "demo_user");
+    setListService.addSongToSet(song.getId(), setList.getId(), null, 0);
+    SetList setList2 = setListService.getSetListById(setList.getId());
+    assertEquals(song.getDefaultKey(), setList2.getSongs().get(0).getDefaultKey());
   }
 
   @Test
   public void whenKeyDefined_DefinedKeyIsSelected() {
     Song song = songService.getSongById(13);
-    int setListId = setListService.createSet("TEST_1", "demo_user", 1, 1);
-    setListService.addSongToSet(song.getId(), setListId, "F", 0);
-    SetList setList = setListService.getSetListById(setListId);
-    assertEquals("F", setList.getSongs().get(0).getDefaultKey());
+    NewSetList newSet = new NewSetList();
+    newSet.setUnit(1);
+    newSet.setSubUnit(1);
+    SetList setList = setListService.createSet("TEST_1", newSet, "demo_user");
+    setListService.addSongToSet(song.getId(), setList.getId(), "F", 0);
+    SetList setList2 = setListService.getSetListById(setList.getId());
+    assertEquals("F", setList2.getSongs().get(0).getDefaultKey());
   }
 
   @Test
@@ -67,14 +74,20 @@ public class SetListTests {
 
   @Test
   public void whenCreatedByInserted_CreatedByReturned() {
-    int setList = setListService.createSet("TEST_2", "test_user", 1, 1);
-    assertEquals("test_user", setListService.getSetListById(setList).getCreatedBy());
+    NewSetList newSet = new NewSetList();
+    newSet.setUnit(1);
+    newSet.setSubUnit(1);
+    SetList setList = setListService.createSet("TEST_2", newSet, "test_user");
+    assertEquals("test_user", setListService.getSetListById(setList.getId()).getCreatedBy());
   }
 
   @Test
   public void whenOrgInserted_OrgReturned() {
-    int setList = setListService.createSet("TEST_3", "test_user", 2, 1);
-    assertEquals(2, setListService.getSetListById(setList).getOrganization());
+    NewSetList newSet = new NewSetList();
+    newSet.setUnit(2);
+    newSet.setSubUnit(1);
+    SetList setList = setListService.createSet("TEST_3", newSet, "test_user");
+    assertEquals(2, setListService.getSetListById(setList.getId()).getOrganization());
   }
 
   @Test
@@ -84,16 +97,25 @@ public class SetListTests {
 
   @Test
   public void whenNewSetListCreated_LatestSetServiceReturnsNewSet() {
+    NewSetList newSet = new NewSetList();
+    newSet.setUnit(1);
+    newSet.setSubUnit(1);
     assertEquals(
-        setListService.createSet("TEST_4", "demo_user", 1, 1),
+        setListService.createSet("TEST_4", newSet, "demo_user").getId(),
         setListService.getLatestSet().getId());
   }
 
   @Test
   public void whenNewSetListCreated_LatestSetByOrgServiceReturnsNewSet() {
-    int testSetId = setListService.createSet("TEST_5", "demo_user", 4, 1);
-    setListService.createSet("TEST_6", "demo_user", 2, 1);
-    assertEquals(testSetId, setListService.getLatestSetByOrg(4).getId());
+    NewSetList newSet = new NewSetList();
+    newSet.setUnit(4);
+    newSet.setSubUnit(1);
+    SetList setList = setListService.createSet("TEST_5", newSet, "demo_user");
+    NewSetList newSet2 = new NewSetList();
+    newSet2.setUnit(2);
+    newSet2.setSubUnit(1);
+    setListService.createSet("TEST_6", newSet2, "demo_user");
+    assertEquals(setList.getId(), setListService.getLatestSetByOrg(4).getId());
   }
 
   @Test
@@ -135,8 +157,11 @@ public class SetListTests {
 
   @Test
   public void whenSetDeleted_SetReturnsNull() {
-    int setListId = setListService.createSet("TEST_99", "test_user", 2, 1);
-    setListService.deleteSet(setListId);
-    assertNull(setListService.getSetListById(setListId));
+    NewSetList newSet = new NewSetList();
+    newSet.setUnit(4);
+    newSet.setSubUnit(1);
+    SetList setList = setListService.createSet("TEST_99", newSet, "test_user");
+    setListService.deleteSet(setList.getId());
+    assertNull(setListService.getSetListById(setList.getId()));
   }
 }

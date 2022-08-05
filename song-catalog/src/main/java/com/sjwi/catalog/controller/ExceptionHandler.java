@@ -1,7 +1,6 @@
 /* (C)2022 https://stephenky.com */
 package com.sjwi.catalog.controller;
 
-import com.sjwi.catalog.aspect.LandingPageAspect;
 import com.sjwi.catalog.log.CustomLogger;
 import com.sjwi.catalog.model.ExceptionResponse;
 import com.sjwi.catalog.model.ExceptionResponse.ExceptionResponseCode;
@@ -20,7 +19,6 @@ public class ExceptionHandler extends ResponseEntityExceptionHandler {
 
   @Autowired CustomLogger customLogger;
 
-  @LandingPageAspect
   @org.springframework.web.bind.annotation.ExceptionHandler({Exception.class})
   public ResponseEntity<ExceptionResponse> exceptionHandler(Exception e) {
     customLogger.logErrorWithEmail(e.getMessage());

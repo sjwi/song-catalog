@@ -1,5 +1,5 @@
 /* (C)2022 https://stephenky.com */
-package com.sjwi.catalog.model.addressbook;
+package com.sjwi.catalog.model.api.addressbook;
 
 import lombok.Data;
 

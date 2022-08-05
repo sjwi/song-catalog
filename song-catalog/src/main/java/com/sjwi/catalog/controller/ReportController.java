@@ -1,22 +1,18 @@
 /* (C)2022 https://stephenky.com */
 package com.sjwi.catalog.controller;
 
+import com.sjwi.catalog.model.LogEntry;
+import com.sjwi.catalog.service.UserService;
 import java.util.List;
 import java.util.stream.Collectors;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
+import lombok.AllArgsConstructor;
+import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import com.sjwi.catalog.model.LogEntry;
-import com.sjwi.catalog.service.UserService;
-
-import lombok.AllArgsConstructor;
-import lombok.Data;
 
 @RestController
 public class ReportController {

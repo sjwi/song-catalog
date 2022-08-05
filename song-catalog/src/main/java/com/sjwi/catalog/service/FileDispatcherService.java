@@ -9,6 +9,7 @@ import com.sjwi.catalog.model.mail.Text;
 import java.io.File;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.net.URL;
 import java.net.URLDecoder;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -44,7 +45,7 @@ public class FileDispatcherService {
 
   @Autowired ControllerHelper controllerHelper;
 
-  public Map.Entry<String, String> getFileAsPathFromRestAPI(String apiEndpoint) throws IOException {
+  public Map.Entry<String, URL> getFileAsPathFromRestAPI(String apiEndpoint) throws IOException {
     HttpEntity<byte[]> response =
         new RestTemplate()
             .exchange(
@@ -65,13 +66,13 @@ public class FileDispatcherService {
             + headers.getContentDisposition().getFilename();
     Path path = Paths.get(localFileName);
     Files.write(path, response.getBody());
-    return new AbstractMap.SimpleEntry<String, String>(
-        localFileName, URLDecoder.decode(fileName, "UTF-8"));
+    return new AbstractMap.SimpleEntry<String, URL>(
+        localFileName, new URL(URLDecoder.decode(fileName, "UTF-8")));
   }
 
   @Async
   public void emailFileToRecipients(
-      List<String> emailTo, Entry<String, String> fileAttachment, String fileUrl) {
+      List<String> emailTo, Entry<String, URL> fileAttachment, String fileUrl) {
     emailTo.stream()
         .map(
             e ->
@@ -97,12 +98,12 @@ public class FileDispatcherService {
 
   @Async
   public void smsFileToRecipients(
-      List<String> textTo, Entry<String, String> fileAttachment, String fileUrl)
+      List<String> textTo, Entry<String, URL> fileAttachment, String fileUrl)
       throws InterruptedException, IllegalArgumentException, UnsupportedEncodingException {
     for (int i = 0; i < textTo.size(); i++) {
       String number = normalizePhoneNumber(textTo.get(i));
       if (i != 0) TimeUnit.SECONDS.sleep(1);
-      if (isFilePpt(fileAttachment.getValue()))
+      if (isFilePpt(fileAttachment.getKey()))
         text.sendText(number, String.format(SMS_LINK_BODY, ServletConstants.SERVER_NAME, fileUrl));
       else
         text.sendText(

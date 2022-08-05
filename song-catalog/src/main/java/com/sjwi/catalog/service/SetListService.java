@@ -6,6 +6,7 @@ import com.sjwi.catalog.controller.ControllerHelper;
 import com.sjwi.catalog.dao.SetListDao;
 import com.sjwi.catalog.log.CustomLogger;
 import com.sjwi.catalog.model.SetList;
+import com.sjwi.catalog.model.api.setlist.NewSetList;
 import com.sjwi.catalog.model.song.Song;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,8 +58,9 @@ public class SetListService {
     return setListDao.getSetSongs(id);
   }
 
-  public int createSet(String setListName, String user, int unit, int subUnit) {
-    int setListId = setListDao.createSet(setListName, user, unit, subUnit);
+  public SetList createSet(String setListName, NewSetList setList, String user) {
+    int setListId =
+        setListDao.createSet(setListName, user, setList.getUnit(), setList.getSubUnit());
     logger.logUserActionWithEmail(
         "New set list created: "
             + setListName
@@ -66,7 +68,7 @@ public class SetListService {
             + ServletConstants.FULL_URL
             + "/setlist/"
             + setListId);
-    return setListId;
+    return setListDao.getSetListById(setListId);
   }
 
   public void deleteSet(int id) {

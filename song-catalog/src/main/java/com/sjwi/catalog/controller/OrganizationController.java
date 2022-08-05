@@ -1,14 +1,18 @@
 /* (C)2022 https://stephenky.com */
 package com.sjwi.catalog.controller;
 
+import com.sjwi.catalog.log.CustomLogger;
+import com.sjwi.catalog.model.Organization;
+import com.sjwi.catalog.model.SetList;
+import com.sjwi.catalog.service.OrganizationService;
+import com.sjwi.catalog.service.SetListService;
+import com.sjwi.catalog.service.SongService;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
-
 import javax.servlet.http.HttpServletResponse;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,16 +24,7 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 import org.springframework.web.util.UriUtils;
 
-import com.sjwi.catalog.aspect.IgnoreAspect;
-import com.sjwi.catalog.log.CustomLogger;
-import com.sjwi.catalog.model.Organization;
-import com.sjwi.catalog.model.SetList;
-import com.sjwi.catalog.service.OrganizationService;
-import com.sjwi.catalog.service.SetListService;
-import com.sjwi.catalog.service.SongService;
-
 @RestController
-@IgnoreAspect
 public class OrganizationController {
 
   @Autowired OrganizationService organizationService;

@@ -5,6 +5,8 @@ import com.sjwi.catalog.exception.FileUtilityException;
 import com.sjwi.catalog.file.FileGenerator;
 import com.sjwi.catalog.file.pdf.PdfFileGenerator;
 import com.sjwi.catalog.file.ppt.PptFileGenerator;
+import com.sjwi.catalog.model.SetList;
+import com.sjwi.catalog.model.api.setlist.NewSetList;
 import com.sjwi.catalog.service.SetListService;
 import com.sjwi.catalog.service.SongService;
 import com.sjwi.catalog.test.config.SpringTestConfiguration;
@@ -32,9 +34,13 @@ public class PowerPointTests {
 
   @Test
   public void generateMasterPowerPoint() throws FileUtilityException, InterruptedException {
-    int setListId = setListService.createSet("Master SetList", "sjwi", 1, 1);
+    NewSetList newSet = new NewSetList();
+    newSet.setUnit(1);
+    newSet.setSubUnit(1);
+    SetList setList = setListService.createSet("Master SetList", newSet, "sjwi");
     songService.getSongs().stream()
-        .forEach(s -> setListService.addSongToSet(s.getId(), setListId, s.getDefaultKey(), 0));
+        .forEach(
+            s -> setListService.addSongToSet(s.getId(), setList.getId(), s.getDefaultKey(), 0));
     FileGenerator fileGenerator = new PptFileGenerator(false, 0, false, false);
     fileGenerator.buildFile(setListService.getLatestSet().transposeToLyrics());
     fileGenerator = new PdfFileGenerator(0, null);

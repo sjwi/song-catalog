@@ -3,7 +3,6 @@ package com.sjwi.catalog.controller.song;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.sjwi.catalog.aspect.LandingPageAspect;
 import com.sjwi.catalog.controller.ControllerHelper;
 import com.sjwi.catalog.log.CustomLogger;
 import com.sjwi.catalog.model.song.Song;
@@ -43,7 +42,6 @@ public class SongDetailsController {
 
   @Autowired OrganizationService organizationService;
 
-  @LandingPageAspect
   @RequestMapping(
       value = {"/songs"},
       method = RequestMethod.GET)
@@ -130,7 +128,6 @@ public class SongDetailsController {
     return ResponseEntity.ok(songService.getSongFrequencyCount(orgId, serviceIds));
   }
 
-  @LandingPageAspect
   @RequestMapping(
       value = {"/song/{id}"},
       method = RequestMethod.GET)

@@ -4,6 +4,22 @@ package com.sjwi.catalog.controller;
 import static com.sjwi.catalog.config.PreferencesConfiguration.NIGHT_MODE_PREFERENCE_KEY;
 import static com.sjwi.catalog.model.security.StoredCookieToken.STORED_COOKIE_TOKEN_KEY;
 
+import com.sjwi.catalog.exception.DatabaseException;
+import com.sjwi.catalog.exception.FileUtilityException;
+import com.sjwi.catalog.file.FileGenerator;
+import com.sjwi.catalog.log.CustomLogger;
+import com.sjwi.catalog.mail.Mailer;
+import com.sjwi.catalog.model.Organization;
+import com.sjwi.catalog.model.SetList;
+import com.sjwi.catalog.model.api.setlist.NewSetList;
+import com.sjwi.catalog.model.security.SecurityToken;
+import com.sjwi.catalog.model.user.CfUser;
+import com.sjwi.catalog.service.AddressBookService;
+import com.sjwi.catalog.service.OrganizationService;
+import com.sjwi.catalog.service.SetListService;
+import com.sjwi.catalog.service.TokenService;
+import com.sjwi.catalog.service.UserService;
+import eu.bitwalker.useragentutils.UserAgent;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -14,12 +30,10 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
-
 import javax.servlet.ServletContext;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
 import org.apache.commons.lang.WordUtils;
 import org.apache.commons.lang.exception.ExceptionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,23 +47,6 @@ import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.util.WebUtils;
-
-import com.sjwi.catalog.exception.DatabaseException;
-import com.sjwi.catalog.exception.FileUtilityException;
-import com.sjwi.catalog.file.FileGenerator;
-import com.sjwi.catalog.log.CustomLogger;
-import com.sjwi.catalog.mail.Mailer;
-import com.sjwi.catalog.model.Organization;
-import com.sjwi.catalog.model.SetList;
-import com.sjwi.catalog.model.security.SecurityToken;
-import com.sjwi.catalog.model.user.CfUser;
-import com.sjwi.catalog.service.AddressBookService;
-import com.sjwi.catalog.service.OrganizationService;
-import com.sjwi.catalog.service.SetListService;
-import com.sjwi.catalog.service.TokenService;
-import com.sjwi.catalog.service.UserService;
-
-import eu.bitwalker.useragentutils.UserAgent;
 
 @Component
 public class ControllerHelper {
@@ -75,42 +72,40 @@ public class ControllerHelper {
       new ArrayList<String>(
           Arrays.asList("The", "Is", "A", "And", "But", "An", "At", "To", "For", "Of"));
 
-  public String buildSetlistName(
-      int org,
-      int service,
-      String otherOrgName,
-      String otherServiceName,
-      Date date,
-      int groupId,
-      String otherGroupName) {
+  public String buildSetlistName(NewSetList setList) {
     String setListName = "Untitled";
-    if (org == 0) {
+    if (setList.getUnit() == 0) {
       setListName =
-          otherOrgName == null || "".equals(otherOrgName) ? "Untitled" : otherOrgName.trim();
+          setList.getOtherUnit() == null || "".equals(setList.getOtherUnit())
+              ? "Untitled"
+              : setList.getOtherUnit().trim();
     } else {
-      setListName = organizationService.getOrganizationById(org).getName().trim();
+      setListName = organizationService.getOrganizationById(setList.getUnit()).getName().trim();
     }
-    if (0 == service) {
+    if (0 == setList.getSubUnit()) {
       setListName =
-          otherServiceName == null || "".equals(otherServiceName)
+          setList.getOtherSubUnit() == null || "".equals(setList.getOtherSubUnit())
               ? setListName
-              : setListName + " " + WordUtils.capitalize(otherServiceName);
-    } else if (2 == service) {
-      if (groupId == 0) {
-        String newHomegroupName = WordUtils.capitalize(otherGroupName.trim());
+              : setListName + " " + WordUtils.capitalize(setList.getOtherSubUnit());
+    } else if (2 == setList.getSubUnit()) {
+      if (setList.getGroupId() == 0) {
+        String newHomegroupName = WordUtils.capitalize(setList.getOtherGroupName().trim());
         setListName = setListName + " " + newHomegroupName + " HF";
         organizationService.addGroup(newHomegroupName);
       } else {
-        String homeGroupName = organizationService.getGroupById(groupId);
+        String homeGroupName = organizationService.getGroupById(setList.getGroupId());
         setListName = setListName + " " + homeGroupName + " HF";
       }
     } else {
-      setListName = setListName + " " + organizationService.getMeetingServiceById(service).trim();
+      setListName =
+          setListName
+              + " "
+              + organizationService.getMeetingServiceById(setList.getSubUnit()).trim();
     }
-    if (date == null) {
-      date = new Date();
+    if (setList.getDate() == null) {
+      setList.setDate(new Date());
     }
-    setListName = setListName + " " + new SimpleDateFormat("MM-dd-yyyy").format(date);
+    setListName = setListName + " " + new SimpleDateFormat("MM-dd-yyyy").format(setList.getDate());
     return setListName.replaceAll(" +", " ");
   }
 

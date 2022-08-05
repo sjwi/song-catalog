@@ -2,10 +2,10 @@
 package com.sjwi.catalog.controller;
 
 import com.sjwi.catalog.mail.Mailer;
-import com.sjwi.catalog.model.addressbook.AddressBookEntry;
-import com.sjwi.catalog.model.addressbook.AddressBookGroup;
-import com.sjwi.catalog.model.addressbook.NewAddressBookEntry;
-import com.sjwi.catalog.model.addressbook.NewAddressBookGroup;
+import com.sjwi.catalog.model.api.addressbook.AddressBookEntry;
+import com.sjwi.catalog.model.api.addressbook.AddressBookGroup;
+import com.sjwi.catalog.model.api.addressbook.NewAddressBookEntry;
+import com.sjwi.catalog.model.api.addressbook.NewAddressBookGroup;
 import com.sjwi.catalog.service.AddressBookService;
 import com.sjwi.catalog.service.OrganizationService;
 import com.sjwi.catalog.service.UserService;
@@ -109,7 +109,7 @@ public class AddressBookController {
             entry.getUsername(),
             entry.getEmail(),
             entry.getPhone()));
-    return ResponseEntity.noContent().build();
+    return ResponseEntity.ok().build();
   }
 
   @PatchMapping("/groups/{id}")
@@ -130,6 +130,6 @@ public class AddressBookController {
           .filter(e -> !existingMembers.contains(e))
           .forEach(e -> addressBookService.addMemberToGroup(e, id));
     }
-    return ResponseEntity.noContent().build();
+    return ResponseEntity.ok().build();
   }
 }

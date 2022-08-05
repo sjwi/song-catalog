@@ -2,9 +2,9 @@
 package com.sjwi.catalog.dao.sql;
 
 import com.sjwi.catalog.dao.AddressBookDao;
-import com.sjwi.catalog.model.addressbook.AddressBookEntry;
-import com.sjwi.catalog.model.addressbook.AddressBookGroup;
-import com.sjwi.catalog.model.addressbook.NewAddressBookEntry;
+import com.sjwi.catalog.model.api.addressbook.AddressBookEntry;
+import com.sjwi.catalog.model.api.addressbook.AddressBookGroup;
+import com.sjwi.catalog.model.api.addressbook.NewAddressBookEntry;
 import java.sql.Types;
 import java.util.ArrayList;
 import java.util.Arrays;
