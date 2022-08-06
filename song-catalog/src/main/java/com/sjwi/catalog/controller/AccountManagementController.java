@@ -30,7 +30,6 @@ import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.ws.rs.BadRequestException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -40,6 +39,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.server.ResponseStatusException;
 
 @Controller
 public class AccountManagementController {
@@ -62,11 +62,11 @@ public class AccountManagementController {
   @PostMapping("/change-password")
   public ResponseEntity<Object> changePassword(
       @RequestBody ChangePasswordRequest body, Principal principal) {
-    if (!body.isValid()) throw new BadRequestException();
+    if (!body.isValid()) throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
     try {
       userService.changePassword(principal.getName(), body.getPassword(), body.getNewPassword());
     } catch (PasswordException e) {
-      throw new BadRequestException(e);
+      throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
     }
     return ResponseEntity.ok().build();
   }

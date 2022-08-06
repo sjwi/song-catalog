@@ -3,33 +3,6 @@ package com.sjwi.catalog.controller;
 
 import static com.sjwi.catalog.model.KeySet.NUMBER_SYSTEM_KEY_CODE;
 
-import java.io.IOException;
-import java.net.URI;
-import java.security.Principal;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-
-import javax.servlet.http.Part;
-import javax.ws.rs.BadRequestException;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RequestPart;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sjwi.catalog.config.ServletConstants;
 import com.sjwi.catalog.log.CustomLogger;
@@ -45,6 +18,30 @@ import com.sjwi.catalog.service.SetListService;
 import com.sjwi.catalog.service.SongService;
 import com.sjwi.catalog.service.UserService;
 import com.sjwi.catalog.service.VersionService;
+import java.io.IOException;
+import java.net.URI;
+import java.security.Principal;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import javax.servlet.http.Part;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 @RestController()
 @RequestMapping("/songs")
@@ -176,7 +173,7 @@ public class SongController {
       @PathVariable int id, @RequestParam int master, Authentication auth) {
     Song newMaster = songService.getSongById(master);
     if (newMaster.getRelated() != 0) {
-      if (newMaster.getRelated() != id) throw new BadRequestException();
+      if (newMaster.getRelated() != id) throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
       versionService.changeMaster(master, newMaster.getRelated());
     }
     return ResponseEntity.ok().build();
