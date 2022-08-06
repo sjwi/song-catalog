@@ -142,7 +142,7 @@ public class SongController {
       throws IOException {
     EditSongRequest editedSong = new ObjectMapper().readValue(song, EditSongRequest.class);
     Song originalSong = songService.getSongById(id);
-    resourceEvaluator.accept(originalSong, (CfUser) principal);
+    resourceEvaluator.accept(originalSong, principal);
     Song revisedSong =
         MasterSong.from(
             editedSong, originalSong, userService.loadCfUserByUsername(principal.getName()));
@@ -161,7 +161,7 @@ public class SongController {
   @DeleteMapping("/{id}")
   public ResponseEntity<Object> deleteSong(@PathVariable int id, Principal principal) {
     Song song = songService.getSongById(id);
-    resourceEvaluator.accept(song, (CfUser) principal);
+    resourceEvaluator.accept(song, principal);
     songService.deleteSong(id);
     return ResponseEntity.noContent().build();
   }
@@ -174,7 +174,7 @@ public class SongController {
       @PathVariable int id)
       throws IOException {
     Song song = songService.getSongById(id);
-    resourceEvaluator.accept(song, (CfUser) principal);
+    resourceEvaluator.accept(song, principal);
     if ("add".equalsIgnoreCase(recording)) recordingService.addOrUpdateRecording(id, songAudio);
     else recordingService.deleteRecording(id);
     return ResponseEntity.ok().build();
@@ -182,9 +182,9 @@ public class SongController {
 
   @PatchMapping(value = "/{id}", params = "master")
   public ResponseEntity<Object> swapMaster(
-      @PathVariable int id, @RequestParam int master, Authentication auth) {
+      @PathVariable int id, @RequestParam int master, Authentication auth, Principal principal) {
     Song currentMaster = songService.getSongById(id);
-    resourceEvaluator.accept(currentMaster, (CfUser) auth.getPrincipal());
+    resourceEvaluator.accept(currentMaster, principal);
     Song newMaster = songService.getSongById(master);
     if (newMaster.getRelated() != 0) {
       if (newMaster.getRelated() != id) throw new ResponseStatusException(HttpStatus.BAD_REQUEST);

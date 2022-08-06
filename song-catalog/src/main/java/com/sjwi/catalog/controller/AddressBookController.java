@@ -32,7 +32,6 @@ import com.sjwi.catalog.model.api.addressbook.AddressBookEntry;
 import com.sjwi.catalog.model.api.addressbook.AddressBookGroup;
 import com.sjwi.catalog.model.api.addressbook.NewAddressBookEntry;
 import com.sjwi.catalog.model.api.addressbook.NewAddressBookGroup;
-import com.sjwi.catalog.model.user.CfUser;
 import com.sjwi.catalog.service.AddressBookService;
 import com.sjwi.catalog.service.OrganizationService;
 import com.sjwi.catalog.service.UserService;
@@ -92,7 +91,7 @@ public class AddressBookController {
   @DeleteMapping("/entries/{id}")
   public ResponseEntity<Object> deleteEntry(@PathVariable int id, Principal principal) {
     AddressBookEntry entry = addressBookService.getAddressBookEntryById(id);
-    resourceEvaluator.accept(entry,(CfUser) principal);
+    resourceEvaluator.accept(entry, principal);
     addressBookService.deleteEntry(id);
     return ResponseEntity.noContent().build();
   }
@@ -111,7 +110,7 @@ public class AddressBookController {
   @PutMapping("/entries/{id}")
   public ResponseEntity<Object> updateEntry(
       @PathVariable int id, @RequestBody NewAddressBookEntry entry, Principal principal) {
-    resourceEvaluator.accept(entry,(CfUser) principal);
+    resourceEvaluator.accept(entry, principal);
     addressBookService.editEntryById(
         new AddressBookEntry(
             id,

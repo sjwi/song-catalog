@@ -35,7 +35,6 @@ import com.sjwi.catalog.model.SetList;
 import com.sjwi.catalog.model.api.setlist.AddSongToSetRequest;
 import com.sjwi.catalog.model.api.setlist.AddSongsToSetRequest;
 import com.sjwi.catalog.model.api.setlist.NewSetList;
-import com.sjwi.catalog.model.user.CfUser;
 import com.sjwi.catalog.service.OrganizationService;
 import com.sjwi.catalog.service.SetListService;
 import com.sjwi.catalog.service.SongService;
@@ -97,7 +96,7 @@ public class SetListController {
   public ResponseEntity<Object> renameSet(@PathVariable int id, @RequestParam String name, Principal principal)
       throws UnsupportedEncodingException {
     SetList setList = setListService.getSetListById(id);
-    resourceEvaluator.accept(setList, (CfUser) principal);
+    resourceEvaluator.accept(setList, principal);
     setListService.renameSet(id, URLDecoder.decode(name, StandardCharsets.UTF_8.name()));
     return ResponseEntity.ok().build();
   }
@@ -111,7 +110,7 @@ public class SetListController {
   @DeleteMapping("/{id}")
   public ResponseEntity<Object> deleteSet(@PathVariable int id, Principal principal) {
     SetList setList = setListService.getSetListById(id);
-    resourceEvaluator.accept(setList, (CfUser) principal);
+    resourceEvaluator.accept(setList, principal);
     setListService.deleteSet(id);
     return ResponseEntity.noContent().build();
   }
@@ -145,7 +144,7 @@ public class SetListController {
   public ResponseEntity<Object> removeSongsFromSet(
       @PathVariable Integer id, @RequestBody List<Integer> songIds, Principal principal) {
     SetList setList = setListService.getSetListById(id);
-    resourceEvaluator.accept(setList, (CfUser) principal);
+    resourceEvaluator.accept(setList, principal);
     songIds.stream().forEach(songId -> setListService.removeSongFromSet(id, songId));
     return ResponseEntity.noContent().build();
   }
