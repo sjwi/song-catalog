@@ -1,13 +1,11 @@
 /* (C)2022 https://stephenky.com */
 package com.sjwi.catalog.model.user;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.util.Collection;
 import java.util.Map;
-
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.User;
-
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @JsonIgnoreProperties({"password", "authorities"})
 public class CfUser extends User {
