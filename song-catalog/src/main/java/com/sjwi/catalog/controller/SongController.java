@@ -3,28 +3,15 @@ package com.sjwi.catalog.controller;
 
 import static com.sjwi.catalog.model.KeySet.NUMBER_SYSTEM_KEY_CODE;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.sjwi.catalog.config.ServletConstants;
-import com.sjwi.catalog.log.CustomLogger;
-import com.sjwi.catalog.mail.MailConstants;
-import com.sjwi.catalog.model.TransposableString;
-import com.sjwi.catalog.model.api.song.EditSongRequest;
-import com.sjwi.catalog.model.api.song.NewSong;
-import com.sjwi.catalog.model.song.MasterSong;
-import com.sjwi.catalog.model.song.Song;
-import com.sjwi.catalog.model.user.CfUser;
-import com.sjwi.catalog.service.RecordingService;
-import com.sjwi.catalog.service.SetListService;
-import com.sjwi.catalog.service.SongService;
-import com.sjwi.catalog.service.UserService;
-import com.sjwi.catalog.service.VersionService;
 import java.io.IOException;
 import java.net.URI;
 import java.security.Principal;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+
 import javax.servlet.http.Part;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -43,7 +30,23 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-@RestController()
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.sjwi.catalog.config.ServletConstants;
+import com.sjwi.catalog.log.CustomLogger;
+import com.sjwi.catalog.mail.MailConstants;
+import com.sjwi.catalog.model.TransposableString;
+import com.sjwi.catalog.model.api.song.EditSongRequest;
+import com.sjwi.catalog.model.api.song.NewSong;
+import com.sjwi.catalog.model.song.MasterSong;
+import com.sjwi.catalog.model.song.Song;
+import com.sjwi.catalog.model.user.CfUser;
+import com.sjwi.catalog.service.RecordingService;
+import com.sjwi.catalog.service.SetListService;
+import com.sjwi.catalog.service.SongService;
+import com.sjwi.catalog.service.UserService;
+import com.sjwi.catalog.service.VersionService;
+
+@RestController
 @RequestMapping("/songs")
 public class SongController {
 
@@ -61,7 +64,7 @@ public class SongController {
 
   @Autowired SetListService setListService;
 
-  @GetMapping("/")
+  @GetMapping
   public ResponseEntity<List<Song>> getSongs(@RequestParam(required = false) String searchTerm) {
     return ResponseEntity.ok(songService.searchSongs(searchTerm));
   }

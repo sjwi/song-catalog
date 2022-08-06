@@ -1,6 +1,30 @@
 /* (C)2022 https://stephenky.com */
 package com.sjwi.catalog.controller;
 
+import java.nio.file.AccessDeniedException;
+import java.security.NoSuchAlgorithmException;
+import java.security.Principal;
+import java.security.spec.InvalidKeySpecException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+import javax.servlet.ServletContext;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
+
 import com.sjwi.catalog.exception.MailException;
 import com.sjwi.catalog.exception.PasswordException;
 import com.sjwi.catalog.log.CustomLogger;
@@ -19,29 +43,8 @@ import com.sjwi.catalog.model.user.CfUser;
 import com.sjwi.catalog.model.user.UserState;
 import com.sjwi.catalog.service.TokenService;
 import com.sjwi.catalog.service.UserService;
-import java.nio.file.AccessDeniedException;
-import java.security.NoSuchAlgorithmException;
-import java.security.Principal;
-import java.security.spec.InvalidKeySpecException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import javax.servlet.ServletContext;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.server.ResponseStatusException;
 
-@Controller
+@RestController
 public class AccountManagementController {
 
   private static final String INVITE_MSG_TEMPLATE = "email-templates/invitation.html";

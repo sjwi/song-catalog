@@ -1,22 +1,17 @@
 /* (C)2022 https://stephenky.com */
 package com.sjwi.catalog.controller;
 
-import com.sjwi.catalog.model.SetList;
-import com.sjwi.catalog.model.api.setlist.AddSongToSetRequest;
-import com.sjwi.catalog.model.api.setlist.AddSongsToSetRequest;
-import com.sjwi.catalog.model.api.setlist.NewSetList;
-import com.sjwi.catalog.service.OrganizationService;
-import com.sjwi.catalog.service.SetListService;
-import com.sjwi.catalog.service.SongService;
 import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 import java.security.Principal;
 import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -35,7 +30,15 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import org.springframework.web.servlet.view.RedirectView;
 
-@RestController()
+import com.sjwi.catalog.model.SetList;
+import com.sjwi.catalog.model.api.setlist.AddSongToSetRequest;
+import com.sjwi.catalog.model.api.setlist.AddSongsToSetRequest;
+import com.sjwi.catalog.model.api.setlist.NewSetList;
+import com.sjwi.catalog.service.OrganizationService;
+import com.sjwi.catalog.service.SetListService;
+import com.sjwi.catalog.service.SongService;
+
+@RestController
 @RequestMapping("/setlists")
 public class SetListController {
 
@@ -49,7 +52,7 @@ public class SetListController {
 
   @Autowired SongService songService;
 
-  @GetMapping("/")
+  @GetMapping
   public ResponseEntity<List<SetList>> getSets(
       @RequestParam(required = false) Integer cursor,
       @RequestParam(required = false) String searchTerm,
@@ -59,7 +62,7 @@ public class SetListController {
         setListService.getSetListPage(SET_LISTS_PER_PAGE, cursor == null ? 0 : cursor));
   }
 
-  @PostMapping("/")
+  @PostMapping
   public ResponseEntity<SetList> createSet(
       @RequestBody NewSetList setList,
       Principal principal,
