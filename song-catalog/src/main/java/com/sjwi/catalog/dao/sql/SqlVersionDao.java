@@ -34,7 +34,7 @@ public class SqlVersionDao implements VersionDao {
   @Autowired JdbcTemplate jdbcTemplate;
 
   @Override
-  public int createNewVersion(int id, String createdBy, String body, String defaultKey) {
+  public Song createNewVersion(int id, String createdBy, String body, String defaultKey) {
     jdbcTemplate.update(
         queryStore.get("createNewVersionForSong"),
         new Object[] {body, defaultKey, createdBy, createdBy, id, id});
@@ -46,7 +46,7 @@ public class SqlVersionDao implements VersionDao {
             });
     jdbcTemplate.update(
         queryStore.get("createNewVersion"), new Object[] {song.getId(), song.getRelated()});
-    return song.getId();
+    return song;
   }
 
   @Override

@@ -1,7 +1,6 @@
 /* (C)2022 https://stephenky.com */
-package com.sjwi.catalog.controller.setlist;
+package com.sjwi.catalog.controller;
 
-import com.sjwi.catalog.controller.ControllerHelper;
 import com.sjwi.catalog.model.SetList;
 import com.sjwi.catalog.model.api.setlist.AddSongToSetRequest;
 import com.sjwi.catalog.model.api.setlist.AddSongsToSetRequest;

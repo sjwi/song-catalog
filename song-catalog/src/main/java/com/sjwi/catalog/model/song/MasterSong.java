@@ -5,6 +5,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.sjwi.catalog.model.Recording;
 import com.sjwi.catalog.model.TransposableString;
+import com.sjwi.catalog.model.api.song.EditSongRequest;
 import com.sjwi.catalog.model.user.CfUser;
 import java.util.Date;
 import java.util.List;
@@ -97,5 +98,23 @@ public class MasterSong extends Song {
               jsonVersions.add(version);
             });
     return jsonVersions.toString();
+  }
+
+  public static MasterSong from(EditSongRequest editSongRequest, Song song, CfUser user) {
+    return new MasterSong(
+        null,
+        song.id,
+        editSongRequest.getSongTitle(),
+        new TransposableString(editSongRequest.getSongBody(), editSongRequest.getDefaultKey()),
+        editSongRequest.getUpdatedKey(),
+        song.getArtist(),
+        song.getNotes(),
+        user,
+        user,
+        new Date(),
+        song.getRelated(),
+        song.isPriv(),
+        editSongRequest.getCategory(),
+        song.getRecording());
   }
 }

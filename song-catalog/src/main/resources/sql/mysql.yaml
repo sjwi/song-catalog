@@ -415,7 +415,7 @@ log: >
   INSERT INTO Log (USERNAME,DEVICE,IP,METHOD,REQ_URL,STAND_ALONE_MODE,PROTOCOL,PARAMS) values (?,?,?,?,?,?,?,?)
 
 getLogData: >
-  SELECT * FROM Log ORDER BY ACTION_TIMESTAMP DESC LIMIT 1000
+  SELECT * FROM Log ORDER BY ACTION_TIMESTAMP DESC LIMIT ?
 
 getAddressBookEntriesWithPopulatedEmails: >
   select * from AddressBook where Email is not null AND Trim(Email) <> '' order by FirstName

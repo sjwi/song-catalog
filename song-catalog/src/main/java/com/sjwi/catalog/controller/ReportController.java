@@ -5,13 +5,12 @@ import com.sjwi.catalog.model.LogEntry;
 import com.sjwi.catalog.service.UserService;
 import java.util.List;
 import java.util.stream.Collectors;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -20,9 +19,8 @@ public class ReportController {
   @Autowired UserService userService;
 
   @GetMapping("/log")
-  public ResponseEntity<LogData> structuredLogs(
-      HttpServletResponse response, HttpServletRequest request) {
-    return ResponseEntity.ok(new LogData(userService.getLogData()));
+  public ResponseEntity<LogData> structuredLogs(@RequestParam(required = false) Integer limit) {
+    return ResponseEntity.ok(new LogData(userService.getLogData(limit == null ? 1000 : limit)));
   }
 
   @AllArgsConstructor

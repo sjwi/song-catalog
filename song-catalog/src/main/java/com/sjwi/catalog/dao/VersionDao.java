@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface VersionDao {
 
-  public int createNewVersion(int id, String createdBy, String body, String defaultKey);
+  public Song createNewVersion(int id, String createdBy, String body, String defaultKey);
 
   public void changeMaster(int songId, int relatedId);
 

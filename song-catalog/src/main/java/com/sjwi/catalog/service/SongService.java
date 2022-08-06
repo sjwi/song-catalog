@@ -50,14 +50,14 @@ public class SongService {
     songDao.setDefaultKey(updatedVersionKey, songId, user);
   }
 
-  public int addSong(
-      String songTitle, String songBody, String chordedIn, CfUser user, int category) {
+  public Song addSong(
+      String songTitle, TransposableString body, String chordedIn, CfUser user, int category) {
     return songDao.addSong(
         new MasterSong(
             null,
             0,
             songTitle,
-            new TransposableString(songBody, chordedIn),
+            body,
             chordedIn,
             null,
             null,

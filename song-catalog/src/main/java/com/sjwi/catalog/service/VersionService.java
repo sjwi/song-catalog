@@ -13,7 +13,7 @@ public class VersionService {
 
   @Autowired VersionDao versionDao;
 
-  public int createNewVersion(int songId, String user, String transposedSongBody, String key) {
+  public Song createNewVersion(int songId, String user, String transposedSongBody, String key) {
     return versionDao.createNewVersion(songId, user, transposedSongBody, key);
   }
 

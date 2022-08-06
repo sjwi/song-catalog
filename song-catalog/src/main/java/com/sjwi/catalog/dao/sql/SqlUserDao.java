@@ -216,7 +216,7 @@ public class SqlUserDao implements UserDao {
   }
 
   @Override
-  public List<LogEntry> getLogData() {
+  public List<LogEntry> getLogData(Integer limit) {
     return jdbcTemplate.query(
         queryStore.get("getLogData"),
         r -> {
@@ -236,7 +236,8 @@ public class SqlUserDao implements UserDao {
                     r.getString("PROTOCOL"),
                     r.getString("PARAMS").split(";")));
           return logs;
-        });
+        },
+        limit);
   }
 
   @Override

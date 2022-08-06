@@ -8,6 +8,7 @@ import com.sjwi.catalog.dao.UserDao;
 import com.sjwi.catalog.exception.PasswordException;
 import com.sjwi.catalog.model.LogEntry;
 import com.sjwi.catalog.model.api.addressbook.AddressBookEntry;
+import com.sjwi.catalog.model.api.uac.EnrollmentRequest;
 import com.sjwi.catalog.model.user.CfUser;
 import com.sjwi.catalog.model.user.UserState;
 import java.security.Principal;
@@ -42,14 +43,8 @@ public class UserService implements UserDetailsService {
   private static Map<String, CfUser> cachedUsers = new HashMap<>();
 
   public CfUser createUser(
-      String username,
-      String firstName,
-      String lastName,
-      String email,
-      String password,
-      List<String> authorityNames,
-      Map<String, String> preferences) {
-    password = passwordEncoder.encode(password);
+      EnrollmentRequest request, List<String> authorityNames, Map<String, String> preferences) {
+    String password = passwordEncoder.encode(request.getPassword());
     List<SimpleGrantedAuthority> authorities = new ArrayList<SimpleGrantedAuthority>();
     authorityNames.stream()
         .forEach(
@@ -58,10 +53,10 @@ public class UserService implements UserDetailsService {
             });
     CfUser user =
         new CfUser(
-            username.trim().toLowerCase(),
-            firstName,
-            lastName,
-            email,
+            request.getUsername().trim().toLowerCase(),
+            request.getFirstName(),
+            request.getLastName(),
+            request.getEmail(),
             password,
             authorities,
             preferences);
@@ -150,8 +145,8 @@ public class UserService implements UserDetailsService {
         username, os, ipAddress, signature, requestUrl, standAloneMode, protocol, parameters);
   }
 
-  public List<LogEntry> getLogData() {
-    return userDao.getLogData();
+  public List<LogEntry> getLogData(Integer limit) {
+    return userDao.getLogData(limit);
   }
 
   public boolean userHasRequestedAccount(String email) {

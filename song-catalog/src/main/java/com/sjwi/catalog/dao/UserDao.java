@@ -44,7 +44,7 @@ public interface UserDao {
       String protocol,
       String parameters);
 
-  public List<LogEntry> getLogData();
+  public List<LogEntry> getLogData(Integer limit);
 
   public void storeAccountRequest(String email);
 

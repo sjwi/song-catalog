@@ -76,7 +76,7 @@ public class SqlSongDao implements SongDao {
   }
 
   @Override
-  public int addSong(Song song) {
+  public Song addSong(Song song) {
     jdbcTemplate.update(
         queryStore.get("insertNewSong"),
         new Object[] {
@@ -92,7 +92,7 @@ public class SqlSongDao implements SongDao {
         queryStore.get("getLatestSongId"),
         r -> {
           r.next();
-          return r.getInt("ID");
+          return getSongById(r.getInt("ID"));
         });
   }
 

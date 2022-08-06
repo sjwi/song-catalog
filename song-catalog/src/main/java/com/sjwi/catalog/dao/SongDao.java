@@ -16,7 +16,7 @@ public interface SongDao {
 
   public List<Song> getSongs(int qty);
 
-  public int addSong(Song song);
+  public Song addSong(Song song);
 
   public Song getSongById(int id);
 
