@@ -40,6 +40,7 @@ import com.sjwi.catalog.model.security.EnrollmentToken;
 import com.sjwi.catalog.model.security.PasswordResetToken;
 import com.sjwi.catalog.model.security.SecurityToken;
 import com.sjwi.catalog.model.user.CfUser;
+import com.sjwi.catalog.model.user.UserRoles;
 import com.sjwi.catalog.model.user.UserState;
 import com.sjwi.catalog.service.TokenService;
 import com.sjwi.catalog.service.UserService;
@@ -163,7 +164,7 @@ public class AccountManagementController {
         tokenService.getEnrollmentToken(body.getUser()).setSessionToken(body.getToken());
     if (!token.isTokenValid()) throw new AccessDeniedException("Invalid enrollment token");
     List<String> authorities = new ArrayList<String>(Arrays.asList("USER"));
-    if (("ADMIN").equals(token.getRole())) authorities.add("ADMIN");
+    if ((UserRoles.ADMIN.name()).equals(token.getRole())) authorities.add(UserRoles.ADMIN.name());
     CfUser user = userService.createUser(body, authorities, null);
     request.login(user.getUsername(), body.getPassword());
     tokenService.deleteEnrollmentToken(token.getId());

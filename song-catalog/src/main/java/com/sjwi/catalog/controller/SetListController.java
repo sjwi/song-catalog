@@ -30,10 +30,12 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import org.springframework.web.servlet.view.RedirectView;
 
+import com.sjwi.catalog.config.security.OwnedResourceEvaluator;
 import com.sjwi.catalog.model.SetList;
 import com.sjwi.catalog.model.api.setlist.AddSongToSetRequest;
 import com.sjwi.catalog.model.api.setlist.AddSongsToSetRequest;
 import com.sjwi.catalog.model.api.setlist.NewSetList;
+import com.sjwi.catalog.model.user.CfUser;
 import com.sjwi.catalog.service.OrganizationService;
 import com.sjwi.catalog.service.SetListService;
 import com.sjwi.catalog.service.SongService;
@@ -51,6 +53,8 @@ public class SetListController {
   @Autowired OrganizationService organizationService;
 
   @Autowired SongService songService;
+
+  @Autowired OwnedResourceEvaluator resourceEvaluator;
 
   @GetMapping
   public ResponseEntity<List<SetList>> getSets(
@@ -90,8 +94,10 @@ public class SetListController {
 
   @PutMapping(value = "/{id}", params = "name")
   @ResponseStatus(value = HttpStatus.OK)
-  public ResponseEntity<Object> renameSet(@PathVariable int id, @RequestParam String name)
+  public ResponseEntity<Object> renameSet(@PathVariable int id, @RequestParam String name, Principal principal)
       throws UnsupportedEncodingException {
+    SetList setList = setListService.getSetListById(id);
+    resourceEvaluator.accept(setList, (CfUser) principal);
     setListService.renameSet(id, URLDecoder.decode(name, StandardCharsets.UTF_8.name()));
     return ResponseEntity.ok().build();
   }
@@ -103,7 +109,9 @@ public class SetListController {
   }
 
   @DeleteMapping("/{id}")
-  public ResponseEntity<Object> deleteSet(@PathVariable int id) {
+  public ResponseEntity<Object> deleteSet(@PathVariable int id, Principal principal) {
+    SetList setList = setListService.getSetListById(id);
+    resourceEvaluator.accept(setList, (CfUser) principal);
     setListService.deleteSet(id);
     return ResponseEntity.noContent().build();
   }
@@ -135,7 +143,9 @@ public class SetListController {
 
   @PatchMapping(value = "/{id}", params = "remove")
   public ResponseEntity<Object> removeSongsFromSet(
-      @PathVariable Integer id, @RequestBody List<Integer> songIds) {
+      @PathVariable Integer id, @RequestBody List<Integer> songIds, Principal principal) {
+    SetList setList = setListService.getSetListById(id);
+    resourceEvaluator.accept(setList, (CfUser) principal);
     songIds.stream().forEach(songId -> setListService.removeSongFromSet(id, songId));
     return ResponseEntity.noContent().build();
   }

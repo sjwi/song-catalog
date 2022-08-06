@@ -3,14 +3,16 @@ package com.sjwi.catalog.model;
 
 import static com.sjwi.catalog.model.KeySet.LYRICS_ONLY_KEY_CODE;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.sjwi.catalog.model.song.Song;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class SetList {
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.sjwi.catalog.model.api.OwnedResource;
+import com.sjwi.catalog.model.song.Song;
+
+public class SetList implements OwnedResource {
   private final int id;
   private final String setListName;
   private final Date createdOn;
@@ -133,5 +135,10 @@ public class SetList {
 
   public int getOrganization() {
     return organization;
+  }
+
+  @Override
+  public String getOwner() {
+    return createdBy;
   }
 }

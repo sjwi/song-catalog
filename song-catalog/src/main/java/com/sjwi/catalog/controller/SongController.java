@@ -32,6 +32,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sjwi.catalog.config.ServletConstants;
+import com.sjwi.catalog.config.security.OwnedResourceEvaluator;
 import com.sjwi.catalog.log.CustomLogger;
 import com.sjwi.catalog.mail.MailConstants;
 import com.sjwi.catalog.model.TransposableString;
@@ -64,6 +65,8 @@ public class SongController {
 
   @Autowired SetListService setListService;
 
+  @Autowired OwnedResourceEvaluator resourceEvaluator;
+
   @GetMapping
   public ResponseEntity<List<Song>> getSongs(@RequestParam(required = false) String searchTerm) {
     return ResponseEntity.ok(songService.searchSongs(searchTerm));
@@ -87,7 +90,7 @@ public class SongController {
     return ResponseEntity.ok(songService.getSongFrequencyCount(orgId, serviceIds));
   }
 
-  @PostMapping("/songs")
+  @PostMapping
   public ResponseEntity<Object> createSong(
       Authentication auth,
       Principal principal,
@@ -139,6 +142,7 @@ public class SongController {
       throws IOException {
     EditSongRequest editedSong = new ObjectMapper().readValue(song, EditSongRequest.class);
     Song originalSong = songService.getSongById(id);
+    resourceEvaluator.accept(originalSong, (CfUser) principal);
     Song revisedSong =
         MasterSong.from(
             editedSong, originalSong, userService.loadCfUserByUsername(principal.getName()));
@@ -155,17 +159,22 @@ public class SongController {
   }
 
   @DeleteMapping("/{id}")
-  public ResponseEntity<Object> deleteSong(@PathVariable int id) {
+  public ResponseEntity<Object> deleteSong(@PathVariable int id, Principal principal) {
+    Song song = songService.getSongById(id);
+    resourceEvaluator.accept(song, (CfUser) principal);
     songService.deleteSong(id);
     return ResponseEntity.noContent().build();
   }
 
   @PatchMapping(value = "/{id}", params = "recording")
   public ResponseEntity<Object> removeRecording(
+      Principal principal,
       @RequestParam String recording,
       @RequestPart(value = "file", required = false) Part songAudio,
       @PathVariable int id)
       throws IOException {
+    Song song = songService.getSongById(id);
+    resourceEvaluator.accept(song, (CfUser) principal);
     if ("add".equalsIgnoreCase(recording)) recordingService.addOrUpdateRecording(id, songAudio);
     else recordingService.deleteRecording(id);
     return ResponseEntity.ok().build();
@@ -174,6 +183,8 @@ public class SongController {
   @PatchMapping(value = "/{id}", params = "master")
   public ResponseEntity<Object> swapMaster(
       @PathVariable int id, @RequestParam int master, Authentication auth) {
+    Song currentMaster = songService.getSongById(id);
+    resourceEvaluator.accept(currentMaster, (CfUser) auth.getPrincipal());
     Song newMaster = songService.getSongById(master);
     if (newMaster.getRelated() != 0) {
       if (newMaster.getRelated() != id) throw new ResponseStatusException(HttpStatus.BAD_REQUEST);

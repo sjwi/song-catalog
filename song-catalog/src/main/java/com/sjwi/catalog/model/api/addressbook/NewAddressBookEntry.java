@@ -2,10 +2,13 @@
 package com.sjwi.catalog.model.api.addressbook;
 
 import javax.validation.constraints.NotBlank;
+
+import com.sjwi.catalog.model.api.OwnedResource;
+
 import lombok.Data;
 
 @Data
-public class NewAddressBookEntry {
+public class NewAddressBookEntry implements OwnedResource {
 
   @NotBlank() public String firstName;
   @NotBlank() public String lastName;
@@ -20,5 +23,10 @@ public class NewAddressBookEntry {
     this.username = username;
     this.email = email;
     this.phone = phone;
+  }
+
+  @Override
+  public String getOwner() {
+    return username;
   }
 }

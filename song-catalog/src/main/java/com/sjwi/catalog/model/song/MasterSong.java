@@ -1,9 +1,6 @@
 /* (C)2022 https://stephenky.com */
 package com.sjwi.catalog.model.song;
 
-import java.util.Date;
-import java.util.List;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
@@ -11,6 +8,8 @@ import com.sjwi.catalog.model.Recording;
 import com.sjwi.catalog.model.TransposableString;
 import com.sjwi.catalog.model.api.song.EditSongRequest;
 import com.sjwi.catalog.model.user.CfUser;
+import java.util.Date;
+import java.util.List;
 
 public class MasterSong extends Song {
 

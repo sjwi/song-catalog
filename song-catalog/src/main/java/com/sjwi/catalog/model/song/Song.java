@@ -10,14 +10,14 @@ import java.util.stream.Collectors;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.sjwi.catalog.model.Recording;
 import com.sjwi.catalog.model.TransposableString;
+import com.sjwi.catalog.model.api.OwnedResource;
 import com.sjwi.catalog.model.user.CfUser;
 
-public abstract class Song {
+public abstract class Song implements OwnedResource {
 
   protected final int id;
   protected final String name;
-  @JsonIgnore
-  protected final TransposableString transposableString;
+  @JsonIgnore protected final TransposableString transposableString;
   protected final String body;
   protected final String defaultKey;
   protected final String artist;
@@ -145,5 +145,10 @@ public abstract class Song {
         .map(s -> s.trim().isEmpty() ? s.trim() : s)
         .collect(Collectors.joining("\n"))
         .split("[\n]{2,}");
+  }
+
+  @JsonIgnore
+  public String getOwner() {
+    return createdBy.getUsername();
   }
 }
