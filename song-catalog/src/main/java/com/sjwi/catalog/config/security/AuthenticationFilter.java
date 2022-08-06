@@ -61,15 +61,12 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
         Jwts.builder()
             .setSubject(user.getUsername())
             .setExpiration(new Date(System.currentTimeMillis() + 30L * 24 * 60 * 60 * 1000 * 12))
-            .setClaims(
-                Map.of(
-                    "scope",
-                    user.getAuthorities().stream()
+            .claim("scope", user.getAuthorities().stream()
                         .map(a -> a.getAuthority())
-                        .collect(Collectors.joining(" ")),
-                        "firstName",user.getFirstName(),
-                        "lastName",user.getLastName(),
-                        "email",user.getEmail()))
+                        .collect(Collectors.joining(" ")))
+            .claim("firstName", user.getFirstName())
+            .claim("lastName", user.getLastName())
+            .claim("email", user.getEmail())
             .signWith(key)
             .compact();
     response.addHeader("Authorization", "Bearer " + token);
