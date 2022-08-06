@@ -3,17 +3,20 @@ package com.sjwi.catalog.model.song;
 
 import static com.sjwi.catalog.file.FileGenerator.LICENSE_TEXT;
 
-import com.sjwi.catalog.model.Recording;
-import com.sjwi.catalog.model.TransposableString;
-import com.sjwi.catalog.model.user.CfUser;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.stream.Collectors;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.sjwi.catalog.model.Recording;
+import com.sjwi.catalog.model.TransposableString;
+import com.sjwi.catalog.model.user.CfUser;
 
 public abstract class Song {
 
   protected final int id;
   protected final String name;
+  @JsonIgnore
   protected final TransposableString transposableString;
   protected final String body;
   protected final String defaultKey;
@@ -71,6 +74,7 @@ public abstract class Song {
     return body;
   }
 
+  @JsonIgnore
   public String[] getBodyAsChunks() {
     // filter CCLI footer
     return Arrays.stream(splitBodyIntoChunks())
@@ -78,6 +82,7 @@ public abstract class Song {
         .toArray(String[]::new);
   }
 
+  @JsonIgnore
   public String getFooter() {
     return Arrays.stream(splitBodyIntoChunks())
         .filter(c -> c.startsWith("CCLI"))
@@ -129,10 +134,12 @@ public abstract class Song {
     return name.replace("/", "_").replace("\"", "_").replace(";", ".");
   }
 
+  @JsonIgnore
   public TransposableString getTransposableString() {
     return transposableString;
   }
 
+  @JsonIgnore
   private String[] splitBodyIntoChunks() {
     return Arrays.stream(body.split("\n"))
         .map(s -> s.trim().isEmpty() ? s.trim() : s)
