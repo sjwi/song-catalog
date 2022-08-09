@@ -1,6 +1,6 @@
 <div class="set-list-container mb-3 flex-wrap" th:id="${'setListContainer_' + set.id }" ondragover="allowDrop(event)" 
 	th:attr="ondrop=${'dropSongToSet(event,' + set.id + ')'},data-target=${set.id},data-setname=${set.setListName}" >
-	<div class="setlist-suffix" th:text="${set.nameSuffix}">
+	<div class="setlist-suffix" th:classappend="${#authorization.expression('hasAuthority(''USER'')')? '': 'right-20'}" th:text="${set.nameSuffix}">
 	</div>
 	<div sec:authorize="hasAuthority('USER')" th:if="${#authentication.principal.username == set.createdBy || #authorization.expression('hasAuthority(''ADMIN'')')}" class="close edit-set">
 		<img width="20px" th:src="@{/images/dropdown.png}" data-toggle="dropdown">
