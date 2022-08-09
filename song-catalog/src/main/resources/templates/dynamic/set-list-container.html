@@ -1,5 +1,7 @@
 <div class="set-list-container mb-3 flex-wrap" th:id="${'setListContainer_' + set.id }" ondragover="allowDrop(event)" 
 	th:attr="ondrop=${'dropSongToSet(event,' + set.id + ')'},data-target=${set.id},data-setname=${set.setListName}" >
+	<div class="setlist-suffix" th:text="${set.nameSuffix}">
+	</div>
 	<div sec:authorize="hasAuthority('USER')" th:if="${#authentication.principal.username == set.createdBy || #authorization.expression('hasAuthority(''ADMIN'')')}" class="close edit-set">
 		<img width="20px" th:src="@{/images/dropdown.png}" data-toggle="dropdown">
 		<ul class="dropdown-menu dropdown-menu-right">
@@ -7,20 +9,23 @@
 				<a class="dropdown-item rename-set">Rename</a>
 			</li>
 			<li>
-				<a class="dropdown-item pin-set">Pin as org's latest set</a>
-			</li>
-			<li>
 				<a 
 					th:with="fullUrl=${T(com.sjwi.catalog.config.ServletConstants).FULL_URL }"
-					class="dropdown-item" th:attr="onclick=${'copyTextToClipboard(''' + fullUrl + '/setlist/' + set.id + ''')'}">Copy set list link</a>
+					class="dropdown-item ignore-td-action" th:attr="onclick=${'copySetLink('''} + ${fullUrl} + @{/setlist/__${set.id}__} + ${''',this)'}">Copy set list link</a>
+			</li>
+			<li>
+				<a class="dropdown-item pin-set">Pin as org's latest set</a>
+			</li>
+			<li class="ignore-td-action">
+				<a th:attr="onclick=${'emailSet(' + set.id + ')'}" class="dropdown-item ignore-td-action">Email set from worship@cfchurches.com</a>
 			</li>
 			<li>
 				<a class="dropdown-item delete-set">Delete</a>
 			</li>
 		</ul>
 	</div>
-	<div class="set-list-title">
-		<span th:text="${set.setListName}"></span>
+	<div class="set-list-title mt-2 mb-2">
+		<a class="text-primary" th:href="@{/setlist/} + ${set.id}"><span th:text="${set.namePrefix}"></span></a>
 	</div>
 	<div class="set-list-songs">
 		<table class="table set-table table-sm mb-0" th:attr="data-setid=${set.id}">
