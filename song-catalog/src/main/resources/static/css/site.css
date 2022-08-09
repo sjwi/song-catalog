@@ -364,6 +364,9 @@ pre#logOutput {
 	font-size:1.15rem;
 	text-decoration:underline;
 }
+.right-20 {
+	right:20px;
+}
 .set-list-dl {
 	margin-top: .05rem;
 }
