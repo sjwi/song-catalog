@@ -23,9 +23,7 @@ import com.sjwi.catalog.model.user.CfUser;
 
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
-import lombok.extern.java.Log;
 
-@Log
 public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
   private AuthenticationManager authenticationManager;
 
