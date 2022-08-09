@@ -41,7 +41,7 @@
 						$('#editSetListModal').find('.submit-form').attr('disabled',true);
 					},
 					success: function() {
-						$('#setListContainer_' + $('#editSetListModal').find('.set-list-id').val()).find('.set-list-title > span').html($('#editSetListModal').find('.set-list-name').val());
+						reloadSetContainerIfPresent($('#editSetListModal').find('.set-list-id').val());
 						alertWithFade('warning','Set list title updated')
 						$('#editSetListModal').modal('hide');
 					},

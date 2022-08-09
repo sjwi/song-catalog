@@ -1,5 +1,7 @@
 <div class="set-list-container mb-3 flex-wrap" th:id="${'setListContainer_' + set.id }" ondragover="allowDrop(event)" 
 	th:attr="ondrop=${'dropSongToSet(event,' + set.id + ')'},data-target=${set.id},data-setname=${set.setListName}" >
+	<div class="setlist-suffix" th:text="${set.nameSuffix}">
+	</div>
 	<div sec:authorize="hasAuthority('USER')" th:if="${#authentication.principal.username == set.createdBy || #authorization.expression('hasAuthority(''ADMIN'')')}" class="close edit-set">
 		<img width="20px" th:src="@{/images/dropdown.png}" data-toggle="dropdown">
 		<ul class="dropdown-menu dropdown-menu-right">
@@ -22,8 +24,8 @@
 			</li>
 		</ul>
 	</div>
-	<div class="set-list-title">
-		<span th:text="${set.setListName}"></span>
+	<div class="set-list-title mt-3 mb-3">
+		<a class="text-primary" th:href="@{/setlist/} + ${set.id}"><span th:text="${set.namePrefix}"></span></a>
 	</div>
 	<div class="set-list-songs">
 		<table class="table set-table table-sm mb-0" th:attr="data-setid=${set.id}">

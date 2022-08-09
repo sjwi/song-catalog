@@ -327,7 +327,7 @@ pre#logOutput {
 	opacity: 1 !important;
 	font-size:2.25rem !important;
 	position:relative;
-	top:-20px;
+	top:-23px;
 }
 .song-catalog-row {
 	height: calc(100vh + var(--default-header-size));  
@@ -363,7 +363,6 @@ pre#logOutput {
 .set-list-title {
 	font-size:1.15rem;
 	text-decoration:underline;
-	margin-bottom:10px;
 }
 .set-list-dl {
 	margin-top: .05rem;
@@ -1511,6 +1510,12 @@ label.v-center {
 }
 .setlist-section.error {
 	height: 100vh !important;
+}
+.setlist-suffix {
+	float:left;
+	position: absolute;
+	top:10px;
+	font-size:.75rem;
 }
 .setlist-section.error .set-list-container{
 	top:calc(40% - 150px);
