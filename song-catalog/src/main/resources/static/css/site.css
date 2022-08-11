@@ -6,9 +6,6 @@ hr {
 	background-color: var(--main-text-color) !important;
 	opacity:.1;
 }
-.fill-notch {
-	padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
-}
 .bg-custom {
 	background-color: var(--secondary-bg-color);
 }
