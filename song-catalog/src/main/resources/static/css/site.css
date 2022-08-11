@@ -1,12 +1,6 @@
 :root {
 	--default-header-size: 40.45px;
 }
-#homePageBody {
-	background-color: white;
-}
-#setListsBody, #setListBody {
-	background-color: var(--main-bg-color);
-}
 hr {
 	margin-top: 2px !important;
 	background-color: var(--main-text-color) !important;
@@ -15,7 +9,7 @@ hr {
 .fill-notch {
 	padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
 }
-.bg-cus-secondary {
+html {
 	background-color: var(--secondary-bg-color);
 }
 .overflow-white {
