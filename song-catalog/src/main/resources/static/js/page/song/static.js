@@ -8,7 +8,7 @@ function slick(){
 		useTransform: false,
 		initialSlide: focusedSlickPage,
 		useCSS: false,
-                touchThreshold: 1,
+                touchThreshold: 10,
 		speed: 200,
 		prevArrow: $('.previous-slide'),
 		nextArrow: $('.next-slide')
