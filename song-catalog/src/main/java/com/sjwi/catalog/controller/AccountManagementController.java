@@ -197,4 +197,9 @@ public class AccountManagementController {
     else userService.setUserState(userState, principal);
     return ResponseEntity.ok().build();
   }
+
+  @PostMapping("/me")
+  public ResponseEntity<CfUser> getMe(Principal principal) {
+    return ResponseEntity.ok((CfUser) principal);
+  }
 }
