@@ -3,17 +3,13 @@ package com.sjwi.catalog.controller.setlist;
 
 import static com.sjwi.catalog.model.KeySet.NUMBER_SYSTEM_KEY_CODE;
 
-import com.sjwi.catalog.controller.ControllerHelper;
-import com.sjwi.catalog.log.CustomLogger;
-import com.sjwi.catalog.model.TransposableString;
-import com.sjwi.catalog.service.SetListService;
-import com.sjwi.catalog.service.SongService;
-import com.sjwi.catalog.service.VersionService;
 import java.security.Principal;
 import java.util.Date;
 import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
@@ -25,6 +21,13 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.servlet.ModelAndView;
+
+import com.sjwi.catalog.controller.ControllerHelper;
+import com.sjwi.catalog.log.CustomLogger;
+import com.sjwi.catalog.model.TransposableString;
+import com.sjwi.catalog.service.SetListService;
+import com.sjwi.catalog.service.SongService;
+import com.sjwi.catalog.service.VersionService;
 
 @Controller
 public class SetListPopulationController {
@@ -58,7 +61,7 @@ public class SetListPopulationController {
       @RequestParam(value = "updatedVersionKey", required = false) String updatedVersionKey,
       @RequestParam(value = "versionBody", required = false) String versionBody,
       @RequestParam(value = "sort", required = false, defaultValue = "0") int sort,
-      @RequestParam(value = "homegroupName", required = false) int homegroupName,
+      @RequestParam(value = "homegroupName", required = false) Integer homegroupName,
       @RequestParam(value = "otherGroupName", required = false) String otherGroupName,
       @RequestParam(value = "setList", required = true) int setListId) {
     try {
