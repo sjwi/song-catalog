@@ -4,6 +4,7 @@ package com.sjwi.catalog.model;
 import static com.sjwi.catalog.model.KeySet.LYRICS_ONLY_KEY_CODE;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -26,6 +27,8 @@ public class SetList implements OwnedResource {
   private final Date flaggedAsMostRecentOn;
   private final String createdBy;
   private final int organization;
+  private String namePrefix;
+  private String nameSuffix;
   private final List<Song> songs;
 
   public SetList(
@@ -135,6 +138,16 @@ public class SetList implements OwnedResource {
 
   public int getOrganization() {
     return organization;
+  }
+
+  public String getNamePrefix() {
+    String[] nameArray = setListName.split(" ");
+    return String.join(" ",Arrays.copyOfRange(nameArray, 0, nameArray.length-1));
+  }
+
+  public String getNameSuffix() {
+    String[] nameArray = setListName.split(" ");
+    return nameArray[nameArray.length - 1].replace("-","/");
   }
 
   @Override
