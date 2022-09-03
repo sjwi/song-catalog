@@ -6,9 +6,11 @@ import static com.sjwi.catalog.model.KeySet.NUMBER_SYSTEM_KEY_CODE;
 import java.io.IOException;
 import java.net.URI;
 import java.security.Principal;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 import javax.servlet.http.Part;
 
@@ -69,7 +71,16 @@ public class SongController {
 
   @GetMapping
   public ResponseEntity<List<Song>> getSongs(@RequestParam(required = false) String searchTerm) {
-    return ResponseEntity.ok(songService.searchSongs(searchTerm));
+    return ResponseEntity.ok(songService.searchSongs(searchTerm).stream()
+      .map(s -> {
+        List<Song> returnedSongs = new ArrayList<Song>();
+        returnedSongs.add(s);
+        returnedSongs.addAll(((MasterSong) s).getVersions());
+        return returnedSongs;
+      })
+      .flatMap(List::stream)
+      .collect(Collectors.toList())
+    );
   }
 
   @GetMapping("/{id}")

@@ -1,17 +1,25 @@
 /* (C)2022 https://stephenky.com */
 package com.sjwi.catalog.controller;
 
+import com.sjwi.catalog.config.security.OwnedResourceEvaluator;
+import com.sjwi.catalog.model.SetList;
+import com.sjwi.catalog.model.SetListResponseBody;
+import com.sjwi.catalog.model.api.setlist.AddSongToSetRequest;
+import com.sjwi.catalog.model.api.setlist.AddSongsToSetRequest;
+import com.sjwi.catalog.model.api.setlist.NewSetList;
+import com.sjwi.catalog.service.OrganizationService;
+import com.sjwi.catalog.service.SetListService;
+import com.sjwi.catalog.service.SongService;
 import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 import java.security.Principal;
 import java.util.List;
-
+import java.util.stream.Collectors;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -30,15 +38,6 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import org.springframework.web.servlet.view.RedirectView;
 
-import com.sjwi.catalog.config.security.OwnedResourceEvaluator;
-import com.sjwi.catalog.model.SetList;
-import com.sjwi.catalog.model.api.setlist.AddSongToSetRequest;
-import com.sjwi.catalog.model.api.setlist.AddSongsToSetRequest;
-import com.sjwi.catalog.model.api.setlist.NewSetList;
-import com.sjwi.catalog.service.OrganizationService;
-import com.sjwi.catalog.service.SetListService;
-import com.sjwi.catalog.service.SongService;
-
 @RestController
 @RequestMapping("/setlists")
 public class SetListController {
@@ -56,13 +55,16 @@ public class SetListController {
   @Autowired OwnedResourceEvaluator resourceEvaluator;
 
   @GetMapping
-  public ResponseEntity<List<SetList>> getSets(
+  public ResponseEntity<List<SetListResponseBody>> getSets(
       @RequestParam(required = false) Integer cursor,
       @RequestParam(required = false) String searchTerm,
       @RequestParam(required = false) Integer orgId) {
-    if (orgId != null) return ResponseEntity.ok(setListService.getSetListsByOrg(orgId));
+    List<SetList> responseBody =
+        orgId != null
+            ? setListService.getSetListsByOrg(orgId)
+            : setListService.getSetListPage(SET_LISTS_PER_PAGE, cursor == null ? 0 : cursor);
     return ResponseEntity.ok(
-        setListService.getSetListPage(SET_LISTS_PER_PAGE, cursor == null ? 0 : cursor));
+        responseBody.stream().map(sl -> new SetListResponseBody(sl)).collect(Collectors.toList()));
   }
 
   @PostMapping
@@ -93,7 +95,8 @@ public class SetListController {
 
   @PutMapping(value = "/{id}", params = "name")
   @ResponseStatus(value = HttpStatus.OK)
-  public ResponseEntity<Object> renameSet(@PathVariable int id, @RequestParam String name, Principal principal)
+  public ResponseEntity<Object> renameSet(
+      @PathVariable int id, @RequestParam String name, Principal principal)
       throws UnsupportedEncodingException {
     SetList setList = setListService.getSetListById(id);
     resourceEvaluator.accept(setList, principal);

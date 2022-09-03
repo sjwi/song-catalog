@@ -2,7 +2,6 @@
 package com.sjwi.catalog.model.api.addressbook;
 
 import java.util.List;
-
 import lombok.Data;
 
 @Data

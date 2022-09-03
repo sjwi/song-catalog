@@ -1,10 +1,8 @@
 /* (C)2022 https://stephenky.com */
 package com.sjwi.catalog.model.api.addressbook;
 
-import javax.validation.constraints.NotBlank;
-
 import com.sjwi.catalog.model.api.OwnedResource;
-
+import javax.validation.constraints.NotBlank;
 import lombok.Data;
 
 @Data

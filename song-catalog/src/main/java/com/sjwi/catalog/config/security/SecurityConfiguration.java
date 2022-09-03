@@ -3,13 +3,12 @@ package com.sjwi.catalog.config.security;
 
 import static com.sjwi.catalog.model.security.StoredCookieToken.STORED_COOKIE_TOKEN_KEY;
 
+import com.sjwi.catalog.service.TokenService;
 import java.io.IOException;
 import java.util.Arrays;
-
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
@@ -32,8 +31,6 @@ import org.springframework.security.web.firewall.StrictHttpFirewall;
 import org.springframework.security.web.savedrequest.HttpSessionRequestCache;
 import org.springframework.security.web.savedrequest.RequestCache;
 import org.thymeleaf.extras.springsecurity5.dialect.SpringSecurityDialect;
-
-import com.sjwi.catalog.service.TokenService;
 
 @Configuration
 @EnableWebSecurity

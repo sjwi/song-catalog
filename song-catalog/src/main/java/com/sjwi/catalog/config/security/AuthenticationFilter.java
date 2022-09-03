@@ -1,28 +1,24 @@
 /* (C)2022 https://stephenky.com */
 package com.sjwi.catalog.config.security;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.sjwi.catalog.model.user.CfUser;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.security.Keys;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Map;
 import java.util.stream.Collectors;
-
 import javax.crypto.SecretKey;
 import javax.servlet.FilterChain;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.sjwi.catalog.model.user.CfUser;
-
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.security.Keys;
 
 public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
   private AuthenticationManager authenticationManager;
@@ -59,9 +55,11 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
         Jwts.builder()
             .setSubject(user.getUsername())
             .setExpiration(new Date(System.currentTimeMillis() + 30L * 24 * 60 * 60 * 1000 * 12))
-            .claim("scope", user.getAuthorities().stream()
-                        .map(a -> a.getAuthority())
-                        .collect(Collectors.joining(" ")))
+            .claim(
+                "scope",
+                user.getAuthorities().stream()
+                    .map(a -> a.getAuthority())
+                    .collect(Collectors.joining(" ")))
             .claim("firstName", user.getFirstName())
             .claim("lastName", user.getLastName())
             .claim("email", user.getEmail())
