@@ -1,11 +1,6 @@
 /* (C)2022 https://stephenky.com */
 package com.sjwi.catalog.dao.sql;
 
-import com.sjwi.catalog.dao.UserDao;
-import com.sjwi.catalog.model.LogEntry;
-import com.sjwi.catalog.model.user.CfUser;
-import com.sjwi.catalog.model.user.UserState;
-import com.sjwi.catalog.service.AddressBookService;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
@@ -13,6 +8,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.TimeZone;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
@@ -21,6 +17,12 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Repository;
+
+import com.sjwi.catalog.dao.UserDao;
+import com.sjwi.catalog.model.LogEntry;
+import com.sjwi.catalog.model.user.CfUser;
+import com.sjwi.catalog.model.user.UserState;
+import com.sjwi.catalog.service.AddressBookService;
 
 @Repository
 public class SqlUserDao implements UserDao {
@@ -314,5 +316,14 @@ public class SqlUserDao implements UserDao {
             "lastGroup",
             state.getLastGroup());
     namedParameterJdbcTemplate.update(queryStore.get("addUserState"), parameterMap);
+  }
+
+  @Override
+  public void cleanBots() {
+    jdbcTemplate.update(queryStore.get("cleanOldLogs"));
+    jdbcTemplate.update(queryStore.get("makeBotTable"));
+    jdbcTemplate.update(queryStore.get("cleanBotLogs"));
+    jdbcTemplate.update(queryStore.get("deleteBotTable"));
+    jdbcTemplate.update(queryStore.get("cleanBots"));
   }
 }
