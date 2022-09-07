@@ -323,7 +323,7 @@ public class SqlUserDao implements UserDao {
     jdbcTemplate.update(queryStore.get("cleanOldLogs"));
     jdbcTemplate.update(queryStore.get("makeBotTable"));
     jdbcTemplate.update(queryStore.get("cleanBotLogs"));
-    jdbcTemplate.update(queryStore.get("makeBotTable"));
+    jdbcTemplate.update(queryStore.get("deleteBotTable"));
     jdbcTemplate.update(queryStore.get("cleanBots"));
   }
 }
