@@ -75,11 +75,11 @@
 	<div class="action-container">
 		<div class="row no-gutters">
 			<th:block sec:authorize="hasAuthority('USER')">
-				<div class="col text-center" data-toggle="tooltip" data-placement="bottom" title="Add song to set" th:attr="onclick=${'addSongsFromSelect(' + set.id + ',''' + #strings.replace(set.setListName,'''','') + ''')'}">
+				<div class="col col-6 text-center" data-toggle="tooltip" data-placement="bottom" title="Add song to set" th:attr="onclick=${'addSongsFromSelect(' + set.id + ',''' + #strings.replace(set.setListName,'''','') + ''')'}">
 					<a href="javascript:void(0)"><img width="30px"type="image/x-icon" th:src="@{/images/plus-sign-inverse.png}"/></a>
 				</div>
 			</th:block>
-			<div class="col col-6 text-center" data-toggle="tooltip" data-placement="bottom" title="Download" th:attr="onclick=${'downloadFile(''setlist'', ' + set.id + ')'}">
+			<div class="col text-center" data-toggle="tooltip" data-placement="bottom" title="Download" th:attr="onclick=${'downloadFile(''setlist'', ' + set.id + ')'}">
 				 <img width="27px" class="set-list-dl" type="image/x-icon" th:src="@{/images/export-inverse.png}"/>
 			</div>
 		</div>
