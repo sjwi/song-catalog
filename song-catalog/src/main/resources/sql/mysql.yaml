@@ -446,3 +446,18 @@ addUserState: >
 
 getAnonymousUser: >
   SELECT * FROM AnonymousUser where HASH = ?
+
+cleanBotLogs: >
+  DELETE FROM Log WHERE username in (SELECT username from bots)
+
+makeBotTable: >
+  CREATE TEMPORARY TABLE bots SELECT username FROM Log GROUP BY username HAVING COUNT(*) < 3
+
+deleteBotTable: >
+  DROP TEMPORARY TABLE bots
+
+cleanBots: >
+  DELETE FROM AnonymousUser where CONCAT('user_', ID) not in (SELECT distinct username from Log)
+
+cleanOldLogs: >
+  DELETE from Log where ACTION_TIMESTAMP < now() - interval 90 DAY
