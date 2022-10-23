@@ -814,8 +814,7 @@ p.song-footer {
 }
 #songCatalogBody .alert.add-songs-alert {
   position: fixed; 
-  left: 2px; 
-  width: calc(16.6666667% - 4px);
+  width: calc(16.6666667%);
 }
 .alert > .alert-opac {
 	background-color: rgba(0, 179, 255,.2);
@@ -1688,8 +1687,7 @@ table > thead > tr > th[class*="sort"]:after {
 @media screen and (max-width: 1245px) {
 	#songCatalogBody .alert.add-songs-alert {
 		position: fixed; 
-		left: 2px; 
-		width: calc(33.33% - 4px);
+		width: calc(33.33%);
 	}
 	.version-column{
 		display:none !important
