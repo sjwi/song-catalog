@@ -42,8 +42,12 @@ function hideCategoriesOnScrollListener(id, scrollElem){
 			var currentScrollPos_1 = $(scrollElem).scrollTop();
 			if (prevScrollpos_1 > currentScrollPos_1) { 
 				$(id).slideDown('fast');
+				if (slideAlertUp && $('.add-songs-alert').hasClass('slide-down') && checkedCacheSize() != 0)
+					slideAlertUp()
 			} else {
 				$(id).slideUp('fast');
+				if (slideAlertDown && !$('.add-songs-alert').hasClass('slide-down') && checkedCacheSize() != 0)
+					slideAlertDown()
 			}
 			prevScrollpos_1 = currentScrollPos_1;	
 		});
