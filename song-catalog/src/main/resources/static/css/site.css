@@ -192,7 +192,7 @@ a:active {
 	position: fixed;
 	top: 0;
 	left: 0;
-	transition: 0.5s;
+	transition: 0.25s;
 	padding-top: 60px;
 	background-color: var(--secondary-bg-color);
 	z-index: 2147483645 !important;
@@ -802,8 +802,7 @@ p.song-footer {
   transition-duration: .5s;
   position: absolute; 
   bottom: -275px; 
-  left: 2%; 
-  width: 96%;
+  width: 100%;
   z-index:3000; 
 }
 #songCatalogBody .title {
