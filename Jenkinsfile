@@ -25,7 +25,7 @@ pipeline {
                     string(credentialsId:'cfsongs_dns', variable: 'DNS')
                 ]) {
                     script {
-                        rollbackWar = sh(script: "sshpass -p '$DREAMHOST_PW' ssh $DREAMHOST_UN@$DNS -o StrictHostKeyChecking=no '/opt/tomcat/scripts/backup_cfsongs.sh'", returnStdout: true).trim()
+                        rollbackWar = sh(script: "ssh $DREAMHOST_UN@$DNS -o StrictHostKeyChecking=no '/opt/tomcat/scripts/backup_cfsongs.sh'", returnStdout: true).trim()
                     }
                 }
             }
@@ -39,10 +39,10 @@ pipeline {
                                 usernamePassword(credentialsId: 'dreamhost_cfsongs', usernameVariable: 'DREAMHOST_UN', passwordVariable: 'DREAMHOST_PW'),
                                 string(credentialsId:'cfsongs_dns', variable: 'DNS')
                             ]) {
-                                sh "sshpass -p '$DREAMHOST_PW' ssh $DREAMHOST_UN@$DNS -o StrictHostKeyChecking=no '/opt/tomcat/bin/shutdown.sh'"
-                                sh "sshpass -p '$DREAMHOST_PW' scp target/ROOT.war $DREAMHOST_UN@$DNS:/opt/tomcat/webapps"
+                                sh "ssh $DREAMHOST_UN@$DNS -o StrictHostKeyChecking=no '/opt/tomcat/bin/shutdown.sh'"
+                                sh "scp target/ROOT.war $DREAMHOST_UN@$DNS:/opt/tomcat/webapps"
                                 sh "sleep 3"
-                                sh "sshpass -p '$DREAMHOST_PW' ssh $DREAMHOST_UN@$DNS -o StrictHostKeyChecking=no '/opt/tomcat/bin/startup.sh'"
+                                sh "ssh $DREAMHOST_UN@$DNS -o StrictHostKeyChecking=no '/opt/tomcat/bin/startup.sh'"
                             }
                         } else if (env.BRANCH == "develop") {
                             sh "sudo mv target/ROOT.war /opt/tomcat/webapps/song-catalog.war"
@@ -82,7 +82,7 @@ pipeline {
                         string(credentialsId:'cfsongs_dns', variable: 'DNS')
                     ]) {
                         echo "Reverting app back to war $rollbackWar ..."
-                        sh "sshpass -p '$DREAMHOST_PW' ssh $DREAMHOST_UN@$DNS -o StrictHostKeyChecking=no 'cp $rollbackWar /opt/tomcat/webapps/ROOT.war'"
+                        sh "ssh $DREAMHOST_UN@$DNS -o StrictHostKeyChecking=no 'cp $rollbackWar /opt/tomcat/webapps/ROOT.war'"
                         echo "Rollback finished."
                     }
                 }
