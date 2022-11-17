@@ -4,6 +4,7 @@ package com.sjwi.catalog.controller;
 import static com.sjwi.catalog.model.KeySet.LYRICS_ONLY_KEY_CODE;
 
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
@@ -151,10 +152,11 @@ public class FileDownloadController {
               ? "Song_Catalog_Export" + date
               : controllerHelper.normalizeString(fileName + date);
       response.addHeader("Content-Disposition", "attachment; filename=\"" + fileName + ".pptx\"");
-      Files.copy(
-          Paths.get(pptGenerator.buildFile(new SetList("", songs))), response.getOutputStream());
+      Path filePath = Paths.get(pptGenerator.buildFile(new SetList("", songs)));
+      Files.copy(filePath, response.getOutputStream());
       logger.logUserActionWithEmail(
           fileName + " ppt downloaded." + "\n" + controllerHelper.getFullUrl());
+      Files.delete(filePath);
     } catch (Exception e) {
       controllerHelper.errorHandler(e);
     }
@@ -186,9 +188,11 @@ public class FileDownloadController {
       pdfGenerator.buildFile(new SetList("", songs));
       response.setContentType("application/pdf; name=\"" + fileName + "\"");
       response.addHeader("Content-Disposition", "inline; filename=\"" + fileName + ".pdf\"");
-      Files.copy(Paths.get(pdfGenerator.getFilePath()), response.getOutputStream());
+      Path filePath = Paths.get(pdfGenerator.getFilePath());
+      Files.copy(filePath, response.getOutputStream());
       logger.logUserActionWithEmail(
           fileName + " pdf downloaded." + "\n" + controllerHelper.getFullUrl());
+      Files.delete(filePath);
     } catch (Exception e) {
       controllerHelper.errorHandler(e);
     }
