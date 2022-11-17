@@ -1,20 +1,23 @@
 /* (C)2022 https://stephenky.com */
 package com.sjwi.catalog.mail;
 
-import com.sjwi.catalog.exception.MailException;
-import com.sjwi.catalog.log.CustomLogger;
-import com.sjwi.catalog.model.mail.Email;
 import java.util.Arrays;
 import java.util.stream.Collectors;
+
 import javax.mail.Message;
 import javax.mail.MessagingException;
 import javax.mail.Session;
 import javax.mail.Transport;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
+
+import com.sjwi.catalog.exception.MailException;
+import com.sjwi.catalog.log.CustomLogger;
+import com.sjwi.catalog.model.mail.Email;
 
 @Component
 public class Mailer {
@@ -33,6 +36,7 @@ public class Mailer {
     try {
       sendMessage(email.getEmailMessage(session));
     } catch (MessagingException e) {
+      logger.error("Unable to send email", e);
       throw new MailException("Unable to send email\n" + email.toString(), e);
     }
   }
@@ -42,6 +46,7 @@ public class Mailer {
     try {
       sendMessage(email.getPlainEmailMessage(session));
     } catch (MessagingException e) {
+      logger.error("Unable to send email", e);
       throw new MailException("Unable to send email\n" + email.toString(), e);
     }
   }
