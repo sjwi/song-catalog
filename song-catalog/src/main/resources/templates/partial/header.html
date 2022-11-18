@@ -16,7 +16,6 @@
 <!-- 						<li><a class="dropdown-item" href="javascript:void(0)" onclick="notImplimented()" >Preferences</a></li> -->
 						<li><a class="dropdown-item" href="javascript:void(0)" onclick="inviteUser()">Invite User</a></li>
 						<li><a class="dropdown-item" href="javascript:void(0)" onclick="changePassword()" >Change Password</a></li>
-						<li sec:authorize="hasAuthority('SUPERADMIN')"><a class="dropdown-item" th:href="@{/logs}">User Feed</a></li>
 						<li sec:authorize="hasAuthority('SUPERADMIN')"><a class="dropdown-item" th:href="@{/structured-logs}">Structured Logs</a></li>
 						<li sec:authorize="hasAuthority('SUPERADMIN')"><a class="dropdown-item" target="_blank" th:href="@{/user-report}">User Report</a></li>
 						<li sec:authorize="hasAuthority('SUPERADMIN')"><a class="dropdown-item" href="javascript:void(0)" onclick="notImplimented()">User Access Control</a></li>
