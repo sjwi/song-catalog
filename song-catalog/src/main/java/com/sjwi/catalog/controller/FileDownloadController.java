@@ -218,9 +218,11 @@ public class FileDownloadController {
       fileName =
           fileName == null ? song.getNormalizedName() : controllerHelper.normalizeString(fileName);
       response.addHeader("Content-Disposition", "attachment; filename=\"" + fileName + ".pptx\"");
-      Files.copy(Paths.get(pptGenerator.buildFile(song)), response.getOutputStream());
+      Path filePath = Paths.get(pptGenerator.buildFile(song));
+      Files.copy(filePath, response.getOutputStream());
       logger.logUserActionWithEmail(
           fileName + " ppt downloaded." + "\n" + controllerHelper.getFullUrl());
+      Files.delete(filePath);
     } catch (Exception e) {
       controllerHelper.errorHandler(e);
     }
@@ -248,9 +250,11 @@ public class FileDownloadController {
               ? setList.getNormalizedSetListName()
               : controllerHelper.normalizeString(fileName);
       response.addHeader("Content-Disposition", "attachment; filename=\"" + fileName + ".pptx\"");
-      Files.copy(Paths.get(pptGenerator.getFilePath()), response.getOutputStream());
+      Path filePath = Paths.get(pptGenerator.getFilePath())
+      Files.copy(filePath, response.getOutputStream());
       logger.logUserActionWithEmail(
           fileName + " ppt downloaded." + "\n" + controllerHelper.getFullUrl());
+      Files.delete(filePath);
     } catch (Exception e) {
       controllerHelper.errorHandler(e);
     }
@@ -280,9 +284,11 @@ public class FileDownloadController {
       else if (key != null) song = song.transpose(key);
       response.setContentType("application/pdf; name=\"" + fileName + "\"");
       response.addHeader("Content-Disposition", "inline; filename=\"" + fileName + ".pdf\"");
-      Files.copy(Paths.get(pdfGenerator.buildFile(song)), response.getOutputStream());
+      Path filePath = Paths.get(pdfGenerator.buildFile(song));
+      Files.copy(filePath, response.getOutputStream());
       logger.logUserActionWithEmail(
           fileName + " pdf downloaded." + "\n" + controllerHelper.getFullUrl());
+      Files.delete(filePath);
     } catch (Exception e) {
       controllerHelper.errorHandler(e);
     }
@@ -315,7 +321,9 @@ public class FileDownloadController {
               : controllerHelper.normalizeString(fileName);
       response.setContentType("application/pdf; name=\"" + fileName + "\"");
       response.addHeader("Content-Disposition", "inline; filename=\"" + fileName + ".pdf\"");
-      Files.copy(Paths.get(pdfGenerator.getFilePath()), response.getOutputStream());
+      Path filePath = Paths.get(pdfGenerator.getFilePath());
+      Files.copy(filePath, response.getOutputStream());
+      Files.delete(filePath);
     } catch (Exception e) {
       controllerHelper.errorHandler(e);
     }
