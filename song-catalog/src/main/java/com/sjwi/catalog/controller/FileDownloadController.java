@@ -250,7 +250,7 @@ public class FileDownloadController {
               ? setList.getNormalizedSetListName()
               : controllerHelper.normalizeString(fileName);
       response.addHeader("Content-Disposition", "attachment; filename=\"" + fileName + ".pptx\"");
-      Path filePath = Paths.get(pptGenerator.getFilePath())
+      Path filePath = Paths.get(pptGenerator.getFilePath());
       Files.copy(filePath, response.getOutputStream());
       logger.logUserActionWithEmail(
           fileName + " ppt downloaded." + "\n" + controllerHelper.getFullUrl());
