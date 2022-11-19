@@ -39,7 +39,10 @@ pipeline {
                                 usernamePassword(credentialsId: 'dreamhost_cfsongs', usernameVariable: 'DREAMHOST_UN', passwordVariable: 'DREAMHOST_PW'),
                                 string(credentialsId:'cfsongs_dns', variable: 'DNS')
                             ]) {
+                                sh "ssh $DREAMHOST_UN@$DNS -o StrictHostKeyChecking=no 'sudo systemctl stop tomcat.service'"
                                 sh "scp target/ROOT.war $DREAMHOST_UN@$DNS:/opt/tomcat/webapps"
+                                sh "sleep 3"
+                                sh "ssh $DREAMHOST_UN@$DNS -o StrictHostKeyChecking=no 'sudo systemctl start tomcat.service'"
                             }
                         } else if (env.BRANCH == "develop") {
                             sh "sudo mv target/ROOT.war /opt/tomcat/webapps/song-catalog.war"
