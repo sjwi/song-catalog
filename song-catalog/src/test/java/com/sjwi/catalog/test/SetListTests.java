@@ -4,14 +4,9 @@ package com.sjwi.catalog.test;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
-import com.sjwi.catalog.model.SetList;
-import com.sjwi.catalog.model.song.SetListSong;
-import com.sjwi.catalog.model.song.Song;
-import com.sjwi.catalog.service.SetListService;
-import com.sjwi.catalog.service.SongService;
-import com.sjwi.catalog.test.config.SpringTestConfiguration;
 import java.util.ArrayList;
 import java.util.Arrays;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +14,13 @@ import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+
+import com.sjwi.catalog.model.SetList;
+import com.sjwi.catalog.model.song.SetListSong;
+import com.sjwi.catalog.model.song.Song;
+import com.sjwi.catalog.service.SetListService;
+import com.sjwi.catalog.service.SongService;
+import com.sjwi.catalog.test.config.SpringTestConfiguration;
 
 @EnableAutoConfiguration
 @SpringBootTest
