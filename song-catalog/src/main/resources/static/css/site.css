@@ -1226,6 +1226,9 @@ input[type=checkbox]{
 	max-height:100px!important;
 	overflow:scroll !important;
 }
+.select2-container--default .select2-results>.select2-results__options {
+	max-height: 250px;
+}
 li.select2-selection__choice,li.select2-results__option {
 	color: #4B4B4B !important;
 }

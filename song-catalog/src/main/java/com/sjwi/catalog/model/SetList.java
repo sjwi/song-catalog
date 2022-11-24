@@ -3,14 +3,13 @@ package com.sjwi.catalog.model;
 
 import static com.sjwi.catalog.model.KeySet.LYRICS_ONLY_KEY_CODE;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.sjwi.catalog.model.song.Song;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
-
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.sjwi.catalog.model.song.Song;
 
 public class SetList {
   private final int id;
@@ -139,11 +138,11 @@ public class SetList {
 
   public String getNamePrefix() {
     String[] nameArray = setListName.split(" ");
-    return String.join(" ",Arrays.copyOfRange(nameArray, 0, nameArray.length-1));
+    return String.join(" ", Arrays.copyOfRange(nameArray, 0, nameArray.length - 1));
   }
 
   public String getNameSuffix() {
     String[] nameArray = setListName.split(" ");
-    return nameArray[nameArray.length - 1].replace("-","/");
+    return nameArray[nameArray.length - 1].replace("-", "/");
   }
 }
