@@ -1,6 +1,13 @@
 /* (C)2022 https://stephenky.com */
 package com.sjwi.catalog.test;
 
+import com.sjwi.catalog.exception.FileUtilityException;
+import com.sjwi.catalog.file.FileGenerator;
+import com.sjwi.catalog.file.pdf.PdfFileGenerator;
+import com.sjwi.catalog.file.ppt.PptFileGenerator;
+import com.sjwi.catalog.service.SetListService;
+import com.sjwi.catalog.service.SongService;
+import com.sjwi.catalog.test.config.SpringTestConfiguration;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -9,14 +16,6 @@ import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-
-import com.sjwi.catalog.exception.FileUtilityException;
-import com.sjwi.catalog.file.FileGenerator;
-import com.sjwi.catalog.file.pdf.PdfFileGenerator;
-import com.sjwi.catalog.file.ppt.PptFileGenerator;
-import com.sjwi.catalog.service.SetListService;
-import com.sjwi.catalog.service.SongService;
-import com.sjwi.catalog.test.config.SpringTestConfiguration;
 
 @EnableAutoConfiguration
 @SpringBootTest

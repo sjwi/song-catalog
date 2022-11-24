@@ -1,18 +1,16 @@
 /* (C)2022 https://stephenky.com */
 package com.sjwi.catalog.dao.sql;
 
+import com.sjwi.catalog.dao.OrganizationDao;
+import com.sjwi.catalog.model.Organization;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
-
-import com.sjwi.catalog.dao.OrganizationDao;
-import com.sjwi.catalog.model.Organization;
 
 @Repository
 public class SqlOrganizationDao implements OrganizationDao {
