@@ -37,7 +37,7 @@
 				let lastService = localStorage.getItem(LAST_SERVICE_KEY);
 				$('#addSongsToSetForm select[name="subUnit"]').val(lastService).trigger('change');
 			} else {
-				$(".add-new-set").show();
+				$(".add-new-set").hide();
 			}
 		})
 	})
