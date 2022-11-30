@@ -3,21 +3,15 @@ package com.sjwi.catalog.controller;
 
 import static com.sjwi.catalog.log.CustomLogger.LOG_FILE_PROPERTY_KEY;
 
-import com.sjwi.catalog.aspect.IgnoreAspect;
-import com.sjwi.catalog.aspect.LandingPageAspect;
-import com.sjwi.catalog.aspect.ServletInitializerAspect;
-import com.sjwi.catalog.log.CustomLogger;
-import com.sjwi.catalog.model.LogEntry;
-import com.sjwi.catalog.model.ResponseMessage;
-import com.sjwi.catalog.model.user.CfUser;
-import com.sjwi.catalog.service.UserService;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
 import java.util.stream.Collectors;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
@@ -29,6 +23,15 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.servlet.ModelAndView;
+
+import com.sjwi.catalog.aspect.IgnoreAspect;
+import com.sjwi.catalog.aspect.LandingPageAspect;
+import com.sjwi.catalog.aspect.ServletInitializerAspect;
+import com.sjwi.catalog.log.CustomLogger;
+import com.sjwi.catalog.model.LogEntry;
+import com.sjwi.catalog.model.ResponseMessage;
+import com.sjwi.catalog.model.user.CfUser;
+import com.sjwi.catalog.service.UserService;
 
 @Controller
 @IgnoreAspect
@@ -101,7 +104,12 @@ public class ReportController {
   @LandingPageAspect
   @ResponseBody
   public LogData structuredLogData(
-      HttpServletResponse response, HttpServletRequest request, Authentication auth) {
+      HttpServletResponse response, HttpServletRequest request) throws IOException {
+    Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+    if (request.getUserPrincipal() == null
+        || !auth.getAuthorities().stream()
+            .anyMatch(a -> a.getAuthority().equalsIgnoreCase("SUPERADMIN")))
+        response.sendRedirect("/login");
     List<LogEntry> data = userService.getLogData();
     return new LogData(data);
   }
