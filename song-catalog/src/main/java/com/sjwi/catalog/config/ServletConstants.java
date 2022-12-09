@@ -17,6 +17,7 @@ public class ServletConstants {
   public static String CONTEXT_PATH;
   public static String BASE_URL;
   public static String FULL_URL;
+  public static String SCHEMELESS_URL;
   public static boolean IS_INITIALIZED = false;
 
   private static final List<String> IGNORE_PORT_LIST =
@@ -32,9 +33,12 @@ public class ServletConstants {
             : request.getScheme();
     SERVER_PORT = String.valueOf(request.getServerPort());
     CONTEXT_PATH = request.getContextPath().replaceAll("/", "");
-    BASE_URL = SCHEME + "://" + SERVER_NAME;
+    BASE_URL = SERVER_NAME;
     if (!IGNORE_PORT_LIST.contains(SERVER_PORT)) BASE_URL += ":" + SERVER_PORT;
     FULL_URL = CONTEXT_PATH.trim().isEmpty() ? BASE_URL : BASE_URL + "/" + CONTEXT_PATH;
+    SCHEMELESS_URL = FULL_URL;
+    BASE_URL = SCHEME + "://" + BASE_URL;
+    FULL_URL = SCHEME + "://" + FULL_URL;
     IS_INITIALIZED = !InetAddressValidator.getInstance().isValid(SERVER_NAME);
   }
 }

@@ -13,13 +13,13 @@ public class ShortLinkService {
 
   public String registerPath(String path) {
     String key = UUID.randomUUID().toString().substring(32);
-    Runnable myrunnable =
+    Runnable registerToDb =
         new Runnable() {
           public void run() {
             shortLinkDao.registerPath(key, path);
           }
         };
-    new Thread(myrunnable).start();
+    new Thread(registerToDb).start();
     return key;
   }
 
