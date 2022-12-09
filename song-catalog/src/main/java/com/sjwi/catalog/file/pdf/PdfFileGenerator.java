@@ -127,6 +127,8 @@ public class PdfFileGenerator implements FileGenerator {
       for (Song song : setList.getSongs()) {
         if (!document.isOpen()) {
           document.open();
+          document.addTitle(setList.getSetListName());
+          document.addSubject(setList.getSetListName());
         } else {
           pageNumber = writer.getPageNumber() + 1;
           document.newPage();
@@ -149,6 +151,8 @@ public class PdfFileGenerator implements FileGenerator {
     try {
       writer.setPageEvent(new DrawHeaderAndFooter(song));
       document.open();
+      document.addTitle(song.getName());
+      document.addSubject(song.getName());
       drawSong(song.getName(), song.getBodyAsChunks());
     } catch (Exception e) {
       throw new FileUtilityException("Unable to build pdf for song " + song.getName(), e);

@@ -97,9 +97,26 @@ function copyDownloadUrl(e){
 	e.preventDefault();
 	copyTextToClipboard($('#copyDownloadLinkBtn').data('basecontext') + generateDownloadLinkWithFormParams());
 }
+
 function generateDownloadLinkWithFormParams(){
-	return downloadBaseUri + '/' + encodeURI($('#downloadForm').find('.filename').val()) + '?' + $('#downloadForm').filter('*').find(':visible,.hidden-key').not('.filename').serialize();
+	let sl_path = downloadBaseUri + '/' + encodeURI($('#downloadForm').find('.filename').val()) + '?' + $('#downloadForm').filter('*').find(':visible,.hidden-key').not('.filename').serialize();
+	let ret_link
+	$.ajax({
+		url: contextpath + "sl?path=" + encodeURIComponent(sl_path),
+		async: false,
+		method: "GET",
+		success: function(data) {
+			console.log(data)
+			ret_link = "/z." + data.sl_key
+		},
+		error: function(data) {
+			ret_link = sl_path
+		}
+	})
+
+	return ret_link
 }
+
 function generateRandomDownloadLinkWithFormParams(){
 	return downloadBaseUri + '/' + encodeURI($('#downloadForm').find('.filename').val() + '_' + (Math.floor(Math.random() * 100000) + 1).toString()) + '?' + $('#downloadForm').filter('*').find(':visible,.hidden-key').not('.filename').serialize();
 }
