@@ -461,3 +461,12 @@ cleanBots: >
 
 cleanOldLogs: >
   DELETE from Log where ACTION_TIMESTAMP < now() - interval 90 DAY
+
+registerPath: >
+  INSERT INTO ShortLink (SL_KEY, PATH) values (?,?)
+
+getPath: >
+  SELECT PATH FROM ShortLink where SL_KEY = ?
+
+deleteRegisteredKey: >
+  DELETE FROM ShortLink WHERE SL_KEY = ?

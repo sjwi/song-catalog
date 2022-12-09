@@ -3,17 +3,9 @@ package com.sjwi.catalog.controller;
 
 import static com.sjwi.catalog.model.KeySet.LYRICS_ONLY_KEY_CODE;
 
-import com.sjwi.catalog.aspect.ServletInitializerAspect;
-import com.sjwi.catalog.file.FileGenerator;
-import com.sjwi.catalog.file.pdf.PdfFileGenerator;
-import com.sjwi.catalog.file.ppt.PptFileGenerator;
-import com.sjwi.catalog.log.CustomLogger;
-import com.sjwi.catalog.model.ResponseMessage;
-import com.sjwi.catalog.model.SetList;
-import com.sjwi.catalog.model.song.Song;
-import com.sjwi.catalog.service.FileDispatcherService;
-import com.sjwi.catalog.service.SetListService;
-import com.sjwi.catalog.service.SongService;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -24,8 +16,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -37,6 +31,19 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
+
+import com.sjwi.catalog.aspect.ServletInitializerAspect;
+import com.sjwi.catalog.file.FileGenerator;
+import com.sjwi.catalog.file.pdf.PdfFileGenerator;
+import com.sjwi.catalog.file.ppt.PptFileGenerator;
+import com.sjwi.catalog.log.CustomLogger;
+import com.sjwi.catalog.model.ResponseMessage;
+import com.sjwi.catalog.model.SetList;
+import com.sjwi.catalog.model.song.Song;
+import com.sjwi.catalog.service.FileDispatcherService;
+import com.sjwi.catalog.service.SetListService;
+import com.sjwi.catalog.service.ShortLinkService;
+import com.sjwi.catalog.service.SongService;
 
 @Controller
 public class FileDownloadController {
@@ -50,6 +57,8 @@ public class FileDownloadController {
   @Autowired CustomLogger logger;
 
   @Autowired FileDispatcherService fileDispatcherService;
+
+  @Autowired ShortLinkService shortLinkService;
 
   @ServletInitializerAspect
   @RequestMapping(
@@ -324,5 +333,28 @@ public class FileDownloadController {
     } catch (Exception e) {
       controllerHelper.errorHandler(e);
     }
+  }
+
+  @RequestMapping(
+    value = {"/sl"},
+    method = RequestMethod.GET
+  )
+  @ResponseBody
+  public Map.Entry<String, String> registerShortLink(@RequestParam String path) throws UnsupportedEncodingException {
+    path = URLDecoder.decode(path, StandardCharsets.UTF_8.name());
+    while (path.startsWith("/"))
+      path = path.substring(1);
+    return Map.entry("sl_key", shortLinkService.registerPath(path));
+  }
+
+  @RequestMapping(
+    value = {"z.{key}"},
+    method = RequestMethod.GET
+  )
+  public ModelAndView shortLink(@PathVariable String key) {
+    String path = shortLinkService.getPath(key);
+    return new ModelAndView(
+        "forward:/" + path
+    );
   }
 }
