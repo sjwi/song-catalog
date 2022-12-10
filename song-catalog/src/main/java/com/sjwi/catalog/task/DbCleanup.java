@@ -1,12 +1,13 @@
 /* (C)2022 https://stephenky.com */
 package com.sjwi.catalog.task;
 
-import com.sjwi.catalog.dao.UserDao;
-import com.sjwi.catalog.log.CustomLogger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
+
+import com.sjwi.catalog.dao.UserDao;
+import com.sjwi.catalog.log.CustomLogger;
 
 @Component
 public class DbCleanup {
@@ -20,7 +21,6 @@ public class DbCleanup {
       havingValue = "com.mysql.jdbc.Driver",
       matchIfMissing = false)
   public void cleanDb() {
-    logger.logMessageWithEmail("Cleaning up bots from db");
     userDao.cleanBots();
   }
 }
