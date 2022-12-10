@@ -91,15 +91,17 @@ function generateDownloadQRCode(e){
 }
 function refreshDownloadQrCode(){
 	$('#dlQrCode').html('');
-	new QRCode(document.getElementById("dlQrCode"), $('#copyDownloadLinkBtn').data('basecontext') + generateDownloadLinkWithFormParams());
+	new QRCode(document.getElementById("dlQrCode"), $('#copyDownloadLinkBtn').data('basecontext') + generateDownloadLinkWithFormParams(false));
 }
 function copyDownloadUrl(e){
 	e.preventDefault();
 	copyTextToClipboard($('#copyDownloadLinkBtn').data('basecontext') + generateDownloadLinkWithFormParams());
 }
 
-function generateDownloadLinkWithFormParams(){
+function generateDownloadLinkWithFormParams(short = true){
 	let sl_path = downloadBaseUri + '/' + encodeURI($('#downloadForm').find('.filename').val()) + '?' + $('#downloadForm').filter('*').find(':visible,.hidden-key').not('.filename').serialize();
+	if (!short)
+		return sl_path
 	let ret_link
 	$.ajax({
 		url: contextpath + "sl?path=" + encodeURIComponent(sl_path),
@@ -113,7 +115,6 @@ function generateDownloadLinkWithFormParams(){
 			ret_link = sl_path
 		}
 	})
-
 	return ret_link
 }
 
