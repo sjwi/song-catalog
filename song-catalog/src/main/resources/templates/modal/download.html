@@ -95,7 +95,7 @@ function refreshDownloadQrCode(){
 }
 function copyDownloadUrl(e){
 	e.preventDefault();
-	copyTextToClipboard($('#copyDownloadLinkBtn').data('schemelessbasecontext') + generateDownloadLinkWithFormParams());
+	copyTextToClipboard($('#copyDownloadLinkBtn').data('basecontext') + generateDownloadLinkWithFormParams());
 }
 
 function generateDownloadLinkWithFormParams(){
