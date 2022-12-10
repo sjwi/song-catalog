@@ -107,7 +107,7 @@ function generateDownloadLinkWithFormParams(){
 		method: "GET",
 		success: function(data) {
 			console.log(data)
-			ret_link = "/z." + data.sl_key
+			ret_link = "/" + data.sl_key
 		},
 		error: function(data) {
 			ret_link = sl_path

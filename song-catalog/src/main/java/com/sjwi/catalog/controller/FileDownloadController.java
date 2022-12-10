@@ -35,6 +35,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -340,15 +341,17 @@ public class FileDownloadController {
       throws UnsupportedEncodingException {
     path = URLDecoder.decode(path, StandardCharsets.UTF_8.name());
     while (path.startsWith("/")) path = path.substring(1);
-    return Map.entry("sl_key", shortLinkService.registerPath(path));
+    String key = shortLinkService.registerPath(path);
+    logger.logUserActionWithEmail(String.format("Short link %s generated.", key));
+    return Map.entry("sl_key", key);
   }
 
-  @RequestMapping(
-      value = {"z.{key}"},
-      method = RequestMethod.GET)
-  public ModelAndView shortLink(@PathVariable String key) {
+  @GetMapping(value = {"{prefix}z{suffix}"})
+  public ModelAndView shortLink(@PathVariable String prefix, @PathVariable String suffix) {
+    String key = String.format("%sz%s", prefix, suffix);
     String path = shortLinkService.getPath(key);
     String action = controllerHelper.getOs().equalsIgnoreCase("UNKNOWN") ? "redirect" : "forward";
+    logger.logUserActionWithEmail(String.format("Short link %s visited.", key));
     return new ModelAndView(action + ":/" + path);
   }
 }
