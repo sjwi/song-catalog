@@ -470,3 +470,18 @@ getPath: >
 
 deleteRegisteredKey: >
   DELETE FROM ShortLink WHERE SL_KEY = ?
+
+createSetListState: >
+  INSERT INTO SetListState (USER_ID, SETLIST_ID) values (?,?)
+
+getSetlistStateForUser: >
+  SELECT * FROM SetListState WHERE USER_ID = ? AND SETLIST_ID = ?
+
+getAllSetlistStatesForUser: >
+  SELECT * FROM SetListState WHERE USER_ID = ?
+
+updateSetListSessionState: >
+  UPDATE SetListState SET SETTINGS = ? WHERE USER_ID = ? AND SETLIST_ID = ?
+
+removeSetListSessionState: >
+  DELETE FROM SetListState where USER_ID = ? and SETLIST_ID = ?

@@ -7,6 +7,8 @@ import com.sjwi.catalog.controller.ControllerHelper;
 import com.sjwi.catalog.dao.UserDao;
 import com.sjwi.catalog.exception.PasswordException;
 import com.sjwi.catalog.model.LogEntry;
+import com.sjwi.catalog.model.SetListState;
+import com.sjwi.catalog.model.SetListState.SetSongSetting;
 import com.sjwi.catalog.model.addressbook.AddressBookEntry;
 import com.sjwi.catalog.model.user.CfUser;
 import com.sjwi.catalog.model.user.UserState;
@@ -178,7 +180,9 @@ public class UserService implements UserDetailsService {
       HttpServletRequest request =
           ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
       try {
+        // session empty
         if (request.getSession().getAttribute(ANONYMOUS_COOKIE_TOKEN_KEY) == null) {
+          // but cookie exists
           if (request.getCookies() != null
               && Arrays.stream(request.getCookies())
                   .filter(c -> ANONYMOUS_COOKIE_TOKEN_KEY.equals(c.getName()))
@@ -195,6 +199,7 @@ public class UserService implements UserDetailsService {
                             .get()
                             .getValue()));
           } else {
+            // New user
             String cookieToken = StringUtils.randomAlphanumeric(200);
             createAnonymousUser(cookieToken);
             ControllerHelper.buildStaticCookie(ANONYMOUS_COOKIE_TOKEN_KEY, cookieToken);
@@ -220,5 +225,27 @@ public class UserService implements UserDetailsService {
 
   public void addUserState(UserState userState, Principal principal) {
     userDao.addUserState(userState, principal.getName());
+  }
+
+  public SetListState getSetState(int setId) {
+    String user = this.getSessionUsername();
+    return userDao.getSetlistStateForUser(user, setId, false);
+  }
+
+  public void updateSetState(int setId, int setSongId, SetSongSetting state) {
+    String user = this.getSessionUsername();
+    SetListState existingSetState = userDao.getSetlistStateForUser(user, setId, true);
+    existingSetState.updateSetting(setSongId, state);
+    userDao.updateSetListSessionState(user, setId, existingSetState);
+  }
+
+  public void removeSetState(int setId) {
+    String user = this.getSessionUsername();
+    userDao.removeSetListSessionState(user, setId);
+  }
+
+  public Map<Integer, SetListState> getAllSetlistStatesForUser() {
+    String user = this.getSessionUsername();
+    return userDao.getAllSetlistStatesForUser(user);
   }
 }

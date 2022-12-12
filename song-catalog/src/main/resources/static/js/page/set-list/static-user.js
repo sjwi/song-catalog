@@ -114,7 +114,8 @@ function changeKeyForSetSong(key,songId,setId){
 			defaultKey : key
 		},
 		success: function(data) {
-			reloadSetSongContainerIfPresent(setId);
+			reloadSetContainerIfPresent(setId)
+			reloadSetSongContainerIfPresent(setId)
 		},
 		error: function(data){
 			alertWithFade('danger','Something went wrong! Unable to update key for song.')

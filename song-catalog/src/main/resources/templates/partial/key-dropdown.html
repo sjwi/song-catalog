@@ -1,27 +1,20 @@
-<th:block th:fragment="keySet(keySelected,className)">
-	<select th:disabled="${!#authorization.expression('hasAuthority(''USER'')') && !#strings.contains(#httpServletRequest.requestURI, 'setlist/')}"  class="btn btn-secondary btn-sm dropdown-toggle required key-select" title="Select a key" th:name="${className}">
+<th:block th:fragment="keySet(keySelected,className)" th:with="overridden=${overridden}?: false">
+	<select class="btn btn-sm dropdown-toggle required key-select mw-w-50" title="Select a key" th:name="${className}"
+		th:classappend="${overridden}? (${capo != 0}? (${capo > 9}? 'btn-warning pr-0px': 'btn-warning pr-1px'): 'btn-warning'): 'btn-secondary'">
 		<th:block th:if="${keySelected == 'N'}">
 			<option value="" selected></option>
 		</th:block>
-		<option value="A" th:selected="${keySelected == 'A'}">A</option>
-		<option value="B" th:selected="${keySelected == 'B'}">B</option>
-		<option value="C" th:selected="${keySelected == 'C'}">C</option>
-		<option value="D" th:selected="${keySelected == 'D'}">D</option>
-		<option value="E" th:selected="${keySelected == 'E'}">E</option>
-		<option value="F" th:selected="${keySelected == 'F'}">F</option>
-		<option value="G" th:selected="${keySelected == 'G'}">G</option>
-		<option value="L" th:selected="${keySelected == 'L'}" data-toggle="tooltip" data-placement="bottom" title="Lyrics only">L</option>
+		<th:block
+			th:with="suffix=${capo != null && capo != 0}? '*' + ${capo}: ''"
+			>
+			<option value="A" th:selected="${keySelected == 'A'}" th:text="${overridden && keySelected == 'A'? 'A' + suffix: 'A'}">A</option>
+			<option value="B" th:selected="${keySelected == 'B'}" th:text="${overridden && keySelected == 'B'? 'B' + suffix: 'B'}">B</option>
+			<option value="C" th:selected="${keySelected == 'C'}" th:text="${overridden && keySelected == 'C'? 'C' + suffix: 'C'}">C</option>
+			<option value="D" th:selected="${keySelected == 'D'}" th:text="${overridden && keySelected == 'D'? 'D' + suffix: 'D'}">D</option>
+			<option value="E" th:selected="${keySelected == 'E'}" th:text="${overridden && keySelected == 'E'? 'E' + suffix: 'E'}">E</option>
+			<option value="F" th:selected="${keySelected == 'F'}" th:text="${overridden && keySelected == 'F'? 'F' + suffix: 'F'}">F</option>
+			<option value="G" th:selected="${keySelected == 'G'}" th:text="${overridden && keySelected == 'G'? 'G' + suffix: 'G'}">G</option>
+			<option value="L" th:selected="${keySelected == 'L'}" data-toggle="tooltip" data-placement="bottom" title="Lyrics only">L</option>
+		</th:block>
 	</select>
-	<div class="collapse text-center confirm-keychange">
-		<div class="btn btn-warning transpose-local transpose-confirm text-center">
-			<div class="transpose-btn">
-				Transpose for me
-			</div>
-		</div>
-		<div class="btn btn-info transpose-global transpose-confirm text-center">
-			<div class="transpose-btn">
-				Transpose for everyone
-			</div>
-		</div>
-	</div>
 </th:block>

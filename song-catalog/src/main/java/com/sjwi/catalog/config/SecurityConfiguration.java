@@ -66,6 +66,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         .permitAll()
         .antMatchers("/enroll")
         .permitAll()
+        .antMatchers("/setlist/state/**")
+        .permitAll()
         .antMatchers("/favicon.ico")
         .permitAll()
         .antMatchers(HttpMethod.GET, "/addressbook*")

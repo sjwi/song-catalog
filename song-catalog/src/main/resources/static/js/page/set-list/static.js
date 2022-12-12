@@ -57,24 +57,27 @@ function pollForSetListUpdate(setListId) {
 }
 
 
-function localSetKeyChange(setListContainer){
-	var setId = $(setListContainer).data('target');
+function localSetKeyChange(setId, setSongId, key, capo) {
 	var songContainer = '.song-page-container[id="' + setId +'"]';
-	var songKeys = [] ;
-	$(setListContainer).find('.set-song-row').each(function(){
-		songKeys.push($(this).find('select[name="defaultKey"]').val());
-	});
-	$.ajax({
-		url: contextpath + 'setlist/details/' + setId + '?view=dynamic/song-container',
-		method: "GET",
-		data : {keys: songKeys},
+	if (!capo || capo == "")
+		capo = null
+	let data = {}
+	data[setSongId] = {
+		key: key,
+		capo: capo
+	}
+	let url = contextpath + 'setlist/state/' + setId
+	$(songContainer).html($('.loading'));
+	$.post({
+		url: url,
+		contentType: "application/json; charset=utf-8",
+		method: "POST",
+		data : JSON.stringify(data),
 		beforeSend: function(jqxhr,settings){
-			window.history.replaceState('transposed', 'transposeSetList', '/setlist/' + setId + '?' + settings.url.split('song-container&')[1]);
-			$(songContainer).html($('.loading'));
 		},
 		success: function(data, textStatus, jqXHR) {
-			$(songContainer).html(data);
-			slick();
+			reloadSetContainerIfPresent(setId)
+			reloadSetSongContainerIfPresent(setId)
 		}
 	});
 }

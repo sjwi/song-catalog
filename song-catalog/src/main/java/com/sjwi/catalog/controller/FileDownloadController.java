@@ -342,7 +342,7 @@ public class FileDownloadController {
     path = URLDecoder.decode(path, StandardCharsets.UTF_8.name());
     while (path.startsWith("/")) path = path.substring(1);
     String key = shortLinkService.registerPath(path);
-    logger.logUserActionWithEmail(String.format("Short link %s generated.", key));
+    logger.logUserActionWithEmail(String.format("Short link %s generated", key));
     return Map.entry("sl_key", key);
   }
 
@@ -351,7 +351,7 @@ public class FileDownloadController {
     String key = String.format("%sz%s", prefix, suffix);
     String path = shortLinkService.getPath(key);
     String action = controllerHelper.getOs().equalsIgnoreCase("UNKNOWN") ? "redirect" : "forward";
-    logger.logUserActionWithEmail(String.format("Short link %s visited.", key));
+    logger.logUserActionWithEmail(String.format("Short link %s visited", key));
     return new ModelAndView(action + ":/" + path);
   }
 }

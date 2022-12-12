@@ -8,6 +8,7 @@ import com.sjwi.catalog.log.CustomLogger;
 import com.sjwi.catalog.model.TransposableString;
 import com.sjwi.catalog.service.SetListService;
 import com.sjwi.catalog.service.SongService;
+import com.sjwi.catalog.service.UserService;
 import com.sjwi.catalog.service.VersionService;
 import java.security.Principal;
 import java.util.Date;
@@ -37,6 +38,8 @@ public class SetListPopulationController {
   @Autowired VersionService versionService;
 
   @Autowired CustomLogger logger;
+
+  @Autowired UserService userService;
 
   @RequestMapping(
       value = {"setlist/add-song"},
@@ -213,6 +216,8 @@ public class SetListPopulationController {
       HttpServletResponse response) {
     try {
       setListService.setDefaultSetKey(newKey, songId);
+      Integer setListId = setListService.getSetListIdBySong(songId);
+      userService.removeSetState(setListId);
     } catch (Exception e) {
       controllerHelper.errorHandler(e);
     }

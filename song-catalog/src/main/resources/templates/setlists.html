@@ -42,18 +42,18 @@
 		<script th:inline="javascript" th:src="@{/js/page/set-list/user.js}"></script>
 		<script th:inline="javascript" th:src="@{/js/page/set-list/static-user.js}"></script>
 		<script th:inline="javascript" th:src="@{/js/page/song/user.js}"></script>
-		<script th:inline="javascript" th:src="@{/js/page/set-list/key-change/user.js}"></script>
 		<script type="text/javascript">
 			var setContainerIgnoreSelector = '.delete-set,.delete-set span,.ignore-nav,a,table,tbody,td,tr,img,.col,.btn,.dropdown-item,button,.close-dark,.grip-container,.set-grip';
 		</script>
 	</th:block>
+	<script th:inline="javascript" th:src="@{/js/page/set-list/key-change/local.js}"></script>
 	<script th:inline="javascript" th:src="@{/js/page/set-list/static.js}"></script>
 
 	<script th:inline="javascript" th:src="@{/js/page/song/page.js}"></script>
 	<script th:inline="javascript" th:src="@{/js/page/song/static.js}"></script>
 
 	<script type="text/javascript" sec:authorize="!hasAuthority('USER')">
-		var setContainerIgnoreSelector = '.col,img';
+		var setContainerIgnoreSelector = '.col,img,.btn';
 	</script>
 	<script>
 		var focusedSet;

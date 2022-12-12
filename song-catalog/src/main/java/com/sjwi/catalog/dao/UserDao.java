@@ -2,6 +2,7 @@
 package com.sjwi.catalog.dao;
 
 import com.sjwi.catalog.model.LogEntry;
+import com.sjwi.catalog.model.SetListState;
 import com.sjwi.catalog.model.user.CfUser;
 import com.sjwi.catalog.model.user.UserState;
 import java.util.Collection;
@@ -61,4 +62,12 @@ public interface UserDao {
   public void addUserState(UserState userState, String name);
 
   public void cleanBots();
+
+  public SetListState getSetlistStateForUser(String user, int setId, boolean create);
+
+  public void updateSetListSessionState(String user, int setId, SetListState existingSetState);
+
+  public void removeSetListSessionState(String user, int setId);
+
+  public Map<Integer, SetListState> getAllSetlistStatesForUser(String user);
 }

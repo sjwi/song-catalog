@@ -1,8 +1,14 @@
 /* (C)2022 https://stephenky.com */
 package com.sjwi.catalog.controller;
 
+import com.sjwi.catalog.model.SetList;
+import com.sjwi.catalog.model.SetListState;
 import com.sjwi.catalog.service.SetListService;
 import com.sjwi.catalog.service.SongService;
+import com.sjwi.catalog.service.UserService;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +27,8 @@ public class SearchController {
   @Autowired SetListService setListService;
 
   @Autowired ControllerHelper controllerHelper;
+
+  @Autowired UserService userService;
 
   @RequestMapping(
       value = {"/search/song"},
@@ -49,13 +57,25 @@ public class SearchController {
       @RequestParam(value = "searchValue", required = false) String searchValue) {
     try {
       ModelAndView mv = null;
+      List<SetList> setlists;
       if (searchValue == null || searchValue.isEmpty()) {
         mv = new ModelAndView("dynamic/set-list-table");
-        mv.addObject("sets", setListService.getSetLists(10));
+        setlists = setListService.getSetLists(10);
       } else {
         mv = new ModelAndView("dynamic/set-list-page");
-        mv.addObject("sets", setListService.searchSetLists(searchValue));
+        setlists = setListService.searchSetLists(searchValue);
       }
+      Map<Integer, SetListState> state = userService.getAllSetlistStatesForUser();
+      setlists =
+          setlists.stream()
+              .map(
+                  s -> {
+                    if (state.containsKey(s.getId())) return s.transpose(state.get(s.getId()));
+                    else return s;
+                  })
+              .collect(Collectors.toList());
+      mv.addObject("sets", setlists);
+      mv.addObject("setListStates", state);
       return mv;
     } catch (Exception e) {
       return controllerHelper.errorHandler(e);

@@ -112,4 +112,8 @@ public class SetListService {
   public void pinLatestSetList(int id) {
     setListDao.flagSetListAsMostRecent(id);
   }
+
+  public Integer getSetListIdBySong(int songId) {
+    return setListDao.getSetListIdForSetSong(songId);
+  }
 }

@@ -40,8 +40,11 @@
 							</svg>
 						</div>
 					</th:block>
-					<span class="text-ellipsis set-row-title" th:text="${setSong.name}">
-					</span>
+					<th:block>
+						<span
+							class="text-ellipsis set-row-title" th:text="${setSong.name}">
+						</span>
+					</th:block>
 				</td>
 				<td width="30px" class="align-middle">
 					<th:block sec:authorize="hasAuthority('USER')">
@@ -61,8 +64,12 @@
 						</ul>
 					</th:block>
 				</td>
-				<td width="80px" class="text-center key-select">
-					<th:block th:replace="partial/key-dropdown :: keySet(${setSong.defaultKey},'defaultKey')"></th:block>
+				<td width="80px" class="text-center key-select"
+					th:with="overridden=${setListState != null && setListState.songSettings.containsKey(setSong.setListSongId)},capo=${setListState != null && setListState.songSettings.containsKey(setSong.setListSongId)? setListState.songSettings.get(setSong.setListSongId).capo: null}"
+				>
+					<th:block
+						th:replace="partial/key-dropdown :: keySet(${setSong.defaultKey},'defaultKey')"
+					></th:block>
 				</td>
 				<td width="10px" class="text-right align-middle">
 					<button sec:authorize="hasAuthority('USER')" type="button" class="close" aria-label="Close">
