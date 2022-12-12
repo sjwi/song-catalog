@@ -3,6 +3,9 @@
 		<div class="modal-content">
 			<div class="modal-header">
 				<h5 class="modal-title">Change Key</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+				  <span aria-hidden="true">&times;</span>
+				</button>
 			</div>
 			<div class="modal-body">
 				<input type="hidden" id="stateKey">
@@ -11,12 +14,12 @@
 				<div th:classappend="${#authorization.expression('hasAuthority(''USER'')')}? 'collapse':'no-auth'" class="row" id="capoSection">
 					<div class="col-md-10 mx-auto">
 						<div class="row">
-							<div class="col-1">
+							<div class="col-1" th:if="${#authorization.expression('hasAuthority(''USER'')')}">
 								<label class="col-form-label">
 									<i id="transposeBack" class="fa fa-arrow-left" aria-hidden="true"></i>
 								</label>
 							</div>
-							<div class="col-3">
+							<div class="col">
 								<label class="col-form-label">Capo</label>
 							</div>
 							<div class="col-8">
@@ -41,7 +44,7 @@
 				</div>
 				<div class="row my-3">
 					<div class="col-md-10 mx-auto">
-						<button class="btn-warning btn-lg w-100" id="transposeForMe">
+						<button class="btn-warning btn-lg w-100" id="transposeForMe" th:text="${#authorization.expression('hasAuthority(''USER'')')}? 'Transpose for me': 'Transpose'">
 							Transpose for me
 						</button>
 					</div>

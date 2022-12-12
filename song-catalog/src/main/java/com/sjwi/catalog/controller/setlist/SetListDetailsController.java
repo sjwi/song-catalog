@@ -23,6 +23,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.sjwi.catalog.aspect.LandingPageAspect;
 import com.sjwi.catalog.controller.ControllerHelper;
+import com.sjwi.catalog.log.CustomLogger;
 import com.sjwi.catalog.model.SetList;
 import com.sjwi.catalog.model.SetListState;
 import com.sjwi.catalog.model.SetListState.SetSongSetting;
@@ -46,6 +47,8 @@ public class SetListDetailsController {
   @Autowired SongService songService;
 
   @Autowired UserService userService;
+
+  @Autowired CustomLogger logger;
 
   @LandingPageAspect
   @RequestMapping(
@@ -132,6 +135,7 @@ public class SetListDetailsController {
       method = RequestMethod.POST)
   @ResponseStatus(value = HttpStatus.OK)
   public void updateSetSettings(@PathVariable Integer id, @RequestBody Map.Entry<Integer, SetSongSetting> body) {
+    logger.logUserActionWithEmail("Setlist state set");
     SetList sl = setListService.getSetListById(id);
     String defKey = sl.getSongs().stream().filter(s -> ((SetListSong) s).getSetListSongId() == body.getKey()).findAny().get().getDefaultKey();
     if (defKey.equals(body.getValue().getKey().toString()))
