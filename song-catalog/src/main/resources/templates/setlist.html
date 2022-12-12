@@ -39,9 +39,8 @@
 		<script th:inline="javascript" th:src="@{/js/page/set-list/user.js}"></script>
 		<script th:inline="javascript" th:src="@{/js/page/set-list/static-user.js}"></script>
 		<script th:inline="javascript" th:src="@{/js/page/song/user.js}"></script>
-		<script th:inline="javascript" th:src="@{/js/page/set-list/key-change/setlist-user.js}"></script>
 	</th:block>
-	<script sec:authorize="!hasAuthority('USER')" th:inline="javascript" th:src="@{/js/page/set-list/key-change/local.js}"></script>
+	<script th:inline="javascript" th:src="@{/js/page/set-list/key-change/local.js}"></script>
 	<script th:inline="javascript" th:src="@{/js/page/set-list/static.js}"></script>
 
 	<script th:inline="javascript" th:src="@{/js/page/song/page.js}"></script>

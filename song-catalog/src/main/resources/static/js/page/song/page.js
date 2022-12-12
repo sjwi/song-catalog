@@ -12,7 +12,6 @@ $(document).ready(function(){
 					$('.back-btn').removeClass('showme');
 					$('#overlay').addClass("overlay");
 					$(this).addClass('focused-page');
-					$('.confirm-keychange').hide();
 					lockScroll();
 				}
 				$('.slick-container').slick('unslick');
@@ -26,7 +25,6 @@ $(document).ready(function(){
 				$('.song-page-container').removeClass('focused-page');
 				$('.song-page-container').addClass('unfocused-page');
 				$('.slick-container').slick('unslick');
-				$('.confirm-keychange').hide();
 				unlockScroll();
 				slick();
 			}

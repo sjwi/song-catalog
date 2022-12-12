@@ -5,7 +5,15 @@
 		th:href="${!#strings.contains(#request.requestURI,'/song')}? @{/song/__${song.id}__}: 'javascript:void(0)'" 
 		th:text="${song.name}"></a></span>
 		<div class="version-indicator w-100">
-			<span class="float-left" th:text="${'[' + song.defaultKey + ']'}"></span>
+			<th:block th:if="${setListState != null}" th:with="capo=${setListState.songSettings.containsKey(song.setListSongId)? setListState.songSettings.get(song.setListSongId).capo: null}">
+				<span
+					th:with="prefix=${capo != null && capo != 0}? ' - capo ' + ${capo} + '': ''"
+					class="float-left" th:text="${'[' + song.defaultKey + prefix + ']'}">
+				</span>
+			</th:block>
+			<th:block th:if="${setListState == null}">
+				<span class="float-left" th:text="${'[' + song.defaultKey + ']'}"></span>
+			</th:block>
 			<th:block th:if="${song instanceof T(com.sjwi.catalog.model.song.SetListVersionSong) || song instanceof T(com.sjwi.catalog.model.song.VersionSong)}">
 				<span class="float-right" th:text="${'[' + song.versionName + ']'}"></span>
 			</th:block>
@@ -15,6 +23,5 @@
 		</div>
 		<hr class="mt-4">
 		<p class="song-body" th:text="${#strings.listJoin(song.getBodyAsChunks(),T(java.lang.System).getProperty('line.separator') + T(java.lang.System).getProperty('line.separator'))}"></p>
-		<!-- <p class="song-footer" th:text="${song.getFooter()}"></p> -->
 	</div>
 </th:block>

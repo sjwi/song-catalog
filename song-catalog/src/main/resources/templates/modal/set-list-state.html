@@ -1,0 +1,100 @@
+<div class="modal fade" id="setListStateModal">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title">Change Key</h5>
+			</div>
+			<div class="modal-body">
+				<input type="hidden" id="stateKey">
+				<input type="hidden" id="stateSetId">
+				<input type="hidden" id="stateSetSongId">
+				<div th:classappend="${#authorization.expression('hasAuthority(''USER'')')}? 'collapse':'no-auth'" class="row" id="capoSection">
+					<div class="col-md-10 mx-auto">
+						<div class="row">
+							<div class="col-1">
+								<label class="col-form-label">
+									<i id="transposeBack" class="fa fa-arrow-left" aria-hidden="true"></i>
+								</label>
+							</div>
+							<div class="col-3">
+								<label class="col-form-label">Capo</label>
+							</div>
+							<div class="col-8">
+								<select class="form-control custom-select" id="capoSelect">
+									<option selected val="0"></option>
+									<option val="1">1</option>
+									<option val="2">2</option>
+									<option val="3">3</option>
+									<option val="4">4</option>
+									<option val="5">5</option>
+									<option val="6">6</option>
+									<option val="7">7</option>
+									<option val="8">8</option>
+									<option val="9">9</option>
+									<option val="10">10</option>
+									<option val="11">11</option>
+									<option val="12">12</option>
+								</select>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row my-3">
+					<div class="col-md-10 mx-auto">
+						<button class="btn-warning btn-lg w-100" id="transposeForMe">
+							Transpose for me
+						</button>
+					</div>
+				</div>
+				<div th:classappend="${#authorization.expression('hasAuthority(''USER'')')}? '':'collapse no-auth'" class="row my-3" id="transposeForEveryoneSection">
+					<div class="col-md-10 mx-auto">
+						<button class="btn-info btn-lg w-100" id="transposeForEveryone">
+							Transpose for everyone
+						</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<script>
+	function updateSetListState(setId, setSongId, key) {
+		$('#setListStateModal').find('#stateSetId').val(setId)
+		$('#setListStateModal').find('#stateSetSongId').val(setSongId)
+		$('#setListStateModal').find('#stateKey').val(key)
+		$('#setListStateModal').modal('show');
+	}
+	$(document).ready(function () {
+		$('#transposeForMe').click(function () {
+			if ($('#capoSection').is(':hidden')) {
+				$('#transposeForEveryoneSection').hide()
+				$('#capoSection').show()
+			} else {
+				let setId = $('#setListStateModal').find('#stateSetId').val()
+				let setSongId = $('#setListStateModal').find('#stateSetSongId').val()
+				let key = $('#setListStateModal').find('#stateKey').val()
+				let capo = $('#setListStateModal').find('#capoSelect').val()
+				localSetKeyChange(setId, setSongId, key, capo)
+				$('#setListStateModal').modal('hide');
+			}
+		})
+		$('#transposeForEveryone').click(function () {
+			let setId = $('#setListStateModal').find('#stateSetId').val()
+			let songId = $('#setListStateModal').find('#stateSetSongId').val()
+			let key = $('#setListStateModal').find('#stateKey').val()
+			changeKeyForSetSong(key,songId,setId)
+			$('#setListStateModal').modal('hide');
+		})
+		$('#transposeBack').click(function () {
+			$('#transposeForEveryoneSection').show()
+			$('#capoSection').hide()
+		})
+		$('#setListStateModal').on('hidden.bs.modal', function () {
+			if (!$('#transposeForEveryoneSection').hasClass('no-auth'))
+				$('#transposeForEveryoneSection').show()
+			if (!$('#capoSection').hasClass('no-auth'))
+				$('#capoSection').hide()
+			$('#setListStateModal').find('#capoSelect').val("0");
+		})
+	});
+</script>

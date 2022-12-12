@@ -791,3 +791,12 @@ CREATE TABLE AnonymousUser (
   HASH varchar(1000) NOT NULL,
   PRIMARY KEY (ID)
 );
+
+DROP TABLE IF EXISTS SetListState;
+CREATE TABLE SetListState (
+  USER_ID varchar(50) NOT NULL,
+  SETLIST_ID int(11) NOT NULL,
+  SETTINGS varchar(5000) DEFAULT ('{ "songSettings": {}}')
+);
+
+INSERT INTO SetListState (USER_ID, SETLIST_ID, SETTINGS) values ('admin', 1, '{ "songSettings": { "1": {"key":"C","capo":1}}}');
