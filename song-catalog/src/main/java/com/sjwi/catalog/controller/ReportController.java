@@ -5,10 +5,8 @@ import static com.sjwi.catalog.log.CustomLogger.LOG_FILE_PROPERTY_KEY;
 
 import com.sjwi.catalog.aspect.IgnoreAspect;
 import com.sjwi.catalog.aspect.LandingPageAspect;
-import com.sjwi.catalog.aspect.ServletInitializerAspect;
 import com.sjwi.catalog.log.CustomLogger;
 import com.sjwi.catalog.model.LogEntry;
-import com.sjwi.catalog.model.ResponseMessage;
 import com.sjwi.catalog.model.user.CfUser;
 import com.sjwi.catalog.service.UserService;
 import java.io.IOException;
@@ -116,15 +114,5 @@ public class ReportController {
         + user.size()
         + ")<br>"
         + user.stream().map(u -> u.getUsername()).collect(Collectors.joining("<br>"));
-  }
-
-  @ServletInitializerAspect
-  @RequestMapping(
-      value = {"/server-availability"},
-      method = RequestMethod.GET)
-  @ResponseStatus(HttpStatus.OK)
-  @ResponseBody
-  public ResponseMessage displayServerAvailability(HttpServletRequest request) {
-    return new ResponseMessage("available", "none");
   }
 }
