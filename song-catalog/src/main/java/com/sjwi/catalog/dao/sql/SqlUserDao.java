@@ -1,6 +1,13 @@
 /* (C)2022 https://stephenky.com */
 package com.sjwi.catalog.dao.sql;
 
+import com.google.gson.Gson;
+import com.sjwi.catalog.dao.UserDao;
+import com.sjwi.catalog.model.LogEntry;
+import com.sjwi.catalog.model.SetListState;
+import com.sjwi.catalog.model.user.CfUser;
+import com.sjwi.catalog.model.user.UserState;
+import com.sjwi.catalog.service.AddressBookService;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
@@ -8,7 +15,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.TimeZone;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
@@ -17,14 +23,6 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Repository;
-
-import com.google.gson.Gson;
-import com.sjwi.catalog.dao.UserDao;
-import com.sjwi.catalog.model.LogEntry;
-import com.sjwi.catalog.model.SetListState;
-import com.sjwi.catalog.model.user.CfUser;
-import com.sjwi.catalog.model.user.UserState;
-import com.sjwi.catalog.service.AddressBookService;
 
 @Repository
 public class SqlUserDao implements UserDao {
@@ -333,21 +331,25 @@ public class SqlUserDao implements UserDao {
 
   @Override
   public SetListState getSetlistStateForUser(String user, int setId, boolean create) {
-    return jdbcTemplate.query(queryStore.get("getSetlistStateForUser"), rs -> {
-      if (rs.next()) {
-        return gson.fromJson(rs.getString("SETTINGS"), SetListState.class);
-      } else {
-        if (create)
-          jdbcTemplate.update(queryStore.get("createSetListState"), user, setId);
-        return new SetListState();
-      }
-    }, user, setId);
+    return jdbcTemplate.query(
+        queryStore.get("getSetlistStateForUser"),
+        rs -> {
+          if (rs.next()) {
+            return gson.fromJson(rs.getString("SETTINGS"), SetListState.class);
+          } else {
+            if (create) jdbcTemplate.update(queryStore.get("createSetListState"), user, setId);
+            return new SetListState();
+          }
+        },
+        user,
+        setId);
   }
 
   @Override
   public void updateSetListSessionState(String user, int setId, SetListState existingSetState) {
     System.out.println(existingSetState);
-    jdbcTemplate.update(queryStore.get("updateSetListSessionState"), gson.toJson(existingSetState), user, setId);
+    jdbcTemplate.update(
+        queryStore.get("updateSetListSessionState"), gson.toJson(existingSetState), user, setId);
   }
 
   @Override
@@ -357,13 +359,17 @@ public class SqlUserDao implements UserDao {
 
   @Override
   public Map<Integer, SetListState> getAllSetlistStatesForUser(String user) {
-    return jdbcTemplate.query(queryStore.get("getAllSetlistStatesForUser"), rs -> {
-      Map<Integer, SetListState> state = new HashMap<>();
-      while (rs.next()) {
-        state.put(rs.getInt("SETLIST_ID"), gson.fromJson(rs.getString("SETTINGS"), SetListState.class));
-      }
-      return state;
-    }, user);
+    return jdbcTemplate.query(
+        queryStore.get("getAllSetlistStatesForUser"),
+        rs -> {
+          Map<Integer, SetListState> state = new HashMap<>();
+          while (rs.next()) {
+            state.put(
+                rs.getInt("SETLIST_ID"),
+                gson.fromJson(rs.getString("SETTINGS"), SetListState.class));
+          }
+          return state;
+        },
+        user);
   }
-
 }

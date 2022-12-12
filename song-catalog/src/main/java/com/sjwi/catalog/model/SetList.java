@@ -3,17 +3,16 @@ package com.sjwi.catalog.model;
 
 import static com.sjwi.catalog.model.KeySet.LYRICS_ONLY_KEY_CODE;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.sjwi.catalog.model.SetListState.SetSongSetting;
+import com.sjwi.catalog.model.song.SetListSong;
+import com.sjwi.catalog.model.song.Song;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
-
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.sjwi.catalog.model.SetListState.SetSongSetting;
-import com.sjwi.catalog.model.song.SetListSong;
-import com.sjwi.catalog.model.song.Song;
 
 public class SetList {
   private final int id;
@@ -152,13 +151,16 @@ public class SetList {
 
   public SetList transpose(SetListState setListState) {
     Map<Integer, SetSongSetting> songSettings = setListState.getSongSettings();
-    List<Song> transposedSongs = songs.stream().map(song -> {
-      SetListSong s = (SetListSong) song;
-      if (songSettings.containsKey(s.getSetListSongId()))
-        return s.transpose(songSettings.get(s.getSetListSongId()).key);
-      else
-        return s;
-    }).collect(Collectors.toList());
+    List<Song> transposedSongs =
+        songs.stream()
+            .map(
+                song -> {
+                  SetListSong s = (SetListSong) song;
+                  if (songSettings.containsKey(s.getSetListSongId()))
+                    return s.transpose(songSettings.get(s.getSetListSongId()).key);
+                  else return s;
+                })
+            .collect(Collectors.toList());
     return new SetList(
         id,
         setListName,

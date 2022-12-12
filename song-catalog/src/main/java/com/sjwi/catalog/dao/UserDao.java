@@ -1,17 +1,15 @@
 /* (C)2022 https://stephenky.com */
 package com.sjwi.catalog.dao;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
-
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.User;
-
 import com.sjwi.catalog.model.LogEntry;
 import com.sjwi.catalog.model.SetListState;
 import com.sjwi.catalog.model.user.CfUser;
 import com.sjwi.catalog.model.user.UserState;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.User;
 
 public interface UserDao {
 

@@ -1,3 +1,4 @@
+/* (C)2022 https://stephenky.com */
 package com.sjwi.catalog.model;
 
 import java.util.HashMap;
@@ -14,7 +15,7 @@ public class SetListState {
   }
 
   Map<Integer, SetSongSetting> songSettings;
-  
+
   public Map<Integer, SetSongSetting> getSongSettings() {
     return songSettings;
   }
@@ -27,15 +28,19 @@ public class SetListState {
       this.capo = capo;
       this.key = key;
     }
+
     public int getCapo() {
       return capo;
     }
+
     public void setCapo(Integer capo) {
       this.capo = capo;
     }
+
     public String getKey() {
       return key;
     }
+
     public void setKey(String key) {
       this.key = key;
     }
