@@ -68,7 +68,7 @@ pipeline {
                         while (appStatus != "200" && testCounter < 12) {
                             sleep(10)
                             testCounter++
-                            appStatus = sh(script: "curl -s -o /dev/null -w '%{http_code}' https://$DNS/server-availability", returnStdout: true).trim()
+                            appStatus = sh(script: "curl -s -o /dev/null -w '%{http_code}' https://$DNS/actuator/health", returnStdout: true).trim()
                         }
                         if (appStatus != "200")
                             throw new Exception("Application failed to deploy new .war - status code: $appStatus")
