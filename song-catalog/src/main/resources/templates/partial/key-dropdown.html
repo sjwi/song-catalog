@@ -1,5 +1,5 @@
 <th:block th:fragment="keySet(keySelected,className)" th:with="overridden=${overridden}?: false">
-	<select class="btn btn-sm dropdown-toggle required key-select mw-w-50" title="Select a key" th:name="${className}"
+	<select class="btn btn-sm dropdown-toggle required key-select text-al-center" title="Select a key" th:name="${className}"
 		th:classappend="${overridden}? (${capo != 0}? (${capo > 9}? 'btn-warning pr-0px': 'btn-warning pr-1px'): 'btn-warning'): 'btn-secondary'">
 		<th:block th:if="${keySelected == 'N'}">
 			<option value="" selected></option>
