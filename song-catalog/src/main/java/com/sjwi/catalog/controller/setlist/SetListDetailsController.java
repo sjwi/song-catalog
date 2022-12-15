@@ -5,7 +5,6 @@ import com.sjwi.catalog.aspect.LandingPageAspect;
 import com.sjwi.catalog.controller.ControllerHelper;
 import com.sjwi.catalog.log.CustomLogger;
 import com.sjwi.catalog.model.SetList;
-import com.sjwi.catalog.model.SetListState;
 import com.sjwi.catalog.model.SetListState.SetSongSetting;
 import com.sjwi.catalog.model.song.SetListSong;
 import com.sjwi.catalog.service.OrganizationService;
@@ -15,7 +14,6 @@ import com.sjwi.catalog.service.UserService;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.stream.Collectors;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -60,10 +58,8 @@ public class SetListDetailsController {
     ModelAndView mv = new ModelAndView("setlist");
     try {
       SetList setList = setListService.getSetListById(id);
-      SetListState setListState = userService.getSetState(id);
-      setList = setList.transpose(setListState);
       mv.addObject("set", setList);
-      mv.addObject("setListState", setListState);
+      mv.addObject("setListState", userService.getSetState(id));
       mv.addObject("orgs", organizationService.getOrganizations());
       return mv;
     } catch (Exception e) {
@@ -86,18 +82,9 @@ public class SetListDetailsController {
     try {
       List<SetList> setlists =
           setListService.getSetListPage(SET_LISTS_PER_PAGE, cursor == null ? 0 : cursor);
-      Map<Integer, SetListState> state = userService.getAllSetlistStatesForUser();
-      setlists =
-          setlists.stream()
-              .map(
-                  s -> {
-                    if (state.containsKey(s.getId())) return s.transpose(state.get(s.getId()));
-                    else return s;
-                  })
-              .collect(Collectors.toList());
       mv.addObject("sets", setlists);
       mv.addObject("orgs", organizationService.getOrganizations());
-      mv.addObject("setListStates", state);
+      mv.addObject("setListStates", userService.getAllSetlistStatesForUser());
       return mv;
     } catch (Exception e) {
       return controllerHelper.errorHandler(e);
@@ -117,10 +104,8 @@ public class SetListDetailsController {
     ModelAndView mv = new ModelAndView(view);
     try {
       SetList setList = setListService.getSetListById(id);
-      SetListState setListState = userService.getSetState(id);
-      setList = setList.transpose(setListState);
       mv.addObject("set", setList);
-      mv.addObject("setListState", setListState);
+      mv.addObject("setListState", userService.getSetState(id));
       mv.addObject("songs", setList.getSongs());
     } catch (Exception e) {
       return controllerHelper.errorHandler(e);

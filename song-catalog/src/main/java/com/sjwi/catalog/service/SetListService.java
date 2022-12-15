@@ -1,15 +1,20 @@
 /* (C)2022 https://stephenky.com */
 package com.sjwi.catalog.service;
 
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
 import com.sjwi.catalog.config.ServletConstants;
 import com.sjwi.catalog.controller.ControllerHelper;
 import com.sjwi.catalog.dao.SetListDao;
 import com.sjwi.catalog.log.CustomLogger;
 import com.sjwi.catalog.model.SetList;
+import com.sjwi.catalog.model.SetListState;
 import com.sjwi.catalog.model.song.Song;
-import java.util.List;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 @Component
 public class SetListService {
@@ -20,8 +25,11 @@ public class SetListService {
 
   @Autowired ControllerHelper controllerHelper;
 
+  @Autowired UserService userService;
+
   public SetList getSetListById(int id) {
-    return setListDao.getSetListById(id);
+    SetList sl = setListDao.getSetListById(id);
+    return sl == null? sl: sl.transpose(userService.getSetState(id));
   }
 
   public SetList getLyricsToSetListById(int id) {
@@ -33,7 +41,18 @@ public class SetListService {
   }
 
   public List<SetList> getSetLists(int quantity) {
-    return setListDao.getSetLists(quantity);
+    return transposeFromState(setListDao.getSetLists(quantity));
+  }
+
+  private List<SetList> transposeFromState(List<SetList> setlists) {
+    Map<Integer, SetListState> state = userService.getAllSetlistStatesForUser();
+    return setlists.stream()
+        .map(
+            s -> {
+              if (state.containsKey(s.getId())) return s.transpose(state.get(s.getId()));
+              else return s;
+            })
+        .collect(Collectors.toList());
   }
 
   public SetList getLatestSet() {
@@ -45,8 +64,9 @@ public class SetListService {
   }
 
   public List<SetList> searchSetLists(String searchTerm) {
-    return setListDao.searchSetLists(
-        searchTerm == null ? null : "%" + searchTerm.toLowerCase() + "%");
+    return transposeFromState(
+        setListDao.searchSetLists(
+            searchTerm == null ? null : "%" + searchTerm.toLowerCase() + "%"));
   }
 
   public List<SetList> getSetListPage(int pageSize, int cursor) {
