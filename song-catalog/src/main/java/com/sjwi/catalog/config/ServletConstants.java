@@ -39,6 +39,8 @@ public class ServletConstants {
     SCHEMELESS_URL = FULL_URL;
     BASE_URL = SCHEME + "://" + BASE_URL;
     FULL_URL = SCHEME + "://" + FULL_URL;
-    IS_INITIALIZED = !InetAddressValidator.getInstance().isValid(SERVER_NAME);
+    IS_INITIALIZED =
+        !InetAddressValidator.getInstance().isValid(SERVER_NAME)
+            && !SERVER_NAME.equals("localhost");
   }
 }
