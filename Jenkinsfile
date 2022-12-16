@@ -16,12 +16,14 @@ pipeline {
                             sh '''
                                 echo server.servlet.contextPath=/song-catalog >> src/main/resources/application.properties
                                 echo server.servlet.context-path=/song-catalog >> src/main/resources/application.properties
+                                echo >> src/main/resources/application.properties
                             '''
                         }
                         else if (env.BRANCH == "main") {
                             sh '''
                                 echo server.servlet.contextPath=/ >> src/main/resources/application.properties
                                 echo server.servlet.context-path=/ >> src/main/resources/application.properties
+                                echo >> src/main/resources/application.properties
                             '''
                         }
                         sh 'mvn clean install package'
