@@ -18,6 +18,12 @@ pipeline {
                                 echo server.servlet.context-path=/song-catalog >> src/main/resources/application.properties
                             '''
                         }
+                        else if (env.BRANCH == "main") {
+                            sh '''
+                                echo server.servlet.contextPath=/ >> src/main/resources/application.properties
+                                echo server.servlet.context-path=/ >> src/main/resources/application.properties
+                            '''
+                        }
                         sh 'mvn clean install package'
                     }
                 }
@@ -117,8 +123,8 @@ pipeline {
                         git checkout FETCH_HEAD -- song-catalog/src/main/resources/static/css/slick.css
                     '''
                     sh '''
-                        echo server.servlet.contextPath=/song-demo >> src/main/resources/application.properties
-                        echo server.servlet.context-path=/song-demo >> src/main/resources/application.properties
+                        echo server.servlet.contextPath=/song-demo >> song-catalog/src/main/resources/application.properties
+                        echo server.servlet.context-path=/song-demo >> song-catalog/src/main/resources/application.properties
                     '''
                     dir('song-catalog') {
                         sh '''
