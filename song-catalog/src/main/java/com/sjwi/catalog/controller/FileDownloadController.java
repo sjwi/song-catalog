@@ -364,10 +364,15 @@ public class FileDownloadController {
 
   @GetMapping(value = {"{prefix}z{suffix}"})
   public ModelAndView shortLink(@PathVariable String prefix, @PathVariable String suffix) {
-    String key = String.format("%sz%s", prefix, suffix);
-    String path = shortLinkService.getPath(key);
-    String action = controllerHelper.getOs().equalsIgnoreCase("UNKNOWN") ? "redirect" : "forward";
-    logger.logUserActionWithEmail(String.format("Short link %s visited", key));
-    return new ModelAndView(action + ":/" + path);
+    try {
+      String key = String.format("%sz%s", prefix, suffix);
+      String path = shortLinkService.getPath(key);
+      String action = controllerHelper.getOs().equalsIgnoreCase("UNKNOWN") ? "redirect" : "forward";
+      logger.logUserActionWithEmail(String.format("Short link %s visited", key));
+      return new ModelAndView(action + ":/" + path);
+    } catch (Exception e) {
+      e.printStackTrace();
+      throw e;
+    }
   }
 }
