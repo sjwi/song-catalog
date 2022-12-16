@@ -210,6 +210,7 @@ public class PdfFileGenerator implements FileGenerator {
         throw new FileUtilityException(e);
       }
     }
+    writer.close();
   }
 
   private BufferedImage generateQRCodeImage(String barcodeText) throws Exception {
@@ -310,6 +311,16 @@ public class PdfFileGenerator implements FileGenerator {
       img.scaleToFit(80, 80);
       img.setAbsolutePosition(508, 755);
       return img;
+    }
+  }
+
+  @Override
+  public void close() {
+    try {
+      if (document.isOpen()) document.close();
+      writer.close();
+    } catch (Exception e) {
+      e.printStackTrace();
     }
   }
 }
