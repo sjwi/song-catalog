@@ -1,6 +1,21 @@
 /* (C)2022 https://stephenky.com */
 package com.sjwi.catalog.file.pdf;
 
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+import javax.imageio.ImageIO;
+
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
+
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.client.j2se.MatrixToImageWriter;
 import com.google.zxing.qrcode.QRCodeWriter;
@@ -23,18 +38,6 @@ import com.sjwi.catalog.file.FileGenerator;
 import com.sjwi.catalog.model.SetList;
 import com.sjwi.catalog.model.TransposableString;
 import com.sjwi.catalog.model.song.Song;
-import java.awt.image.BufferedImage;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import javax.imageio.ImageIO;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
 
 public class PdfFileGenerator implements FileGenerator {
 
@@ -210,7 +213,6 @@ public class PdfFileGenerator implements FileGenerator {
         throw new FileUtilityException(e);
       }
     }
-    writer.close();
   }
 
   private BufferedImage generateQRCodeImage(String barcodeText) throws Exception {
