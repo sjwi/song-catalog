@@ -126,8 +126,8 @@ var pptDownloadBaseUri;
 var pdfDownloadBaseUri;
 var downloadBaseUri;
 function downloadFile(endpoint,id,key){
-	pptDownloadBaseUri = contextpath + '/' + endpoint + '/ppt/' + id;
-	pdfDownloadBaseUri = contextpath + '/' + endpoint + '/pdf/' + id;
+	pptDownloadBaseUri = '/' + endpoint + '/ppt/' + id;
+	pdfDownloadBaseUri = '/' + endpoint + '/pdf/' + id;
 	var downloadRequestUrl = contextpath + endpoint + '/download/' + id;
 	if (key){
 		downloadRequestUrl = downloadRequestUrl + '?key=' + key;
