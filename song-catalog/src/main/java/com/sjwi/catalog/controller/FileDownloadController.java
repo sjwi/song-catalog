@@ -3,18 +3,6 @@ package com.sjwi.catalog.controller;
 
 import static com.sjwi.catalog.model.KeySet.LYRICS_ONLY_KEY_CODE;
 
-import com.sjwi.catalog.aspect.ServletInitializerAspect;
-import com.sjwi.catalog.file.FileGenerator;
-import com.sjwi.catalog.file.pdf.PdfFileGenerator;
-import com.sjwi.catalog.file.ppt.PptFileGenerator;
-import com.sjwi.catalog.log.CustomLogger;
-import com.sjwi.catalog.model.ResponseMessage;
-import com.sjwi.catalog.model.SetList;
-import com.sjwi.catalog.model.song.Song;
-import com.sjwi.catalog.service.FileDispatcherService;
-import com.sjwi.catalog.service.SetListService;
-import com.sjwi.catalog.service.ShortLinkService;
-import com.sjwi.catalog.service.SongService;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
@@ -28,8 +16,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -42,6 +32,19 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
+
+import com.sjwi.catalog.aspect.ServletInitializerAspect;
+import com.sjwi.catalog.file.FileGenerator;
+import com.sjwi.catalog.file.pdf.PdfFileGenerator;
+import com.sjwi.catalog.file.ppt.PptFileGenerator;
+import com.sjwi.catalog.log.CustomLogger;
+import com.sjwi.catalog.model.ResponseMessage;
+import com.sjwi.catalog.model.SetList;
+import com.sjwi.catalog.model.song.Song;
+import com.sjwi.catalog.service.FileDispatcherService;
+import com.sjwi.catalog.service.SetListService;
+import com.sjwi.catalog.service.ShortLinkService;
+import com.sjwi.catalog.service.SongService;
 
 @Controller
 public class FileDownloadController {
@@ -142,8 +145,9 @@ public class FileDownloadController {
       @RequestParam(name = "alignCenter", required = false) boolean alignCenter,
       @RequestParam(name = "blankSlideDelimiter", required = false) boolean blankSlideDelimiter,
       @RequestParam(name = "fontSize") Optional<Integer> fontSize) {
+    FileGenerator pptGenerator = null;
     try {
-      FileGenerator pptGenerator =
+      pptGenerator =
           new PptFileGenerator(
               prependBlankSlide, fontSize.orElse(0), alignCenter, blankSlideDelimiter);
       List<Song> songs =
@@ -162,6 +166,7 @@ public class FileDownloadController {
           fileName + " ppt downloaded." + "\n" + controllerHelper.getFullUrl());
       Files.delete(filePath);
     } catch (Exception e) {
+      if (pptGenerator != null) pptGenerator.close();
       controllerHelper.errorHandler(e);
     }
   }
@@ -177,8 +182,9 @@ public class FileDownloadController {
       @RequestParam(value = "lyricsOnly", required = false, defaultValue = "false")
           boolean lyricsOnly,
       @RequestParam(name = "qrCode", required = false, defaultValue = "false") boolean qrCode) {
+    FileGenerator pdfGenerator = null;
     try {
-      FileGenerator pdfGenerator =
+      pdfGenerator =
           new PdfFileGenerator(fontSize.orElse(0), qrCode ? controllerHelper.getFullUrl() : null);
       List<Song> songs =
           songService.getSongs().stream()
@@ -198,6 +204,7 @@ public class FileDownloadController {
           fileName + " pdf downloaded." + "\n" + controllerHelper.getFullUrl());
       Files.delete(filePath);
     } catch (Exception e) {
+      if (pdfGenerator != null) pdfGenerator.close();
       controllerHelper.errorHandler(e);
     }
   }
@@ -214,8 +221,9 @@ public class FileDownloadController {
       @RequestParam(name = "blankSlideDelimiter", required = false) boolean blankSlideDelimiter,
       @RequestParam(name = "alignCenter", required = false) boolean alignCenter,
       @RequestParam(name = "fontSize") Optional<Integer> fontSize) {
+    FileGenerator pptGenerator = null;
     try {
-      FileGenerator pptGenerator =
+      pptGenerator =
           new PptFileGenerator(
               prependBlankSlide, fontSize.orElse(0), alignCenter, blankSlideDelimiter);
       Song song = songService.getSongById(id).transpose(LYRICS_ONLY_KEY_CODE);
@@ -228,6 +236,7 @@ public class FileDownloadController {
           fileName + " ppt downloaded." + "\n" + controllerHelper.getFullUrl());
       Files.delete(filePath);
     } catch (Exception e) {
+      if (pptGenerator != null) pptGenerator.close();
       controllerHelper.errorHandler(e);
     }
   }
@@ -244,8 +253,9 @@ public class FileDownloadController {
       @RequestParam(name = "alignCenter", required = false) boolean alignCenter,
       @RequestParam(name = "fontSize") Optional<Integer> fontSize,
       @PathVariable int id) {
+    FileGenerator pptGenerator = null;
     try {
-      FileGenerator pptGenerator =
+      pptGenerator =
           new PptFileGenerator(
               prependBlankSlide, fontSize.orElse(0), alignCenter, blankSlideDelimiter);
       SetList setList = controllerHelper.buildSetFile(id, pptGenerator, true);
@@ -260,6 +270,7 @@ public class FileDownloadController {
           fileName + " ppt downloaded." + "\n" + controllerHelper.getFullUrl());
       Files.delete(filePath);
     } catch (Exception e) {
+      if (pptGenerator != null) pptGenerator.close();
       controllerHelper.errorHandler(e);
     }
   }
@@ -278,8 +289,9 @@ public class FileDownloadController {
           boolean lyricsOnly,
       @RequestParam(name = "qrCode", required = false, defaultValue = "false") boolean qrCode,
       @RequestParam(name = "key", required = false) String key) {
+    FileGenerator pdfGenerator = null;
     try {
-      FileGenerator pdfGenerator =
+      pdfGenerator =
           new PdfFileGenerator(fontSize.orElse(0), qrCode ? controllerHelper.getFullUrl() : null);
       Song song = songService.getSongById(id);
       fileName =
@@ -294,6 +306,7 @@ public class FileDownloadController {
           fileName + " pdf downloaded." + "\n" + controllerHelper.getFullUrl());
       Files.delete(filePath);
     } catch (Exception e) {
+      if (pdfGenerator != null) pdfGenerator.close();
       controllerHelper.errorHandler(e);
     }
   }
@@ -311,8 +324,9 @@ public class FileDownloadController {
       @RequestParam(value = "lyricsOnly", required = false, defaultValue = "false")
           boolean lyricsOnly,
       @RequestParam(name = "qrCode", required = false, defaultValue = "false") boolean qrCode) {
+    FileGenerator pdfGenerator = null;
     try {
-      FileGenerator pdfGenerator =
+      pdfGenerator =
           new PdfFileGenerator(fontSize.orElse(0), qrCode ? controllerHelper.getFullUrl() : null);
       SetList setList =
           lyricsOnly
@@ -329,6 +343,8 @@ public class FileDownloadController {
       Files.copy(filePath, response.getOutputStream());
       Files.delete(filePath);
     } catch (Exception e) {
+      System.out.println(e);
+      if (pdfGenerator != null) pdfGenerator.close();
       controllerHelper.errorHandler(e);
     }
   }
@@ -347,7 +363,7 @@ public class FileDownloadController {
   }
 
   @GetMapping(value = {"{prefix}z{suffix}"})
-  public ModelAndView shortLink(@PathVariable String prefix, @PathVariable String suffix) {
+  public ModelAndView shortLink(@PathVariable String prefix, @PathVariable String suffix, HttpServletRequest request) {
     String key = String.format("%sz%s", prefix, suffix);
     String path = shortLinkService.getPath(key);
     String action = controllerHelper.getOs().equalsIgnoreCase("UNKNOWN") ? "redirect" : "forward";

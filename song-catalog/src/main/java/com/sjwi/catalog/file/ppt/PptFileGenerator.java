@@ -223,4 +223,13 @@ public class PptFileGenerator implements FileGenerator {
       throw new FileUtilityException(e);
     }
   }
+
+  @Override
+  public void close() {
+    try {
+      ppt.close();
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+  }
 }

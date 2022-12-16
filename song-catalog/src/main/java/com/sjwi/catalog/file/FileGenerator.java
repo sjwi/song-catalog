@@ -16,4 +16,6 @@ public interface FileGenerator {
   public void removeFile() throws FileUtilityException;
 
   public String getFilePath();
+
+  public void close();
 }

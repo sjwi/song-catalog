@@ -1,13 +1,6 @@
 /* (C)2022 https://stephenky.com */
 package com.sjwi.catalog.service;
 
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
 import com.sjwi.catalog.config.ServletConstants;
 import com.sjwi.catalog.controller.ControllerHelper;
 import com.sjwi.catalog.dao.SetListDao;
@@ -15,6 +8,11 @@ import com.sjwi.catalog.log.CustomLogger;
 import com.sjwi.catalog.model.SetList;
 import com.sjwi.catalog.model.SetListState;
 import com.sjwi.catalog.model.song.Song;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 @Component
 public class SetListService {
@@ -29,7 +27,7 @@ public class SetListService {
 
   public SetList getSetListById(int id) {
     SetList sl = setListDao.getSetListById(id);
-    return sl == null? sl: sl.transpose(userService.getSetState(id));
+    return sl == null ? sl : sl.transpose(userService.getSetState(id));
   }
 
   public SetList getLyricsToSetListById(int id) {

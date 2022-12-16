@@ -4,8 +4,9 @@ package com.sjwi.catalog.config;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
-import org.apache.commons.validator.routines.InetAddressValidator;
+
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
@@ -39,8 +40,6 @@ public class ServletConstants {
     SCHEMELESS_URL = FULL_URL;
     BASE_URL = SCHEME + "://" + BASE_URL;
     FULL_URL = SCHEME + "://" + FULL_URL;
-    IS_INITIALIZED =
-        !InetAddressValidator.getInstance().isValid(SERVER_NAME)
-            && !SERVER_NAME.equals("localhost");
+    IS_INITIALIZED = SERVER_NAME.equals("cfworship.app");
   }
 }

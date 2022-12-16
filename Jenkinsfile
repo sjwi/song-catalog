@@ -11,7 +11,23 @@ pipeline {
         stage('Build WAR') {
             steps {
                 dir('song-catalog') {
-                    sh 'mvn clean install package'
+                    script {
+                        if (env.BRANCH == "develop") {
+                            sh '''
+                                echo server.servlet.contextPath=/song-catalog >> src/main/resources/application.properties
+                                echo server.servlet.context-path=/song-catalog >> src/main/resources/application.properties
+                                echo >> src/main/resources/application.properties
+                            '''
+                        }
+                        else if (env.BRANCH == "main") {
+                            sh '''
+                                echo server.servlet.contextPath=/ >> src/main/resources/application.properties
+                                echo server.servlet.context-path=/ >> src/main/resources/application.properties
+                                echo >> src/main/resources/application.properties
+                            '''
+                        }
+                        sh 'mvn clean install package'
+                    }
                 }
             }
         }
@@ -107,6 +123,10 @@ pipeline {
                         git checkout FETCH_HEAD -- song-catalog/src/main/resources/static/images/logo_transparent.png
                         git checkout FETCH_HEAD -- song-catalog/src/main/resources/static/images/logo_transparent_dark.png
                         git checkout FETCH_HEAD -- song-catalog/src/main/resources/static/css/slick.css
+                    '''
+                    sh '''
+                        echo server.servlet.contextPath=/song-demo >> song-catalog/src/main/resources/application.properties
+                        echo server.servlet.context-path=/song-demo >> song-catalog/src/main/resources/application.properties
                     '''
                     dir('song-catalog') {
                         sh '''
