@@ -1,18 +1,21 @@
 /* (C)2022 https://stephenky.com */
 package com.sjwi.catalog.service;
 
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
 import com.sjwi.catalog.config.ServletConstants;
 import com.sjwi.catalog.controller.ControllerHelper;
 import com.sjwi.catalog.dao.SetListDao;
 import com.sjwi.catalog.log.CustomLogger;
 import com.sjwi.catalog.model.SetList;
 import com.sjwi.catalog.model.SetListState;
+import com.sjwi.catalog.model.song.SetListSong;
 import com.sjwi.catalog.model.song.Song;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 @Component
 public class SetListService {
@@ -53,6 +56,19 @@ public class SetListService {
         .collect(Collectors.toList());
   }
 
+  private List<Song> transposeFromState(List<Song> songs, int setId) {
+    SetListState state = userService.getSetState(setId);
+    return songs.stream()
+        .map(
+            s -> {
+              SetListSong sl = (SetListSong) s;
+              if (state.getSongSettings().containsKey(sl.getSetListSongId()))
+                return sl.transpose(state.getSongSettings().get(sl.getSetListSongId()).getKey());
+              else return sl;
+            })
+        .collect(Collectors.toList());
+  }
+
   public SetList getLatestSet() {
     return setListDao.getLatestSet();
   }
@@ -68,11 +84,11 @@ public class SetListService {
   }
 
   public List<SetList> getSetListPage(int pageSize, int cursor) {
-    return setListDao.getSetListPage(pageSize, cursor);
+    return transposeFromState(setListDao.getSetListPage(pageSize, cursor));
   }
 
   public List<Song> getSetSongs(int id) {
-    return setListDao.getSetSongs(id);
+    return transposeFromState(setListDao.getSetSongs(id),id);
   }
 
   public int createSet(String setListName, String user, int unit, int subUnit) {
