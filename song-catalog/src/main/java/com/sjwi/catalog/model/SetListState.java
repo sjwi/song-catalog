@@ -23,6 +23,7 @@ public class SetListState {
   public static class SetSongSetting {
     Integer capo;
     String key;
+    String ogKey;
 
     public SetSongSetting(int capo, String key) {
       this.capo = capo;
@@ -43,6 +44,14 @@ public class SetListState {
 
     public void setKey(String key) {
       this.key = key;
+    }
+
+    public String getOgKey() {
+      return ogKey;
+    }
+
+    public void setOgKey(String ogKey) {
+      this.ogKey = ogKey;
     }
   }
 }

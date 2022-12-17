@@ -120,14 +120,19 @@ public class SetListDetailsController {
   public void updateSetSettings(
       @PathVariable Integer id, @RequestBody Map.Entry<Integer, SetSongSetting> body) {
     logger.logUserActionWithEmail("Setlist state set");
-    SetList sl = setListService.getSetListById(id);
+    SetList sl = setListService.getSetListById(id, false);
     String defKey =
         sl.getSongs().stream()
             .filter(s -> ((SetListSong) s).getSetListSongId() == body.getKey())
             .findAny()
             .get()
             .getDefaultKey();
-    if (defKey.equals(body.getValue().getKey().toString())) userService.removeSetState(id);
-    else userService.updateSetState(id, body.getKey(), body.getValue());
+    if (defKey.equals(body.getValue().getKey().toString()))
+      userService.removeSetState(id, body.getKey());
+    else {
+      SetSongSetting settings = body.getValue();
+      settings.setOgKey(defKey);
+      userService.updateSetState(id, body.getKey(), settings);
+    }
   }
 }

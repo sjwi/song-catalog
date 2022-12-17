@@ -217,7 +217,7 @@ public class SetListPopulationController {
     try {
       setListService.setDefaultSetKey(newKey, songId);
       Integer setListId = setListService.getSetListIdBySong(songId);
-      userService.removeSetState(setListId);
+      userService.removeSetState(setListId, songId);
     } catch (Exception e) {
       controllerHelper.errorHandler(e);
     }

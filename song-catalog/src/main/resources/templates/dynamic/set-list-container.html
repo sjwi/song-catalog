@@ -65,7 +65,9 @@
 					</th:block>
 				</td>
 				<td width="80px" class="text-center key-select"
-					th:with="overridden=${setListState != null && setListState.songSettings.containsKey(setSong.setListSongId)},capo=${setListState != null && setListState.songSettings.containsKey(setSong.setListSongId)? setListState.songSettings.get(setSong.setListSongId).capo: null}"
+					th:with="overridden=${setListState != null && setListState.songSettings.containsKey(setSong.setListSongId)},
+						capo=${setListState != null && setListState.songSettings.containsKey(setSong.setListSongId)? setListState.songSettings.get(setSong.setListSongId).capo: null},
+						ogKey=${setListState != null && setListState.songSettings.containsKey(setSong.setListSongId)? setListState.songSettings.get(setSong.setListSongId).ogKey: null}"
 				>
 					<th:block
 						th:replace="partial/key-dropdown :: keySet(${setSong.defaultKey},'defaultKey')"

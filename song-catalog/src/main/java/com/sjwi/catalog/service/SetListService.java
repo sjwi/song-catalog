@@ -1,13 +1,6 @@
 /* (C)2022 https://stephenky.com */
 package com.sjwi.catalog.service;
 
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
 import com.sjwi.catalog.config.ServletConstants;
 import com.sjwi.catalog.controller.ControllerHelper;
 import com.sjwi.catalog.dao.SetListDao;
@@ -16,6 +9,11 @@ import com.sjwi.catalog.model.SetList;
 import com.sjwi.catalog.model.SetListState;
 import com.sjwi.catalog.model.song.SetListSong;
 import com.sjwi.catalog.model.song.Song;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 @Component
 public class SetListService {
@@ -88,7 +86,7 @@ public class SetListService {
   }
 
   public List<Song> getSetSongs(int id) {
-    return transposeFromState(setListDao.getSetSongs(id),id);
+    return transposeFromState(setListDao.getSetSongs(id), id);
   }
 
   public int createSet(String setListName, String user, int unit, int subUnit) {
@@ -149,5 +147,10 @@ public class SetListService {
 
   public Integer getSetListIdBySong(int songId) {
     return setListDao.getSetListIdForSetSong(songId);
+  }
+
+  public SetList getSetListById(Integer id, boolean transposeFromState) {
+    if (transposeFromState) return getSetListById(id);
+    else return setListDao.getSetListById(id);
   }
 }

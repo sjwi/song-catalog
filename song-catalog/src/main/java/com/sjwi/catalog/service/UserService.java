@@ -239,9 +239,12 @@ public class UserService implements UserDetailsService {
     userDao.updateSetListSessionState(user, setId, existingSetState);
   }
 
-  public void removeSetState(int setId) {
+  public void removeSetState(int setId, int songId) {
     String user = this.getSessionUsername();
-    userDao.removeSetListSessionState(user, setId);
+    SetListState existingState = userDao.getSetlistStateForUser(user, setId, false);
+    if (existingState.getSongSettings().containsKey(songId))
+      existingState.getSongSettings().remove(songId);
+    userDao.updateSetListSessionState(user, setId, existingState);
   }
 
   public Map<Integer, SetListState> getAllSetlistStatesForUser() {
