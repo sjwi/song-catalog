@@ -11,8 +11,9 @@
 <script>
 	$('.songs-to-add').select2({
 		placeholder: 'Click to select',
-		closeOnSelect: false,
+		closeOnSelect: true,
 		escapeMarkup: function (markup) { return markup; },
+		allowClear: true,
 		language: {
 		   noResults: function(){
 			   return "No Results Found:  <div class='text-right d-inline ml-2'><a href='javascript:void(0)' onclick='newSong()' class='text-info'>Create Song</a></div>";
