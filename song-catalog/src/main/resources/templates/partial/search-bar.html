@@ -82,7 +82,6 @@
 					tmpSongArray.forEach((id) => $('#songCheckbox_' + id).prop('checked',true));
 				},
 				error: function(data) {
-					alertWithFade('danger','Unable to search song database at this time.')
 				},
 				complete: function() {
 					$(append).find('div').removeClass('loading');
