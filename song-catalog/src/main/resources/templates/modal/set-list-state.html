@@ -9,6 +9,7 @@
 			</div>
 			<div class="modal-body">
 				<input type="hidden" id="stateKey">
+				<input type="hidden" id="oldKey">
 				<input type="hidden" id="stateSetId">
 				<input type="hidden" id="stateSetSongId">
 				<div th:classappend="${#authorization.expression('hasAuthority(''USER'')')}? 'collapse':'no-auth'" class="row" id="capoSection">
@@ -24,7 +25,7 @@
 							</div>
 							<div class="col-8">
 								<select class="form-control custom-select" id="capoSelect">
-									<option selected val="0"></option>
+									<option selected val="0">No Capo</option>
 									<option val="1">1</option>
 									<option val="2">2</option>
 									<option val="3">3</option>
@@ -61,15 +62,29 @@
 	</div>
 </div>
 <script>
-	function updateSetListState(setId, setSongId, key) {
-		$('#setListStateModal').find('#stateSetId').val(setId)
-		$('#setListStateModal').find('#stateSetSongId').val(setSongId)
-		$('#setListStateModal').find('#stateKey').val(key)
-		$('#setListStateModal').modal('show');
+	function updateSetListState(setId, setSongId, key, backToDefault) {
+		oldKey = $('#setSongRow_' + setSongId).data('key')
+		if (backToDefault){
+			localSetKeyChange(setId, setSongId, key, false)
+		} else {
+			$('#setListStateModal').find('#stateSetId').val(setId)
+			$('#setListStateModal').find('#stateSetSongId').val(setSongId)
+			$('#setListStateModal').find('#stateKey').val(key)
+			$('#setListStateModal').find('#oldKey').val(oldKey)
+			$('#setListStateModal').modal('show');
+		}
 	}
+	let _keyRange = ["A", "A#", "B", "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#"]
 	$(document).ready(function () {
-		$('#transposeForMe').click(function () {
+		$('#transposeForMe').click(function (e) {
 			if ($('#capoSection').is(':hidden')) {
+				let targetKey = $('#setListStateModal').find('#stateKey').val()
+				let currentKey = $('#setListStateModal').find('#oldKey').val()
+				let current_idx = _keyRange.indexOf(currentKey)
+				let target_idx = _keyRange.indexOf(targetKey)
+				range = target_idx - current_idx
+				defaultPrompt = Math.min(Math.abs(range), Math.abs(_keyRange.length - range))
+				$('#setListStateModal').find('#capoSelect').val(defaultPrompt)
 				$('#transposeForEveryoneSection').hide()
 				$('#capoSection').show()
 			} else {

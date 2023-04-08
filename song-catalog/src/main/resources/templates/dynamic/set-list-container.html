@@ -29,7 +29,7 @@
 	</div>
 	<div class="set-list-songs">
 		<table class="table set-table table-sm mb-0" th:attr="data-setid=${set.id}">
-			<tr class="set-song-row song-metadata" th:each="setSong, iter: ${set.songs}" 
+			<tr th:id="${'setSongRow_' + setSong.setListSongId}" class="set-song-row song-metadata" th:each="setSong, iter: ${set.songs}" 
 			th:attr="data-sort=${iter.index + 1},data-setsongid=${setSong.setListSongId},data-target=${setSong.id},data-key=${setSong.defaultKey},data-songname=${setSong.name},data-setid=${set.id}">
 				<td class="text-left set-row-primary-td" th:classappend="${#authorization.expression('hasAuthority(''USER'')')}? 'align-middle':'pt-2'">
 					<th:block sec:authorize="hasAuthority('USER')">
