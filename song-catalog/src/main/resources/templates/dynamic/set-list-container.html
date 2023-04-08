@@ -29,8 +29,8 @@
 	</div>
 	<div class="set-list-songs">
 		<table class="table set-table table-sm mb-0" th:attr="data-setid=${set.id}">
-			<tr class="set-song-row song-metadata" th:each="setSong, iter: ${set.songs}" 
-			th:attr="data-sort=${iter.index + 1},data-setsongid=${setSong.setListSongId},data-target=${setSong.id},data-key=${setSong.defaultKey},data-songname=${setSong.name},data-setid=${set.id}">
+			<tr th:id="${'setSongRow_' + setSong.setListSongId}" class="set-song-row song-metadata" th:each="setSong, iter: ${set.songs}" 
+			th:attr="data-sort=${iter.index + 1},data-setsongid=${setSong.setListSongId},data-target=${setSong.id},data-key=${setSong.defaultKey},data-songname=${setSong.name},data-setid=${set.id},data-ogkey=${setListState != null && setListState.songSettings.containsKey(setSong.setListSongId)? setListState.songSettings.get(setSong.setListSongId).ogKey: null}">
 				<td class="text-left set-row-primary-td" th:classappend="${#authorization.expression('hasAuthority(''USER'')')}? 'align-middle':'pt-2'">
 					<th:block sec:authorize="hasAuthority('USER')">
 						<div class="grip-container set-grip" data-toggle="tooltip" data-placement="bottom" title="Click and drag to sort">
