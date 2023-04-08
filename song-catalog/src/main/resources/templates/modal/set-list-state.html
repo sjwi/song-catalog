@@ -9,7 +9,6 @@
 			</div>
 			<div class="modal-body">
 				<input type="hidden" id="stateKey">
-				<input type="hidden" id="oldKey">
 				<input type="hidden" id="stateSetId">
 				<input type="hidden" id="stateSetSongId">
 				<div th:classappend="${#authorization.expression('hasAuthority(''USER'')')}? 'collapse':'no-auth'" class="row" id="capoSection">
@@ -62,29 +61,55 @@
 	</div>
 </div>
 <script>
+	class KeyNode {
+		constructor(key, prev) {
+			this.key = key
+			this.prev = prev
+		}
+	}
+	const _keyRange = ["A", "A#", "B", "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#"]
+	let root = new KeyNode("A")
+	let current = root
+	for (let i = 1; i < _keyRange.length; i++) {
+		newNode = new KeyNode(_keyRange[i], current)
+		current = newNode
+	}
+	root.prev = current
+	const ROOT_KEY_NODE = root
+	const same_root_strings = [new Set(["E","F","G"]),new Set(["A","B","C"])]
 	function updateSetListState(setId, setSongId, key, backToDefault) {
-		oldKey = $('#setSongRow_' + setSongId).data('key')
+		let targetKey = key
+		let currentKey = $('#setSongRow_' + setSongId).data('key')
+		let ogKey = $('#setSongRow_' + setSongId).data('ogkey')
+		if (ogKey && ogKey != currentKey)
+			currentKey = ogKey
+		let tracerNode = ROOT_KEY_NODE
+		let rawCapoDistance = 0
+		while (tracerNode.key != currentKey)
+			tracerNode = tracerNode.prev
+		while (tracerNode.key != targetKey) {
+			tracerNode = tracerNode.prev
+			rawCapoDistance += 1
+		}
+		for (_keys of same_root_strings)
+			if (_keys.has(targetKey) && _keys.has(currentKey))
+				rawCapoDistance = 0
+
+		defaultPrompt = rawCapoDistance
+		$('#setListStateModal').find('#capoSelect').val(defaultPrompt)
+
 		if (backToDefault){
 			localSetKeyChange(setId, setSongId, key, false)
 		} else {
 			$('#setListStateModal').find('#stateSetId').val(setId)
 			$('#setListStateModal').find('#stateSetSongId').val(setSongId)
 			$('#setListStateModal').find('#stateKey').val(key)
-			$('#setListStateModal').find('#oldKey').val(oldKey)
 			$('#setListStateModal').modal('show');
 		}
 	}
-	let _keyRange = ["A", "A#", "B", "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#"]
 	$(document).ready(function () {
 		$('#transposeForMe').click(function (e) {
 			if ($('#capoSection').is(':hidden')) {
-				let targetKey = $('#setListStateModal').find('#stateKey').val()
-				let currentKey = $('#setListStateModal').find('#oldKey').val()
-				let current_idx = _keyRange.indexOf(currentKey)
-				let target_idx = _keyRange.indexOf(targetKey)
-				range = target_idx - current_idx
-				defaultPrompt = Math.min(Math.abs(range), Math.abs(_keyRange.length - range))
-				$('#setListStateModal').find('#capoSelect').val(defaultPrompt)
 				$('#transposeForEveryoneSection').hide()
 				$('#capoSection').show()
 			} else {

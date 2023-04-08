@@ -59,7 +59,7 @@ function pollForSetListUpdate(setListId) {
 
 function localSetKeyChange(setId, setSongId, key, capo) {
 	var songContainer = '.song-page-container[id="' + setId +'"]';
-	if (!capo || capo == "")
+	if (!capo || capo == "" || capo == "No Capo")
 		capo = null
 	let data = {}
 	data[setSongId] = {
