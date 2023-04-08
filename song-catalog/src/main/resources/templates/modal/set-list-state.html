@@ -76,7 +76,6 @@
 	}
 	root.prev = current
 	const ROOT_KEY_NODE = root
-	const same_root_strings = [new Set(["E","F","G"]),new Set(["A","B","C"])]
 	function updateSetListState(setId, setSongId, key, backToDefault) {
 		let targetKey = key
 		let currentKey = $('#setSongRow_' + setSongId).data('key')
@@ -91,9 +90,6 @@
 			tracerNode = tracerNode.prev
 			rawCapoDistance += 1
 		}
-		for (_keys of same_root_strings)
-			if (_keys.has(targetKey) && _keys.has(currentKey))
-				rawCapoDistance = 0
 
 		defaultPrompt = rawCapoDistance
 		$('#setListStateModal').find('#capoSelect').val(defaultPrompt)
