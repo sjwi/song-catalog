@@ -1,20 +1,14 @@
 /* (C)2022 https://stephenky.com */
 package com.sjwi.catalog.controller;
 
-import com.sjwi.catalog.aspect.IgnoreAspect;
-import com.sjwi.catalog.aspect.LandingPageAspect;
-import com.sjwi.catalog.log.CustomLogger;
-import com.sjwi.catalog.model.Organization;
-import com.sjwi.catalog.model.SetList;
-import com.sjwi.catalog.service.OrganizationService;
-import com.sjwi.catalog.service.SetListService;
-import com.sjwi.catalog.service.SongService;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
@@ -24,6 +18,15 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.util.UriUtils;
+
+import com.sjwi.catalog.aspect.IgnoreAspect;
+import com.sjwi.catalog.aspect.LandingPageAspect;
+import com.sjwi.catalog.log.CustomLogger;
+import com.sjwi.catalog.model.Organization;
+import com.sjwi.catalog.model.SetList;
+import com.sjwi.catalog.service.OrganizationService;
+import com.sjwi.catalog.service.SetListService;
+import com.sjwi.catalog.service.SongService;
 
 @Controller
 @IgnoreAspect
@@ -197,7 +200,6 @@ public class OrganizationController {
       switch (endpoint) {
         case "lyrics-handout":
         case "latest-handout":
-          log.logUserActionWithEmail(organization.getName() + " lyric handout shortlink visited");
           String dynamicName = organization.getId() == 0 ? "CF" : organization.getName();
           return new ModelAndView(
               "redirect:/org/" + id + "/" + dynamicName + "%20Worship%20Handout");
