@@ -197,7 +197,6 @@ public class OrganizationController {
       switch (endpoint) {
         case "lyrics-handout":
         case "latest-handout":
-          log.logUserActionWithEmail(organization.getName() + " lyric handout shortlink visited");
           String dynamicName = organization.getId() == 0 ? "CF" : organization.getName();
           return new ModelAndView(
               "redirect:/org/" + id + "/" + dynamicName + "%20Worship%20Handout");

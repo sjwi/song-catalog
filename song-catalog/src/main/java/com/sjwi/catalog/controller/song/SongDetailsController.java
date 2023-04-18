@@ -101,7 +101,6 @@ public class SongDetailsController {
       HttpServletRequest request,
       HttpServletResponse response) {
     try {
-      logger.logUserActionWithEmail("Multi-select page visited");
       ModelAndView mv = new ModelAndView(view);
       List<Integer> songIdsToAdd =
           new Gson().fromJson(songIds, new TypeToken<ArrayList<Integer>>() {}.getType());
