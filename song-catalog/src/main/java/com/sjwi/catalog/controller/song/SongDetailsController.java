@@ -1,22 +1,6 @@
 /* (C)2022 https://stephenky.com */
 package com.sjwi.catalog.controller.song;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.servlet.ModelAndView;
-
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.sjwi.catalog.aspect.LandingPageAspect;
@@ -27,6 +11,19 @@ import com.sjwi.catalog.service.OrganizationService;
 import com.sjwi.catalog.service.SetListService;
 import com.sjwi.catalog.service.SongService;
 import com.sjwi.catalog.service.VersionService;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.ModelAndView;
 
 @Controller
 public class SongDetailsController {
