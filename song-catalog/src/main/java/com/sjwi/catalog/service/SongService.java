@@ -1,6 +1,17 @@
 /* (C)2022 https://stephenky.com */
 package com.sjwi.catalog.service;
 
+import java.sql.ResultSet;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
 import com.github.difflib.DiffUtils;
 import com.github.difflib.patch.AbstractDelta;
 import com.sjwi.catalog.dao.SongDao;
@@ -10,20 +21,14 @@ import com.sjwi.catalog.model.TransposableString;
 import com.sjwi.catalog.model.song.MasterSong;
 import com.sjwi.catalog.model.song.Song;
 import com.sjwi.catalog.model.user.CfUser;
-import java.sql.ResultSet;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 @Component
 public class SongService {
 
   private static final String SEARCH_TERM_DELIMITER = ":";
+
+  private static final String SONG_CACHE_KEY_ROOT = "songs";
+  private static HashMap<String, List<Song>> songCache = new HashMap<>();
 
   @Autowired SongDao songDao;
 
@@ -32,11 +37,18 @@ public class SongService {
   }
 
   public List<Song> getSongs() {
-    return songDao.getSongs();
+    if (!songCache.containsKey(SONG_CACHE_KEY_ROOT))
+      songCache.put(SONG_CACHE_KEY_ROOT, songDao.getSongs());
+    return songCache.get(SONG_CACHE_KEY_ROOT);
   }
 
   public List<Song> searchSongs(String searchValue) {
-    if (searchValue == null || searchValue.trim().isEmpty()) return songDao.getSongs();
+    if (searchValue == null || searchValue.trim().isEmpty()) return getSongs();
+
+    String cacheKey = SONG_CACHE_KEY_ROOT + searchValue;
+    if (songCache.containsKey(cacheKey))
+      return songCache.get(cacheKey);
+    
     if (searchValue.contains(SEARCH_TERM_DELIMITER)) {
       String[] searchParts = searchValue.split(SEARCH_TERM_DELIMITER);
       String termKey = searchParts[0];
@@ -44,7 +56,8 @@ public class SongService {
       SearchTerm term = SearchTerm.fromString(termKey);
       if (term != null) return songDao.searchSongsWithTerm(term, termValue);
     }
-    return songDao.searchSongs("%" + searchValue.toLowerCase() + "%");
+    songCache.put(cacheKey, songDao.searchSongs("%" + searchValue.toLowerCase() + "%"));
+    return songCache.get(cacheKey);
   }
 
   public void setDefaultKey(String updatedVersionKey, int songId, String user) {
@@ -53,7 +66,7 @@ public class SongService {
 
   public int addSong(
       String songTitle, String songBody, String chordedIn, CfUser user, int category) {
-    return songDao.addSong(
+    int song = songDao.addSong(
         new MasterSong(
             null,
             0,
@@ -69,14 +82,18 @@ public class SongService {
             false,
             category,
             null));
+    refreshSongCache();
+    return song;
   }
 
   public void deleteSong(int songId) {
     songDao.deleteSong(songId);
+    refreshSongCache();
   }
 
   public void updateSong(Song song, String user) {
     songDao.updateSong(song, user);
+    refreshSongCache();
   }
 
   public List<KeySet> getKeySets() {
@@ -126,4 +143,16 @@ public class SongService {
   public Song getSongByName(String songTitle) {
     return songDao.getSongByName(songTitle);
   }
+
+  public void refreshSongCache() {
+    songCache.clear();
+    Thread clearCache = new Thread(new Runnable() {
+      @Override
+      public void run() {
+        songCache.put(SONG_CACHE_KEY_ROOT, songDao.getSongs());
+      }
+    });  
+    clearCache.start();
+  }
+
 }
