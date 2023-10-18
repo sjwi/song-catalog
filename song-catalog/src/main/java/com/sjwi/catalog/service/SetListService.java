@@ -1,6 +1,14 @@
 /* (C)2022 https://stephenky.com */
 package com.sjwi.catalog.service;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
 import com.sjwi.catalog.config.ServletConstants;
 import com.sjwi.catalog.controller.ControllerHelper;
 import com.sjwi.catalog.dao.SetListDao;
@@ -9,14 +17,12 @@ import com.sjwi.catalog.model.SetList;
 import com.sjwi.catalog.model.SetListState;
 import com.sjwi.catalog.model.song.SetListSong;
 import com.sjwi.catalog.model.song.Song;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 @Component
 public class SetListService {
+
+  private static final String SETLIST_CACHE_KEY_ROOT = "setlist";
+  private static Map<String, List<SetList>> setListCache = new HashMap<>();
 
   @Autowired SetListDao setListDao;
 
@@ -36,11 +42,16 @@ public class SetListService {
   }
 
   public List<SetList> getSetLists() {
-    return setListDao.getSetLists();
+    if (!setListCache.containsKey(SETLIST_CACHE_KEY_ROOT))
+      setListCache.put(SETLIST_CACHE_KEY_ROOT, setListDao.getSetLists());
+    return setListCache.get(SETLIST_CACHE_KEY_ROOT);
   }
 
   public List<SetList> getSetLists(int quantity) {
-    return transposeFromState(setListDao.getSetLists(quantity));
+    String cacheKey = SETLIST_CACHE_KEY_ROOT + String.valueOf(quantity);
+    if (!setListCache.containsKey(cacheKey))
+      setListCache.put(cacheKey, transposeFromState(setListDao.getSetLists(quantity)));
+    return setListCache.get(cacheKey);
   }
 
   private List<SetList> transposeFromState(List<SetList> setlists) {
@@ -98,43 +109,53 @@ public class SetListService {
             + ServletConstants.FULL_URL
             + "/setlist/"
             + setListId);
+    refreshSetListCache();
     return setListId;
   }
 
   public void deleteSet(int id) {
     setListDao.deleteSet(id);
+    refreshSetListCache();
   }
 
   public void addSongToSet(int songId, int setListId, String key, int sort) {
     setListDao.addSongToSet(songId, setListId, key, sort);
+    refreshSetListCache();
   }
 
   public void addSongsToSet(List<Integer> songIds, int setListId) {
     setListDao.addSongsToSet(songIds, setListId);
+    refreshSetListCache();
   }
 
   public void removeSongFromSet(int setListId, int songId) {
     setListDao.removeSongFromSet(setListId, songId);
+    refreshSetListCache();
   }
 
   public void changeVersion(int setId, int oldVersion, int newVersion) {
     setListDao.changeVersion(setId, oldVersion, newVersion);
+    refreshSetListCache();
   }
 
   public void setDefaultSetKey(String newKey, int songId) {
     setListDao.setDefaultSetKey(newKey, songId, setListDao.getSetListIdForSetSong(songId));
+    refreshSetListCache();
   }
 
   public void changeVersion(int setSongId, int versionId) {
     setListDao.changeVersion(setSongId, versionId);
+    refreshSetListCache();
   }
 
   public void sortSetList(List<Integer> songIds) {
     setListDao.sortSetList(songIds);
+    refreshSetListCache();
   }
 
   public void renameSet(int id, String setListName) {
     setListDao.renameSet(id, setListName);
+    refreshSetListCache();
   }
 
   public List<SetList> getSetListsByOrg(int id) {
@@ -143,6 +164,7 @@ public class SetListService {
 
   public void pinLatestSetList(int id) {
     setListDao.flagSetListAsMostRecent(id);
+    refreshSetListCache();
   }
 
   public Integer getSetListIdBySong(int songId) {
@@ -152,5 +174,15 @@ public class SetListService {
   public SetList getSetListById(Integer id, boolean transposeFromState) {
     if (transposeFromState) return getSetListById(id);
     else return setListDao.getSetListById(id);
+  }
+  public void refreshSetListCache() {
+    setListCache.clear();
+    Thread clearCache = new Thread(new Runnable() {
+      @Override
+      public void run() {
+        setListCache.put(SETLIST_CACHE_KEY_ROOT + "25", setListDao.getSetLists(25));
+      }
+    });  
+    clearCache.start();
   }
 }
