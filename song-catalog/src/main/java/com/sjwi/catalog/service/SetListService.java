@@ -1,16 +1,6 @@
 /* (C)2022 https://stephenky.com */
 package com.sjwi.catalog.service;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
 import com.sjwi.catalog.config.ServletConstants;
 import com.sjwi.catalog.controller.ControllerHelper;
 import com.sjwi.catalog.dao.SetListDao;
@@ -19,6 +9,14 @@ import com.sjwi.catalog.model.SetList;
 import com.sjwi.catalog.model.SetListState;
 import com.sjwi.catalog.model.song.SetListSong;
 import com.sjwi.catalog.model.song.Song;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 @Component
 public class SetListService {
@@ -186,9 +184,11 @@ public class SetListService {
               @Override
               public void run() {
                 List<String> counts = new ArrayList<>(Arrays.asList("25", "10"));
-                counts.forEach(c -> 
-                  setListCache.put(SETLIST_CACHE_KEY_ROOT + c, setListDao.getSetLists(Integer.valueOf(c)))
-                );
+                counts.forEach(
+                    c ->
+                        setListCache.put(
+                            SETLIST_CACHE_KEY_ROOT + c,
+                            setListDao.getSetLists(Integer.valueOf(c))));
               }
             });
     clearCache.start();
