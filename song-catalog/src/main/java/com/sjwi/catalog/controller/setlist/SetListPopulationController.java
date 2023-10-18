@@ -143,6 +143,7 @@ public class SetListPopulationController {
       setListService.removeSongFromSet(setListId, songId);
       ModelAndView mv = new ModelAndView("dynamic/set-list-container");
       mv.addObject("set", setListService.getSetListById(setListId));
+      mv.addObject("setListState", userService.getSetState(setListId));
       return mv;
 
     } catch (Exception e) {

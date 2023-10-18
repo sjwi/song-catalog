@@ -1,17 +1,6 @@
 /* (C)2022 https://stephenky.com */
 package com.sjwi.catalog.service;
 
-import java.sql.ResultSet;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
 import com.github.difflib.DiffUtils;
 import com.github.difflib.patch.AbstractDelta;
 import com.sjwi.catalog.dao.SongDao;
@@ -21,6 +10,15 @@ import com.sjwi.catalog.model.TransposableString;
 import com.sjwi.catalog.model.song.MasterSong;
 import com.sjwi.catalog.model.song.Song;
 import com.sjwi.catalog.model.user.CfUser;
+import java.sql.ResultSet;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 @Component
 public class SongService {
@@ -46,9 +44,8 @@ public class SongService {
     if (searchValue == null || searchValue.trim().isEmpty()) return getSongs();
 
     String cacheKey = SONG_CACHE_KEY_ROOT + searchValue;
-    if (songCache.containsKey(cacheKey))
-      return songCache.get(cacheKey);
-    
+    if (songCache.containsKey(cacheKey)) return songCache.get(cacheKey);
+
     if (searchValue.contains(SEARCH_TERM_DELIMITER)) {
       String[] searchParts = searchValue.split(SEARCH_TERM_DELIMITER);
       String termKey = searchParts[0];
@@ -66,22 +63,23 @@ public class SongService {
 
   public int addSong(
       String songTitle, String songBody, String chordedIn, CfUser user, int category) {
-    int song = songDao.addSong(
-        new MasterSong(
-            null,
-            0,
-            songTitle,
-            new TransposableString(songBody, chordedIn),
-            chordedIn,
-            null,
-            null,
-            user,
-            user,
-            new Date(),
-            0,
-            false,
-            category,
-            null));
+    int song =
+        songDao.addSong(
+            new MasterSong(
+                null,
+                0,
+                songTitle,
+                new TransposableString(songBody, chordedIn),
+                chordedIn,
+                null,
+                null,
+                user,
+                user,
+                new Date(),
+                0,
+                false,
+                category,
+                null));
     refreshSongCache();
     return song;
   }
@@ -146,13 +144,14 @@ public class SongService {
 
   public void refreshSongCache() {
     songCache.clear();
-    Thread clearCache = new Thread(new Runnable() {
-      @Override
-      public void run() {
-        songCache.put(SONG_CACHE_KEY_ROOT, songDao.getSongs());
-      }
-    });  
+    Thread clearCache =
+        new Thread(
+            new Runnable() {
+              @Override
+              public void run() {
+                songCache.put(SONG_CACHE_KEY_ROOT, songDao.getSongs());
+              }
+            });
     clearCache.start();
   }
-
 }
