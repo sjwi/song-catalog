@@ -1589,6 +1589,8 @@ label.v-center {
 	border-bottom: .5px solid rgb(128, 128, 128 ,.3);
 }
 ul.ks-cboxtags {
+	overflow-x: scroll;
+	white-space: nowrap;
 	margin-bottom: 0;
 	padding: 0 0 0 0 !important;
     list-style: none;
