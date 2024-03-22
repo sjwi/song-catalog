@@ -12,14 +12,14 @@ pipeline {
             steps {
                 dir('song-catalog') {
                     script {
-                        if (env.BRANCH == "develop") {
+                        if (env.BRANCH == "origin/develop") {
                             sh '''
                                 echo server.servlet.contextPath=/song-catalog >> src/main/resources/application.properties
                                 echo server.servlet.context-path=/song-catalog >> src/main/resources/application.properties
                                 echo >> src/main/resources/application.properties
                             '''
                         }
-                        else if (env.BRANCH == "main") {
+                        else if (env.BRANCH == "origin/main") {
                             sh '''
                                 echo server.servlet.contextPath=/ >> src/main/resources/application.properties
                                 echo server.servlet.context-path=/ >> src/main/resources/application.properties
@@ -33,7 +33,7 @@ pipeline {
         }
         stage('Backup Existing WAR') {
             when {
-                expression { env.BRANCH == "main"}
+                expression { env.BRANCH == "origin/main"}
             }
             steps {
                 withCredentials([
@@ -50,7 +50,7 @@ pipeline {
             steps {
                 dir('song-catalog'){
                     script {
-                        if (env.BRANCH == "main") {
+                        if (env.BRANCH == "origin/main") {
                             withCredentials([
                                 usernamePassword(credentialsId: 'dreamhost_cfsongs', usernameVariable: 'DREAMHOST_UN', passwordVariable: 'DREAMHOST_PW'),
                                 string(credentialsId:'cfsongs_dns', variable: 'DNS')
@@ -63,7 +63,7 @@ pipeline {
                         } else if (env.BRANCH == "develop") {
                             sh "sudo mv target/ROOT.war /opt/tomcat/webapps/song-catalog.war"
                         } else {
-                            def featureContext = "sc-" + env.BRANCH + ".war"
+                            def featureContext = "sc-" + env.BRANCH.replace("/", "-") + ".war"
                             sh "sudo mv target/ROOT.war /opt/tomcat/webapps/$featureContext"
                         }
                     }
@@ -72,7 +72,7 @@ pipeline {
         }
         stage('Test Availability') {
             when {
-                expression { env.BRANCH == "main"}
+                expression { env.BRANCH == "origin/main"}
             }
             steps {
                 withCredentials([
@@ -106,7 +106,7 @@ pipeline {
         }
         stage('Deploy Demo') {
             when {
-                expression { env.BRANCH == "main"}
+                expression { env.BRANCH == "origin/main"}
             }
             steps {
                 withCredentials([
