@@ -60,10 +60,10 @@ pipeline {
                                 sh "sleep 3"
                                 sh "ssh $DREAMHOST_UN@$DNS -o StrictHostKeyChecking=no 'sudo systemctl start tomcat.service'"
                             }
-                        } else if (env.BRANCH == "develop") {
+                        } else if (env.BRANCH == "origin/develop") {
                             sh "sudo mv target/ROOT.war /opt/tomcat/webapps/song-catalog.war"
                         } else {
-                            def featureContext = "sc-" + env.BRANCH.replace("/", "-") + ".war"
+                            def featureContext = "sc-" + env.BRANCH + ".war"
                             sh "sudo mv target/ROOT.war /opt/tomcat/webapps/$featureContext"
                         }
                     }
