@@ -5,7 +5,7 @@ pipeline {
         cron('1 3 * * *')
     }
     environment {
-        BRANCH = "${CHANGE_BRANCH ?: GIT_BRANCH}"
+        BRANCH = "${CHANGE_BRANCH ?: BRANCH_NAME}"
     }
     stages {
         stage('Build WAR') {
