@@ -542,6 +542,17 @@ body {
 	box-shadow: 4px 4px 4px 2px rgba(0, 0, 0, 0.4);
 	z-index:1032;
 }
+
+.column-page {
+	column-count: 2;
+}
+
+.column-page > p.song-body-sect {
+	white-space: pre-wrap !important;
+	display: inline-block;
+	font-size: .90rem;
+}
+
 .off-nav-title,.off-nav-title > span > div {
 	font-size:1.5rem;
 }
@@ -691,6 +702,8 @@ body {
 }
 .version-container > .version-body > .song-body{
 	padding: 0 15px 15px 15px;
+	white-space: pre;
+	text-align: left;
 }
 .version-container .add-version-img {
 	padding-top:100px;
@@ -739,9 +752,13 @@ body {
   display:block !important;
   opacity:1 !important;
 }
-p.song-body, p.song-footer {
+div.song-body > p.song-body-sect {
 	text-align:left;
-	white-space:pre;
+	white-space:pre-wrap;
+	overflow:hidden;
+}
+div.song-body, p.song-footer {
+	text-align:left;
 	overflow:hidden;
 	padding: 0 0 30px 30px;
 	/* padding: 3rem 0 30px 30px; */
@@ -2054,6 +2071,13 @@ table > thead > tr > th[class*="sort"]:after {
 	}
 }
 @media screen and (max-width: 700px) {
+	.column-page{
+		column-count: 1;
+	}
+	.column-page > .song-body-sect {
+		white-space: pre;
+		font-size: auto;
+	}
 	.static-song-page-title > span {
 		max-width:190px !important;
 	}

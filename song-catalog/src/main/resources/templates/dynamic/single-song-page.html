@@ -22,6 +22,9 @@
 			</th:block>
 		</div>
 		<hr class="mt-4">
-		<p class="song-body" th:text="${#strings.listJoin(song.getBodyAsChunks(),T(java.lang.System).getProperty('line.separator') + T(java.lang.System).getProperty('line.separator'))}"></p>
+		<div class="song-body" th:classappend="${song.getBodyLineCount() > 35? 'column-page':''}">
+			<p class="song-body-sect" th:each="songsect: ${song.getBodyAsChunks()}" th:text="${songsect.trim()}">
+			</p>
+		</div>
 	</div>
 </th:block>

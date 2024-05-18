@@ -9,7 +9,7 @@
 	$(document).ready(function(){
 		$('.zoom-min').click(function(e){
 			if (parseInt($('#zoomPerc').html()) > 30){
-				var songBodies = $(this).closest('.song-page-container').find('.song-body,.song-footer');
+				var songBodies = $(this).closest('.song-page-container').find('.song-body,.song-footer,.song-body-sect');
 				$(songBodies).each(function(){
 					var currentFont = parseInt($(this).css("font-size"));
 					$(this).css({'font-size':currentFont - 2 + 'px'});
@@ -21,7 +21,7 @@
 		});
 		$('.zoom-plus').click(function(e){
 			if (parseInt($('#zoomPerc').html()) < 200){
-				var songBodys = $(this).closest('.song-page-container').find('.song-body,.song-footer');
+				var songBodys = $(this).closest('.song-page-container').find('.song-body,.song-footer,.song-body-sect');
 				$(songBodys).each(function(){
 					var currentFont = parseInt($(this).css("font-size"));
 					$(this).css({'font-size':currentFont + 2 + 'px'});

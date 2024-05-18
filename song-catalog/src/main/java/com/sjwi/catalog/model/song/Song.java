@@ -3,12 +3,13 @@ package com.sjwi.catalog.model.song;
 
 import static com.sjwi.catalog.file.FileGenerator.LICENSE_TEXT;
 
-import com.sjwi.catalog.model.Recording;
-import com.sjwi.catalog.model.TransposableString;
-import com.sjwi.catalog.model.user.CfUser;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.stream.Collectors;
+
+import com.sjwi.catalog.model.Recording;
+import com.sjwi.catalog.model.TransposableString;
+import com.sjwi.catalog.model.user.CfUser;
 
 public abstract class Song {
 
@@ -69,6 +70,10 @@ public abstract class Song {
 
   public String getBody() {
     return body;
+  }
+
+  public int getBodyLineCount() {
+    return body.split("\n").length;
   }
 
   public String[] getBodyAsChunks() {
