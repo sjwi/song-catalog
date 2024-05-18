@@ -547,16 +547,13 @@ body {
 	column-count: 2;
 }
 
-.column-page > p:nth-child(2n) {
-	padding-left: 50px;
-}
-
 .column-page > p.song-body-sect {
 	white-space: pre;
 	text-overflow: ellipsis;
 	display: inline-block;
 	font-size: .90rem;
 	max-width: 100%;
+	min-width: 100%;
 }
 
 .off-nav-title,.off-nav-title > span > div {
