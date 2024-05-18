@@ -547,10 +547,16 @@ body {
 	column-count: 2;
 }
 
+.column-page > p:nth-child(2n) {
+	padding-left: 50px;
+}
+
 .column-page > p.song-body-sect {
-	white-space: pre-wrap !important;
+	white-space: pre;
+	text-overflow: ellipsis;
 	display: inline-block;
 	font-size: .90rem;
+	max-width: 100%;
 }
 
 .off-nav-title,.off-nav-title > span > div {
@@ -754,7 +760,7 @@ body {
 }
 div.song-body > p.song-body-sect {
 	text-align:left;
-	white-space:pre-wrap;
+	white-space:pre;
 	overflow:hidden;
 }
 div.song-body, p.song-footer {
@@ -2076,7 +2082,9 @@ table > thead > tr > th[class*="sort"]:after {
 	}
 	.column-page > .song-body-sect {
 		white-space: pre;
+		text-overflow: hidden;
 		font-size: auto;
+		max-width: auto;
 	}
 	.static-song-page-title > span {
 		max-width:190px !important;
