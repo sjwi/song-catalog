@@ -554,7 +554,7 @@ body {
 	font-size: .90rem;
 	max-width: 100%;
 	min-width: 100%;
-	margin-bottom: -1rem;
+	margin-bottom: -.1rem;
 }
 
 .off-nav-title,.off-nav-title > span > div {
@@ -760,7 +760,7 @@ div.song-body > p.song-body-sect {
 	text-align:left;
 	white-space:pre;
 	overflow:hidden;
-	line-height: .6rem;
+	line-height: .3rem;
 }
 div.song-body, p.song-footer {
 	text-align:left;
@@ -2084,7 +2084,7 @@ table > thead > tr > th[class*="sort"]:after {
 		text-overflow: hidden;
 		font-size: auto;
 		max-width: auto;
-		margin-bottom: -1rem;
+		margin-bottom: -.1rem;
 	}
 	.static-song-page-title > span {
 		max-width:190px !important;
