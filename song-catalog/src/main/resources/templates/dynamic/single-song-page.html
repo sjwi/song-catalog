@@ -23,7 +23,11 @@
 		</div>
 		<hr class="mt-4">
 		<div class="song-body" th:classappend="${song.getBodyLineCount() > 35? 'column-page':''}">
-			<p class="song-body-sect" th:each="songsect: ${song.getBodyAsChunks()}" th:text="${songsect.trim()}">
+			<p class="song-body-sect" th:each="songsect: ${song.getBodyAsChunks()}">
+				<th:block th:each="line: ${#strings.arraySplit(songsect.trim(), T(java.lang.System).getProperty('line.separator'))}">
+					<span th:if="${!T(com.sjwi.catalog.model.TransposableString).isLineOnlyChords(line)}" th:text="${line.trim()}"></span>
+					<strong th:if="${T(com.sjwi.catalog.model.TransposableString).isLineOnlyChords(line)}" th:text="${line.trim()}"></strong>
+				</th:block>
 			</p>
 		</div>
 	</div>
