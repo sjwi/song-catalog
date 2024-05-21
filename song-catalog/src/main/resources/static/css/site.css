@@ -23,6 +23,9 @@ hr {
 .logo:active {
 	opacity: .75;
 }
+pb-dot5 {
+	padding-bottom: .125rem;
+}
 .logo-sm {
 	opacity:.95;
 	width:32px;
@@ -555,6 +558,10 @@ body {
 	max-width: 100%;
 	min-width: 100%;
 	margin-bottom: -.1rem;
+}
+
+.song-body-sect > strong {
+	padding-bottom: 0.25rem;
 }
 
 .off-nav-title,.off-nav-title > span > div {
@@ -2080,11 +2087,12 @@ table > thead > tr > th[class*="sort"]:after {
 		column-count: 1;
 	}
 	.column-page > .song-body-sect {
-		white-space: pre;
 		text-overflow: hidden;
-		font-size: auto;
 		max-width: auto;
-		margin-bottom: -.1rem;
+		font-size: calc(.9rem - 2px) !important;
+	}
+	.song-body-sect > strong {
+		padding-bottom: 0;
 	}
 	.static-song-page-title > span {
 		max-width:190px !important;
