@@ -26,7 +26,7 @@
 			<p class="song-body-sect" th:each="songsect: ${song.getBodyAsChunks()}">
 				<th:block th:each="line: ${#strings.arraySplit(songsect.trim(), T(java.lang.System).getProperty('line.separator'))}">
 					<span class="d-block" th:if="${!T(com.sjwi.catalog.model.TransposableString).isLineOnlyChords(line)}" th:text="${line.trim()}"></span>
-					<strong class="d-block pb-dot5" th:if="${T(com.sjwi.catalog.model.TransposableString).isLineOnlyChords(line)}" th:text="${line.trim()}"></strong>
+					<strong class="d-block pb-dot5" th:if="${T(com.sjwi.catalog.model.TransposableString).isLineOnlyChords(line)}" th:text="${line}"></strong>
 				</th:block>
 			</p>
 		</div>
