@@ -1970,7 +1970,22 @@ table > thead > tr > th[class*="sort"]:after {
 	.static-song-page-title {
 		margin-left: 0 !important;
 	}
-	.setlist-home-col,.hide-song-catalog, .hide-song-details,.song-catalog-nav, .drag-notification, .song-grip-container {
+	.home-page{
+		overflow-x: scroll !important;
+		scroll-snap-type: x mandatory;
+	}
+	.song-home-col{
+		scroll-snap-align: start;
+		min-width: 100vw !important
+	}
+	.setlist-home-col{
+		scroll-snap-align: start;
+		min-width: 100vw !important;
+	}
+	.setlist-section{
+		background: var(--primary-grey) !important;
+	}
+	.hide-song-catalog, .hide-song-details,.song-catalog-nav, .drag-notification, .song-grip-container {
 	  display:none !important;
 	}
 	#setListDetailsHeader .off-home-header{
@@ -1980,6 +1995,7 @@ table > thead > tr > th[class*="sort"]:after {
 		overflow:auto !important;
 		max-height:none !important;
 		height: fit-content !important;
+		
 	}
 	.dynamic-song-page-title, .dynamic-search-bar {
 		display:flex;
@@ -2051,7 +2067,7 @@ table > thead > tr > th[class*="sort"]:after {
 		z-index:2000;
 	}
 	.song-section, .song-catalog-row, body, #songCatalogBody .song-column {
-		height:auto !important;
+		/*height:auto !important;*/
 	}
 	#songCatalogBody .song-catalog-row {
 		padding-top: 40.3px;

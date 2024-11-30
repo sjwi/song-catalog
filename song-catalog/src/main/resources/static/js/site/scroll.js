@@ -1,4 +1,6 @@
-function addScrollListener(id, size, delay){
+function addScrollListener(id, size, delay, elem){
+	if (!elem)
+		elem = window
 	if (!delay && size) {
 		delay = Math.abs(size);
 	} else {
@@ -9,17 +11,17 @@ function addScrollListener(id, size, delay){
 	} else {
 		size = size.toString() + 'px';
 	}
-	var prevScrollpos = window.pageYOffset;
+	var prevScrollpos = $(elem).scrollTop();
 	var velocityThreshold = 5;
-	if ($(window).scrollTop() != 0) {
+	if ($(elem).scrollTop() != 0) {
 		$(id).css('top',size);
 		$('.sticky-top-nav, .top-nav').css('top',size);
 	}
 	$(document).ready(function(){
-		$(window).on('scroll',function(e){
-			var currentScrollPos = window.pageYOffset;
+		$(elem).on('scroll',function(e){
+			var currentScrollPos  = $(elem).scrollTop();
 			var velocity = Math.abs(prevScrollpos - currentScrollPos);
-			if ((prevScrollpos > currentScrollPos && velocity > velocityThreshold) || $(window).scrollTop() <= delay) {
+			if ((prevScrollpos > currentScrollPos && velocity > velocityThreshold) || $(elem).scrollTop() <= delay) {
 				$(id).css('top','0');
 				$('.sticky-top-nav, .top-nav').css('top','0');
 				if (slideAlertUp && $('.add-songs-alert').hasClass('slide-down') && checkedCacheSize() != 0)

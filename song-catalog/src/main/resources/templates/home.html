@@ -5,8 +5,8 @@
 	<body id="homePageBody">
 		<div class="scroll-lock" style="overflow-y:hidden;">
 			<div class="row no-gutters flex-nowrap home-page">
-				<div class="col no-gutters">
-					<div class="song-section">
+				<div class="song-home-col col no-gutters">
+					<div id="homeSongSection" class="song-section">
 						<nav class="sticky-top song custom-border-bottom" id="songNav">
 							<div class="row song-header no-gutters">
 								<div class="col-2">
@@ -33,7 +33,7 @@
 								<th:block th:replace="partial/categories"></th:block>
 							</div>
 						</nav>
-						<div class="container pl-0 pr-0">
+						<div id="songHomeScroll" class="container pl-0 pr-0">
 							<div class="template-container" id="songTableContainer">
 								<th:block th:replace="dynamic/song-table"></th:block>
 							</div>
@@ -43,7 +43,7 @@
 						</th:block>
 					</div>
 				</div>
-				<div class="col-12 col-md-6 no-gutters setlist-home-col border-left" style="background: var(--secondary-bg-color)">
+				<div id="setListHomeCol" class="col-12 col-md-6 no-gutters setlist-home-col border-left" style="background: var(--secondary-bg-color)">
 					<div class="setlist-section">
 						<nav class="sticky-top setlist" id="setListNav">
 							<div class="row setlist-header no-gutters">
@@ -129,12 +129,32 @@
 					location.reload();
 				}
 			});	
+			var lastScrollLeft = 0;
 			if (window.innerWidth < 900){
 				if (window.innerWidth < 577) {
-					addScrollListener('#songNav', -133);
+					var size = -133
 				} else {
-					addScrollListener('#songNav', -137);
+					var size = -137
 				}
+				$('.home-page').on('scroll', function() {
+					var scrollLeft = $(this).scrollLeft();
+
+					if (scrollLeft > lastScrollLeft) {
+						console.log($('#songNav').css('top'))
+						if ($('#songNav').css('top') != '0px') {
+							$('#categoriesControl').hide()
+						} else {
+							$('#categoriesControl').slideUp('fast')
+						}
+						$('#songNav').css('top','0');
+						$('.sticky-top-nav, .top-nav').css('top','0');
+					} else if (scrollLeft < lastScrollLeft) {
+						$('#categoriesControl').slideDown('fast')
+					}
+
+					lastScrollLeft = scrollLeft;
+				});
+				addScrollListener('#songNav', size, 0, '#homeSongSection');
 			} else {
 				hideCategoriesOnScrollListener('#categoriesControl', '.song-section');
 			}
