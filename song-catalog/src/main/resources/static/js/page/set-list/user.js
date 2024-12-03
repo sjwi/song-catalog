@@ -29,7 +29,7 @@ $(document).ready(function(){
 		}
 	});
 	
-	$(document).on('click','.set-list-container .set-table .close',function(e){
+	$(document).on('click','.set-list-container .set-table .remove',function(e){
 		deleteSongFromSet($(e.target).closest('.set-song-row').data('target'),
 				$(e.target).closest('.set-song-row').data('setsongid'),
 				$(e.target).closest('.set-song-row').data('setid'),

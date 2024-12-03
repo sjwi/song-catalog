@@ -277,8 +277,8 @@ CREATE TABLE Recording (
 -- Dumping data for table Recording
 --
 
---INSERT INTO Recording (SONG_ID, PATH, EXT, FILE) Values
---()
+INSERT INTO Recording (SONG_ID, PATH, EXT) Values
+(1, '1', 'mp3')
 
 /*!40000 ALTER TABLE Recording DISABLE KEYS */;
 /*!40000 ALTER TABLE Recording ENABLE KEYS */;

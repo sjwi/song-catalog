@@ -46,6 +46,15 @@
 						</span>
 					</th:block>
 				</td>
+				<td width="80px" class="text-center key-select"
+					th:with="overridden=${setListState != null && setListState.songSettings.containsKey(setSong.setListSongId)},
+						capo=${setListState != null && setListState.songSettings.containsKey(setSong.setListSongId)? setListState.songSettings.get(setSong.setListSongId).capo: null},
+						ogKey=${setListState != null && setListState.songSettings.containsKey(setSong.setListSongId)? setListState.songSettings.get(setSong.setListSongId).ogKey: null}"
+				>
+					<th:block
+						th:replace="partial/key-dropdown :: keySet(${setSong.defaultKey},'defaultKey')"
+					></th:block>
+				</td>
 				<td width="30px" class="align-middle">
 					<th:block sec:authorize="hasAuthority('USER')">
 						<img class="action-btn" th:src="@{/images/ellipse-inverse.png}" data-toggle="dropdown">	
@@ -61,22 +70,13 @@
 							<li>
 								<a class="dropdown-item choose-version" th:attr="onclick=${'openChangeVersionModal(' + setSong.id + ',' + set.id + ',''' + #strings.replace(setSong.name,'''','\''') + ''',' + setSong.setListSongId +')'}">Select Version</a>
 							</li>
+							<li>
+								<a sec:authorize="hasAuthority('USER')" class="dropdown-item remove" aria-label="Remove">
+									Remove
+								</a>
+							</li>
 						</ul>
 					</th:block>
-				</td>
-				<td width="80px" class="text-center key-select"
-					th:with="overridden=${setListState != null && setListState.songSettings.containsKey(setSong.setListSongId)},
-						capo=${setListState != null && setListState.songSettings.containsKey(setSong.setListSongId)? setListState.songSettings.get(setSong.setListSongId).capo: null},
-						ogKey=${setListState != null && setListState.songSettings.containsKey(setSong.setListSongId)? setListState.songSettings.get(setSong.setListSongId).ogKey: null}"
-				>
-					<th:block
-						th:replace="partial/key-dropdown :: keySet(${setSong.defaultKey},'defaultKey')"
-					></th:block>
-				</td>
-				<td width="10px" class="text-right align-middle">
-					<button sec:authorize="hasAuthority('USER')" type="button" class="close" aria-label="Close">
-					  <span aria-hidden="true" class="close-dark">&times;</span>
-					</button>
 				</td>
 			</tr>
 		</table>

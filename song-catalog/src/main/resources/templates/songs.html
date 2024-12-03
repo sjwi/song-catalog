@@ -49,13 +49,9 @@
 			$('#songTableContainer').html($('.loading').clone());
 		var ignoreSongClickedSelector = ".action-btn,.song-dropdown-btn,.dropdown-menu, li, .dropdown-item,.grip-container,img,.round,.round>*";
 		var focusedSong = [[${focusedSong[0].id}]];
-		var focusedSlickPage = [[${fsInitialIndex}]];
 		
 		function refreshSongContainer(id){
-			$('#catalogSongDetails').load(contextpath + 'song/' + id + '?view=dynamic/song-details',function(){
-				focusedSlickPage = 0;
-				slick();
-			});
+			$('#catalogSongDetails').load(contextpath + 'song/' + id + '?view=dynamic/song-details', bindSongContainerScroll);
 			$('#catalogVersionDetails').load(contextpath + 'song/' + id + '?view=dynamic/version-details');
 		}
 		function selectFocusedSong(id){

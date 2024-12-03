@@ -136,11 +136,11 @@
 				} else {
 					var size = -137
 				}
+				var width = $('.home-page')[0].scrollWidth
 				$('.home-page').on('scroll', function() {
 					var scrollLeft = $(this).scrollLeft();
 
-					if (scrollLeft > lastScrollLeft) {
-						console.log($('#songNav').css('top'))
+					if (scrollLeft > lastScrollLeft && scrollLeft > 0) {
 						if ($('#songNav').css('top') != '0px') {
 							$('#categoriesControl').hide()
 						} else {
@@ -148,8 +148,10 @@
 						}
 						$('#songNav').css('top','0');
 						$('.sticky-top-nav, .top-nav').css('top','0');
-					} else if (scrollLeft < lastScrollLeft) {
+						$('.title-link').text("Set Lists")
+					} else if ((scrollLeft < lastScrollLeft || scrollLeft <= 0) && scrollLeft < (width / 2)) {
 						$('#categoriesControl').slideDown('fast')
+						$('.title-link').text("Song Catalog")
 					}
 
 					lastScrollLeft = scrollLeft;

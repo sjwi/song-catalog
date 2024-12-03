@@ -10,7 +10,6 @@ function reloadSetSongContainerIfPresent(setId){
 			success: function(data) {
 				lastUpdatedTime = undefined;
 				$(songContainer).html(data);
-				slick();
 			}
 		});
 	}	

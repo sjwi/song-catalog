@@ -51,17 +51,6 @@
 		var setListId = /*[[${set.id}]]*/;
 		var ignoreTdAction = '.grip-container,.set-grip,img,.action-btn-container,key-select,button,.close-dark,.ignore-td-action';
 		$(document).ready(function(){
-			$(document).on('click','.set-list-container',function(e){
-				if($(e.target).is('td, td span') && !$(e.target).is(ignoreTdAction)){
-					if ($('#slickContainer').length){
-						$('#slickContainer').slick('slickGoTo',$(e.target).closest('.set-song-row').data('sort') - 1);
-					}
-				}
-			});
-			$(".slick-container").on("beforeChange", function (e, slick, currentSlide, nextSlide){
-				resetSongPageAudio($(slick.$slides.get(nextSlide)).data('recording'));
-			});
-			$('.wrapper').css('height',$(document).height() - 30);
 			setInterval(function(){
 				pollForSetListUpdate(setListId);
 			}, 5000)

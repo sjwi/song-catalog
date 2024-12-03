@@ -38,7 +38,78 @@ $(document).ready(function(e){
 	$(document).on('hide.bs.modal','.modal', function() {
 		unlockScroll();
 	});
+	$(document).on('click', '.next-slide', function() {
+		var container = $('.multi-song-container');
+    var itemWidth = $('.multi-song-container>div').outerWidth(true); // Get the width of one item (including margin)
+    var currentScroll = container.scrollLeft(); // Get current scroll position
+    
+    // Scroll right by one item width
+    container.scrollLeft(currentScroll + itemWidth);
+	});
+	$(document).on('click', '.previous-slide', function() {
+		var container = $('.multi-song-container');
+		var itemWidth = $('.multi-song-container>div').outerWidth(true);
+		var currentScroll = container.scrollLeft();
+		
+		container.scrollLeft(currentScroll - itemWidth);
+	});
+	$(document).on('click thouchstart','.audio-box',function(){
+		var songRecording = $(this).data('recording');
+		if (songRecording != null){
+			$('.audio-box').replaceWith('<audio class="song-page-audio" controls><source src="/audio/' + songRecording + '" type="audio/mpeg"></audio>');
+			$('.song-page-audio')[0].play();
+		}
+	});
+	$(document).on('click','.set-list-container',function(e){
+		if($(e.target).is('td, td span') && !$(e.target).is(ignoreTdAction)){
+			var sortNum = $(e.target).closest('.set-song-row').attr('data-sort') - 1
+			var container = $('.multi-song-container')
+			var itemWidth = $('.multi-song-container>div').outerWidth(true);
+
+			container.scrollLeft(itemWidth * sortNum);
+		}
+	});
+	$(document).on('click', '.version-container', function(){
+		if ($(this).hasClass('new-version')){
+			openVersionControlModal($(this).data('target'),true);
+		} else {
+			var sortNum = $(this).data('target')
+			var container = $('.multi-song-container')
+			var itemWidth = $('.multi-song-container>div').outerWidth(true);
+
+			container.scrollLeft(itemWidth * sortNum);
+		}
+	});
+	bindSongContainerScroll()
 });
+function bindSongContainerScroll() {
+	var lastScrollLeft = 0;
+	$('.multi-song-container').off('scroll').on('scroll', function() {
+		var width = this.scrollWidth
+		var scrollLeft = $(this).scrollLeft();
+    var itemWidth = $(this).children('div').outerWidth(true);
+		if (scrollLeft > lastScrollLeft && scrollLeft > 0) {
+			console.log("right")
+			// scrolling right
+			$(this).siblings('.previous-slide').show()
+			if ($(this).scrollLeft() > width - 2 * itemWidth){
+				$(this).siblings('.next-slide').hide()
+			} else {
+				$(this).siblings('.next-slide').show()
+			}
+		} else if (scrollLeft < lastScrollLeft || scrollLeft <= 0) {
+			console.log("left")
+			// scrolling left
+			$(this).siblings('.next-slide').show()
+			if ($(this).scrollLeft() < itemWidth){
+				$(this).siblings('.previous-slide').hide()
+			} else {
+				$(this).siblings('.previous-slide').show()
+			}
+		}
+		lastScrollLeft = scrollLeft;
+  });
+}
 function notImplimented(){
 	alertWithFade('danger','This feature hasn\'t been implimented yet :(');
 }

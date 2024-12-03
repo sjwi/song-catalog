@@ -14,22 +14,14 @@ $(document).ready(function(){
 					$(this).addClass('focused-page');
 					lockScroll();
 				}
-				$('.slick-container').slick('unslick');
-				slick();
 			}
 		});
 		$(document).on('click','#overlay', function(e){
-			var x = document.getElementById('slickContainer');
-			if (e.target != x && !x.contains(e.target)){
-				$('#overlay').removeClass("overlay");
-				$('.song-page-container').removeClass('focused-page');
-				$('.song-page-container').addClass('unfocused-page');
-				$('.slick-container').slick('unslick');
-				unlockScroll();
-				slick();
-			}
+			$('#overlay').removeClass("overlay");
+			$('.song-page-container').removeClass('focused-page');
+			$('.song-page-container').addClass('unfocused-page');
+			unlockScroll();
 		});
 	}
-	slick();
 });
 

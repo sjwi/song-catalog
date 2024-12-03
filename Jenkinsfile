@@ -122,7 +122,6 @@ pipeline {
                         git checkout FETCH_HEAD -- song-catalog/src/main/resources/templates/partial/header.html
                         git checkout FETCH_HEAD -- song-catalog/src/main/resources/static/images/logo_transparent.png
                         git checkout FETCH_HEAD -- song-catalog/src/main/resources/static/images/logo_transparent_dark.png
-                        git checkout FETCH_HEAD -- song-catalog/src/main/resources/static/css/slick.css
                     '''
                     sh '''
                         echo server.servlet.contextPath=/song-demo >> song-catalog/src/main/resources/application.properties

@@ -32,8 +32,6 @@ function initializeSortableSetListTable(element){
 				success : function(data) {
 					if($(songContainer).length){
 						$(songContainer).html(data);
-						focusedSlickPage = 0;
-						slick();
 					}
 					lastUpdatedTime = undefined;
 				},
