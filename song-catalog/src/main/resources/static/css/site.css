@@ -809,8 +809,7 @@ div.song-body > p.song-body-sect {
 div.song-body, p.song-footer {
 	text-align:left;
 	overflow:hidden;
-	padding: 0 0 30px 30px;
-	/* padding: 3rem 0 30px 30px; */
+	padding: 0 20px 20px 20px;
 }
 p.song-footer {
 	position: absolute;
@@ -2055,7 +2054,6 @@ table > thead > tr > th[class*="sort"]:after {
 		opacity:.75;
 	}
 	.zoom-box .zoom-val {
-		padding-top:7px;
 		font-size:.6rem;
 	}
 	input {

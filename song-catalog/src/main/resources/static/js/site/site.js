@@ -40,11 +40,10 @@ $(document).ready(function(e){
 	});
 	$(document).on('click', '.next-slide', function() {
 		var container = $('.multi-song-container');
-    var itemWidth = $('.multi-song-container>div').outerWidth(true); // Get the width of one item (including margin)
-    var currentScroll = container.scrollLeft(); // Get current scroll position
+		var itemWidth = $('.multi-song-container>div').outerWidth(true); // Get the width of one item (including margin)
+		var currentScroll = container.scrollLeft(); // Get current scroll position
     
-    // Scroll right by one item width
-    container.scrollLeft(currentScroll + itemWidth);
+		container.scrollLeft(currentScroll + itemWidth);
 	});
 	$(document).on('click', '.previous-slide', function() {
 		var container = $('.multi-song-container');
@@ -82,15 +81,32 @@ $(document).ready(function(e){
 	});
 	bindSongContainerScroll()
 });
+
+function focusSong(sp) {
+	console.log(sp)
+	if (!sp)
+		var sp = 0;
+
+	$('.multi-song-container').each(function(idx, container){
+		var itemWidth = $(container).children('div').outerWidth(true);
+		$(this).css('scroll-behavior', 'auto');
+		container.scrollLeft = itemWidth * sp;
+		$(this).css('scroll-behavior', 'smooth');
+	})
+}
+var lastScrollLeft = 0;
+var songInView
 function bindSongContainerScroll() {
-	var lastScrollLeft = 0;
 	$('.multi-song-container').off('scroll').on('scroll', function() {
+		const children = Array.from(this.children);
 		var width = this.scrollWidth
+		var parentWidth = this.offsetWidth;
 		var scrollLeft = $(this).scrollLeft();
-    var itemWidth = $(this).children('div').outerWidth(true);
+		var itemWidth = $(this).children('div').outerWidth(true);
+
 		if (scrollLeft > lastScrollLeft && scrollLeft > 0) {
-			console.log("right")
 			// scrolling right
+			var left = false
 			$(this).siblings('.previous-slide').show()
 			if ($(this).scrollLeft() > width - 2 * itemWidth){
 				$(this).siblings('.next-slide').hide()
@@ -98,7 +114,7 @@ function bindSongContainerScroll() {
 				$(this).siblings('.next-slide').show()
 			}
 		} else if (scrollLeft < lastScrollLeft || scrollLeft <= 0) {
-			console.log("left")
+			var left = true
 			// scrolling left
 			$(this).siblings('.next-slide').show()
 			if ($(this).scrollLeft() < itemWidth){
@@ -107,6 +123,21 @@ function bindSongContainerScroll() {
 				$(this).siblings('.previous-slide').show()
 			}
 		}
+
+		const idx = left? Math.floor(scrollLeft / parentWidth): Math.ceil(scrollLeft / parentWidth)
+		const currentSong = children[idx];
+
+		nowInView = $(currentSong).find('.song-page').data('target')
+
+		if (nowInView != songInView) {
+			$('.version-container.selected').removeClass('selected');
+			$('#versionContainer_' + idx).addClass('selected');
+			if (window.location.pathname.includes("song")){
+				window.history.replaceState('song', 'Song Catalog', contextpath + 'song/' + nowInView);
+			}
+			songInView = nowInView
+		}
+
 		lastScrollLeft = scrollLeft;
   });
 }

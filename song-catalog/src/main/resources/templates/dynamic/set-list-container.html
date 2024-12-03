@@ -55,8 +55,8 @@
 						th:replace="partial/key-dropdown :: keySet(${setSong.defaultKey},'defaultKey')"
 					></th:block>
 				</td>
-				<td width="30px" class="align-middle">
-					<th:block sec:authorize="hasAuthority('USER')">
+				<th:block sec:authorize="hasAuthority('USER')">
+					<td width="30px" class="align-middle">
 						<img class="action-btn" th:src="@{/images/ellipse-inverse.png}" data-toggle="dropdown">	
 						<ul class="dropdown-menu max-z">
 							<li>
@@ -76,8 +76,8 @@
 								</a>
 							</li>
 						</ul>
-					</th:block>
-				</td>
+					</td>
+				</th:block>
 			</tr>
 		</table>
 	</div>

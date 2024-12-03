@@ -3,6 +3,10 @@
 	<th:block th:replace="partial/head :: head(${focusedSong[0].name})"></th:block>
 	<th:block th:replace="partial/header"></th:block>
 	<body id="songCatalogBody">
+		<script th:inline="javascript">
+			const focusedScrollPage = [[${fsInitialIndex}]];
+			var focusedSong = [[${focusedSong[0].id}]];
+		</script>
 		<div class="scroll-lock">
 			<th:block th:replace="partial/off-navbar :: offNavBar('addSong')"></th:block>
 			<div class="song-catalog-row row no-gutters flex-nowrap">
@@ -48,7 +52,6 @@
 		if ($('.song-table').length == 0)
 			$('#songTableContainer').html($('.loading').clone());
 		var ignoreSongClickedSelector = ".action-btn,.song-dropdown-btn,.dropdown-menu, li, .dropdown-item,.grip-container,img,.round,.round>*";
-		var focusedSong = [[${focusedSong[0].id}]];
 		
 		function refreshSongContainer(id){
 			$('#catalogSongDetails').load(contextpath + 'song/' + id + '?view=dynamic/song-details', bindSongContainerScroll);
