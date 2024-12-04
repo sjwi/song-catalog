@@ -1,15 +1,22 @@
 function reloadSetSongContainerIfPresent(setId){
 	var songContainer = '.song-page-container[id="' + setId +'"]';
+	var focusedScrollPage = 0
 	if($(songContainer).length){
 		$.ajax({
 			url: contextpath + 'setlist/details/' + setId + '?view=dynamic/song-container',
 			method: "GET",
 			beforeSend: function(data){
+				focusedScrollPage = getFocusedSetIdx()
 				$(songContainer).html($('.loading'));
 			},
 			success: function(data) {
 				lastUpdatedTime = undefined;
 				$(songContainer).html(data);
+				setTimeout(function() {
+					focusSong(focusedScrollPage)
+				}, 0);
+
+				
 			}
 		});
 	}	
@@ -66,7 +73,6 @@ function localSetKeyChange(setId, setSongId, key, capo) {
 		capo: capo
 	}
 	let url = contextpath + 'setlist/state/' + setId
-	$(songContainer).html($('.loading'));
 	$.post({
 		url: url,
 		contentType: "application/json; charset=utf-8",

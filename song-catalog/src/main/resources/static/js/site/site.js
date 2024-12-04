@@ -80,13 +80,12 @@ $(document).ready(function(e){
 		}
 	});
 	bindSongContainerScroll()
+	if (!focusedScrollPage)
+		var focusedScrollPage = 0
+	focusSong(focusedScrollPage)
 });
 
 function focusSong(sp) {
-	console.log(sp)
-	if (!sp)
-		var sp = 0;
-
 	$('.multi-song-container').each(function(idx, container){
 		var itemWidth = $(container).children('div').outerWidth(true);
 		$(this).css('scroll-behavior', 'auto');
@@ -94,6 +93,13 @@ function focusSong(sp) {
 		$(this).css('scroll-behavior', 'smooth');
 	})
 }
+function getFocusedSetIdx() {
+	var container = $('.song-page-container.setlist .multi-song-container')
+	var itemWidth = $(container).children('div').outerWidth(true);
+	var scrollLeft = $(container).scrollLeft();
+	return Math.round(scrollLeft / itemWidth)
+}
+
 var lastScrollLeft = 0;
 var songInView
 function bindSongContainerScroll() {

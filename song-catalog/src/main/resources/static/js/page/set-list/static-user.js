@@ -13,6 +13,7 @@ function initializeSortableSetListTable(element){
 			var setId = $(this).data('setid');
 			var songContainer = '.song-page-container[id="' + setId +'"]';
 			var counter = 1;
+			var focusedScrollPage
 			$(this).find('tr').each(function(){
 				sortedSongs.push($(this).data('setsongid'));
 				$(this).attr("data-sort",counter);
@@ -25,6 +26,7 @@ function initializeSortableSetListTable(element){
 					sortedSongs: sortedSongs
 				},
 				beforeSend: function(){
+					focusedScrollPage = getFocusedSetIdx()
 					if($(songContainer).length){
 						$(songContainer).html($('.loading').clone());
 					}
@@ -34,6 +36,9 @@ function initializeSortableSetListTable(element){
 						$(songContainer).html(data);
 					}
 					lastUpdatedTime = undefined;
+					setTimeout(function() {
+						focusSong(focusedScrollPage)
+					}, 0);
 				},
 				error : function(e) {
 					alertWithFade('danger','Unable to sort set list.');

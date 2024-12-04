@@ -24,13 +24,15 @@ function addScrollListener(id, size, delay, elem){
 			if ((prevScrollpos > currentScrollPos && velocity > velocityThreshold) || $(elem).scrollTop() <= delay) {
 				$(id).css('top','0');
 				$('.sticky-top-nav, .top-nav').css('top','0');
-				if (slideAlertUp && $('.add-songs-alert').hasClass('slide-down') && checkedCacheSize() != 0)
-					slideAlertUp()
+				if (slideAlertUp)
+					if ($('.add-songs-alert').hasClass('slide-down') && checkedCacheSize() != 0)
+						slideAlertUp()
 			} else if (velocity > velocityThreshold) {
 				$(id).css('top',size);
 				$('.sticky-top-nav, .top-nav').css('top',size);
-				if (slideAlertDown && !$('.add-songs-alert').hasClass('slide-down') && checkedCacheSize() != 0)
-					slideAlertDown()
+				if (slideAlertDown)
+					if (!$('.add-songs-alert').hasClass('slide-down') && checkedCacheSize() != 0)
+						slideAlertDown()
 			}
 			prevScrollpos = currentScrollPos;	
 		});
