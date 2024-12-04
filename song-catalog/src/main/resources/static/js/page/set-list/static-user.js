@@ -25,6 +25,7 @@ function initializeSortableSetListTable(element){
 					sortedSongs: sortedSongs
 				},
 				beforeSend: function(){
+					FOCUSED_SCROLL_PAGE = getFocusedSetIdx()
 					if($(songContainer).length){
 						$(songContainer).html($('.loading').clone());
 					}
@@ -32,10 +33,11 @@ function initializeSortableSetListTable(element){
 				success : function(data) {
 					if($(songContainer).length){
 						$(songContainer).html(data);
-						focusedSlickPage = 0;
-						slick();
 					}
 					lastUpdatedTime = undefined;
+					setTimeout(function() {
+						focusSong(FOCUSED_SCROLL_PAGE)
+					}, 0);
 				},
 				error : function(e) {
 					alertWithFade('danger','Unable to sort set list.');

@@ -1,0 +1,41 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Debug (Launch) - Current File",
+            "request": "launch",
+            "mainClass": "${file}",
+            "env": {
+                "SONG_MAIL_DBL": "stephenjw@fastmail.com",
+                "SONG_MAIL_PW": "dummy_val",
+                "SONG_MAIL_UN": "stephenjw@fastmail.com",
+                "SONG_MAIL_LEVEL": "DEBUG",
+                "SONG_MAIL_SMTP": "smtp.fastmail.com",
+                "SONG_MAIL_PORT": "587",
+                "SONG_DATASOURCE_INIT": "always",
+                "SONG_JDBC_DATASOURCE_URL": "jdbc:h2:mem:Song;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE",
+                "SONG_JDBC_DRIVER": "com.mysql.jdbc.Driver",
+                "SONG_JDBC_DRIVER_H2": "org.h2.Driver",
+                "SONG_JDBC_PASSWORD": "sa",
+                "SONG_JDBC_USERNAME": "sa",
+                "SONG_JDBC_PLATFORM": "org.hibernate.dialect.H2Dialect",
+                "SONG_TWILIO_ACCOUNT": "dummy_val",
+                "SONG_TWILIO_AUTH_CODE": "dummy_val",
+                "SONG_TWILIO_PHONE_NUMBER": "dummy_val",
+                "APPLICATION_PROPER_NAME": "CF Song Catalog",
+                "SONG_AUDIO_DIRECTORY" : "/Users/stephenwilliams/static/audio"
+            }
+        },
+        {
+            "type": "java",
+            "name": "Debug (Launch)-SongCatalogWebApplication<song-catalog>",
+            "request": "launch",
+            "mainClass": "com.sjwi.catalog.SongCatalogWebApplication",
+            "projectName": "song-catalog"
+        }
+    ]
+}

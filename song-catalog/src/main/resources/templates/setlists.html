@@ -70,23 +70,19 @@
 					e.preventDefault();
 					$('.offnav-right-header').html($(this).find('.set-list-title').html());
 					$('.song-page-container').attr('id',$(this).data('target'));
-					focusedSlickPage = 0;
 					reloadSetSongContainerIfPresent($(this).data('target'));
 					focusedSet = $(this).data('target');
 					$('.set-list-container').removeClass('focused-set-container');
 					$(e.target).closest('.set-list-container').addClass('focused-set-container');
 				} else if($(e.target).is('td, td span') && !$(e.target).is(ignoreTdAction) && $('.setlists-song-container').is(':visible')){
-					if ($('#slickContainer').length){
-						$('#slickContainer').slick('slickGoTo',$(e.target).closest('.set-song-row').attr('data-sort') - 1);
-					}
+					var sortNum = $(e.target).closest('.set-song-row').attr('data-sort') - 1
+					var container = $('.multi-song-container')
+					var itemWidth = $('.multi-song-container>div').outerWidth(true);
 				} else if(!$(e.target).is(setContainerIgnoreSelector)){
 					location.href = contextpath +'setlist/' +  $(this).data('target');
 				}
 			});
 			
-			$(".slick-container").on("beforeChange", function (e, slick, currentSlide, nextSlide){
-				resetSongPageAudio($(slick.$slides.get(nextSlide)).data('recording'));
-			});
 			if (window.length < 900){
 				addScrollListener('#offNav');
 			}

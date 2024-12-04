@@ -7,8 +7,8 @@
 		<li class="nav-item song-catalog-nav">
 			<a class="nav-link text-white" th:href="@{/songs}">Song Catalog</a>
 		</li>
-		<li class="nav-item">
-			<a class="nav-link text-white" th:href="@{/setlists}" >Set Lists</a>
+		<li class="nav-item setlists-nav">
+			<a class="nav-link text-white" href="javascript:void(0)">Set Lists</a>
 		</li>
 		<li class="nav-item" sec:authorize="hasAuthority('USER')">
 			<a class="nav-link text-white" th:href="@{/addressbook}" >Address Book</a>
@@ -38,5 +38,15 @@
 				location.href = contextpath + 'orgs';
 			}
 		});
+		$('.setlists-nav').click(function(){
+			if ($('#setlistMaybeHidden:visible').length == 0){
+				window.location.href = contextpath + 'setlists';
+			} else {
+				$('.home-page').scrollLeft($('.home-page')[0].scrollWidth);
+				setTimeout(function() {
+					$('.close-nav').click();
+				}, 0);
+			}
+		})
 	});
 </script>
