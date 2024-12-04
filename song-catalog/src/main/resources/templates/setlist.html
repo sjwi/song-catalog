@@ -56,19 +56,19 @@
 			}, 5000)
 
 			const $parent = $('.body-scroll');
-			const $child = $('.multi-song-container');
+			const $child = $('.multi-song-container .song-page');
 
 			if (!($parent.scrollTop() + $parent.outerHeight() >= $parent[0].scrollHeight))
-				$('.multi-song-container').addClass('noscroll-v')
+				$child.addClass('noscroll-v')
 		
 			$parent.on('scroll', function () {
 				const isParentScrolledToBottom =
 					$parent.scrollTop() + $parent.outerHeight() >= $parent[0].scrollHeight;
 				
 				if (isParentScrolledToBottom) {
-					$('.multi-song-container').removeClass('noscroll-v')
+					$child.removeClass('noscroll-v')
 				} else {
-					$('.multi-song-container').addClass('noscroll-v')
+					$child.addClass('noscroll-v')
 				}
 			});
 		});
