@@ -464,6 +464,9 @@ pre#logOutput {
 .multi-song-container .song-body-sect{
 	display:block !important;
 }
+.noscroll-v {
+	overflow-y: hidden !important;
+}
 
 .song-flyout-panel {
 	position: fixed;
