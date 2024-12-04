@@ -73,16 +73,6 @@ pb-dot5 {
   height:45px;
   box-shadow: 0 .5rem 1rem rgba(0,0,0,.35)!important;
 }
-.back-btn {
-  transition-duration: .5s;
-  position:fixed;
-  bottom:-75px;
-  left:15px;
-  z-index:2147483646;
-}
-.back-btn.showme {
-  bottom:25px;
-}
 .navbar-default, .navbar-collapse {
 	white-space:nowrap !important;
 }
@@ -447,7 +437,7 @@ pre#logOutput {
 	scroll-snap-type: x mandatory;
 	scroll-behavior: smooth;
 	overscroll-behavior-x: none;
-	scroll-snap-stop: always;
+	scroll-snap-stop: normal;
 	font-size:0;
 	white-space: nowrap;
 	max-height: 100%;
@@ -464,7 +454,7 @@ pre#logOutput {
 	vertical-align: top;
 }
 .multi-song-container .song-page {
-	overscroll-behavior-y: auto;
+	overscroll-behavior-y: none;
 }
 .multi-song-container .song-body {
 	line-height:0;
