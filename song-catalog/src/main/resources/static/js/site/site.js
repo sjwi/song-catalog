@@ -108,8 +108,9 @@ $(document).ready(function(e){
 		window.localStorage.removeItem('focusedFlyoutIdx');
 	});
 
-	$(document).on('swiped-down', function(e){
+	$(document).on('swiped-down', '.multi-song-container .song-page', function(e){
 		if ($(this).scrollTop() == 0){
+			console.log("BAM")
 			$('.song-page').click();
 		}
 	})
