@@ -1,0 +1,47 @@
+<div class="song-action-container">
+    <div class="row w-100 h-100 no-gutters grey-bg">
+        <div class="d-table col-12 w-100 h-100">
+            <div class="d-table-cell align-middle no-gutters text-center" data-toggle="dropdown" style="position:relative;z-index:1033" data-toggle-second="tooltip" data-placement="bottom" title="Transpose Key">
+                <ul class="dropdown-menu" >
+                    <li th:each="letter : ${'A,B,C,D,E,F,G'.split(',')}">
+                        <a class="dropdown-item transpose" onclick="transposeSong(this)" th:text="${letter}"></a>
+                    </li>
+                </ul>
+                    <span class="transpose-key dropdown-toggle" th:text="${focusedSong[fsInitialIndex].defaultKey}"></span>
+            </div>
+            <th:block sec:authorize="hasAuthority('USER')">
+                <div class="d-table-cell align-middle no-gutters text-center add-song-to-set-ic" data-toggle="tooltip" data-placement="bottom" title="Add song to set"
+                th:attr="onclick=${'addSongToSet(' + focusedSong[fsInitialIndex].id + ')'}">
+                    <a><img width="27px" type="image/x-icon"
+                        th:with="nightModePreference=${T(com.sjwi.catalog.config.PreferencesConfiguration).NIGHT_MODE_PREFERENCE_KEY}"
+                        th:src="${#session.getAttribute(nightModePreference) == null || !#session.getAttribute(nightModePreference)}? @{/images/add-song-to-set-inverse.png} : @{/images/add-song-to-set.png}"/></a>
+                </div>
+            </th:block>
+            <div class="d-table-cell align-middle no-gutters text-center download-focused-song" data-toggle="tooltip" data-placement="bottom" title="Download"
+            th:attr="onclick=${'downloadFile(''song'', ' + focusedSong[fsInitialIndex].id + ')'}">
+                    <a><img width="34px" style="position: relative; bottom: 1px;" type="image/x-icon" th:src="@{/images/export-inverse.png}"/></a>
+            </div>
+            <th:block sec:authorize="hasAuthority('USER')">
+                <div class="d-table-cell align-middle no-gutters text-center edit-focused-song" th:attr="onclick=${'showEditSongModal(' + focusedSong[fsInitialIndex].id + ')'}" data-toggle="tooltip" data-placement="bottom" title="Edit song" >
+                    <a><img width="34px" type="image/x-icon" th:src="@{/images/edit-inverse.png}"/></a>
+                </div>
+                <div class="d-table-cell align-middle no-gutters text-center" data-toggle="tooltip" data-placement="bottom" title="Version control"
+                th:attr="onclick=${'openVersionControlModal(' + focusedSong[0].id + ')'}">
+                    <a><img width="30px" type="image/x-icon" th:src="@{/images/version-control-inverse.png}"/></a>
+                </div>
+            </th:block>
+            <th:block sec:authorize="hasAuthority('USER')">
+                <div class="d-table-cell align-middle no-gutters text-center delete-focused-song" data-toggle="tooltip" data-placement="bottom" title="Delete song"
+                th:attr="onclick=${'deleteSong(' + focusedSong[0].id + ',' + focusedSong[fsInitialIndex].related + ')'}">
+                    <a><img width="30px" type="image/x-icon" th:src="@{/images/delete-transparent.png}"/></a>
+                </div>
+            </th:block>
+            <div class="d-table-cell align-middle no-gutters text-center" id="songCloseFlyout">
+                <a><img width="30px" type="image/x-icon" th:src="@{/images/close-inverse.png}"/></a>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="song-page-container modal-page-container flyout-container text-center mb-4" th:id="${focusedSong[0].id}">
+    <th:block th:replace="dynamic/song-container :: songContainer(${focusedSong})"></th:block>
+</div>

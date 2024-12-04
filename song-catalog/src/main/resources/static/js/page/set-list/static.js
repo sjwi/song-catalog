@@ -1,19 +1,18 @@
 function reloadSetSongContainerIfPresent(setId){
 	var songContainer = '.song-page-container[id="' + setId +'"]';
-	var focusedScrollPage = 0
 	if($(songContainer).length){
 		$.ajax({
 			url: contextpath + 'setlist/details/' + setId + '?view=dynamic/song-container',
 			method: "GET",
 			beforeSend: function(data){
-				focusedScrollPage = getFocusedSetIdx()
+				FOCUSED_SCROLL_PAGE = getFocusedSetIdx()
 				$(songContainer).html($('.loading'));
 			},
 			success: function(data) {
 				lastUpdatedTime = undefined;
 				$(songContainer).html(data);
 				setTimeout(function() {
-					focusSong(focusedScrollPage)
+					focusSong(FOCUSED_SCROLL_PAGE)
 				}, 0);
 
 				

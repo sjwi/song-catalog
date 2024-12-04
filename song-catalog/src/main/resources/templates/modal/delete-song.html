@@ -43,3 +43,16 @@ $(document).ready(function(){
 });
 
 </script>
+<script sec:authorize="hasAuthority('USER')">
+	function deleteSong(id,related){
+		$('#deleteSongModal').find('.modal-title').html("Delete song");
+		if (related != 0){
+			$('#deleteSongModal').find('.modal-message').html("Are you sure you want to permanently delete this version from the song catalog?\nThis will also remove it from all setlists");
+		} else {
+			$('#deleteSongModal').find('.modal-message').html("Are you sure you want to permanently delete this song from the song catalog?\nThis will also remove it from all setlists and delete any versions");
+		}
+		$('#deleteSongModal').find('.song-id').val(id);
+		$('#deleteSongModal').find('.song-name').val(name);
+		$('#deleteSongModal').modal('show');
+	}
+</script>

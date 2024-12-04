@@ -131,7 +131,6 @@ function generateDownloadLinkWithFormParams(short = true){
 		async: false,
 		method: "GET",
 		success: function(data) {
-			console.log(data)
 			ret_link = "/" + data.sl_key
 		},
 		error: function(data) {

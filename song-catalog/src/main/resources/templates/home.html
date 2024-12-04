@@ -3,6 +3,7 @@
 	<th:block th:replace="partial/head :: head(${@environment.getProperty('com.sjwi.settings.app.properName')})"></th:block>
 	<th:block th:replace="partial/header"></th:block>
 	<body id="homePageBody">
+		<div id="setlistMaybeHidden"></div>
 		<div class="scroll-lock" style="overflow-y:hidden;">
 			<div class="row no-gutters flex-nowrap home-page">
 				<div class="song-home-col col no-gutters">
@@ -75,6 +76,7 @@
 		<!-- 	<th:block th:replace="partial/footer"></th:block> -->
 			<div class="modal-container">
 				<th:block th:replace="modal/qrcode"></th:block>
+				<th:block th:replace="modal/song-flyout"></th:block>
 				<th:block sec:authorize="hasAuthority('USER')">
 					<th:block th:replace="modal/add-song-to-set"></th:block>
 					<th:block th:replace="modal/add-songs-to-set"></th:block>
@@ -101,17 +103,9 @@
 	<script th:inline="javascript" th:src="@{/js/page/song/page.js}"></script>
 	<script th:inline="javascript" th:src="@{/js/page/song/static.js}"></script>
 	<script>
-		var ignoreSongClickedSelector = ".action-btn,.song-dropdown-btn,.dropdown-menu, li, .dropdown-item,.grip-container,img,.round,.round>*";
 		var resized = false;
 		$(document).ready(function(){
 			refreshCategories();
-			$(document).on('click','.song-row',function(e){
-				$('.song-row').removeClass('selected')
-				$(this).addClass('selected');
-				if (!$(e.target).is(ignoreSongClickedSelector)){
-					location.href= contextpath + "song/" + $(e.target).closest('.song-metadata').data('target');
-				}
-			});
 			$(document).on('click','.set-list-container',function(e){
 				if(!$(e.target).is(setContainerIgnoreSelector)){
 					location.href = contextpath +'setlist/' +  $(this).data('target');

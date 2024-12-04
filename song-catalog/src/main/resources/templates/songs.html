@@ -4,7 +4,7 @@
 	<th:block th:replace="partial/header"></th:block>
 	<body id="songCatalogBody">
 		<script th:inline="javascript">
-			const focusedScrollPage = [[${fsInitialIndex}]];
+			FOCUSED_SCROLL_PAGE = [[${fsInitialIndex}]];
 			var focusedSong = [[${focusedSong[0].id}]];
 		</script>
 		<div class="scroll-lock">
@@ -51,7 +51,6 @@
 	<script th:inline="javascript">
 		if ($('.song-table').length == 0)
 			$('#songTableContainer').html($('.loading').clone());
-		var ignoreSongClickedSelector = ".action-btn,.song-dropdown-btn,.dropdown-menu, li, .dropdown-item,.grip-container,img,.round,.round>*";
 		
 		function refreshSongContainer(id){
 			$('#catalogSongDetails').load(contextpath + 'song/' + id + '?view=dynamic/song-details', bindSongContainerScroll);

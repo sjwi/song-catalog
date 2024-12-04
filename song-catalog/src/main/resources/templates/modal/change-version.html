@@ -51,7 +51,6 @@ $(document).ready(function(){
 					processData: false,
 					contentType: false,
 					success: function(data) {
-						console.log($('#changeVersionForm').find('input[name="currentVersion"]').val());
 						$.ajax({
 							url: contextpath + 'setlist/change-version',
 							method: "POST",
