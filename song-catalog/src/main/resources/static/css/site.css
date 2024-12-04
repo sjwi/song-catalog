@@ -450,7 +450,7 @@ pre#logOutput {
 .multi-song-container > div {
 	top:0;
 	position: relative;
-	scroll-snap-align: start;
+	scroll-snap-align: center;
 	display: inline-block;
 	width: 100%;
 	max-width: 100%;
