@@ -10,7 +10,7 @@
 	</th:block>
 	<div class="multi-song-container">
 		<th:block th:each="song:${songs}">
-			<div>
+			<div class="h-100">
 			<th:block th:replace="dynamic/single-song-page :: songPage(${song})"></th:block>
 			</div>
 		</th:block>
