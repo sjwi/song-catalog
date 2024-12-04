@@ -442,6 +442,7 @@ pre#logOutput {
 	overflow: scroll;
 	scroll-snap-type: x mandatory;
 	scroll-behavior: smooth;
+	overscroll-behavior: none;
 	font-size:0;
 	white-space: nowrap;
 	max-height: 100%;
@@ -2072,6 +2073,7 @@ table > thead > tr > th[class*="sort"]:after {
 		overflow-x: scroll !important;
 		scroll-snap-type: x mandatory;
 		scroll-behavior: smooth;
+		overscroll-behavior: none;
 	}
 	.song-home-col{
 		scroll-snap-align: start;
