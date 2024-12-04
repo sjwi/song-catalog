@@ -18,20 +18,20 @@ $(document).ready(function(){
 		}
 		else if ($(location).attr('href').includes('/setlist')){
 			if (!$(e.target).is(ignoreFocusSelector)){
-				if ($(this).hasClass('scroll-focused')){
-					$(this).removeClass('scroll-focused');
+				$container = $('.set-list-page>.row');
+				var isScrolledToBottom = $container.scrollTop() + $container.innerHeight() >= $container[0].scrollHeight;
+				if (isScrolledToBottom){
 					$(this).removeClass('mh-none');
-					$('.set-list-page>.row')[0].scrollTo({
+					$container[0].scrollTo({
 						top: 0,
 						behavior: 'smooth'
 					});
 				}
 				else {
-					$('.set-list-page>.row')[0].scrollTo({
+					$container[0].scrollTo({
 						top: $('.set-list-page>.row')[0].scrollHeight,
 						behavior: 'smooth'
 					});
-					$(this).addClass('scroll-focused');
 					$(this).addClass('mh-none');
 				}
 			}

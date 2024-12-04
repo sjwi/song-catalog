@@ -463,6 +463,9 @@ pre#logOutput {
 	white-space-collapse: preserve;
 	vertical-align: top;
 }
+.multi-song-container .song-page {
+	overscroll-behavior-y: auto;
+}
 .multi-song-container .song-body {
 	line-height:0;
 	font-size: 0.9375rem;
