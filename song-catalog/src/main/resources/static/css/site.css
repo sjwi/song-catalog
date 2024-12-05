@@ -288,7 +288,7 @@ a:active {
 	height:calc(100vh + var(--default-header-size));
 }
 #setListBody>.sl-songc, #setListBody>nav {
-	 scroll-snap-align: start;
+	 scroll-snap-align: end;
 }
 #setListBody, #setListsBody .wrapper {
 	background-color: var(--primary-grey) !important;

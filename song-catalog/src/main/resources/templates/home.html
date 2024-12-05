@@ -45,7 +45,7 @@
 					</div>
 				</div>
 				<div id="setListHomeCol" class="col-12 col-md-6 no-gutters setlist-home-col border-left" style="background: var(--secondary-bg-color)">
-					<div class="setlist-section">
+					<div class="setlist-section" id="homeSlSection">
 						<nav class="sticky-top setlist" id="setListNav">
 							<div class="row setlist-header no-gutters">
 									<div class="col-12 my-auto text-center">
@@ -152,10 +152,11 @@
 						}
 						$('#addSong').attr("onclick", "createSetList()")
 						$('#songNav').css('top','0');
-						$('.sticky-top-nav, .top-nav').css('top','0');
+						$('#songNav, .sticky-top-nav, .top-nav').css('top','0');
 						$('.title-link').text("Set Lists")
 						window.localStorage.setItem('home-focus', 'setlist')
 					} else if ((scrollLeft < lastScrollLeft || scrollLeft <= 0) && scrollLeft < (width / 2)) {
+						$('#songNav, .sticky-top-nav, .top-nav').css('top','0');
 						$('#categoriesControl').slideDown('fast')
 						$('.title-link').text("Song Catalog")
 						$('#addSong').attr("onclick", "createSong()")
@@ -165,6 +166,7 @@
 					lastScrollLeft = scrollLeft;
 				});
 				addScrollListener('#songNav', size, 0, '#homeSongSection');
+				addScrollListener('#songNav', size, 0, '#homeSlSection');
 			} else {
 				hideCategoriesOnScrollListener('#categoriesControl', '.song-section');
 			}
