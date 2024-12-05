@@ -291,7 +291,7 @@ a:active {
 	 scroll-snap-align: start;
 }
 #setListBody, #setListsBody .wrapper {
-	background-color: var(--secondary-bg-color) !important;
+	background-color: var(--primary-grey) !important;
 }
 #setListBody #offNav > .row, #setListsBody #offNav > .row, #errorBody #offNav > .row, #userFeedBody #offNav > .row{
 	border-bottom:none !important;
@@ -1924,7 +1924,7 @@ table > thead > tr > th[class*="sort"]:after {
 		display:none !important;
 	}
 	#setListsBody .setlists-page {
-		background-color: var(--secondary-bg-color) !important;
+		background-color: var(--primary-grey) !important;
 	}
 	#setListsBody .off-navline {
 		border-bottom-style: none !important;

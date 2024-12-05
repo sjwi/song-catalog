@@ -11,7 +11,7 @@
 						<nav class="sticky-top song custom-border-bottom" id="songNav">
 							<div class="row song-header no-gutters">
 								<div class="col-2">
-									<a th:with="nightModePreference=${T(com.sjwi.catalog.config.PreferencesConfiguration).NIGHT_MODE_PREFERENCE_KEY}" th:href="@{/}"><img border="0"
+									<a th:with="nightModePreference=${T(com.sjwi.catalog.config.PreferencesConfiguration).NIGHT_MODE_PREFERENCE_KEY}" class="home-nav" href="javascript:void(0)"><img border="0"
 							th:src="${#session.getAttribute(nightModePreference) == null || !#session.getAttribute(nightModePreference)}? @{/images/logo_transparent.png}: @{/images/logo_transparent_dark.png}"  class="logo dark-swap" alt="Logo"></a>
 								</div>
 								<div class="col-8 text-center my-auto">
@@ -24,7 +24,7 @@
 									<th:block th:replace="partial/navbar"></th:block>
 								</div>
 								<div class="col-4 my-auto text-center" >
-									<div sec:authorize="hasAuthority('USER')" class="btn add-item-btn" onclick="createSong();" data-toggle="tooltip" data-placement="bottom" title="Add new song"><img width="30px" th:src="@{/images/plus-blue.png}"></div>
+									<div sec:authorize="hasAuthority('USER')" class="btn add-item-btn" id="addSong" onclick="createSong();" data-toggle="tooltip" data-placement="bottom" title="Add new song"><img width="30px" th:src="@{/images/plus-blue.png}"></div>
 								</div>
 								<div class="col-4 text-center">
 									<th:block th:replace="partial/search-bar :: searchBar('search/song','','song catalog','songSearch','#songTableContainer')"></th:block>
@@ -110,6 +110,7 @@
 				const $container = $('.home-page');
 				$container.css('scroll-behavior', 'auto');
 				$container.scrollLeft($container[0].scrollWidth);
+				$('#categoriesControl').hide()
 				$container.css('scroll-behavior', 'smooth');
 			}
 		}
@@ -149,6 +150,7 @@
 						} else {
 							$('#categoriesControl').slideUp('fast')
 						}
+						$('#addSong').attr("onclick", "createSetList()")
 						$('#songNav').css('top','0');
 						$('.sticky-top-nav, .top-nav').css('top','0');
 						$('.title-link').text("Set Lists")
@@ -156,6 +158,7 @@
 					} else if ((scrollLeft < lastScrollLeft || scrollLeft <= 0) && scrollLeft < (width / 2)) {
 						$('#categoriesControl').slideDown('fast')
 						$('.title-link').text("Song Catalog")
+						$('#addSong').attr("onclick", "createSong()")
 						window.localStorage.setItem('home-focus', 'song')
 					}
 

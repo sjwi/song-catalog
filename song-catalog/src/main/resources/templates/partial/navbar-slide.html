@@ -2,7 +2,7 @@
   <a href="javascript:void(0)" class="close-nav nav-link text-white">&times;</a>
 	<ul class="navbar-nav ml-2">
 		<li class="nav nav-item active">
-			<a class="nav-link text-white" th:href="@{/}">Home <span class="sr-only">Home</span></a>
+			<a class="nav-link text-white home-nav">Home <span class="sr-only">Home</span></a>
 		</li>
 		<li class="nav-item song-catalog-nav">
 			<a class="nav-link text-white" th:href="@{/songs}">Song Catalog</a>
@@ -40,12 +40,7 @@
 		});
 		$('.setlists-nav').click(function(){
 			if ($('#setlistMaybeHidden:visible').length == 0){
-				if ($(window).width() <= 900) {
-					window.localStorage.setItem('home-focus', 'setlist')
-					window.location.href = contextpath
-				} else {
-					window.location.href = contextpath + 'setlists';
-				}
+				window.location.href = contextpath + 'setlists';
 			} else {
 				$('.home-page').scrollLeft($('.home-page')[0].scrollWidth);
 				setTimeout(function() {

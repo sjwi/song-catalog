@@ -104,6 +104,7 @@ $(document).ready(function(e){
 
 	$(window).on('popstate', function (event) {
 		if (!event.originalEvent.state || !event.originalEvent.state.flyoutOpen) {
+		  $('.song-row').removeClass('selected')
 			flyout.removeClass('open');
 			window.localStorage.removeItem('focusedFlyout', id);
 			window.localStorage.removeItem('focusedFlyoutIdx');
@@ -113,9 +114,15 @@ $(document).ready(function(e){
 	$(document).on('click', '#songCloseFlyout', function() {
 		flyout.removeClass('open');
 		history.back();
+		$('.song-row').removeClass('selected')
 		window.localStorage.removeItem('focusedFlyout', id);
 		window.localStorage.removeItem('focusedFlyoutIdx');
 	});
+
+	$(document).on("click", '.home-nav', function(){
+		window.localStorage.removeItem("home-focus")
+		window.location.href = contextpath;
+	})
 
 	bindSongContainerScroll()
 	focusSong(FOCUSED_SCROLL_PAGE)

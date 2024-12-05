@@ -9,7 +9,7 @@
 				<nav class="sticky-top ab-header" id="addressBookEntries">
 					<div class="row song-header no-gutters">
 						<div class="col-2">
-							<a th:href="@{/}"><img border="0"
+							<a href="javascript:void(0)" class="home-nav"><img border="0"
 								th:with="nightModePreference=${T(com.sjwi.catalog.config.PreferencesConfiguration).NIGHT_MODE_PREFERENCE_KEY}"
 						th:src="${#session.getAttribute(nightModePreference) == null || !#session.getAttribute(nightModePreference)}? @{/images/logo_transparent.png}: @{/images/logo_transparent_dark.png}"  class="logo dark-swap" alt="Logo"></a>
 						</div>
