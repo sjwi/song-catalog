@@ -63,9 +63,9 @@ pb-dot5 {
 	background-color: #fff !important;
 	opacity:.80;
 }
-#offNav .navbar-toggler:hover .icon-bar{
-	opacity: .5;
-}
+
+
+
 #offNav .navbar-toggler:active .icon-bar{
 	opacity: .5;
 }
@@ -262,7 +262,7 @@ a:active {
 	margin-top: 102px;
 }
 .home-page .song-section > .container {
-	margin-top: 137px;
+	margin-top: 132px;
 }
 .home-page .setlist-section > .container {
 	margin-top: calc(102px - .4rem + 1rem);
@@ -2052,7 +2052,33 @@ table > thead > tr > th[class*="sort"]:after {
 		color:var(--strong-text-color) !important;
 	}
 }
+.hp-slide-idc {
+	display: none;
+}
 @media screen and (max-width: 900px) {
+	.hp-slide-idc {
+		position: absolute;
+		display: block;
+		left: 0;
+		right: 0;
+		margin: auto;
+		width: 30px;
+		height: 10px;
+		bottom: 50px;
+	}
+	.hp-slide-idc .circle {
+		width: 10px;
+		height: 10px;
+		background: white;
+		border-radius: 50%;
+		margin: 0 auto;
+		border: 1px solid var(--deep-grey);
+		box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+	}
+	.hp-slide-idc .circle.selected {
+		border: 1px solid #333;
+		background: var(--dark-grey);
+	}
 	.alert.add-songs-alert {
 		position:fixed;
 	}

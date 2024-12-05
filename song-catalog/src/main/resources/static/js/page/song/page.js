@@ -19,6 +19,12 @@ $(document).ready(function(){
 				$container = $(window);
 				var isScrolledToBottom = $(window).scrollTop() + $(window).height() >= $(document).height() - 60
 				if (isScrolledToBottom){
+					$('.song-page').each(function() {
+						$(this)[0].scrollTo({
+							top: 0,
+							behavior: 'smooth'
+						});
+					});
 					window.scrollTo({
 						top: 0,
 						behavior: 'smooth'

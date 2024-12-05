@@ -72,6 +72,16 @@
 						</div>
 					</div>
 				</div>
+				<div class="hp-slide-idc">
+					<div class="row no-gutters text-center">
+						<div class="col text-center">
+							<div class="circle selected lhs"></div>
+						</div>
+						<div class="col text-center">
+							<div class="circle rhs"></div>
+						</div>
+					</div>
+				</div>
 			</div>
 		<!-- 	<th:block th:replace="partial/footer"></th:block> -->
 			<div class="modal-container">
@@ -140,11 +150,19 @@
 				} else {
 					var size = -137
 				}
+				var outerWidth = $('.home-page').outerWidth()
 				var width = $('.home-page')[0].scrollWidth
 				$('.home-page').on('scroll', function() {
 					var scrollLeft = $(this).scrollLeft();
+					var halfwayPoint = (width - outerWidth) / 2;
 
-					if (scrollLeft > lastScrollLeft && scrollLeft > 0) {
+					if (scrollLeft > lastScrollLeft) {
+						// SETLIST
+						if (scrollLeft > halfwayPoint) {
+							$('.hp-slide-idc .circle.lhs').removeClass("selected")
+							$('.hp-slide-idc .circle.rhs').addClass("selected")
+						}
+
 						if ($('#songNav').css('top') != '0px') {
 							$('#categoriesControl').hide()
 						} else {
@@ -155,7 +173,13 @@
 						$('#songNav, .sticky-top-nav, .top-nav').css('top','0');
 						$('.title-link').text("Set Lists")
 						window.localStorage.setItem('home-focus', 'setlist')
-					} else if ((scrollLeft < lastScrollLeft || scrollLeft <= 0) && scrollLeft < (width / 2)) {
+					} else if (scrollLeft < lastScrollLeft) {
+						// SONGS
+						if (scrollLeft < halfwayPoint) {
+							$('.hp-slide-idc .circle.rhs').removeClass("selected")
+							$('.hp-slide-idc .circle.lhs').addClass("selected")
+						}
+
 						$('#songNav, .sticky-top-nav, .top-nav').css('top','0');
 						$('#categoriesControl').slideDown('fast')
 						$('.title-link').text("Song Catalog")
@@ -165,8 +189,8 @@
 
 					lastScrollLeft = scrollLeft;
 				});
-				addScrollListener('#songNav', size, 0, '#homeSongSection');
 				addScrollListener('#songNav', size, 0, '#homeSlSection');
+				addScrollListener('#songNav', size, 0, '#homeSongSection');
 			} else {
 				hideCategoriesOnScrollListener('#categoriesControl', '.song-section');
 			}

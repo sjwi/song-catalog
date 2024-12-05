@@ -68,6 +68,12 @@
 				if (isParentScrolledToBottom) {
 					$child.removeClass('noscroll-v')
 				} else {
+					$('.song-page').each(function() {
+						$(this)[0].scrollTo({
+							top: 0,
+							behavior: 'smooth'
+						});
+					});
 					$child.addClass('noscroll-v')
 				}
 			});
