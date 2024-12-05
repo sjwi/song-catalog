@@ -2064,20 +2064,21 @@ table > thead > tr > th[class*="sort"]:after {
 		margin: auto;
 		width: 30px;
 		height: 10px;
-		bottom: 50px;
+		bottom: 40px;
 	}
 	.hp-slide-idc .circle {
-		width: 10px;
-		height: 10px;
+		width: 7px;
+		height: 7px;
 		background: white;
 		border-radius: 50%;
 		margin: 0 auto;
 		border: 1px solid var(--deep-grey);
 		box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+		opacity: 0.4;
 	}
 	.hp-slide-idc .circle.selected {
-		border: 1px solid #333;
-		background: var(--dark-grey);
+		border: 1px solid black;
+		background: #262626;
 	}
 	.alert.add-songs-alert {
 		position:fixed;
@@ -2102,7 +2103,7 @@ table > thead > tr > th[class*="sort"]:after {
 	}
 	.song-home-col{
 		scroll-snap-align: start;
-		min-width: 100vw !important
+		min-width: 100vw !important;
 	}
 	.setlist-home-col{
 		scroll-snap-align: start;
