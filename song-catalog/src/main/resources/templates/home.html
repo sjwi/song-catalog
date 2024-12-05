@@ -104,6 +104,15 @@
 	<script th:inline="javascript" th:src="@{/js/page/song/static.js}"></script>
 	<script>
 		var resized = false;
+		if (window.localStorage.getItem('home-focus')) {
+			homeFocus = window.localStorage.getItem('home-focus')
+			if (homeFocus == 'setlist') {
+				const $container = $('.home-page');
+				$container.css('scroll-behavior', 'auto');
+				$container.scrollLeft($container[0].scrollWidth);
+				$container.css('scroll-behavior', 'smooth');
+			}
+		}
 		$(document).ready(function(){
 			refreshCategories();
 			$(document).on('click','.set-list-container',function(e){
@@ -143,9 +152,11 @@
 						$('#songNav').css('top','0');
 						$('.sticky-top-nav, .top-nav').css('top','0');
 						$('.title-link').text("Set Lists")
+						window.localStorage.setItem('home-focus', 'setlist')
 					} else if ((scrollLeft < lastScrollLeft || scrollLeft <= 0) && scrollLeft < (width / 2)) {
 						$('#categoriesControl').slideDown('fast')
 						$('.title-link').text("Song Catalog")
+						window.localStorage.setItem('home-focus', 'song')
 					}
 
 					lastScrollLeft = scrollLeft;

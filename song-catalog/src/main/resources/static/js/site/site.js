@@ -91,9 +91,9 @@ $(document).ready(function(e){
 		if (!$(e.target).is(ignoreSongClickedSelector)){
 			id = $(e.target).closest('.song-metadata').data('target')
 			$('#songFlyoutPanel').load(contextpath + 'song/' + id + '?view=modal/dynamic/song-flyout', bindSongContainerScroll);
+			history.pushState({ flyoutOpen: true }, '', '#song');
 			flyout.addClass('open');
 			window.localStorage.setItem('focusedFlyout', id);
-			// location.href= contextpath + "song/" + $(e.target).closest('.song-metadata').data('target');
 		}
 	});
 
@@ -102,18 +102,20 @@ $(document).ready(function(e){
 		$('#songRow_' + id).click();
 	}
 
+	$(window).on('popstate', function (event) {
+		if (!event.originalEvent.state || !event.originalEvent.state.flyoutOpen) {
+			flyout.removeClass('open');
+			window.localStorage.removeItem('focusedFlyout', id);
+			window.localStorage.removeItem('focusedFlyoutIdx');
+		}
+	});
+
 	$(document).on('click', '#songCloseFlyout', function() {
 		flyout.removeClass('open');
+		history.back();
 		window.localStorage.removeItem('focusedFlyout', id);
 		window.localStorage.removeItem('focusedFlyoutIdx');
 	});
-
-	$(document).on('swiped-down', '.multi-song-container .song-page', function(e){
-		if ($(this).scrollTop() == 0){
-			console.log("BAM")
-			$('.song-page').click();
-		}
-	})
 
 	bindSongContainerScroll()
 	focusSong(FOCUSED_SCROLL_PAGE)

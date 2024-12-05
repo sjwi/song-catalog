@@ -16,21 +16,19 @@ $(document).ready(function(){
 		}
 		else if ($(location).attr('href').includes('/setlist')){
 			if (!$(e.target).is(ignoreFocusSelector)){
-				$container = $('.set-list-page>.row');
-				var isScrolledToBottom = $container.scrollTop() + $container.innerHeight() >= $container[0].scrollHeight;
+				$container = $(window);
+				var isScrolledToBottom = $(window).scrollTop() + $(window).height() >= $(document).height() - 60
 				if (isScrolledToBottom){
-					$(this).removeClass('mh-none');
-					$container[0].scrollTo({
+					window.scrollTo({
 						top: 0,
 						behavior: 'smooth'
 					});
 				}
 				else {
-					$container[0].scrollTo({
-						top: $('.set-list-page>.row')[0].scrollHeight,
+					window.scrollTo({
+						top: document.body.scrollHeight,
 						behavior: 'smooth'
 					});
-					$(this).addClass('mh-none');
 				}
 			}
 		}

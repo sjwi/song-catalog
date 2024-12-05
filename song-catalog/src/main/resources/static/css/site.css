@@ -15,6 +15,12 @@ hr {
 .mh-100vh {
 	min-height: 100vh;
 }
+.maxh-100vh {
+	min-height: 100vh;
+}
+.w-100vw {
+	width: 100vw;
+}
 .h-100 {
 	height: 100% !important;
 }
@@ -281,7 +287,10 @@ a:active {
 	background-color: var(--primary-grey) !important;
 	height:calc(100vh + var(--default-header-size));
 }
-#setListBody .wrapper, #setListsBody .wrapper {
+#setListBody>.sl-songc, #setListBody>nav {
+	 scroll-snap-align: start;
+}
+#setListBody, #setListsBody .wrapper {
 	background-color: var(--secondary-bg-color) !important;
 }
 #setListBody #offNav > .row, #setListsBody #offNav > .row, #errorBody #offNav > .row, #userFeedBody #offNav > .row{
@@ -410,14 +419,6 @@ pre#logOutput {
 .song-page-container:has(.multi-song-container) {
 	overflow-x: scroll;
 }
-.row:has(.left-side){
-	scroll-snap-type: y mandatory;
-	overflow-y: scroll;
-	max-height: 100vh !important;
-}
-.left-side, .right-side{
-	scroll-snap-align: start;
-}
 .left-side.setlist {
 	height:auto !important;
 }
@@ -454,7 +455,8 @@ pre#logOutput {
 	vertical-align: top;
 }
 .multi-song-container .song-page {
-	overscroll-behavior-y: auto;
+	-webkit-overflow-scrolling: touch;
+  overscroll-behavior-y: auto; /* Allow propagation to parent */
 }
 .multi-song-container .song-body {
 	line-height:0;
@@ -476,7 +478,7 @@ pre#logOutput {
 	height: 100%;
 	background-color: #f8f9fa;
 	box-shadow: -2px 0 5px rgba(0, 0, 0, 0.2);
-	transition: right 0.5s ease-in-out;
+	transition: right 0.3s ease-in-out;
 	z-index: 4000;
 }
 
@@ -674,7 +676,7 @@ body {
 	padding: 5px 20px 20px 20px;
 	/* padding: 5px 20px 6.5rem 20px; */
 	height:100%;
-	overflow:scroll;
+	overflow:auto;
 	margin-top:1.25rem;
 }
 .song-page > .song-title{
@@ -1140,7 +1142,6 @@ ul.multi-select-ul {
 	width:100%;
 	scrollbar-width:none !important;
 	flex: 1 0 800px;
-	height:calc(100vh);
 }
 .loading {
 	opacity: .95;
@@ -1908,9 +1909,9 @@ table > thead > tr > th[class*="sort"]:after {
 	}
 
 	.song-page-container {
-		height: calc(100vh - 60px);
-		max-height:calc(100vh - 60px);
-		min-height: calc(100vh - 60px);
+		height: calc(100vh - 30px);
+		max-height:calc(100vh - 30px);
+		min-height: calc(100vh - 30px);
 	}
 	.song-body {
 		font-size:1rem;

@@ -1,4 +1,4 @@
-<div id="sideNav" class="side-nav">
+<div id="sideNav" class="side-nav text-left">
   <a href="javascript:void(0)" class="close-nav nav-link text-white">&times;</a>
 	<ul class="navbar-nav ml-2">
 		<li class="nav nav-item active">
@@ -40,7 +40,12 @@
 		});
 		$('.setlists-nav').click(function(){
 			if ($('#setlistMaybeHidden:visible').length == 0){
-				window.location.href = contextpath + 'setlists';
+				if ($(window).width() <= 900) {
+					window.localStorage.setItem('home-focus', 'setlist')
+					window.location.href = contextpath
+				} else {
+					window.location.href = contextpath + 'setlists';
+				}
 			} else {
 				$('.home-page').scrollLeft($('.home-page')[0].scrollWidth);
 				setTimeout(function() {

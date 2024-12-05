@@ -1,37 +1,35 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" style="scroll-snap-type: y mandatory; scroll-behavior: smooth; overscroll-behavior: none;">
 	<th:block th:replace="partial/head :: head(${set.setListName})"></th:block>
 	<th:block th:replace="partial/header"></th:block>
-	<body id="setListBody" data-oc="var(--secondary-bg-color),var(--secondary-bg-color)">
-		<div class="scroll-lock">
-			<th:block th:replace="partial/off-navbar :: offNavBar('addSetList')"></th:block>
-			<div class="wrapper set-list-page text-center">
-				<div class="row no-gutters body-scroll">
-					<div class="col left-side setlist">
-						<div class="pt-3" th:id="${'appendSetList_' + set.id}">
-							<th:block th:replace="dynamic/set-list-container"></th:block>
-						</div>
-					</div>
-					<div class="col right-side setlist">
-						<div class="song-page-container setlist hover text-center mt-3 mb-4" th:id="${set.id}">
-							<th:block th:replace="dynamic/song-container :: songContainer(${set.songs})"></th:block>
-						</div>
-					</div>
+	<body id="setListBody" class="text-center w-100">
+		<th:block th:replace="partial/off-navbar :: offNavBar('addSetList')"></th:block>
+		<div class="row no-gutters">
+			<div class="col left-side setlist">
+				<div class="pt-3" th:id="${'appendSetList_' + set.id}">
+					<th:block th:replace="dynamic/set-list-container"></th:block>
 				</div>
 			</div>
-			<div id="overlay">
+		</div>
+		<div class="sl-songc row no-gutters w-100vw maxh-100vh">
+			<div class="col right-side setlist">
+				<div class="song-page-container setlist hover text-center mt-3 mb-4" th:id="${set.id}">
+					<th:block th:replace="dynamic/song-container :: songContainer(${set.songs})"></th:block>
+				</div>
 			</div>
-			<div class="modal-container">
-				<th:block th:replace="modal/qrcode"></th:block>
-				<th:block sec:authorize="hasAuthority('USER')">
-					<th:block th:replace="modal/edit-song"></th:block>
-					<th:block th:replace="modal/edit-set"></th:block>
-					<th:block th:replace="modal/add-song-from-select"></th:block>
-					<th:block th:replace="modal/delete-setlist"></th:block>
-					<th:block th:replace="modal/change-version"></th:block>
-					<th:block th:replace="modal/email-set"></th:block>
-				</th:block>
-			</div>
+		</div>
+		<div id="overlay">
+		</div>
+		<div class="modal-container">
+			<th:block th:replace="modal/qrcode"></th:block>
+			<th:block sec:authorize="hasAuthority('USER')">
+				<th:block th:replace="modal/edit-song"></th:block>
+				<th:block th:replace="modal/edit-set"></th:block>
+				<th:block th:replace="modal/add-song-from-select"></th:block>
+				<th:block th:replace="modal/delete-setlist"></th:block>
+				<th:block th:replace="modal/change-version"></th:block>
+				<th:block th:replace="modal/email-set"></th:block>
+			</th:block>
 		</div>
 	</body>
 	<th:block sec:authorize="hasAuthority('USER')">
@@ -54,15 +52,18 @@
 				pollForSetListUpdate(setListId);
 			}, 5000)
 
-			const $parent = $('.body-scroll');
+			const $parent = $(window);
 			const $child = $('.multi-song-container .song-page');
 
 			if (!($parent.scrollTop() + $parent.outerHeight() >= $parent[0].scrollHeight))
 				$child.addClass('noscroll-v')
 		
 			$parent.on('scroll', function () {
-				const isParentScrolledToBottom =
-					$parent.scrollTop() + $parent.outerHeight() >= $parent[0].scrollHeight;
+				var scrollTop = $(window).scrollTop(); // Current vertical scroll position
+				var documentHeight = $(document).height(); // Total height of the document
+				var windowHeight = $(window).height(); // Height of the visible window
+
+				const isParentScrolledToBottom = scrollTop + windowHeight >= documentHeight - 1
 				
 				if (isParentScrolledToBottom) {
 					$child.removeClass('noscroll-v')
