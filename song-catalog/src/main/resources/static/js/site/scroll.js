@@ -44,7 +44,7 @@ function hideCategoriesOnScrollListener(id, scrollElem){
 	$(document).ready(function(){
 		$(scrollElem).on('scroll',function(e){
 			var currentScrollPos_1 = $(scrollElem).scrollTop();
-			if (prevScrollpos_1 > currentScrollPos_1) { 
+			if (prevScrollpos_1 > currentScrollPos_1 || currentScrollPos_1 <= 0) { 
 				$(id).slideDown('fast');
 				if (typeof slideAlertUp !== 'undefined'){
 					if ($('.add-songs-alert').hasClass('slide-down') && checkedCacheSize() != 0)

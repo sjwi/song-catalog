@@ -1,10 +1,6 @@
 /* (C)2022 https://stephenky.com */
 package com.sjwi.catalog.file.ppt;
 
-import com.sjwi.catalog.exception.FileUtilityException;
-import com.sjwi.catalog.file.FileGenerator;
-import com.sjwi.catalog.model.SetList;
-import com.sjwi.catalog.model.song.Song;
 import java.awt.Color;
 import java.awt.geom.Rectangle2D;
 import java.io.File;
@@ -13,6 +9,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
+
 import org.apache.poi.sl.usermodel.TextParagraph.TextAlign;
 import org.apache.poi.xslf.usermodel.SlideLayout;
 import org.apache.poi.xslf.usermodel.XMLSlideShow;
@@ -26,6 +23,11 @@ import org.apache.poi.xslf.usermodel.XSLFTextShape;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
+import com.sjwi.catalog.exception.FileUtilityException;
+import com.sjwi.catalog.file.FileGenerator;
+import com.sjwi.catalog.model.SetList;
+import com.sjwi.catalog.model.song.Song;
+
 public class PptFileGenerator implements FileGenerator {
 
   private static final String SUFFIX = ".pptx";
@@ -36,7 +38,7 @@ public class PptFileGenerator implements FileGenerator {
   private static final int DEF_TITLE_SIZE_MAX = 38;
   private static final int DEF_FONT_SIZE = 39;
   private static final int MARGIN = 20;
-  private static final int DEF_TITLE_FONT_SIZE = 41;
+  private static final int DEF_TITLE_FONT_SIZE = 25;
   private static final int LINE_SPACING = 100;
 
   private final int fontSize;
@@ -194,10 +196,10 @@ public class PptFileGenerator implements FileGenerator {
     footerParagraph.setRightMargin(0.);
     XSLFTextRun r = footerParagraph.addNewTextRun();
     r.setText(LICENSE_TEXT);
-    r.setFontSize(20.);
+    r.setFontSize(14.);
     r.setFontColor(Color.WHITE);
     Rectangle2D footerRect = footer.getAnchor();
-    footerRect.setRect(430, 500, 300, 30);
+    footerRect.setRect(500, 500, 300, 30);
     footer.setAnchor(footerRect);
   }
 

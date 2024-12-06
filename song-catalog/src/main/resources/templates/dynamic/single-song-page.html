@@ -1,7 +1,6 @@
 <th:block th:fragment="songPage(song)">
 	<div class="song-page" th:id="${'songPage_' + song.id}" 
 	th:attr="data-target=${song.id},data-key=${song.defaultKey},data-related=${song.related},data-recording=${song.recording?.path}">
-		<div th:replace="partial/audio-box :: audioBox(${song})"></div>
 		<span class="text-center song-title mb-2"><a class="song-title-link" 
 		th:href="${!#strings.contains(#request.requestURI,'/song')}? @{/song/__${song.id}__}: 'javascript:void(0)'" 
 		th:text="${song.name}"></a></span>
@@ -22,7 +21,10 @@
 				<span class="float-right" th:text="${'[**]'}"></span>
 			</th:block>
 		</div>
-		<hr class="mt-4">
+		<div class="hr-wrapper mt-4">
+			<hr>
+			<audio th:if="${song.recording != null}" class="song-page-audio mt-4" preload="metadata" controls><source th:src="@{/audio/{path}(path=${song.recording.path})}" type="audio/mpeg"></audio>  cl
+		</div>
 		<div class="song-body" th:classappend="${song.getBodyLineCount() > 35? 'column-page':''}">
 			<p class="song-body-sect" th:each="songsect: ${song.getBodyAsChunks()}">
 				<th:block th:each="line: ${#strings.arraySplit(songsect.trim(), T(java.lang.System).getProperty('line.separator'))}">

@@ -58,8 +58,9 @@ $(document).ready(function(e){
 	$(document).on('click thouchstart','.audio-box',function(){
 		var songRecording = $(this).data('recording');
 		if (songRecording != null){
-			$('.audio-box').replaceWith('<audio class="song-page-audio" controls><source src="/audio/' + songRecording + '" type="audio/mpeg"></audio>');
-			$('.song-page-audio')[0].play();
+			s_id = 'spa_' + songRecording
+			$(this).replaceWith('<audio id="' + songRecording  + '" class="song-page-audio" controls><source src="/audio/' + songRecording + '" type="audio/mpeg"></audio>');
+			$('#' + s_id)[0].play();
 		}
 	});
 	$(document).on('click','.set-list-container',function(e){

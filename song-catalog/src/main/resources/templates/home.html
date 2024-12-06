@@ -19,7 +19,7 @@
 								</div>
 								<div class="col-2"></div>
 							</div>
-							<div class="row mr-2 pb-2 no-gutters">
+							<div class="row mr-2 pb-2 no-gutters" id="midHeader">
 								<div class="col-4">
 									<th:block th:replace="partial/navbar"></th:block>
 								</div>
@@ -156,7 +156,7 @@
 					var scrollLeft = $(this).scrollLeft();
 					var halfwayPoint = (width - outerWidth) / 2;
 
-					if (scrollLeft > lastScrollLeft) {
+					if (scrollLeft > lastScrollLeft && scrollLeft > 0) {
 						// SETLIST
 						if (scrollLeft > halfwayPoint) {
 							$('.hp-slide-idc .circle.lhs').removeClass("selected")
@@ -173,7 +173,7 @@
 						$('#songNav, .sticky-top-nav, .top-nav').css('top','0');
 						$('.title-link').text("Set Lists")
 						window.localStorage.setItem('home-focus', 'setlist')
-					} else if (scrollLeft < lastScrollLeft) {
+					} else if ((scrollLeft < lastScrollLeft || scrollLeft <= 0) && scrollLeft < (width / 2)) {
 						// SONGS
 						if (scrollLeft < halfwayPoint) {
 							$('.hp-slide-idc .circle.rhs').removeClass("selected")
