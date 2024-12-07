@@ -1,8 +1,16 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:sec="http://www.thymeleaf.org" xmlns:th="http://www.thymeleaf.org">
-	<th:block th:replace="partial/head :: head(${@environment.getProperty('com.sjwi.settings.app.properName')})"></th:block>
+	<th:block th:with="nightModePreference=${T(com.sjwi.catalog.config.PreferencesConfiguration).NIGHT_MODE_PREFERENCE_KEY}">
+		<th:block th:replace="partial/head :: head(
+			${@environment.getProperty('com.sjwi.settings.app.properName')},
+			${#session == null || #session.getAttribute(nightModePreference) == null || !#session.getAttribute(nightModePreference)}? '#ffffff': '#303030'
+		)"
+		>
+		</th:block>
+	</th:block>
 	<th:block th:replace="partial/header"></th:block>
 	<body id="homePageBody">
+		<div th:text="${#session.getAttribute(nightModePreference)}"></div>
 		<div id="setlistMaybeHidden"></div>
 		<div class="scroll-lock" style="overflow-y:hidden;">
 			<div class="row no-gutters flex-nowrap home-page">

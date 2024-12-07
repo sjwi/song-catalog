@@ -19,8 +19,6 @@ self.addEventListener('install', function(event) {
     'js/lib/select2.full.min.js',
     'css/bootstrap.css',
     'css/bootstrap-dark.css',
-    'css/colors-dark.css',
-    'css/colors.css',
     'css/datatable.min.css',
     'css/font-awesome.all.min.css',
     'css/jquery.datatable.min.css',

@@ -1,10 +1,17 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org" style="scroll-snap-type: y mandatory; scroll-behavior: smooth; overscroll-behavior: none;">
-	<th:block th:replace="partial/head :: head(${set.setListName})"></th:block>
+	<th:block th:with="nightModePreference=${T(com.sjwi.catalog.config.PreferencesConfiguration).NIGHT_MODE_PREFERENCE_KEY}">
+		<th:block th:replace="partial/head :: head(
+			'${set.setListName}',
+			${#session == null || #session.getAttribute(nightModePreference) == null || !#session.getAttribute(nightModePreference)}? '#00b3ff': '#004f70'
+		)"
+		>
+		</th:block>
+	</th:block>
 	<th:block th:replace="partial/header"></th:block>
-	<body id="setListBody" class="text-center w-100">
+	<body id="setListBody">
 		<th:block th:replace="partial/off-navbar :: offNavBar('addSetList')"></th:block>
-		<div class="row no-gutters">
+		<div class="row no-gutters text-center w-100">
 			<div class="col left-side setlist">
 				<div class="pt-3" th:id="${'appendSetList_' + set.id}">
 					<th:block th:replace="dynamic/set-list-container"></th:block>

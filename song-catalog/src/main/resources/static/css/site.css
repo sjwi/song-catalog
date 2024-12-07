@@ -294,7 +294,7 @@ a:active {
 	 scroll-snap-align: end;
 }
 #setListBody, #setListsBody .wrapper {
-	background-color: var(--primary-grey) !important;
+	background-color: var(--secondary-bg-color) !important;
 }
 #setListBody #offNav > .row, #setListsBody #offNav > .row, #errorBody #offNav > .row, #userFeedBody #offNav > .row{
 	border-bottom:none !important;
@@ -372,6 +372,7 @@ pre#logOutput {
 	box-shadow: var(--set-table-hover);
 }
 .set-list-title {
+	padding-left: 20px;
 	font-size:1.15rem;
 	text-decoration:underline;
 }
@@ -793,6 +794,15 @@ body {
 .hr-wrapper hr {
   margin: 0;
   position: relative;
+}
+
+.notch-area-secondary {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: env(safe-area-inset-top);
+  background-color: var(--secondary-bg-color);
 }
 
 .hr-wrapper .song-page-audio {
@@ -1842,12 +1852,23 @@ ul.ks-cboxtags li input[type="checkbox"] {
 	font-weight:bold;
 }
 
+.set-list-title, .set-list-title a, .set-list-title span {
+	width: 100%;
+}
+.set-list-title span {
+	text-decoration: underline;
+}
+
 span.short-word {
 	display:none;
 }
 table > thead > tr > th[class*="sort"]:before,
 table > thead > tr > th[class*="sort"]:after {
     content: "" !important;
+}
+#songListTable {
+	background-color: var(--main-bg-color);
+	color: var(--main-text-color);
 }
 .dataTables_wrapper {
 	border-right: 1px solid rgb(75,75,75,.2);
@@ -2081,16 +2102,16 @@ table > thead > tr > th[class*="sort"]:after {
 	.hp-slide-idc .circle {
 		width: 7px;
 		height: 7px;
-		background: white;
+		background: var(--hp-idc);
 		border-radius: 50%;
 		margin: 0 auto;
-		border: 1px solid var(--deep-grey);
+		border: 1px solid var(--hp-idc-border);
 		box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
 		opacity: 0.4;
 	}
 	.hp-slide-idc .circle.selected {
-		border: 1px solid black;
-		background: #262626;
+		border: 1px solid var(--hp-idc-border-sel);
+		background: var(--hp-idc-sel);
 	}
 	.alert.add-songs-alert {
 		position:fixed;
@@ -2257,7 +2278,7 @@ table > thead > tr > th[class*="sort"]:after {
 }
 @media (max-width: 576px){
 	.song-page-audio {
-		width: 250px;
+		width: 200px;
 	}
 	.alert-container{
 		width:100%;

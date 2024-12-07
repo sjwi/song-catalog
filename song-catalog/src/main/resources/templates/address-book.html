@@ -1,6 +1,13 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<th:block th:replace="partial/head :: head('Address Book')"></th:block>
+	<th:block th:with="nightModePreference=${T(com.sjwi.catalog.config.PreferencesConfiguration).NIGHT_MODE_PREFERENCE_KEY}">
+		<th:block th:replace="partial/head :: head(
+			'Address Book',
+			${#session == null || #session.getAttribute(nightModePreference) == null || !#session.getAttribute(nightModePreference)}? '#ffffff': '#303030'
+		)"
+		>
+		</th:block>
+	</th:block>
 <th:block th:replace="partial/header"></th:block>
 <body id="addressBookBody">
 	<div class="scroll-lock">

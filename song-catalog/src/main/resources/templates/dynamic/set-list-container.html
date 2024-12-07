@@ -25,7 +25,7 @@
 		</ul>
 	</div>
 	<div class="set-list-title mt-2 mb-2">
-		<a class="text-primary" th:href="@{/setlist/} + ${set.id}"><span th:text="${set.namePrefix}"></span></a>
+		<a class="text-primary" th:href="@{/setlist/} + ${set.id}"><span th:class="text-primary" th:text="${set.namePrefix}"></span></a>
 	</div>
 	<div class="set-list-songs">
 		<table class="table set-table table-sm mb-0" th:attr="data-setid=${set.id}">
