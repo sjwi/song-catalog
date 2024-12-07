@@ -482,7 +482,7 @@ pre#logOutput {
 	height: 100%;
 	background-color: #f8f9fa;
 	box-shadow: -2px 0 5px rgba(0, 0, 0, 0.2);
-	transition: right 0.3s ease-in-out;
+	transition: right 0.5s ease-in-out;
 	z-index: 4000;
 }
 
@@ -2089,6 +2089,9 @@ table > thead > tr > th[class*="sort"]:after {
 	display: none;
 }
 @media screen and (max-width: 900px) {
+	.song-flyout-panel {
+		transition: right 0.3s ease-in-out;
+	}
 	.hp-slide-idc {
 		position: absolute;
 		display: block;

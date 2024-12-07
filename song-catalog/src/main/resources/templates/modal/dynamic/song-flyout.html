@@ -3,11 +3,11 @@
         <div class="d-table col-12 w-100 h-100">
             <div class="d-table-cell align-middle no-gutters text-center" data-toggle="dropdown" style="position:relative;z-index:1033" data-toggle-second="tooltip" data-placement="bottom" title="Transpose Key">
                 <ul class="dropdown-menu" >
-                    <li th:each="letter : ${'A,B,C,D,E,F,G'.split(',')}">
+                    <li th:each="letter : ${'A,B,C,D,E,F,G,L'.split(',')}">
                         <a class="dropdown-item transpose" onclick="transposeSong(this)" th:text="${letter}"></a>
                     </li>
                 </ul>
-                    <span class="transpose-key dropdown-toggle" th:text="${focusedSong[fsInitialIndex].defaultKey}"></span>
+                <span class="transpose-key dropdown-toggle" th:text="${focusedSong[fsInitialIndex].defaultKey}"></span>
             </div>
             <th:block sec:authorize="hasAuthority('USER')">
                 <div class="d-table-cell align-middle no-gutters text-center add-song-to-set-ic" data-toggle="tooltip" data-placement="bottom" title="Add song to set"

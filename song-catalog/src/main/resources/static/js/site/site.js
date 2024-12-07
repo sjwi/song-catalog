@@ -157,6 +157,7 @@ function transposeSong(selection) {
 	$('.transpose-key').text(key);
 
 	var container = $(selection).closest('.song-action-container').siblings('.song-page-container').find('.multi-song-container');
+	console.log(container)
 	var selectedSlide = getFocusedSongPage(container);
 
 	var pageId = $(selectedSlide).data('target');

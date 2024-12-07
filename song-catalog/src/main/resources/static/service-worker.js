@@ -99,6 +99,8 @@ self.addEventListener('install', function(event) {
       .then(function(cache) {
         console.log('Opened cache');
         cache.delete('css/site.css');
+        cache.delete('css/colors.css');
+        cache.delete('css/colors-dark.css');
         cache.delete('js/site/site.js');
         return cache.addAll(urlsToCache);
       })
