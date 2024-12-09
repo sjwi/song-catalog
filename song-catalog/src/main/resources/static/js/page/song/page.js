@@ -16,8 +16,11 @@ $(document).ready(function(){
 		}
 		else if ($(location).attr('href').includes('/setlist')){
 			if (!$(e.target).is(ignoreFocusSelector)){
-				$container = $(window);
-				var isScrolledToBottom = $(window).scrollTop() + $(window).height() >= $(document).height() - 60
+				const container = $(window).width() > 900? window: $('#lock')[0];
+				const scrollHeight = $(window).width() > 900? $('body').prop('scrollHeight'): $(container).prop('scrollHeight');
+
+				var isScrolledToBottom = $(container).scrollTop() + $(container).height() >= scrollHeight - 60
+
 				if (isScrolledToBottom){
 					$('.song-page').each(function() {
 						$(this)[0].scrollTo({
@@ -25,14 +28,14 @@ $(document).ready(function(){
 							behavior: 'smooth'
 						});
 					});
-					window.scrollTo({
+					container.scrollTo({
 						top: 0,
 						behavior: 'smooth'
 					});
 				}
 				else {
-					window.scrollTo({
-						top: document.body.scrollHeight,
+					container.scrollTo({
+						top: scrollHeight,
 						behavior: 'smooth'
 					});
 				}

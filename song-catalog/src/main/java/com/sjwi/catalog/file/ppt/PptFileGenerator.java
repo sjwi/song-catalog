@@ -1,6 +1,10 @@
 /* (C)2022 https://stephenky.com */
 package com.sjwi.catalog.file.ppt;
 
+import com.sjwi.catalog.exception.FileUtilityException;
+import com.sjwi.catalog.file.FileGenerator;
+import com.sjwi.catalog.model.SetList;
+import com.sjwi.catalog.model.song.Song;
 import java.awt.Color;
 import java.awt.geom.Rectangle2D;
 import java.io.File;
@@ -9,7 +13,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
-
 import org.apache.poi.sl.usermodel.TextParagraph.TextAlign;
 import org.apache.poi.xslf.usermodel.SlideLayout;
 import org.apache.poi.xslf.usermodel.XMLSlideShow;
@@ -22,11 +25,6 @@ import org.apache.poi.xslf.usermodel.XSLFTextRun;
 import org.apache.poi.xslf.usermodel.XSLFTextShape;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
-
-import com.sjwi.catalog.exception.FileUtilityException;
-import com.sjwi.catalog.file.FileGenerator;
-import com.sjwi.catalog.model.SetList;
-import com.sjwi.catalog.model.song.Song;
 
 public class PptFileGenerator implements FileGenerator {
 

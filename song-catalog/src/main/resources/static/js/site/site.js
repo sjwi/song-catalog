@@ -92,7 +92,10 @@ $(document).ready(function(e){
 		if (!$(e.target).is(ignoreSongClickedSelector)){
 			id = $(e.target).closest('.song-metadata').data('target')
 			$('#songFlyoutPanel').load(contextpath + 'song/' + id + '?view=modal/dynamic/song-flyout', bindSongContainerScroll);
-			history.pushState({ flyoutOpen: true }, '', '#song');
+			const currentState = history.state;
+			if (!currentState?.flyoutOpen) {
+				history.pushState({ flyoutOpen: true }, '', '#song');
+			}
 			flyout.addClass('open');
 			window.localStorage.setItem('focusedFlyout', id);
 		}
@@ -103,9 +106,19 @@ $(document).ready(function(e){
 		$('#songRow_' + id).click();
 	}
 
+	let isProgrammaticBack = false;
+
 	$(window).on('popstate', function (event) {
 		if (!event.originalEvent.state || !event.originalEvent.state.flyoutOpen) {
 		  $('.song-row').removeClass('selected')
+			if (!isProgrammaticBack) {
+				flyout.removeClass('trans-right')
+				setTimeout(function() {
+					flyout.addClass('trans-right')
+				},100)
+			} else {
+				isProgrammaticBack = false
+			}
 			flyout.removeClass('open');
 			window.localStorage.removeItem('focusedFlyout', id);
 			window.localStorage.removeItem('focusedFlyoutIdx');
@@ -114,6 +127,7 @@ $(document).ready(function(e){
 
 	$(document).on('click', '#songCloseFlyout', function() {
 		flyout.removeClass('open');
+		isProgrammaticBack = true
 		history.back();
 		$('.song-row').removeClass('selected')
 		window.localStorage.removeItem('focusedFlyout', id);
@@ -185,8 +199,10 @@ function bindSongContainerScroll() {
 		if (scrollLeft > lastScrollLeft && scrollLeft > 0) {
 			// scrolling right
 			var left = false
-			$(this).siblings('.previous-slide').show()
-			if ($(this).scrollLeft() > width - 2 * itemWidth){
+			if (scrollLeft > 0) {
+				$(this).siblings('.previous-slide').show()
+			}
+			if ($(this).scrollLeft() > width - 2 * itemWidth || scrollLeft >= width - parentWidth){
 				$(this).siblings('.next-slide').hide()
 			} else {
 				$(this).siblings('.next-slide').show()
@@ -194,8 +210,11 @@ function bindSongContainerScroll() {
 		} else if (scrollLeft < lastScrollLeft || scrollLeft <= 0) {
 			var left = true
 			// scrolling left
-			$(this).siblings('.next-slide').show()
-			if ($(this).scrollLeft() < itemWidth){
+			if (scrollLeft < width - parentWidth - 1)
+				$(this).siblings('.next-slide').show()
+			console.log(scrollLeft)
+			console.log(itemWidth)
+			if (scrollLeft < itemWidth - 1 || scrollLeft <= 0){
 				$(this).siblings('.previous-slide').hide()
 			} else {
 				$(this).siblings('.previous-slide').show()

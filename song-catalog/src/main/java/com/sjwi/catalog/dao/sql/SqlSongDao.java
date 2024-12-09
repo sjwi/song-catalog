@@ -4,27 +4,35 @@ package com.sjwi.catalog.dao.sql;
 import static com.sjwi.catalog.model.KeySet.LYRICS_ONLY_KEY_CODE;
 import static com.sjwi.catalog.model.KeySet.NUMBER_SYSTEM_KEY_CODE;
 
-import com.sjwi.catalog.controller.ControllerHelper;
-import com.sjwi.catalog.dao.SongDao;
-import com.sjwi.catalog.model.KeySet;
-import com.sjwi.catalog.model.SearchTerm;
-import com.sjwi.catalog.model.TransposableString;
-import com.sjwi.catalog.model.song.MasterSong;
-import com.sjwi.catalog.model.song.Song;
-import com.sjwi.catalog.service.RecordingService;
-import com.sjwi.catalog.service.UserService;
-import com.sjwi.catalog.service.VersionService;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
+
+import com.sjwi.catalog.controller.ControllerHelper;
+import com.sjwi.catalog.dao.SongDao;
+import com.sjwi.catalog.model.KeySet;
+import com.sjwi.catalog.model.Recording;
+import com.sjwi.catalog.model.SearchTerm;
+import com.sjwi.catalog.model.TransposableString;
+import com.sjwi.catalog.model.song.MasterSong;
+import com.sjwi.catalog.model.song.MinSong;
+import com.sjwi.catalog.model.song.Song;
+import com.sjwi.catalog.model.song.VersionSong;
+import com.sjwi.catalog.service.RecordingService;
+import com.sjwi.catalog.service.UserService;
+import com.sjwi.catalog.service.VersionService;
 
 @Repository
 public class SqlSongDao implements SongDao {
@@ -201,13 +209,14 @@ public class SqlSongDao implements SongDao {
   }
 
   private List<Song> buildSongsFromResultSet(ResultSet rs) {
-    List<Song> songs = new ArrayList<Song>();
+    List<MinSong> songs = new ArrayList<>();
+    Set<Integer> songIds = new HashSet<>();
     try {
       while (rs.next()) {
+        Integer songId = rs.getInt("ID");
         songs.add(
-            new MasterSong(
-                versionService.getVersionsByRelatedId(rs.getInt("ID")),
-                rs.getInt("ID"),
+            new MinSong(
+                songId,
                 rs.getString("NAME"),
                 new TransposableString(rs.getString("BODY"), NUMBER_SYSTEM_KEY_CODE),
                 rs.getString("DEFAULT_KEY"),
@@ -219,12 +228,17 @@ public class SqlSongDao implements SongDao {
                 rs.getInt("RELATED"),
                 ("Y").equals(rs.getString("PRIVATE")) ? true : false,
                 rs.getInt("CATEGORY"),
-                recordingService.getRecordingBySongId(rs.getInt("ID"))));
+                null
+            )
+        );
+        songIds.add(songId);
       }
     } catch (Exception e) {
       controllerHelper.errorHandler(e);
     }
-    return songs;
+    Map<Integer, List<VersionSong>> versionMap = versionService.getVersionsByRelatedIds();
+    Map<Integer, Recording> recordingMap = recordingService.getRecordingsBySongIds();
+    return songs.stream().map(s -> s.toMaster(versionMap.getOrDefault(s.getId(), new ArrayList<>()), recordingMap.get(s.getId()))).collect(Collectors.toList());
   }
 
   @Override

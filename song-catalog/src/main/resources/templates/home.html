@@ -10,7 +10,6 @@
 	</th:block>
 	<th:block th:replace="partial/header"></th:block>
 	<body id="homePageBody">
-		<div th:text="${#session.getAttribute(nightModePreference)}"></div>
 		<div id="setlistMaybeHidden"></div>
 		<div class="scroll-lock" style="overflow-y:hidden;">
 			<div class="row no-gutters flex-nowrap home-page">
@@ -122,6 +121,7 @@
 	<script th:inline="javascript" th:src="@{/js/page/song/static.js}"></script>
 	<script>
 		var resized = false;
+		/*
 		if (window.localStorage.getItem('home-focus')) {
 			homeFocus = window.localStorage.getItem('home-focus')
 			if (homeFocus == 'setlist') {
@@ -132,6 +132,7 @@
 				$container.css('scroll-behavior', 'smooth');
 			}
 		}
+		*/
 		$(document).ready(function(){
 			refreshCategories();
 			$(document).on('click','.set-list-container',function(e){

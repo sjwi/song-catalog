@@ -6,11 +6,17 @@ hr {
 	background-color: var(--main-text-color) !important;
 	opacity:.1;
 }
+.z-1 {
+	z-index: 1 !important;
+}
 .bg-primary {
 	background-color: var(--main-bg-color);
 }
 .bg-custom {
 	background-color: var(--secondary-bg-color);
+}
+.text-primary {
+	color: var(--main-text-color) !important;
 }
 .mh-100vh {
 	min-height: 100vh;
@@ -290,7 +296,10 @@ a:active {
 	background-color: var(--primary-grey) !important;
 	height:calc(100vh + var(--default-header-size));
 }
-#setListBody>.sl-songc, #setListBody>nav {
+#setListBody nav {
+	 scroll-snap-align: end;
+}
+.ssae {
 	 scroll-snap-align: end;
 }
 #setListBody, #setListsBody .wrapper {
@@ -441,7 +450,6 @@ pre#logOutput {
 	overflow-y: hidden;
 	scroll-snap-type: x mandatory;
 	scroll-behavior: smooth;
-	overscroll-behavior-x: none;
 	scroll-snap-stop: normal;
 	font-size:0;
 	white-space: nowrap;
@@ -473,16 +481,22 @@ pre#logOutput {
 	overflow-y: hidden !important;
 }
 
+.disappear {
+	position: fixed !important;
+	right: -100px !important;
+}
+.trans-right {
+	transition: right 0.5s ease-in-out;
+}
 .song-flyout-panel {
 	position: fixed;
 	top: 0;
 	right: -100%;
 	width: 100%;
-	max-width: 900px;
+	max-width: 700px;
 	height: 100%;
 	background-color: #f8f9fa;
 	box-shadow: -2px 0 5px rgba(0, 0, 0, 0.2);
-	transition: right 0.5s ease-in-out;
 	z-index: 4000;
 }
 
@@ -2089,6 +2103,16 @@ table > thead > tr > th[class*="sort"]:after {
 	display: none;
 }
 @media screen and (max-width: 900px) {
+	#setListBody {
+		position: fixed;
+	}
+	#setListBody>#lock {
+		overflow-y:scroll;
+		height: calc(100vh - env(safe-area-inset-bottom));
+		scroll-snap-type: y mandatory;
+		scroll-behavior: smooth;
+		overscroll-behavior: none;
+	}
 	.song-flyout-panel {
 		transition: right 0.3s ease-in-out;
 	}
@@ -2246,6 +2270,9 @@ table > thead > tr > th[class*="sort"]:after {
 	.song-dropdown-btn {
 		max-width: 16.6666666666% !important;
 		padding-right:.5rem !important;
+	}
+	#setListBody .song-page {
+		padding-bottom: 60px;
 	}
 }
 @media screen and (max-width: 767px) {

@@ -3,13 +3,12 @@ package com.sjwi.catalog.model.song;
 
 import static com.sjwi.catalog.file.FileGenerator.LICENSE_TEXT;
 
-import java.util.Arrays;
-import java.util.Date;
-import java.util.stream.Collectors;
-
 import com.sjwi.catalog.model.Recording;
 import com.sjwi.catalog.model.TransposableString;
 import com.sjwi.catalog.model.user.CfUser;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.stream.Collectors;
 
 public abstract class Song {
 
