@@ -3,16 +3,6 @@ package com.sjwi.catalog.dao.sql;
 
 import static com.sjwi.catalog.model.KeySet.NUMBER_SYSTEM_KEY_CODE;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Lazy;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.stereotype.Repository;
-
 import com.sjwi.catalog.dao.VersionDao;
 import com.sjwi.catalog.model.TransposableString;
 import com.sjwi.catalog.model.song.MasterSong;
@@ -22,6 +12,14 @@ import com.sjwi.catalog.model.song.VersionSong;
 import com.sjwi.catalog.service.RecordingService;
 import com.sjwi.catalog.service.SongService;
 import com.sjwi.catalog.service.UserService;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.stereotype.Repository;
 
 @Repository
 public class SqlVersionDao implements VersionDao {
@@ -61,38 +59,38 @@ public class SqlVersionDao implements VersionDao {
         queryStore.get("swapMasterOfVersionById"), new Object[] {songId, relatedId});
     jdbcTemplate.update(queryStore.get("swapVersionById"), new Object[] {relatedId, songId});
   }
-  
+
   @Override
-  public Map<Integer, List<VersionSong>> getVersionsByRelatedIds(){
+  public Map<Integer, List<VersionSong>> getVersionsByRelatedIds() {
     String query = queryStore.get("getSongVersionsByRelatedIdsExcludePrivate");
 
     return jdbcTemplate.query(
-      query,
-      r -> {
-        Map<Integer, List<VersionSong>> versionMap = new HashMap<>();
-          while(r.next()) {
-            versionMap.computeIfAbsent(r.getInt("RELATED"), k -> new ArrayList<>()).add(
-                new VersionSong(
-                    r.getInt("VERSION_ID"),
-                    r.getString("VERSION"),
-                    r.getInt("ID"),
-                    r.getString("NAME"),
-                    new TransposableString(r.getString("BODY"), NUMBER_SYSTEM_KEY_CODE),
-                    r.getString("DEFAULT_KEY"),
-                    r.getString("ARTIST"),
-                    r.getString("NOTES"),
-                    userService.loadCfUserByUsername(r.getString("CREATED_BY")),
-                    userService.loadCfUserByUsername(r.getString("MODIFIED_BY")),
-                    r.getTimestamp("CHANGED_ON"),
-                    r.getInt("RELATED"),
-                    "Y".equals(r.getString("PRIVATE")) ? true : false,
-                    r.getInt("CATEGORY"),
-                    null
-                    ));
+        query,
+        r -> {
+          Map<Integer, List<VersionSong>> versionMap = new HashMap<>();
+          while (r.next()) {
+            versionMap
+                .computeIfAbsent(r.getInt("RELATED"), k -> new ArrayList<>())
+                .add(
+                    new VersionSong(
+                        r.getInt("VERSION_ID"),
+                        r.getString("VERSION"),
+                        r.getInt("ID"),
+                        r.getString("NAME"),
+                        new TransposableString(r.getString("BODY"), NUMBER_SYSTEM_KEY_CODE),
+                        r.getString("DEFAULT_KEY"),
+                        r.getString("ARTIST"),
+                        r.getString("NOTES"),
+                        userService.loadCfUserByUsername(r.getString("CREATED_BY")),
+                        userService.loadCfUserByUsername(r.getString("MODIFIED_BY")),
+                        r.getTimestamp("CHANGED_ON"),
+                        r.getInt("RELATED"),
+                        "Y".equals(r.getString("PRIVATE")) ? true : false,
+                        r.getInt("CATEGORY"),
+                        null));
           }
-        return versionMap;
-      }
-    );
+          return versionMap;
+        });
   }
 
   @Override

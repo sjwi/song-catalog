@@ -3,12 +3,19 @@
 	<div class="col-sm-4 mx-auto"> 
 		<div class="row form-group">
 			<label class="col-3 col-form-label" for="title">Versions</label>
-			<select class="col-9 custom-select version-list required" title="Select a version to change to" name="version">
+			<select class="col-9 custom-select version-list required pr-2" title="Select a version to change to" name="version">
 				<option th:each="version: ${versions}" th:value="${version.id}" th:selected="${currentVersionId == version.id}" th:text="${version.versionName + ' [' + version.createdBy?.firstName + ']'}"></option>
 				<option value="newVersion">Create New Version</option>
 			</select>
 		</div>
 	</div>
+</div>
+<div class="row no-gutters w-100 mb-4">
+	<div class="col-2"></div>
+	<div class="col col-lg col-8">
+		<button type="submit" class="btn btn-info btn-lg w-100" id="submitChangeVersionBtn">Choose Version</button>
+	</div>
+	<div class="col-2"></div>
 </div>
 <div id="newVersionContainer" class="template-container collapse">
 </div>

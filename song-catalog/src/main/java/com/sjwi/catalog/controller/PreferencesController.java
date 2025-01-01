@@ -1,6 +1,7 @@
 /* (C)2022 https://stephenky.com */
 package com.sjwi.catalog.controller;
 
+import static com.sjwi.catalog.config.PreferencesConfiguration.FONT_SIZE_PREFERENCE_KEY;
 import static com.sjwi.catalog.config.PreferencesConfiguration.NIGHT_MODE_PREFERENCE_KEY;
 
 import com.sjwi.catalog.log.CustomLogger;
@@ -45,6 +46,22 @@ public class PreferencesController {
       request.getSession().setAttribute(NIGHT_MODE_PREFERENCE_KEY, "true");
       response.addCookie(ControllerHelper.buildStaticCookie(NIGHT_MODE_PREFERENCE_KEY, "true"));
       response.sendRedirect("home");
+    } catch (Exception e) {
+      controllerHelper.errorHandler(e);
+    }
+  }
+
+  @RequestMapping(value = {"/scale-font"})
+  public void scaleFont(
+      HttpServletRequest request,
+      HttpServletResponse response,
+      Authentication auth,
+      @RequestParam(name = "size", required = true) String size) {
+    try {
+      request.getSession().setAttribute(FONT_SIZE_PREFERENCE_KEY, size);
+      response.addCookie(ControllerHelper.buildStaticCookie(FONT_SIZE_PREFERENCE_KEY, size));
+      if (auth != null)
+        preferencesService.setUserPreference(FONT_SIZE_PREFERENCE_KEY, size, auth.getName());
     } catch (Exception e) {
       controllerHelper.errorHandler(e);
     }

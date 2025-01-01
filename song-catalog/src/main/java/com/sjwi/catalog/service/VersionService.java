@@ -1,16 +1,14 @@
 /* (C)2022 https://stephenky.com */
 package com.sjwi.catalog.service;
 
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
 import com.sjwi.catalog.dao.VersionDao;
 import com.sjwi.catalog.model.song.Song;
 import com.sjwi.catalog.model.song.VersionSong;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 @Component
 public class VersionService {
@@ -18,7 +16,8 @@ public class VersionService {
   @Autowired VersionDao versionDao;
 
   private static final String VERSION_CACHE_KEY_ROOT = "versions";
-  private static ConcurrentHashMap<String, Map<Integer, List<VersionSong>>> versionCache = new ConcurrentHashMap<>();
+  private static ConcurrentHashMap<String, Map<Integer, List<VersionSong>>> versionCache =
+      new ConcurrentHashMap<>();
 
   public int createNewVersion(int songId, String user, String transposedSongBody, String key) {
     int vId = versionDao.createNewVersion(songId, user, transposedSongBody, key);

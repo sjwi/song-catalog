@@ -63,6 +63,7 @@
 		<link rel="apple-touch-startup-image" th:href="@{/images/splashscreen_1536x2048.png}" media="(min-device-width: 768px) and (max-device-width: 1024px) and (-webkit-min-device-pixel-ratio: 2) and (orientation: portrait)">
 		<link rel="apple-touch-startup-image" th:href="@{/images/splashscreen_1668x2224.png}" media="(min-device-width: 834px) and (max-device-width: 834px) and (-webkit-min-device-pixel-ratio: 2) and (orientation: portrait)">
 		<link rel="apple-touch-startup-image" th:href="@{/images/splashscreen_2048x2732.png}" media="(min-device-width: 1024px) and (max-device-width: 1024px) and (-webkit-min-device-pixel-ratio: 2) and (orientation: portrait)">
+		<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 
 
 		<link rel="shortcut icon" th:href="@{/favicon.ico}" type="image/x-icon">
@@ -74,7 +75,6 @@
 		</th:block>
 		<link rel="stylesheet" type="text/css" th:href="@{/css/select2.min.css}"/>
 		<link rel="apple-touch-icon" th:href="@{/images/icon_dark.png}">
-		<link rel="stylesheet" th:href="@{/css/site.css}" />
 		<link rel="stylesheet" th:href="@{/css/font-awesome.all.min.css}" />
 		<link rel="stylesheet" th:href="@{/css/datatable.min.css}" />
 		<link rel="stylesheet" th:href="@{/css/jquery.datatable.min.css}" />
@@ -85,13 +85,21 @@
 		<script th:src="@{/js/lib/bootstrap.bundle.js}"></script>
 		<script th:src="@{/js/lib/jquery.ui.touch-punch.min.js}"></script>
 		<script th:src="@{/js/lib/popper.min.js}"></script>
-		<script th:src="@{/js/site/site.js}"></script>
 		<script th:src="@{/js/lib/select2.full.min.js}"></script>
 		<script th:src="@{/js/lib/moment-with-locales.min.js}"></script>
 		<script th:src="@{/js/lib/qrcode.min.js}"></script>
 		<script th:src="@{/js/site/form-validation.js}"></script>
 		<script th:src="@{/js/site/scroll.js}"></script>
 		<script th:src="@{/js/site/swipe.js}"></script>
+
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/pulltorefreshjs/0.1.22/index.umd.min.js" integrity="sha512-djmgTiVR15A/7fON+ojDzFYrRsfVkzQZu07ZVb0zLC1OhA2iISP39Lzs05GqSKF0vPjkLzL5hBC+am6po7dKpA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+		<th:block th:with="version='1.1'">
+			<!--For caching-->
+			<link rel="stylesheet" th:href="@{'/css/site.css?version=' + ${version}}" />
+			<script th:src="@{'/js/site/site.js?version=' + ${version}}"></script>
+		</th:block>
+
 		<script th:inline="javascript">
 			var contextpath = /*[[@{/}]]*/;
 			var loggedInUser = /*[[${#authentication?.getPrincipal()}]]*/;

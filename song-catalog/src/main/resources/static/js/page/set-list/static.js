@@ -11,11 +11,10 @@ function reloadSetSongContainerIfPresent(setId){
 			success: function(data) {
 				lastUpdatedTime = undefined;
 				$(songContainer).html(data);
+				bindSongContainerScroll()
 				setTimeout(function() {
 					focusSong(FOCUSED_SCROLL_PAGE)
 				}, 0);
-
-				
 			}
 		});
 	}	

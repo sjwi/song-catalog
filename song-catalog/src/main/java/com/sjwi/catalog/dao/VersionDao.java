@@ -1,12 +1,11 @@
 /* (C)2022 https://stephenky.com */
 package com.sjwi.catalog.dao;
 
-import java.util.List;
-import java.util.Map;
-
 import com.sjwi.catalog.model.song.SetListVersionSong;
 import com.sjwi.catalog.model.song.Song;
 import com.sjwi.catalog.model.song.VersionSong;
+import java.util.List;
+import java.util.Map;
 
 public interface VersionDao {
 

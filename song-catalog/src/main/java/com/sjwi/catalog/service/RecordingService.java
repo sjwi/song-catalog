@@ -1,6 +1,8 @@
 /* (C)2022 https://stephenky.com */
 package com.sjwi.catalog.service;
 
+import com.sjwi.catalog.dao.RecordingDao;
+import com.sjwi.catalog.model.Recording;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -9,17 +11,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
-
 import javax.servlet.ServletContext;
 import javax.servlet.http.Part;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
-
-import com.sjwi.catalog.dao.RecordingDao;
-import com.sjwi.catalog.model.Recording;
-  
 
 @Component
 public class RecordingService {
@@ -46,8 +42,9 @@ public class RecordingService {
 
   public Recording getRecordingBySongId(int id) {
     if (recordingCache.isEmpty())
-      recordingCache.putAll(recordingDao.getAllRecordingsWithFileStreams()
-      .stream().collect(Collectors.toMap(Recording::getSongId, recording -> recording)));
+      recordingCache.putAll(
+          recordingDao.getAllRecordingsWithFileStreams().stream()
+              .collect(Collectors.toMap(Recording::getSongId, recording -> recording)));
     return recordingCache.get(id);
   }
 
@@ -58,8 +55,9 @@ public class RecordingService {
 
   public List<Recording> getAllRecordings() {
     if (recordingCache.isEmpty())
-      recordingCache.putAll(recordingDao.getAllRecordingsWithFileStreams()
-      .stream().collect(Collectors.toMap(Recording::getSongId, recording -> recording)));
+      recordingCache.putAll(
+          recordingDao.getAllRecordingsWithFileStreams().stream()
+              .collect(Collectors.toMap(Recording::getSongId, recording -> recording)));
     return new ArrayList<>(recordingCache.values());
   }
 

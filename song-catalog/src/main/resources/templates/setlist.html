@@ -67,6 +67,20 @@
 			if (!($parent.scrollTop() + $parent.outerHeight() >= $parent[0].scrollHeight))
 				$child.addClass('noscroll-v')
 
+			const ptr = PullToRefresh.init({
+				mainElement: '#lock',
+				shouldPullToRefresh: function(){
+					var scrollTop = $parent.scrollTop(); // Current vertical scroll position
+					var documentHeight = $parent.prop("scrollHeight"); // Total height of the document
+					var windowHeight = $parent.height(); // Height of the visible window
+          let isAtBottom = scrollTop + windowHeight >= documentHeight - 1
+					return !isAtBottom
+        },
+				onRefresh() {
+					window.location.reload();
+				}
+			});
+
 			let hidden = false;
 			let lastScrollTop = 0;
 
@@ -76,16 +90,17 @@
 				var windowHeight = $parent.height(); // Height of the visible window
 
 				var scrollingDown = scrollTop > lastScrollTop
+				var scrollingUp = scrollTop < lastScrollTop
 
 				if (!hidden && scrollingDown) {
 					$('.top-nav').fadeOut('fast')
 					hidden = true
-				} else if (hidden && !scrollingDown){
+				} else if (hidden && scrollingUp){
 					$('.top-nav').fadeIn('fast')
 					hidden = false;
 				}
 
-				const isParentScrolledToBottom = scrollTop + windowHeight >= documentHeight - 1
+				isParentScrolledToBottom = scrollTop + windowHeight >= documentHeight - 1
 
 				if (isParentScrolledToBottom) {
 					$child.removeClass('noscroll-v')

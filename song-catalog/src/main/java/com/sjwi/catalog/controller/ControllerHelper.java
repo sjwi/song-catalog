@@ -1,6 +1,7 @@
 /* (C)2022 https://stephenky.com */
 package com.sjwi.catalog.controller;
 
+import static com.sjwi.catalog.config.PreferencesConfiguration.FONT_SIZE_PREFERENCE_KEY;
 import static com.sjwi.catalog.config.PreferencesConfiguration.NIGHT_MODE_PREFERENCE_KEY;
 import static com.sjwi.catalog.model.security.StoredCookieToken.STORED_COOKIE_TOKEN_KEY;
 
@@ -290,6 +291,8 @@ public class ControllerHelper {
           .forEach(
               c -> {
                 if (NIGHT_MODE_PREFERENCE_KEY.equals(c.getName())) {
+                  request.getSession().setAttribute(c.getName(), c.getValue());
+                } else if (FONT_SIZE_PREFERENCE_KEY.equals(c.getName())) {
                   request.getSession().setAttribute(c.getName(), c.getValue());
                 }
               });

@@ -1,4 +1,4 @@
-var ignoreFocusSelector = ".song-title-link, .zoom-min, .zoom-plus, .zoom-val, .zoom-val span, img, audio,.slide-arrow,svg,path";
+var ignoreFocusSelector = "i, .song-title-link, .zoom-min, .zoom-plus, .zoom-val, .zoom-val span, .zoom-btn, img, audio,.slide-arrow,svg,path";
 $(document).ready(function(){
 	$(document).on('click','.song-page-container:not(.modal-page-container)', function(e){
 		if ($(location).attr('href').includes('/setlists')){
