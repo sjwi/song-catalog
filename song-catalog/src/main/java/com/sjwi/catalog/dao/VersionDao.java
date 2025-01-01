@@ -5,6 +5,7 @@ import com.sjwi.catalog.model.song.SetListVersionSong;
 import com.sjwi.catalog.model.song.Song;
 import com.sjwi.catalog.model.song.VersionSong;
 import java.util.List;
+import java.util.Map;
 
 public interface VersionDao {
 
@@ -13,6 +14,8 @@ public interface VersionDao {
   public void changeMaster(int songId, int relatedId);
 
   public List<VersionSong> getVersionsByRelatedId(int id);
+
+  public Map<Integer, List<VersionSong>> getVersionsByRelatedIds();
 
   public VersionSong getVersionById(int id);
 

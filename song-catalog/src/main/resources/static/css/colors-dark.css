@@ -37,4 +37,9 @@
 	--version-bg-color: #292929;
 	--version-bg-color-hover: #3b3b3b;
 	--secondary-border-color: #006791;
+
+	--hp-idc: #262626;
+	--hp-idc-border: black;
+	--hp-idc-sel: #fff;
+	--hp-idc-border-sel: #a6a6a6;
 }

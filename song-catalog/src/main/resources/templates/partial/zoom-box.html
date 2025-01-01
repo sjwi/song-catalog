@@ -1,34 +1,19 @@
 <div class="zoom-box">
-	<div class="row no-gutters w-100 h-100">
-		<div class="zoom-min col-3 no-gutters">-</div>
-		<div class="zoom-val col-6 no-gutters"><span id="zoomPerc">100</span><span>%</span></div>
-		<div class="zoom-plus col-3 no-gutters">+</div>
+	<div class="row no-gutters w-100 h-100 zoom-val-row">
+		<th:block th:with="fontScale=${T(com.sjwi.catalog.config.PreferencesConfiguration).FONT_SIZE_PREFERENCE_KEY}">
+			<th:block th:with="fontScaleSuffix=${#session == null || #session.getAttribute(fontScale) == null? '100': #session.getAttribute(fontScale)}">
+				<div class="zoom-val no-gutters zoom-col"><span id="zoomPerc" th:text="${fontScaleSuffix}">100</span><span>%</span></div>
+			</th:block>
+		</th:block>
+		<div class="zoom-min zoom-min-sel col-6 no-gutters zoom-col">
+			<div class="zoom-btn">
+				<i class="fa-solid fa-magnifying-glass-minus"></i>
+			</div>
+		</div>
+		<div class="zoom-plus zoom-plus-sel col-6 no-gutters zoom-col">
+			<div class="zoom-btn">
+				<i class="fa-solid fa-magnifying-glass-plus"></i>
+			</div>
+		</div>
 	</div>
 </div>
-<script>
-	$(document).ready(function(){
-		$('.zoom-min').click(function(e){
-			if (parseInt($('#zoomPerc').html()) > 30){
-				var songBodies = $(this).closest('.song-page-container').find('.song-body,.song-footer');
-				$(songBodies).each(function(){
-					var currentFont = parseInt($(this).css("font-size"));
-					$(this).css({'font-size':currentFont - 2 + 'px'});
-				});
-				$('#zoomPerc').html(parseInt($('#zoomPerc').html()) - 10);
-			}
-			$('.wrapper').css('height','auto');
-			$('.wrapper').css('height',$(document).height() - 30);
-		});
-		$('.zoom-plus').click(function(e){
-			if (parseInt($('#zoomPerc').html()) < 200){
-				var songBodys = $(this).closest('.song-page-container').find('.song-body,.song-footer');
-				$(songBodys).each(function(){
-					var currentFont = parseInt($(this).css("font-size"));
-					$(this).css({'font-size':currentFont + 2 + 'px'});
-				});
-				$('#zoomPerc').html(parseInt($('#zoomPerc').html()) + 10);
-			}
-			$('.wrapper').css('height',$(document).height() - 30);
-		});
-	});
-</script>

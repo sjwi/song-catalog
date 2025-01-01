@@ -1,6 +1,6 @@
 <div class="alert alert-light py-0 px-0 add-songs-alert text-center rounded-top" role="alert">
   <div class="alert-opac px-3 rounded-top">
-    <div class="col my-0 pl-0 pt-2 text-center" id="hideAddAlert">
+    <div class="col my-0 pl-0 pr-0 pt-2 text-center" id="hideAddAlert">
       <i class="fa fa-angle-down" aria-hidden="true"></i>
       <i class="fa fa-angle-up collapse" aria-hidden="true"></i>
     </div>
@@ -46,6 +46,7 @@
       slideAlertUp();
     } else {
       removeSongFromCheckedCache($(this).data('target'));
+      $(this).closest('.song-row').removeClass('selected')
     }
     if (checkedCacheSize() > 0) {
       showAddSongsAlert();

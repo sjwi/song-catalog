@@ -1,8 +1,19 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org" data-oc="var(--primary-grey),var(--primary-grey)">
-	<th:block th:replace="partial/head :: head(${focusedSong[0].name})"></th:block>
+	<th:block th:with="nightModePreference=${T(com.sjwi.catalog.config.PreferencesConfiguration).NIGHT_MODE_PREFERENCE_KEY}">
+		<th:block th:replace="partial/head :: head(
+			${focusedSong[0].name},
+			${#session == null || #session.getAttribute(nightModePreference) == null || !#session.getAttribute(nightModePreference)}? '#00b3ff': '#004f70'
+		)"
+		>
+		</th:block>
+	</th:block>
 	<th:block th:replace="partial/header"></th:block>
 	<body id="songCatalogBody">
+		<script th:inline="javascript">
+			FOCUSED_SCROLL_PAGE = [[${fsInitialIndex}]];
+			var focusedSong = [[${focusedSong[0].id}]];
+		</script>
 		<div class="scroll-lock">
 			<th:block th:replace="partial/off-navbar :: offNavBar('addSong')"></th:block>
 			<div class="song-catalog-row row no-gutters flex-nowrap">
@@ -37,7 +48,6 @@
 				</th:block>
 			</div>
 		</div>
-		<th:block th:replace="partial/back-btn"></th:block>
 	</body>
 	<script th:inline="javascript" th:src="@{/js/page/song/page.js}"></script>
 	<script th:inline="javascript" th:src="@{/js/page/set-list/static.js}"></script>
@@ -47,15 +57,9 @@
 	<script th:inline="javascript">
 		if ($('.song-table').length == 0)
 			$('#songTableContainer').html($('.loading').clone());
-		var ignoreSongClickedSelector = ".action-btn,.song-dropdown-btn,.dropdown-menu, li, .dropdown-item,.grip-container,img,.round,.round>*";
-		var focusedSong = [[${focusedSong[0].id}]];
-		var focusedSlickPage = [[${fsInitialIndex}]];
 		
 		function refreshSongContainer(id){
-			$('#catalogSongDetails').load(contextpath + 'song/' + id + '?view=dynamic/song-details',function(){
-				focusedSlickPage = 0;
-				slick();
-			});
+			$('#catalogSongDetails').load(contextpath + 'song/' + id + '?view=dynamic/song-details', bindSongContainerScroll);
 			$('#catalogVersionDetails').load(contextpath + 'song/' + id + '?view=dynamic/version-details');
 		}
 		function selectFocusedSong(id){

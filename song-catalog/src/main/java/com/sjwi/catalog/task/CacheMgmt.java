@@ -14,7 +14,7 @@ public class CacheMgmt {
   @Autowired SetListService setListService;
 
   @Scheduled(cron = "0 */10 * * * *")
-  public void cleanDb() {
+  public void clearCaches() {
     songService.refreshSongCache();
     setListService.refreshSetListCache();
   }

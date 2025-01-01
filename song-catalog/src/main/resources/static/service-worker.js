@@ -17,16 +17,12 @@ self.addEventListener('install', function(event) {
     'js/lib/popper.min.js',
     'js/lib/qrcode.min.js',
     'js/lib/select2.full.min.js',
-    'js/lib/slick.min.js',
     'css/bootstrap.css',
     'css/bootstrap-dark.css',
-    'css/colors-dark.css',
-    'css/colors.css',
     'css/datatable.min.css',
     'css/font-awesome.all.min.css',
     'css/jquery.datatable.min.css',
     'css/select2.min.css',
-    'css/slick.css',
     'images/add-song-to-set-inverse.png',
     'images/add-song-to-set.png',
     'images/click-here.png',
@@ -103,6 +99,8 @@ self.addEventListener('install', function(event) {
       .then(function(cache) {
         console.log('Opened cache');
         cache.delete('css/site.css');
+        cache.delete('css/colors.css');
+        cache.delete('css/colors-dark.css');
         cache.delete('js/site/site.js');
         return cache.addAll(urlsToCache);
       })

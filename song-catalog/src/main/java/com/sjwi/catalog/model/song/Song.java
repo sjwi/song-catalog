@@ -71,6 +71,10 @@ public abstract class Song {
     return body;
   }
 
+  public int getBodyLineCount() {
+    return body.split("\n").length;
+  }
+
   public String[] getBodyAsChunks() {
     // filter CCLI footer
     return Arrays.stream(splitBodyIntoChunks())

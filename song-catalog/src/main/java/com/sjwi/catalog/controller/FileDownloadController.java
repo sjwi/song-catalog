@@ -156,6 +156,8 @@ public class FileDownloadController {
           fileName == null
               ? "Song_Catalog_Export" + date
               : controllerHelper.normalizeString(fileName + date);
+      response.setContentType(
+          "application/vnd.openxmlformats-officedocument.presentationml.presentation");
       response.addHeader("Content-Disposition", "attachment; filename=\"" + fileName + ".pptx\"");
       Path filePath = Paths.get(pptGenerator.buildFile(new SetList("", songs)));
       Files.copy(filePath, response.getOutputStream());
@@ -226,6 +228,9 @@ public class FileDownloadController {
       Song song = songService.getSongById(id).transpose(LYRICS_ONLY_KEY_CODE);
       fileName =
           fileName == null ? song.getNormalizedName() : controllerHelper.normalizeString(fileName);
+
+      response.setContentType(
+          "application/vnd.openxmlformats-officedocument.presentationml.presentation");
       response.addHeader("Content-Disposition", "attachment; filename=\"" + fileName + ".pptx\"");
       Path filePath = Paths.get(pptGenerator.buildFile(song));
       Files.copy(filePath, response.getOutputStream());
@@ -260,6 +265,8 @@ public class FileDownloadController {
           fileName == null
               ? setList.getNormalizedSetListName()
               : controllerHelper.normalizeString(fileName);
+      response.setContentType(
+          "application/vnd.openxmlformats-officedocument.presentationml.presentation");
       response.addHeader("Content-Disposition", "attachment; filename=\"" + fileName + ".pptx\"");
       Path filePath = Paths.get(pptGenerator.getFilePath());
       Files.copy(filePath, response.getOutputStream());
@@ -338,7 +345,6 @@ public class FileDownloadController {
       Files.copy(filePath, response.getOutputStream());
       Files.delete(filePath);
     } catch (Exception e) {
-      System.out.println(e);
       if (pdfGenerator != null) pdfGenerator.close();
       controllerHelper.errorHandler(e);
     }

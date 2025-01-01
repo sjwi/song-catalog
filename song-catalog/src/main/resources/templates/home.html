@@ -1,16 +1,24 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:sec="http://www.thymeleaf.org" xmlns:th="http://www.thymeleaf.org">
-	<th:block th:replace="partial/head :: head(${@environment.getProperty('com.sjwi.settings.app.properName')})"></th:block>
+	<th:block th:with="nightModePreference=${T(com.sjwi.catalog.config.PreferencesConfiguration).NIGHT_MODE_PREFERENCE_KEY}">
+		<th:block th:replace="partial/head :: head(
+			${@environment.getProperty('com.sjwi.settings.app.properName')},
+			${#session == null || #session.getAttribute(nightModePreference) == null || !#session.getAttribute(nightModePreference)}? '#ffffff': '#303030'
+		)"
+		>
+		</th:block>
+	</th:block>
 	<th:block th:replace="partial/header"></th:block>
 	<body id="homePageBody">
+		<div id="setlistMaybeHidden"></div>
 		<div class="scroll-lock" style="overflow-y:hidden;">
 			<div class="row no-gutters flex-nowrap home-page">
-				<div class="col no-gutters">
-					<div class="song-section">
+				<div class="song-home-col col no-gutters">
+					<div id="homeSongSection" class="song-section">
 						<nav class="sticky-top song custom-border-bottom" id="songNav">
 							<div class="row song-header no-gutters">
 								<div class="col-2">
-									<a th:with="nightModePreference=${T(com.sjwi.catalog.config.PreferencesConfiguration).NIGHT_MODE_PREFERENCE_KEY}" th:href="@{/}"><img border="0"
+									<a th:with="nightModePreference=${T(com.sjwi.catalog.config.PreferencesConfiguration).NIGHT_MODE_PREFERENCE_KEY}" class="home-nav" href="javascript:void(0)"><img border="0"
 							th:src="${#session.getAttribute(nightModePreference) == null || !#session.getAttribute(nightModePreference)}? @{/images/logo_transparent.png}: @{/images/logo_transparent_dark.png}"  class="logo dark-swap" alt="Logo"></a>
 								</div>
 								<div class="col-8 text-center my-auto">
@@ -18,12 +26,12 @@
 								</div>
 								<div class="col-2"></div>
 							</div>
-							<div class="row mr-2 pb-2 no-gutters">
+							<div class="row mr-2 pb-2 no-gutters" id="midHeader">
 								<div class="col-4">
 									<th:block th:replace="partial/navbar"></th:block>
 								</div>
 								<div class="col-4 my-auto text-center" >
-									<div sec:authorize="hasAuthority('USER')" class="btn add-item-btn" onclick="createSong();" data-toggle="tooltip" data-placement="bottom" title="Add new song"><img width="30px" th:src="@{/images/plus-blue.png}"></div>
+									<div sec:authorize="hasAuthority('USER')" class="btn add-item-btn" id="addSong" onclick="createSong();" data-toggle="tooltip" data-placement="bottom" title="Add new song"><img width="30px" th:src="@{/images/plus-blue.png}"></div>
 								</div>
 								<div class="col-4 text-center">
 									<th:block th:replace="partial/search-bar :: searchBar('search/song','','song catalog','songSearch','#songTableContainer')"></th:block>
@@ -33,7 +41,7 @@
 								<th:block th:replace="partial/categories"></th:block>
 							</div>
 						</nav>
-						<div class="container pl-0 pr-0">
+						<div id="songHomeScroll" class="container pl-0 pr-0">
 							<div class="template-container" id="songTableContainer">
 								<th:block th:replace="dynamic/song-table"></th:block>
 							</div>
@@ -43,8 +51,8 @@
 						</th:block>
 					</div>
 				</div>
-				<div class="col-12 col-md-6 no-gutters setlist-home-col border-left" style="background: var(--secondary-bg-color)">
-					<div class="setlist-section">
+				<div id="setListHomeCol" class="col-12 col-md-6 no-gutters setlist-home-col border-left" style="background: var(--secondary-bg-color)">
+					<div class="setlist-section" id="homeSlSection">
 						<nav class="sticky-top setlist" id="setListNav">
 							<div class="row setlist-header no-gutters">
 									<div class="col-12 my-auto text-center">
@@ -71,10 +79,21 @@
 						</div>
 					</div>
 				</div>
+				<div class="hp-slide-idc">
+					<div class="row no-gutters text-center">
+						<div class="col text-center">
+							<div class="circle selected lhs"></div>
+						</div>
+						<div class="col text-center">
+							<div class="circle rhs"></div>
+						</div>
+					</div>
+				</div>
 			</div>
 		<!-- 	<th:block th:replace="partial/footer"></th:block> -->
 			<div class="modal-container">
 				<th:block th:replace="modal/qrcode"></th:block>
+				<th:block th:replace="modal/song-flyout"></th:block>
 				<th:block sec:authorize="hasAuthority('USER')">
 					<th:block th:replace="modal/add-song-to-set"></th:block>
 					<th:block th:replace="modal/add-songs-to-set"></th:block>
@@ -101,17 +120,21 @@
 	<script th:inline="javascript" th:src="@{/js/page/song/page.js}"></script>
 	<script th:inline="javascript" th:src="@{/js/page/song/static.js}"></script>
 	<script>
-		var ignoreSongClickedSelector = ".action-btn,.song-dropdown-btn,.dropdown-menu, li, .dropdown-item,.grip-container,img,.round,.round>*";
 		var resized = false;
+		/*
+		if (window.localStorage.getItem('home-focus')) {
+			homeFocus = window.localStorage.getItem('home-focus')
+			if (homeFocus == 'setlist') {
+				const $container = $('.home-page');
+				$container.css('scroll-behavior', 'auto');
+				$container.scrollLeft($container[0].scrollWidth);
+				$('#categoriesControl').hide()
+				$container.css('scroll-behavior', 'smooth');
+			}
+		}
+		*/
 		$(document).ready(function(){
 			refreshCategories();
-			$(document).on('click','.song-row',function(e){
-				$('.song-row').removeClass('selected')
-				$(this).addClass('selected');
-				if (!$(e.target).is(ignoreSongClickedSelector)){
-					location.href= contextpath + "song/" + $(e.target).closest('.song-metadata').data('target');
-				}
-			});
 			$(document).on('click','.set-list-container',function(e){
 				if(!$(e.target).is(setContainerIgnoreSelector)){
 					location.href = contextpath +'setlist/' +  $(this).data('target');
@@ -129,12 +152,54 @@
 					location.reload();
 				}
 			});	
+			var lastScrollLeft = 0;
 			if (window.innerWidth < 900){
 				if (window.innerWidth < 577) {
-					addScrollListener('#songNav', -133);
+					var size = -133
 				} else {
-					addScrollListener('#songNav', -137);
+					var size = -137
 				}
+				var outerWidth = $('.home-page').outerWidth()
+				var width = $('.home-page')[0].scrollWidth
+				$('.home-page').on('scroll', function() {
+					var scrollLeft = $(this).scrollLeft();
+					var halfwayPoint = (width - outerWidth) / 2;
+
+					if (scrollLeft > lastScrollLeft && scrollLeft > 0) {
+						// SETLIST
+						if (scrollLeft > halfwayPoint) {
+							$('.hp-slide-idc .circle.lhs').removeClass("selected")
+							$('.hp-slide-idc .circle.rhs').addClass("selected")
+						}
+
+						if ($('#songNav').css('top') != '0px') {
+							$('#categoriesControl').hide()
+						} else {
+							$('#categoriesControl').slideUp('fast')
+						}
+						$('#addSong').attr("onclick", "createSetList()")
+						$('#songNav').css('top','0');
+						$('#songNav, .sticky-top-nav, .top-nav').css('top','0');
+						$('.title-link').text("Set Lists")
+						window.localStorage.setItem('home-focus', 'setlist')
+					} else if ((scrollLeft < lastScrollLeft || scrollLeft <= 0) && scrollLeft < (width / 2)) {
+						// SONGS
+						if (scrollLeft < halfwayPoint) {
+							$('.hp-slide-idc .circle.rhs').removeClass("selected")
+							$('.hp-slide-idc .circle.lhs').addClass("selected")
+						}
+
+						$('#songNav, .sticky-top-nav, .top-nav').css('top','0');
+						$('#categoriesControl').slideDown('fast')
+						$('.title-link').text("Song Catalog")
+						$('#addSong').attr("onclick", "createSong()")
+						window.localStorage.setItem('home-focus', 'song')
+					}
+
+					lastScrollLeft = scrollLeft;
+				});
+				addScrollListener('#songNav', size, 0, '#homeSlSection');
+				addScrollListener('#songNav', size, 0, '#homeSongSection');
 			} else {
 				hideCategoriesOnScrollListener('#categoriesControl', '.song-section');
 			}

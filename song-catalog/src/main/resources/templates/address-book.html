@@ -1,6 +1,13 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<th:block th:replace="partial/head :: head('Address Book')"></th:block>
+	<th:block th:with="nightModePreference=${T(com.sjwi.catalog.config.PreferencesConfiguration).NIGHT_MODE_PREFERENCE_KEY}">
+		<th:block th:replace="partial/head :: head(
+			'Address Book',
+			${#session == null || #session.getAttribute(nightModePreference) == null || !#session.getAttribute(nightModePreference)}? '#ffffff': '#303030'
+		)"
+		>
+		</th:block>
+	</th:block>
 <th:block th:replace="partial/header"></th:block>
 <body id="addressBookBody">
 	<div class="scroll-lock">
@@ -9,7 +16,7 @@
 				<nav class="sticky-top ab-header" id="addressBookEntries">
 					<div class="row song-header no-gutters">
 						<div class="col-2">
-							<a th:href="@{/}"><img border="0"
+							<a href="javascript:void(0)" class="home-nav"><img border="0"
 								th:with="nightModePreference=${T(com.sjwi.catalog.config.PreferencesConfiguration).NIGHT_MODE_PREFERENCE_KEY}"
 						th:src="${#session.getAttribute(nightModePreference) == null || !#session.getAttribute(nightModePreference)}? @{/images/logo_transparent.png}: @{/images/logo_transparent_dark.png}"  class="logo dark-swap" alt="Logo"></a>
 						</div>

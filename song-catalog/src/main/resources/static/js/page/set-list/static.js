@@ -5,12 +5,16 @@ function reloadSetSongContainerIfPresent(setId){
 			url: contextpath + 'setlist/details/' + setId + '?view=dynamic/song-container',
 			method: "GET",
 			beforeSend: function(data){
+				FOCUSED_SCROLL_PAGE = getFocusedSetIdx()
 				$(songContainer).html($('.loading'));
 			},
 			success: function(data) {
 				lastUpdatedTime = undefined;
 				$(songContainer).html(data);
-				slick();
+				bindSongContainerScroll()
+				setTimeout(function() {
+					focusSong(FOCUSED_SCROLL_PAGE)
+				}, 0);
 			}
 		});
 	}	
@@ -67,7 +71,6 @@ function localSetKeyChange(setId, setSongId, key, capo) {
 		capo: capo
 	}
 	let url = contextpath + 'setlist/state/' + setId
-	$(songContainer).html($('.loading'));
 	$.post({
 		url: url,
 		contentType: "application/json; charset=utf-8",

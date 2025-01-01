@@ -13,6 +13,7 @@ import com.sjwi.catalog.service.RecordingService;
 import com.sjwi.catalog.service.SongService;
 import com.sjwi.catalog.service.UserService;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -60,10 +61,42 @@ public class SqlVersionDao implements VersionDao {
   }
 
   @Override
+  public Map<Integer, List<VersionSong>> getVersionsByRelatedIds() {
+    String query = queryStore.get("getSongVersionsByRelatedIdsExcludePrivate");
+
+    return jdbcTemplate.query(
+        query,
+        r -> {
+          Map<Integer, List<VersionSong>> versionMap = new HashMap<>();
+          while (r.next()) {
+            versionMap
+                .computeIfAbsent(r.getInt("RELATED"), k -> new ArrayList<>())
+                .add(
+                    new VersionSong(
+                        r.getInt("VERSION_ID"),
+                        r.getString("VERSION"),
+                        r.getInt("ID"),
+                        r.getString("NAME"),
+                        new TransposableString(r.getString("BODY"), NUMBER_SYSTEM_KEY_CODE),
+                        r.getString("DEFAULT_KEY"),
+                        r.getString("ARTIST"),
+                        r.getString("NOTES"),
+                        userService.loadCfUserByUsername(r.getString("CREATED_BY")),
+                        userService.loadCfUserByUsername(r.getString("MODIFIED_BY")),
+                        r.getTimestamp("CHANGED_ON"),
+                        r.getInt("RELATED"),
+                        "Y".equals(r.getString("PRIVATE")) ? true : false,
+                        r.getInt("CATEGORY"),
+                        null));
+          }
+          return versionMap;
+        });
+  }
+
+  @Override
   public List<VersionSong> getVersionsByRelatedId(int id) {
     return jdbcTemplate.query(
         queryStore.get("getSongVersionsByRelatedIdExcludePrivate"),
-        new Object[] {id},
         r -> {
           List<VersionSong> versionSongs = new ArrayList<VersionSong>();
           while (r.next()) {
@@ -86,14 +119,14 @@ public class SqlVersionDao implements VersionDao {
                     recordingService.getRecordingBySongId(r.getInt("ID"))));
           }
           return versionSongs;
-        });
+        },
+        id);
   }
 
   @Override
   public VersionSong getVersionById(int id) {
     return jdbcTemplate.query(
         queryStore.get("getSongVersionById"),
-        new Object[] {id},
         r -> {
           r.next();
           return new VersionSong(
@@ -112,14 +145,14 @@ public class SqlVersionDao implements VersionDao {
               "Y".equals(r.getString("PRIVATE")) ? true : false,
               r.getInt("CATEGORY"),
               recordingService.getRecordingBySongId(r.getInt("ID")));
-        });
+        },
+        id);
   }
 
   @Override
   public SetListVersionSong getSetListVersionSongById(int id) {
     return jdbcTemplate.query(
         queryStore.get("getSetListVersionById"),
-        new Object[] {id},
         r -> {
           r.next();
           return new SetListVersionSong(
@@ -141,7 +174,8 @@ public class SqlVersionDao implements VersionDao {
               "Y".equals(r.getString("PRIVATE")) ? true : false,
               r.getInt("CATEGORY"),
               recordingService.getRecordingBySongId(r.getInt("ID")));
-        });
+        },
+        id);
   }
 
   @Override

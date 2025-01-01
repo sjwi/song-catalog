@@ -20,6 +20,12 @@
 				searchType = "item";
 			}
 			var form = '#' + id + '_form';
+
+			$(form).find('input').on('focus', function() {
+				if ($('.home-page').length != 0) {
+					$('.home-page').scrollLeft(0)
+				}
+			})
 			$(form).find('input').on('keyup',function(){
 				clearTimeout(typingTimer);
 				typingTimer = setTimeout(function() {

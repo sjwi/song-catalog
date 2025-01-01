@@ -1,4 +1,6 @@
-function addScrollListener(id, size, delay){
+function addScrollListener(id, size, delay, elem){
+	if (!elem)
+		elem = window
 	if (!delay && size) {
 		delay = Math.abs(size);
 	} else {
@@ -9,26 +11,28 @@ function addScrollListener(id, size, delay){
 	} else {
 		size = size.toString() + 'px';
 	}
-	var prevScrollpos = window.pageYOffset;
+	var prevScrollpos = $(elem).scrollTop();
 	var velocityThreshold = 5;
-	if ($(window).scrollTop() != 0) {
+	if ($(elem).scrollTop() != 0) {
 		$(id).css('top',size);
 		$('.sticky-top-nav, .top-nav').css('top',size);
 	}
 	$(document).ready(function(){
-		$(window).on('scroll',function(e){
-			var currentScrollPos = window.pageYOffset;
+		$(elem).on('scroll',function(e){
+			var currentScrollPos  = $(elem).scrollTop();
 			var velocity = Math.abs(prevScrollpos - currentScrollPos);
-			if ((prevScrollpos > currentScrollPos && velocity > velocityThreshold) || $(window).scrollTop() <= delay) {
+			if ((prevScrollpos > currentScrollPos && velocity > velocityThreshold) || $(elem).scrollTop() <= delay) {
 				$(id).css('top','0');
 				$('.sticky-top-nav, .top-nav').css('top','0');
-				if (slideAlertUp && $('.add-songs-alert').hasClass('slide-down') && checkedCacheSize() != 0)
-					slideAlertUp()
+				if (typeof slideAlertUp !== 'undefined')
+					if ($('.add-songs-alert').hasClass('slide-down') && checkedCacheSize() != 0)
+						slideAlertUp()
 			} else if (velocity > velocityThreshold) {
 				$(id).css('top',size);
 				$('.sticky-top-nav, .top-nav').css('top',size);
-				if (slideAlertDown && !$('.add-songs-alert').hasClass('slide-down') && checkedCacheSize() != 0)
-					slideAlertDown()
+				if (typeof slideAlertDown !== 'undefined')
+					if (!$('.add-songs-alert').hasClass('slide-down') && checkedCacheSize() != 0)
+						slideAlertDown()
 			}
 			prevScrollpos = currentScrollPos;	
 		});
@@ -40,14 +44,18 @@ function hideCategoriesOnScrollListener(id, scrollElem){
 	$(document).ready(function(){
 		$(scrollElem).on('scroll',function(e){
 			var currentScrollPos_1 = $(scrollElem).scrollTop();
-			if (prevScrollpos_1 > currentScrollPos_1) { 
+			if (prevScrollpos_1 > currentScrollPos_1 || currentScrollPos_1 <= 0) { 
 				$(id).slideDown('fast');
-				if (slideAlertUp && $('.add-songs-alert').hasClass('slide-down') && checkedCacheSize() != 0)
-					slideAlertUp()
+				if (typeof slideAlertUp !== 'undefined'){
+					if ($('.add-songs-alert').hasClass('slide-down') && checkedCacheSize() != 0)
+						slideAlertUp()
+				}
 			} else {
 				$(id).slideUp('fast');
-				if (slideAlertDown && !$('.add-songs-alert').hasClass('slide-down') && checkedCacheSize() != 0)
-					slideAlertDown()
+				if (typeof slideAlertDown !== 'undefined'){
+					if (!$('.add-songs-alert').hasClass('slide-down') && checkedCacheSize() != 0)
+						slideAlertDown()
+				}
 			}
 			prevScrollpos_1 = currentScrollPos_1;	
 		});

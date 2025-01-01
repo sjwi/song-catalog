@@ -25,7 +25,7 @@ public class SqlRecordingDao implements RecordingDao {
     deleteRecording(recording.getId());
     jdbcTemplate.update(
         queryStore.get("addRecording"),
-        new Object[] {recording.getId(), recording.getPath(), recording.getExtension()});
+        new Object[] {recording.getSongId(), recording.getPath(), recording.getExtension()});
   }
 
   @Override
@@ -40,7 +40,8 @@ public class SqlRecordingDao implements RecordingDao {
         new Object[] {id},
         r -> {
           if (r.next()) {
-            return new Recording(r.getInt("ID"), r.getString("PATH"), r.getString("EXT"));
+            return new Recording(
+                r.getInt("ID"), r.getString("PATH"), r.getString("EXT"), r.getInt("SONG_ID"));
           } else {
             return null;
           }
@@ -54,7 +55,9 @@ public class SqlRecordingDao implements RecordingDao {
         r -> {
           List<Recording> recordings = new ArrayList<>();
           while (r.next()) {
-            recordings.add(new Recording(r.getInt("ID"), r.getString("PATH"), r.getString("EXT")));
+            recordings.add(
+                new Recording(
+                    r.getInt("ID"), r.getString("PATH"), r.getString("EXT"), r.getInt("SONG_ID")));
           }
           return recordings;
         });

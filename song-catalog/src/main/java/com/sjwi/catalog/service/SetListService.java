@@ -11,9 +11,9 @@ import com.sjwi.catalog.model.song.SetListSong;
 import com.sjwi.catalog.model.song.Song;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -22,7 +22,7 @@ import org.springframework.stereotype.Component;
 public class SetListService {
 
   private static final String SETLIST_CACHE_KEY_ROOT = "setlist";
-  private static Map<String, List<SetList>> setListCache = new HashMap<>();
+  private static ConcurrentHashMap<String, List<SetList>> setListCache = new ConcurrentHashMap<>();
 
   @Autowired SetListDao setListDao;
 

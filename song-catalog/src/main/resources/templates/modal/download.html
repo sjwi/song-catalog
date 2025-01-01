@@ -57,9 +57,10 @@
 		e.preventDefault();
 		if (isFormFilled(this)){
 			if (isInStandaloneMode())
-				standAloneBehavior()
+				standAloneBehavior2()
 			else
-				saveAs($('#copyDownloadLinkBtn').data('basecontext') + generateDownloadLinkWithFormParams());
+				standAloneBehavior2()
+				//saveAs($('#copyDownloadLinkBtn').data('basecontext') + generateDownloadLinkWithFormParams());
 		}
 	});
 	function standAloneBehavior() {
@@ -67,6 +68,28 @@
 			window.open('https://view.officeapps.live.com/op/view.aspx?src=' + encodeURIComponent($('#copyDownloadLinkBtn').data('basecontext') + generateRandomDownloadLinkWithFormParams()),'_blank');
 		else
 			window.open('https://docs.google.com/viewer?embedded=true&url=' + encodeURIComponent($('#copyDownloadLinkBtn').data('basecontext') + generateDownloadLinkWithFormParams()),'_blank');
+	}
+	function standAloneBehavior2() {
+		var fileExt
+		if ($('.download-tab.selected').hasClass('right-download-modal'))
+			fileExt = "pptx"
+		else
+		  fileExt = "pdf"
+		var fileName = $('#downloadForm').find('.filename').val()
+		var url = $('#copyDownloadLinkBtn').data('basecontext') + generateDownloadLinkWithFormParams()
+		var xhr = new XMLHttpRequest();
+		xhr.open('GET', url, true);
+		xhr.responseType = 'blob';
+		xhr.onload = function(e) {
+			if (this.status == 200) {
+				var myBlob = this.response;
+				var link = document.createElement('a');
+				link.href = window.URL.createObjectURL(myBlob);
+				link.download = fileName + "." + fileExt;
+				link.click();
+			}
+		};
+    xhr.send();
 	}
 	function openDownloadInBrowser(){
 		if ($('.download-tab.selected').hasClass('right-download-modal')){
@@ -108,7 +131,6 @@ function generateDownloadLinkWithFormParams(short = true){
 		async: false,
 		method: "GET",
 		success: function(data) {
-			console.log(data)
 			ret_link = "/" + data.sl_key
 		},
 		error: function(data) {

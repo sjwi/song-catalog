@@ -15,9 +15,9 @@ import com.sjwi.catalog.model.user.UserState;
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
@@ -41,7 +41,7 @@ public class UserService implements UserDetailsService {
 
   @Autowired UserDao userDao;
 
-  private static Map<String, CfUser> cachedUsers = new HashMap<>();
+  private static ConcurrentHashMap<String, CfUser> cachedUsers = new ConcurrentHashMap<>();
 
   public CfUser createUser(
       String username,
@@ -118,13 +118,9 @@ public class UserService implements UserDetailsService {
   public synchronized CfUser loadCfUserByUsername(String username)
       throws UsernameNotFoundException {
     username = username.trim().toLowerCase();
-    if (cachedUsers.containsKey(username)) {
-      return cachedUsers.get(username);
-    } else {
-      CfUser user = (CfUser) userDao.getUser(username);
-      cachedUsers.put(username, user);
-      return user;
-    }
+    if (!cachedUsers.containsKey(username))
+      cachedUsers.put(username, (CfUser) userDao.getUser(username));
+    return cachedUsers.get(username);
   }
 
   public List<CfUser> getAllActiveUsers() {

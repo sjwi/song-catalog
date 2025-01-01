@@ -25,9 +25,11 @@
       window.CustomEvent.prototype = window.Event.prototype;
   }
 
-  document.addEventListener('touchstart', handleTouchStart, false);
-  document.addEventListener('touchmove', handleTouchMove, false);
-  document.addEventListener('touchend', handleTouchEnd, false);
+  $(document).ready(function() {
+    document.addEventListener('touchstart', handleTouchStart, false);
+    document.addEventListener('touchmove', handleTouchMove, false);
+    document.addEventListener('touchend', handleTouchEnd, false);
+  })
 
   var xDown = null;
   var yDown = null;
@@ -42,7 +44,6 @@
    * @returns {void}
    */
   function handleTouchEnd(e) {
-
       // if the user released on a different target, cancel!
       if (startEl !== e.target) return;
 
@@ -100,7 +101,6 @@
    * @returns {void}
    */
   function handleTouchStart(e) {
-
       // if the element has data-swipe-ignore="true" we stop listening for swipe events
       if (e.target.getAttribute('data-swipe-ignore') === 'true') return;
 

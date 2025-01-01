@@ -1,5 +1,12 @@
 <!DOCTYPE html>
-<th:block th:replace="partial/head :: head('Uh oh...')"></th:block>
+	<th:block th:with="nightModePreference=${T(com.sjwi.catalog.config.PreferencesConfiguration).NIGHT_MODE_PREFERENCE_KEY}">
+		<th:block th:replace="partial/head :: head(
+			'Uh oh...',
+			${#session == null || #session.getAttribute(nightModePreference) == null || !#session.getAttribute(nightModePreference)}? '#00b3ff': '#004f70'
+		)"
+		>
+		</th:block>
+	</th:block>
 <body id="errorBody">
 	<th:block th:replace="partial/header"></th:block>
 	<th:block th:replace="partial/off-navbar :: offNavBar('addSong')"></th:block>

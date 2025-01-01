@@ -9,6 +9,11 @@ getSongVersionsByRelatedIdExcludePrivate: >
     from Song s inner join Version v on s.ID = v.SONG_ID INNER JOIN VersionControl vc on vc.ID = v.VERSION_NAME
     WHERE s.RELATED = ? and s.PRIVATE IS NULL
   
+getSongVersionsByRelatedIdsExcludePrivate: >
+  select v.ID as VERSION_ID,vc.VERSION,s.ID,s.NAME,s.BODY,s.DEFAULT_KEY,s.ARTIST,s.NOTES,s.CREATED_BY,s.MODIFIED_BY,s.CHANGED_ON,s.RELATED,s.PRIVATE,s.CATEGORY
+    from Song s inner join Version v on s.ID = v.SONG_ID INNER JOIN VersionControl vc on vc.ID = v.VERSION_NAME
+    WHERE s.PRIVATE IS NULL
+  
 getSongVersionsByRelatedIdIncludePrivate: >
   select v.ID as VERSION_ID,vc.VERSION,s.ID,s.NAME,s.BODY,s.DEFAULT_KEY,s.ARTIST,s.NOTES,s.CREATED_BY,s.MODIFIED_BY,s.CHANGED_ON,s.RELATED,s.PRIVATE,s.CATEGORY
     from Song s inner join Version v on s.ID = v.SONG_ID INNER JOIN VersionControl vc on vc.ID = v.VERSION_NAME
@@ -155,14 +160,14 @@ getSetlistById: >
   
 searchSongsByTerm: >
   select * from (
-    Select *, '1' as crank from Song a where (RELATED IS NULL AND PRIVATE IS NULL) AND LOWER(REPLACE(NAME,',','')) like :term
+    Select *, '1' as crank from Song a where RELATED IS NULL AND PRIVATE IS NULL AND NAME like :term
     UNION DISTINCT
     SELECT *, '2' as crank FROM Song a where (
-      (RELATED IS NULL AND PRIVATE IS NULL) AND (LOWER(REPLACE(BODY,',','')) like :term or ID like :term or CREATED_BY like :term or LOWER(NOTES) like :term or (SELECT COUNT(*) FROM Song WHERE RELATED = a.ID and LOWER(REPLACE(BODY,',','')) like :term) > 0)
+      ((RELATED IS NULL AND PRIVATE IS NULL) AND BODY like :term or (SELECT COUNT(*) FROM Song WHERE RELATED = a.ID and BODY like :term) > 0)
     ) AND (
-      ID not in (Select ID from Song a where (RELATED IS NULL AND PRIVATE IS NULL) AND LOWER(REPLACE(NAME,',','')) like :term)
+      ID not in (Select ID from Song a where (RELATED IS NULL AND PRIVATE IS NULL) AND NAME like :term)
     )
-  ) t order by crank, REPLACE(NAME,'''','')
+  ) t order by crank, NAME
 
 searchSongsByKeyedTerm: >
   select * from Song where (RELATED IS NULL AND PRIVATE IS NULL) and UPPER(<QUERY_ATTRIBUTE>) like UPPER(?) order by REPLACE(NAME,'''','')
@@ -191,7 +196,7 @@ updateSetListSortForInsert: >
 searchSetlistsByTerm: >
   select DISTINCT m.ID,m.SETLIST_NAME,m.CREATED_ON,m.LAST_UPDATED,m.CREATED_BY,m.ORGANIZATION, m.FLAGGED_AS_MOST_RECENT_ON
   from SetListMaster m INNER JOIN SetList s on m.ID = s.SETLIST_ID INNER JOIN Song a on s.SONG_ID = a.ID 
-  WHERE LOWER(a.name) like ? or LOWER(a.body) like ? or LOWER(m.SETLIST_NAME) like ? order by LAST_UPDATED Desc
+  WHERE a.name like ? or a.body like ? or m.SETLIST_NAME like ? order by LAST_UPDATED Desc
   
 setDefaultKeyForSong: >
   UPDATE Song set DEFAULT_KEY = ?,CHANGED_ON = CURRENT_TIMESTAMP(), MODIFIED_BY = ? where ID = ?

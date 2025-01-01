@@ -30,15 +30,3 @@
 		<div style="margin-bottom:calc(120px + 10rem)"></div>
 	</div>
 </div>
-
-<script>
-	$(document).ready(function(){
-		$('.version-container').click(function(e){
-			if ($(this).hasClass('new-version')){
-				openVersionControlModal($(this).data('target'),true);
-			} else {
-				$('#slickContainer').slick('slickGoTo',$(e.target).closest('.version-container').data('target'));
-			}
-		});
-	});
-</script>

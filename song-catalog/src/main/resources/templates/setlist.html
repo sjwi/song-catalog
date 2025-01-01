@@ -1,21 +1,28 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
-	<th:block th:replace="partial/head :: head(${set.setListName})"></th:block>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" style="scroll-snap-type: y mandatory; scroll-behavior: smooth; overscroll-behavior: none;">
+	<th:block th:with="nightModePreference=${T(com.sjwi.catalog.config.PreferencesConfiguration).NIGHT_MODE_PREFERENCE_KEY}">
+		<th:block th:replace="partial/head :: head(
+			${set.setListName},
+			${#session == null || #session.getAttribute(nightModePreference) == null || !#session.getAttribute(nightModePreference)}? '#00b3ff': '#004f70'
+		)"
+		>
+		</th:block>
+	</th:block>
 	<th:block th:replace="partial/header"></th:block>
-	<body id="setListBody" data-oc="var(--secondary-bg-color),var(--secondary-bg-color)">
-		<div class="scroll-lock">
+	<body id="setListBody">
+		<div id="lock">
 			<th:block th:replace="partial/off-navbar :: offNavBar('addSetList')"></th:block>
-			<div class="wrapper set-list-page text-center">
-				<div class="row no-gutters">
-					<div class="col-lg-6 left-side setlist">
-						<div class="pt-3" th:id="${'appendSetList_' + set.id}">
-							<th:block th:replace="dynamic/set-list-container"></th:block>
-						</div>
+			<div class="row no-gutters text-center w-100">
+				<div class="col left-side setlist">
+					<div class="pt-3" th:id="${'appendSetList_' + set.id}">
+						<th:block th:replace="dynamic/set-list-container"></th:block>
 					</div>
-					<div class="col-lg-6 right-side setlist">
-						<div class="song-page-container setlist hover text-center mt-3 mb-4" th:id="${set.id}">
-							<th:block th:replace="dynamic/song-container :: songContainer(${set.songs})"></th:block>
-						</div>
+				</div>
+			</div>
+			<div class="sl-songc ssae row no-gutters w-100vw maxh-100vh">
+				<div class="col right-side setlist">
+					<div class="song-page-container setlist hover text-center mt-3 mb-4" th:id="${set.id}">
+						<th:block th:replace="dynamic/song-container :: songContainer(${set.songs})"></th:block>
 					</div>
 				</div>
 			</div>
@@ -33,7 +40,6 @@
 				</th:block>
 			</div>
 		</div>
-		<th:block th:replace="partial/back-btn"></th:block>
 	</body>
 	<th:block sec:authorize="hasAuthority('USER')">
 		<script th:inline="javascript" th:src="@{/js/page/set-list/user.js}"></script>
@@ -51,20 +57,64 @@
 		var setListId = /*[[${set.id}]]*/;
 		var ignoreTdAction = '.grip-container,.set-grip,img,.action-btn-container,key-select,button,.close-dark,.ignore-td-action';
 		$(document).ready(function(){
-			$(document).on('click','.set-list-container',function(e){
-				if($(e.target).is('td, td span') && !$(e.target).is(ignoreTdAction)){
-					if ($('#slickContainer').length){
-						$('#slickContainer').slick('slickGoTo',$(e.target).closest('.set-song-row').data('sort') - 1);
-					}
-				}
-			});
-			$(".slick-container").on("beforeChange", function (e, slick, currentSlide, nextSlide){
-				resetSongPageAudio($(slick.$slides.get(nextSlide)).data('recording'));
-			});
-			$('.wrapper').css('height',$(document).height() - 30);
 			setInterval(function(){
 				pollForSetListUpdate(setListId);
 			}, 5000)
+
+			const $parent = $(window).width() > 900? $(window): $('#lock');
+			const $child = $('.multi-song-container .song-page');
+
+			if (!($parent.scrollTop() + $parent.outerHeight() >= $parent[0].scrollHeight))
+				$child.addClass('noscroll-v')
+
+			const ptr = PullToRefresh.init({
+				mainElement: '#lock',
+				shouldPullToRefresh: function(){
+					var scrollTop = $parent.scrollTop(); // Current vertical scroll position
+					var documentHeight = $parent.prop("scrollHeight"); // Total height of the document
+					var windowHeight = $parent.height(); // Height of the visible window
+          let isAtBottom = scrollTop + windowHeight >= documentHeight - 1
+					return !isAtBottom
+        },
+				onRefresh() {
+					window.location.reload();
+				}
+			});
+
+			let hidden = false;
+			let lastScrollTop = 0;
+
+			$parent.on('scroll', function () {
+				var scrollTop = $parent.scrollTop(); // Current vertical scroll position
+				var documentHeight = $parent.prop("scrollHeight"); // Total height of the document
+				var windowHeight = $parent.height(); // Height of the visible window
+
+				var scrollingDown = scrollTop > lastScrollTop
+				var scrollingUp = scrollTop < lastScrollTop
+
+				if (!hidden && scrollingDown) {
+					$('.top-nav').fadeOut('fast')
+					hidden = true
+				} else if (hidden && scrollingUp){
+					$('.top-nav').fadeIn('fast')
+					hidden = false;
+				}
+
+				isParentScrolledToBottom = scrollTop + windowHeight >= documentHeight - 1
+
+				if (isParentScrolledToBottom) {
+					$child.removeClass('noscroll-v')
+				} else {
+					$('.song-page').each(function() {
+						$(this)[0].scrollTo({
+							top: 0,
+							behavior: 'smooth'
+						});
+					});
+					$child.addClass('noscroll-v')
+				}
+				lastScrollTop = scrollTop;
+			});
 		});
 	</script>
 </html>

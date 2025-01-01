@@ -347,7 +347,6 @@ public class SqlUserDao implements UserDao {
 
   @Override
   public void updateSetListSessionState(String user, int setId, SetListState existingSetState) {
-    System.out.println(existingSetState);
     jdbcTemplate.update(
         queryStore.get("updateSetListSessionState"), gson.toJson(existingSetState), user, setId);
   }

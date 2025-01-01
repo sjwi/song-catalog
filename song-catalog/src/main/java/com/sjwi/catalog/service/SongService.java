@@ -17,6 +17,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -26,9 +27,11 @@ public class SongService {
   private static final String SEARCH_TERM_DELIMITER = ":";
 
   private static final String SONG_CACHE_KEY_ROOT = "songs";
-  private static HashMap<String, List<Song>> songCache = new HashMap<>();
+  private static ConcurrentHashMap<String, List<Song>> songCache = new ConcurrentHashMap<>();
 
   @Autowired SongDao songDao;
+  @Autowired VersionService versionService;
+  @Autowired RecordingService recordingService;
 
   public Song getSongById(int id) {
     return songDao.getSongById(id);
@@ -150,6 +153,8 @@ public class SongService {
               @Override
               public void run() {
                 songCache.put(SONG_CACHE_KEY_ROOT, songDao.getSongs());
+                versionService.refreshVersionCache();
+                recordingService.refreshRecordingCache();
               }
             });
     clearCache.start();
